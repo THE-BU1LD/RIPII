@@ -1,0 +1,54 @@
+seed: 3
+device: cpu
+output_dir: runs/ripii_no_graph
+batch_size: 4
+val_batch_size: 4
+steps: 4
+warmup_steps: 0
+lr: 0.001
+weight_decay: 0.0
+input_dim: 64
+latent_dim: 32
+hidden_dim: 64
+node_dim: 8
+num_nodes: 4
+num_levels: 2
+num_projectors: 2
+codebook_size: 16
+fine_codebook_size: 16
+codebook_dim: 16
+graph_steps: 0
+graph_topk: 0
+dataset_size: 32
+noise_std: 0.05
+transform_scale: 0.15
+transform_shift: 2
+transform_dim: 4
+num_classes: 4
+eval_every: 2
+log_every: 2
+compile_model: false
+amp: false
+depth_target: 0.5
+use_projective: true
+use_graph: false
+use_quantizer: true
+use_action: true
+use_spectral_loss: true
+use_equivariance_loss: true
+use_identity_loss: true
+use_depth_loss: true
+loss_weights:
+  rec: 1.0
+  equiv: 0.8
+  inv: 0.8
+  scale: 0.2
+  proj: 0.2
+  spectral: 0.1
+  geom: 0.1
+  vq: 1.0
+  node: 0.0
+  moment: 0.05
+  identity: 0.05
+  kl: 0.01
+  depth: 0.05
