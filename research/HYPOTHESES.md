@@ -34,6 +34,18 @@ per-scene long-rollout position error summarized first within dataset, then acro
 least five training seeds. A practically meaningful difference is 5%. Exact model and
 dataset choices must be frozen in a new versioned protocol before any test evaluation.
 
+## H1-CONDITIONAL-HIERARCHY (executed; prospective development protocol)
+
+- **H0:** long-range coupling does not give multiscale a five-percentage-point paired
+  advantage over global pooling on more-object scenes beyond its local-regime advantage.
+- **H1:** on every seed, multiscale beats global pool by at least 5% when coupled and
+  gains at least five percentage points relative to the local regime.
+- Setup: paired seeds 53, 59, 61; \(\kappa\in\{0,1\}\); 100 updates; data seed 12031;
+  parameter matched, not FLOP matched. The protocol was written before both runs.
+- Decision: **H1 rejected**. Coupled multiscale was only about 1.09% better on average,
+  seed directions were mixed, and the coupling-interaction mean was -0.00089 with exact
+  two-sided sign-flip p=1.0. This is development evidence, not confirmation.
+
 ## Ranked extensions
 
 1. **Simplify to graph:** tests whether hierarchy is unnecessary; lowest cost and

@@ -56,7 +56,9 @@ def test_plain_baseline_can_be_parameter_matched_without_padding() -> None:
     assert hidden_dim > 0
     assert count == sum(
         p.numel()
-        for p in PlainAutoencoder(cfg.input_dim, cfg.latent_dim, hidden_dim).parameters()
+        for p in PlainAutoencoder(
+            cfg.input_dim, cfg.latent_dim, hidden_dim
+        ).parameters()
         if p.requires_grad
     )
     assert error <= 0.02

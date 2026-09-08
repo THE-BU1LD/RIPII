@@ -15,3 +15,12 @@ historical results were not altered.
 
 Current verdict: **EVIDENCE_PARTIAL**. See `audit/FINAL_AUDIT.md` for verification and
 remaining blockers.
+
+The executed long-range extension sharpens the negative conclusion. A symmetric
+all-pairs force creates a controlled need for global information while preserving
+pair momentum. In the prospectively written local-versus-coupled development study,
+multiscale improved the primary coupled more-objects metric over global pooling by
+only about 1.09% with mixed seed directions; coupling did not increase its advantage
+(interaction mean -0.00089; exact sign-flip p=1.0). A fresh 300-update follow-up found
+global pool had the best mean IID and all three mean OOD errors. This favors simple
+global aggregation under nonlocal dynamics and a local graph otherwise.

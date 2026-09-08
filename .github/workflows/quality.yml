@@ -45,3 +45,17 @@ jobs:
         run: >-
           python -m ripii.world verify-capsule
           research/results/development/world_v3_convergence_capsule_v2.json
+      - name: Verify conditional-hierarchy result capsule
+        run: >-
+          python scripts/run_coupling_study.py --verify-capsule
+          research/results/development/world_v4_coupling_capsule.json
+      - name: Verify extended result capsule and failure analyses
+        run: >-
+          python -m ripii.world verify-capsule
+          research/results/development/world_global_coupling_v1_capsule.json
+          && python scripts/analyze_failures.py --verify-output
+          research/results/development/world_v3_failure_analysis.json
+          && python scripts/analyze_failures.py --verify-output
+          research/results/development/world_global_coupling_v1_failure_analysis.json
+          && python scripts/plan_power.py --verify-output
+          research/planning/external_power_plan_v1.json

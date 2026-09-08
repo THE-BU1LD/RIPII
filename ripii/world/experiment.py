@@ -12,8 +12,11 @@ from pathlib import Path
 import torch
 
 from ..utils.statistics import descriptive_summary, paired_sign_flip_test
+from .data import DatasetSpec, load_dataset
 from .models import VARIANTS, WorldModel
-from .physics import Physics, make_dataset
+from .physics import Physics
+from .protocol import ExperimentProtocol
+from .run_status import RunTracker, verify_complete_status
 
 
 @dataclass
@@ -31,12 +34,16 @@ class Experiment:
     data_seed: int = 2026
     validate_every: int = 50
     quantizer_weight: float = 0.01
+    global_coupling: float = 0.0
 
     def validate(self):
         for key, value in asdict(self).items():
-            if key not in {"lr", "quantizer_weight", "data_seed"} and (
-                not isinstance(value, int) or value < 1
-            ):
+            if key not in {
+                "lr",
+                "quantizer_weight",
+                "global_coupling",
+                "data_seed",
+            } and (not isinstance(value, int) or value < 1):
                 raise ValueError(f"{key} must be a positive integer")
         if not isinstance(self.data_seed, int):
             raise ValueError("data_seed must be an integer")
@@ -45,8 +52,12 @@ class Experiment:
             or not 0 < self.lr < 1
             or not math.isfinite(self.quantizer_weight)
             or self.quantizer_weight < 0
+            or not math.isfinite(self.global_coupling)
+            or self.global_coupling < 0
         ):
-            raise ValueError("invalid learning rate or quantizer weight")
+            raise ValueError(
+                "invalid learning rate, quantizer weight, or global coupling"
+            )
         if (
             self.rollout_steps > self.train_horizon
             or self.test_horizon < self.rollout_steps
@@ -54,6 +65,38 @@ class Experiment:
             raise ValueError("rollout length exceeds trajectory horizon")
         if not 5 <= self.max_objects <= 16 or self.hidden % 4:
             raise ValueError("max_objects must be 5..16 and hidden a multiple of 4")
+
+
+def _reject_json_constant(value: str) -> None:
+    raise ValueError(f"non-standard JSON numeric constant: {value}")
+
+
+def _finite_json(value) -> bool:
+    if isinstance(value, float):
+        return math.isfinite(value)
+    if isinstance(value, dict):
+        return all(isinstance(key, str) and _finite_json(item) for key, item in value.items())
+    if isinstance(value, list):
+        return all(_finite_json(item) for item in value)
+    return value is None or isinstance(value, (str, int, bool))
+
+
+def _parse_json_object(content: str, label: str) -> dict:
+    try:
+        payload = json.loads(content, parse_constant=_reject_json_constant)
+    except (json.JSONDecodeError, ValueError) as exc:
+        raise ValueError(f"{label} is invalid JSON") from exc
+    if not isinstance(payload, dict) or not _finite_json(payload):
+        raise ValueError(f"{label} must be a finite JSON object")
+    return payload
+
+
+def _load_json_object(path: Path, label: str) -> dict:
+    try:
+        content = path.read_text(encoding="utf-8")
+    except OSError as exc:
+        raise ValueError(f"{label} is unreadable") from exc
+    return _parse_json_object(content, label)
 
 
 def write_json(path: Path, value):
@@ -81,6 +124,20 @@ def load_model(path: str | Path):
         or checkpoint.get("format") != "ripii-world-v1"
         or not isinstance(checkpoint.get("model_spec"), dict)
         or not isinstance(checkpoint.get("model"), dict)
+        or not isinstance(checkpoint.get("completed_steps"), int)
+        or isinstance(checkpoint.get("completed_steps"), bool)
+        or checkpoint["completed_steps"] < 1
+        or not isinstance(checkpoint.get("best_validation"), (int, float))
+        or isinstance(checkpoint.get("best_validation"), bool)
+        or not math.isfinite(checkpoint["best_validation"])
+        or checkpoint["best_validation"] < 0
+        or not checkpoint["model"]
+        or not all(
+            isinstance(name, str)
+            and isinstance(value, torch.Tensor)
+            and torch.isfinite(value).all()
+            for name, value in checkpoint["model"].items()
+        )
     ):
         raise ValueError("not a RIPII world-model checkpoint")
     model = WorldModel(**checkpoint["model_spec"])
@@ -168,9 +225,52 @@ def evaluate(model, data, horizons=(1, 4, 16, 32)):
     ).sqrt()
     result["worst_scene_position_rmse"] = float(per_scene.max())
     result["worst_scene_id"] = int(data["ids"][per_scene.argmax()])
-    outside = (predicted[:, 1:, :, :2].abs() > 1.0 + predicted[:, 1:, :, 4:5]).any(-1)
+    for quantile in (0.5, 0.9, 0.95):
+        result[f"per_scene_position_rmse_p{int(quantile * 100)}"] = float(
+            torch.quantile(per_scene, quantile)
+        )
+    first_error = error[:, 0, :, :2]
+    last_error = error[:, -1, :, :2]
+    first_rmse = ((first_error.square() * mask[..., None]).sum() / (mask.sum() * 2)).sqrt()
+    last_rmse = ((last_error.square() * mask[..., None]).sum() / (mask.sum() * 2)).sqrt()
+    result["position_rmse_growth_final_over_h1"] = float(
+        last_rmse / first_rmse.clamp_min(1e-12)
+    )
+    result["max_abs_predicted_position"] = float(
+        predicted[:, 1:, :, :2]
+        .masked_select(mask[:, None, :, None])
+        .abs()
+        .max()
+    )
+    result["max_abs_predicted_velocity"] = float(
+        predicted[:, 1:, :, 2:4]
+        .masked_select(mask[:, None, :, None])
+        .abs()
+        .max()
+    )
+    property_error = predicted[:, 1:, :, 4:] - data["states"][:, 1:, :, 4:]
+    result["max_abs_property_drift"] = float(
+        property_error.masked_select(mask[:, None, :, None]).abs().max()
+    )
+    predicted_momentum = (
+        predicted[:, 1:, :, 2:4] * predicted[:, 1:, :, 5:6] * live
+    ).sum(2)
+    target_momentum = (
+        data["states"][:, 1:, :, 2:4]
+        * data["states"][:, 1:, :, 5:6]
+        * live
+    ).sum(2)
+    result["scene_momentum_rmse"] = float(
+        (predicted_momentum - target_momentum).square().mean().sqrt()
+    )
+    outside = (
+        predicted[:, 1:, :, :2].abs() > 1.0 - predicted[:, 1:, :, 4:5]
+    ).any(-1)
     result["outside_arena_fraction"] = float(
         (outside * mask[:, None]).sum() / (mask.sum() * error.shape[1])
+    )
+    result["outside_arena_scene_fraction"] = float(
+        (outside & mask[:, None]).any(dim=(1, 2)).float().mean()
     )
     diagnostic_keys = sorted({key for row in diagnostic_rows for key in row})
     for key in diagnostic_keys:
@@ -209,6 +309,17 @@ def train(
     first_step, best, elapsed_before = 0, float("inf"), 0.0
     if resume:
         model, saved = load_model(resume)
+        if (
+            not isinstance(saved.get("experiment"), dict)
+            or not isinstance(saved.get("optimizer"), dict)
+            or not isinstance(saved.get("sampler_rng"), torch.Tensor)
+            or not isinstance(saved.get("torch_rng"), torch.Tensor)
+            or not isinstance(saved.get("train_seconds"), (int, float))
+            or isinstance(saved.get("train_seconds"), bool)
+            or not math.isfinite(saved["train_seconds"])
+            or saved["train_seconds"] < 0
+        ):
+            raise ValueError("checkpoint lacks valid exact-resume state")
         expected_spec = WorldModel(
             variant, hidden or cfg.hidden, cfg.max_objects, bottleneck=bottleneck
         ).spec
@@ -234,15 +345,38 @@ def train(
             import shutil
 
             shutil.copy2(best_source, output / "best.pt")
-    train_data = make_dataset(
-        "train", cfg.train_scenes, cfg.train_horizon, cfg.data_seed, cfg.max_objects
+    physics = Physics(global_coupling=cfg.global_coupling)
+    train_data, train_dataset_record = load_dataset(
+        DatasetSpec(
+            "train",
+            cfg.train_scenes,
+            cfg.train_horizon,
+            cfg.data_seed,
+            cfg.max_objects,
+            physics,
+        )
     )
-    validation = make_dataset(
-        "validation", cfg.eval_scenes, cfg.rollout_steps, cfg.data_seed, cfg.max_objects
+    validation, validation_dataset_record = load_dataset(
+        DatasetSpec(
+            "validation",
+            cfg.eval_scenes,
+            cfg.rollout_steps,
+            cfg.data_seed,
+            cfg.max_objects,
+            physics,
+        )
     )
     write_json(
         output / "config.json",
-        {"experiment": asdict(cfg), "model_spec": model.spec, "seed": seed},
+        {
+            "experiment": asdict(cfg),
+            "model_spec": model.spec,
+            "seed": seed,
+            "datasets": {
+                "train": train_dataset_record,
+                "validation": validation_dataset_record,
+            },
+        },
     )
     train_start = time.perf_counter()
     for step in range(first_step, cfg.steps):
@@ -332,9 +466,7 @@ class ForceKinematic(torch.nn.Module):
         acceleration = action / state[..., 5:6].clamp_min(0.1)
         result[..., 2:4] = state[..., 2:4] + self.dt * acceleration
         result[..., :2] = (
-            state[..., :2]
-            + self.dt * state[..., 2:4]
-            + 0.5 * self.dt**2 * acceleration
+            state[..., :2] + self.dt * state[..., 2:4] + 0.5 * self.dt**2 * acceleration
         )
         return result * mask[..., None]
 
@@ -380,7 +512,7 @@ def widths(cfg, variants, bottleneck):
 CAPACITY_MATCH_TOLERANCE = 0.05
 
 
-def benchmark(
+def _benchmark_impl(
     cfg: Experiment,
     output: Path,
     seeds=(3, 7, 11),
@@ -401,8 +533,7 @@ def benchmark(
         or not bottlenecks
         or len(set(bottlenecks)) != len(bottlenecks)
         or any(
-            bottleneck not in {"continuous", "fsq", "vq"}
-            for bottleneck in bottlenecks
+            bottleneck not in {"continuous", "fsq", "vq"} for bottleneck in bottlenecks
         )
     ):
         raise ValueError(
@@ -419,7 +550,6 @@ def benchmark(
         raise ValueError(f"capacity matching exceeds 5% tolerance: {mismatched}")
     if output.exists():
         raise ValueError(f"refusing existing benchmark directory: {output}")
-    output.mkdir(parents=True)
     source_root = Path(__file__).parents[2]
     source_paths = sorted((source_root / "ripii").rglob("*.py"))
     source_paths.extend(
@@ -427,15 +557,43 @@ def benchmark(
         for p in (source_root / "pyproject.toml", source_root / "uv.lock")
         if p.is_file()
     )
-    sources = {}
-    for path in source_paths:
-        relative = path.relative_to(source_root)
-        payload = path.read_bytes()
-        sources[str(relative)] = hashlib.sha256(payload).hexdigest()
-        snapshot = output / "source" / relative
-        snapshot.parent.mkdir(parents=True, exist_ok=True)
-        snapshot.write_bytes(payload)
+    source_payloads = {path: path.read_bytes() for path in source_paths}
+    sources = {
+        str(path.relative_to(source_root)): hashlib.sha256(payload).hexdigest()
+        for path, payload in source_payloads.items()
+    }
+    physics = Physics(global_coupling=cfg.global_coupling)
+    dataset_specs = {
+        "train": DatasetSpec(
+            "train",
+            cfg.train_scenes,
+            cfg.train_horizon,
+            cfg.data_seed,
+            cfg.max_objects,
+            physics,
+        ),
+        "validation": DatasetSpec(
+            "validation",
+            cfg.eval_scenes,
+            cfg.rollout_steps,
+            cfg.data_seed,
+            cfg.max_objects,
+            physics,
+        ),
+        **{
+            split: DatasetSpec(
+                split,
+                cfg.eval_scenes,
+                cfg.test_horizon,
+                cfg.data_seed,
+                cfg.max_objects,
+                physics,
+            )
+            for split in ("test", "more_objects", "composition", "fast")
+        },
+    }
     protocol = {
+        "format": "ripii-world-protocol-v1",
         "study": "RIPII object-state world model",
         "status": "development_benchmark",
         "experiment": asdict(cfg),
@@ -445,7 +603,10 @@ def benchmark(
         "capacity": capacity,
         "capacity_match_tolerance": CAPACITY_MATCH_TOLERANCE,
         "source_sha256": sources,
-        "physics": Physics().as_dict(),
+        "physics": physics.as_dict(),
+        "datasets": {
+            split: spec.as_record() for split, spec in dataset_specs.items()
+        },
         "selection": "minimum validation position RMSE + 0.25 * velocity RMSE",
         "training": "same scenes, updates, sampler seeds and fixed objective weights",
         "uncertainty": "initialization/minibatch seeds on one fixed dataset; not population inference",
@@ -468,8 +629,26 @@ def benchmark(
             "torch": str(torch.__version__),
         },
     }
+    protocol_record = ExperimentProtocol.from_mapping(protocol)
+    protocol = protocol_record.as_dict()
+    cfg = Experiment(**protocol["experiment"])
+    seeds = tuple(protocol["seeds"])
+    variants = tuple(protocol["variants"])
+    bottlenecks = tuple(protocol["bottlenecks"])
+    output.mkdir(parents=True)
     # Written before training. Checkpoints are selected using validation only.
     write_json(output / "protocol.json", protocol)
+    tracker = RunTracker.create(
+        output,
+        run_kind="world_benchmark",
+        protocol_sha256=sha256(output / "protocol.json"),
+    )
+    tracker.transition("running")
+    for path, payload in source_payloads.items():
+        relative = path.relative_to(source_root)
+        snapshot = output / "source" / relative
+        snapshot.parent.mkdir(parents=True, exist_ok=True)
+        snapshot.write_bytes(payload)
     jobs = []
     for bottleneck in bottlenecks:
         for variant in variants:
@@ -496,12 +675,16 @@ def benchmark(
                         checkpoint["completed_steps"],
                     )
                 )
-    datasets = {
-        split: make_dataset(
-            split, cfg.eval_scenes, cfg.test_horizon, cfg.data_seed, cfg.max_objects
-        )
+    loaded_datasets = {
+        split: load_dataset(dataset_specs[split])
         for split in ("test", "more_objects", "composition", "fast")
     }
+    datasets = {split: loaded[0] for split, loaded in loaded_datasets.items()}
+    dataset_registry = {
+        "format": "ripii-dataset-registry-v1",
+        "datasets": {split: loaded[1] for split, loaded in loaded_datasets.items()},
+    }
+    write_json(output / "datasets.json", dataset_registry)
     rows = []
     analytic_baselines = {
         name: {split: evaluate(factory(), data) for split, data in datasets.items()}
@@ -619,9 +802,9 @@ def benchmark(
                 baseline["metrics"][split]["position_rmse"] for split in ood
             ) / len(ood)
             ood_improvement = 1 - candidate_ood / max(baseline_ood, 1e-12)
-            id_improvement = 1 - candidate["metrics"]["test"][
-                "position_rmse"
-            ] / max(baseline["metrics"]["test"]["position_rmse"], 1e-12)
+            id_improvement = 1 - candidate["metrics"]["test"]["position_rmse"] / max(
+                baseline["metrics"]["test"]["position_rmse"], 1e-12
+            )
             pairs.append(
                 {
                     "seed": seed,
@@ -670,6 +853,7 @@ def benchmark(
     )
     report = {
         "protocol_sha256": sha256(output / "protocol.json"),
+        "dataset_registry_sha256": sha256(output / "datasets.json"),
         "runs": rows,
         "by_model": grouped,
         "analytic_baselines": analytic_baselines,
@@ -726,6 +910,7 @@ def benchmark(
         ]
     )
     (output / "report.md").write_text("\n".join(lines) + "\n")
+    tracker.transition("complete")
     artifacts = [
         {
             "path": str(p.relative_to(output)),
@@ -742,16 +927,34 @@ def benchmark(
     return report
 
 
+def benchmark(
+    cfg: Experiment,
+    output: Path,
+    seeds=(3, 7, 11),
+    variants=VARIANTS,
+    bottlenecks=("continuous",),
+):
+    """Run a complete benchmark and leave an explicit failed state on exceptions."""
+    output = Path(output)
+    status_existed = (output / "status.json").exists()
+    try:
+        return _benchmark_impl(cfg, output, seeds, variants, bottlenecks)
+    except BaseException as exc:
+        status = output / "status.json"
+        if not status_existed and status.is_file() and not status.is_symlink():
+            tracker = RunTracker.open(output)
+            if tracker.payload["state"] != "failed":
+                tracker.transition("failed", error=exc)
+        raise
+
+
 def verify(directory: Path):
     directory = Path(directory)
     manifest_path = directory / "manifest.json"
     if manifest_path.is_symlink() or not manifest_path.is_file():
         raise ValueError("manifest must be a regular non-symlink file")
     manifest_path = manifest_path.resolve()
-    try:
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
-        raise ValueError("manifest is unreadable or invalid JSON") from exc
+    manifest = _load_json_object(manifest_path, "manifest")
     if (
         not isinstance(manifest, dict)
         or manifest.get("format") != "ripii-world-manifest-v1"
@@ -782,6 +985,11 @@ def verify(directory: Path):
             failures.append(relative)
         elif path.stat().st_size != entry["bytes"] or sha256(path) != entry["sha256"]:
             failures.append(relative)
+        elif path.suffix == ".json":
+            try:
+                _load_json_object(path, f"artifact {relative}")
+            except ValueError:
+                failures.append(relative)
         seen.add(relative)
     actual = {
         str(path.relative_to(root))
@@ -795,6 +1003,10 @@ def verify(directory: Path):
             "artifact verification failed: "
             f"invalid={failures}, unexpected={unexpected}, missing={missing}"
         )
+    protocol_path = root / "protocol.json"
+    status_path = root / "status.json"
+    if status_path.is_file():
+        verify_complete_status(status_path, sha256(protocol_path))
     return {
         "status": "PASS",
         "artifacts_verified": len(seen),
@@ -803,15 +1015,15 @@ def verify(directory: Path):
 
 
 def _capsule_signature(payload: dict) -> str:
-    signed = {key: value for key, value in payload.items() if key != "result_sha256"}
+    unsigned = {key: value for key, value in payload.items() if key != "result_sha256"}
     encoded = json.dumps(
-        signed, sort_keys=True, separators=(",", ":"), allow_nan=False
+        unsigned, sort_keys=True, separators=(",", ":"), allow_nan=False
     ).encode()
     return hashlib.sha256(encoded).hexdigest()
 
 
 def capture(directory: Path, output: Path):
-    """Retain a compact, signed result capsule after verifying a complete run."""
+    """Retain a compact, self-checksummed capsule after verifying a complete run."""
     directory, output = Path(directory), Path(output)
     verification = verify(directory)
     retained = {}
@@ -825,7 +1037,9 @@ def capture(directory: Path, output: Path):
             "bytes": path.stat().st_size,
             "content_text": content_text,
         }
-    summary = json.loads(retained["summary.json"]["content_text"])
+    summary = _parse_json_object(
+        retained["summary.json"]["content_text"], "summary"
+    )
     if summary.get("protocol_sha256") != retained["protocol.json"]["sha256"]:
         raise ValueError("summary does not reference the retained protocol")
     payload = {
@@ -860,10 +1074,7 @@ def verify_capsule(path: Path):
     path = Path(path)
     if path.is_symlink() or not path.is_file():
         raise ValueError("capsule must be a regular non-symlink JSON file")
-    try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
-        raise ValueError("capsule is unreadable or invalid JSON") from exc
+    payload = _load_json_object(path, "capsule")
     if (
         not isinstance(payload, dict)
         or payload.get("format")
@@ -902,12 +1113,11 @@ def verify_capsule(path: Path):
             ):
                 raise ValueError(f"retained content hash or size mismatch: {name}")
             if name.endswith(".json"):
-                try:
-                    json.loads(content)
-                except json.JSONDecodeError as exc:
-                    raise ValueError(f"retained JSON content is invalid: {name}") from exc
+                _parse_json_object(content, f"retained JSON content {name}")
+        elif not _finite_json(entry["content"]):
+            raise ValueError(f"legacy retained content is non-finite: {name}")
     summary_content = (
-        json.loads(summary["content_text"])
+        _parse_json_object(summary["content_text"], "retained summary")
         if capsule_format == "ripii-world-result-capsule-v2"
         else summary["content"]
     )

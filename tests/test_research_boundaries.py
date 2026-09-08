@@ -140,9 +140,7 @@ def test_legacy_reconstruction_weight_is_mapped_explicitly(tmp_path: Path) -> No
 
 def test_conflicting_reconstruction_weight_names_fail_closed(tmp_path: Path) -> None:
     config = tmp_path / "bad.yaml"
-    config.write_text(
-        "loss_weights:\n  rec: 0.25\n  recon: 0.5\n", encoding="utf-8"
-    )
+    config.write_text("loss_weights:\n  rec: 0.25\n  recon: 0.5\n", encoding="utf-8")
     with pytest.raises(ValueError, match="both rec and recon"):
         load_config(config)
 
@@ -182,7 +180,9 @@ def test_warmup_disables_balancer_offsets_for_inactive_losses() -> None:
         dataset_size=8,
         num_classes=3,
     )
-    model = __import__("ripii.models.factory", fromlist=["build_model"]).build_model(cfg)
+    model = __import__("ripii.models.factory", fromlist=["build_model"]).build_model(
+        cfg
+    )
     batch = {
         "x": torch.randn(4, cfg.input_dim),
         "x_view": torch.randn(4, cfg.input_dim),
@@ -213,4 +213,6 @@ def test_disabled_modules_are_not_reported_as_trainable() -> None:
     model = build_model(apply_mode(Config(), "no_structured"))
     assert not any(parameter.requires_grad for parameter in model.action.parameters())
     assert not any(parameter.requires_grad for parameter in model.graph.parameters())
-    assert not any(parameter.requires_grad for parameter in model.quantizer.parameters())
+    assert not any(
+        parameter.requires_grad for parameter in model.quantizer.parameters()
+    )

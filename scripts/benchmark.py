@@ -82,7 +82,9 @@ def main() -> None:
     args = parser.parse_args()
     protocol_fields = (args.study_id, args.protocol, args.protocol_sha256)
     if any(protocol_fields) and not all(protocol_fields):
-        parser.error("--study-id, --protocol, and --protocol-sha256 must be used together")
+        parser.error(
+            "--study-id, --protocol, and --protocol-sha256 must be used together"
+        )
     protocol_path = Path(args.protocol) if args.protocol else None
     if protocol_path is not None:
         if protocol_path.is_symlink() or not protocol_path.is_file():
@@ -119,7 +121,9 @@ def main() -> None:
         and retain_root is not None
         and retain_root.parent.resolve() != out.parent.resolve()
     ):
-        parser.error("a protocol-bound retained run directory must share the output parent")
+        parser.error(
+            "a protocol-bound retained run directory must share the output parent"
+        )
     if retain_root is not None and retain_root.exists():
         parser.error(f"refusing to overwrite retained run directory: {retain_root}")
     results: list[dict[str, Any]] = []
@@ -132,7 +136,9 @@ def main() -> None:
     # temporary volumes are often much smaller, and a full volume can surface as
     # SIGBUS inside PyTorch rather than a useful Python exception.
     out.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix=".ripii-benchmark-", dir=out.parent) as tmpdir:
+    with tempfile.TemporaryDirectory(
+        prefix=".ripii-benchmark-", dir=out.parent
+    ) as tmpdir:
         tmpdir = Path(tmpdir)
         initial_states: dict[int, Path] = {}
         for seed in args.seeds:
@@ -269,8 +275,13 @@ def main() -> None:
                 mode_summary[f"{key}_std"] = std
         summary["by_mode"][mode] = mode_summary
     if "base" in grouped and "plain_ae" in grouped:
-        base_counts = {int(row["seed"]): int(row["trainable_params"]) for row in grouped["base"]}
-        plain_counts = {int(row["seed"]): int(row["trainable_params"]) for row in grouped["plain_ae"]}
+        base_counts = {
+            int(row["seed"]): int(row["trainable_params"]) for row in grouped["base"]
+        }
+        plain_counts = {
+            int(row["seed"]): int(row["trainable_params"])
+            for row in grouped["plain_ae"]
+        }
         matched_seeds = sorted(set(base_counts) & set(plain_counts))
         relative_errors = [
             abs(plain_counts[seed] - base_counts[seed]) / base_counts[seed]
@@ -297,7 +308,9 @@ def main() -> None:
     )
     artifacts = [out, csv_path, report_path]
     if retain_root is not None:
-        artifacts.extend(sorted(path for path in retain_root.rglob("*") if path.is_file()))
+        artifacts.extend(
+            sorted(path for path in retain_root.rglob("*") if path.is_file())
+        )
     manifest = {
         "study_id": args.study_id or None,
         "protocol_sha256": actual_protocol_sha,

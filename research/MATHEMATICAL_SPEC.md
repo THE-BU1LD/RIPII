@@ -81,3 +81,18 @@ long-horizon/OOD dynamics beyond local graph messages or ordinary global context
 The current five-seed evidence falsifies that advancement claim in this simulator:
 the graph wins every aggregate OOD comparison. Active group assignments establish
 gradient reachability and non-collapse, not causal utility.
+
+## Long-range coupling intervention
+
+The extension adds an optional, symmetric all-pairs harmonic force. For live objects
+and coupling strength \(\kappa\geq0\),
+
+\[
+F^{\mathrm{global}}_i=-\frac{\kappa}{N}\sum_{j\ne i}(p_i-p_j).
+\]
+
+Every pair contributes equal and opposite force, so total momentum is conserved when
+drag, walls, and external actions are absent. At \(\kappa=0\), the original simulator
+is recovered exactly. This targeted counterexample makes nonlocal information useful
+without giving a model future information. The decisive control is masked global
+pooling: hierarchy must beat generic global context, not only a radius-limited graph.

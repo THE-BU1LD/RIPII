@@ -1,0 +1,3361 @@
+{
+  "format": "ripii-world-failure-analysis-v1",
+  "evidence_status": "exploratory_development_failure_analysis",
+  "source_run": "world_v3_convergence",
+  "source_protocol_sha256": "fb8c3a1ca56f68a848b32c3e012b170b3a171ef3e4b5aeed96129854f82c116f",
+  "full_run_verification": {
+    "status": "PASS",
+    "artifacts_verified": 124,
+    "unexpected_files": 0
+  },
+  "post_analysis_run_verification": {
+    "status": "PASS",
+    "artifacts_verified": 124,
+    "unexpected_files": 0
+  },
+  "analysis_source_sha256": {
+    "scripts/analyze_failures.py": "7ff9b5fb007d6214beb0eca649f3f76e2c176c3e505777bcf29ccf151e40a88d",
+    "ripii/world/failure_analysis.py": "aea4fe6933939b331ee93825ba6044ee67e76d66ddb6601c66ded601572300e8",
+    "ripii/world/experiment.py": "f3f0df640a6aa5c17d18bc312e6ab82dcc5d41293170b113f67237a7df5c6def",
+    "ripii/utils/statistics.py": "b11718e2ef416f7fe429ae80a50e55abea0c43055eed310098540a5bbdb489ef"
+  },
+  "checkpoint_model_source": {
+    "current_sha256": "71524557dec49bee6a065a81eb92a6b6ba23824c7151ec020cb52b10cdaa0fe7",
+    "retained_sha256": "2ddc213d4203eef49fc7ad83f89f42b2a7ceab69849b561f414e604ad4492beb",
+    "exact_match": false,
+    "ast_equivalent": true,
+    "policy": "exact bytes or identical Python AST; executable drift is rejected"
+  },
+  "near_contact_margin": 0.05,
+  "regime_definition": "pre-transition true state; categories overlap except free_flight",
+  "experimental_unit": "paired initialization/minibatch seed on one fixed simulator dataset",
+  "rows": [
+    {
+      "variant": "graph",
+      "seed": 23,
+      "checkpoint": "graph_continuous/seed_23/best.pt",
+      "checkpoint_sha256": "7afb0d848a5b6d47a09aec36594437d1ef7f49f1acd804eb89e3a5e7d7b7295b",
+      "selected_step": 700,
+      "splits": {
+        "test": {
+          "contact": {
+            "object_transitions": 66,
+            "position_rmse": 0.06265810132026672,
+            "velocity_rmse": 0.2630520761013031
+          },
+          "near_contact": {
+            "object_transitions": 128,
+            "position_rmse": 0.06674955040216446,
+            "velocity_rmse": 0.1677246391773224
+          },
+          "wall": {
+            "object_transitions": 215,
+            "position_rmse": 0.12711329758167267,
+            "velocity_rmse": 0.3098297417163849
+          },
+          "forced": {
+            "object_transitions": 1072,
+            "position_rmse": 0.07934993505477905,
+            "velocity_rmse": 0.1594376116991043
+          },
+          "free_flight": {
+            "object_transitions": 1809,
+            "position_rmse": 0.09719325602054596,
+            "velocity_rmse": 0.13441981375217438
+          },
+          "all": {
+            "object_transitions": 3168,
+            "position_rmse": 0.09179957956075668,
+            "velocity_rmse": 0.15804530680179596
+          }
+        },
+        "more_objects": {
+          "contact": {
+            "object_transitions": 323,
+            "position_rmse": 0.13566061854362488,
+            "velocity_rmse": 0.3568407893180847
+          },
+          "near_contact": {
+            "object_transitions": 478,
+            "position_rmse": 0.141985684633255,
+            "velocity_rmse": 0.23401384055614471
+          },
+          "wall": {
+            "object_transitions": 570,
+            "position_rmse": 0.13157524168491364,
+            "velocity_rmse": 0.3042297661304474
+          },
+          "forced": {
+            "object_transitions": 2392,
+            "position_rmse": 0.12265513092279434,
+            "velocity_rmse": 0.19086375832557678
+          },
+          "free_flight": {
+            "object_transitions": 3347,
+            "position_rmse": 0.10600225627422333,
+            "velocity_rmse": 0.16122272610664368
+          },
+          "all": {
+            "object_transitions": 6624,
+            "position_rmse": 0.11540336161851883,
+            "velocity_rmse": 0.19318056106567383
+          }
+        },
+        "composition": {
+          "contact": {
+            "object_transitions": 160,
+            "position_rmse": 0.12835203111171722,
+            "velocity_rmse": 0.35086899995803833
+          },
+          "near_contact": {
+            "object_transitions": 184,
+            "position_rmse": 0.11665386706590652,
+            "velocity_rmse": 0.25330349802970886
+          },
+          "wall": {
+            "object_transitions": 414,
+            "position_rmse": 0.11571895331144333,
+            "velocity_rmse": 0.3666974902153015
+          },
+          "forced": {
+            "object_transitions": 1164,
+            "position_rmse": 0.12378614395856857,
+            "velocity_rmse": 0.2189539521932602
+          },
+          "free_flight": {
+            "object_transitions": 1707,
+            "position_rmse": 0.09688901901245117,
+            "velocity_rmse": 0.16350780427455902
+          },
+          "all": {
+            "object_transitions": 3328,
+            "position_rmse": 0.11113838106393814,
+            "velocity_rmse": 0.22063827514648438
+          }
+        },
+        "fast": {
+          "contact": {
+            "object_transitions": 86,
+            "position_rmse": 0.22945186495780945,
+            "velocity_rmse": 0.42833226919174194
+          },
+          "near_contact": {
+            "object_transitions": 138,
+            "position_rmse": 0.21304689347743988,
+            "velocity_rmse": 0.400618314743042
+          },
+          "wall": {
+            "object_transitions": 473,
+            "position_rmse": 0.1073715090751648,
+            "velocity_rmse": 0.5100007653236389
+          },
+          "forced": {
+            "object_transitions": 1232,
+            "position_rmse": 0.16310487687587738,
+            "velocity_rmse": 0.3006051778793335
+          },
+          "free_flight": {
+            "object_transitions": 1463,
+            "position_rmse": 0.1603553295135498,
+            "velocity_rmse": 0.23323428630828857
+          },
+          "all": {
+            "object_transitions": 3136,
+            "position_rmse": 0.16021843254566193,
+            "velocity_rmse": 0.2981770932674408
+          }
+        }
+      }
+    },
+    {
+      "variant": "graph",
+      "seed": 29,
+      "checkpoint": "graph_continuous/seed_29/best.pt",
+      "checkpoint_sha256": "ecf81f730ecdf5677a8e47b34511624c132776afd719173440fe7313314ccf66",
+      "selected_step": 900,
+      "splits": {
+        "test": {
+          "contact": {
+            "object_transitions": 66,
+            "position_rmse": 0.07276010513305664,
+            "velocity_rmse": 0.2798716127872467
+          },
+          "near_contact": {
+            "object_transitions": 128,
+            "position_rmse": 0.07532832771539688,
+            "velocity_rmse": 0.187064066529274
+          },
+          "wall": {
+            "object_transitions": 215,
+            "position_rmse": 0.09690064191818237,
+            "velocity_rmse": 0.32208317518234253
+          },
+          "forced": {
+            "object_transitions": 1072,
+            "position_rmse": 0.08463507890701294,
+            "velocity_rmse": 0.1446249634027481
+          },
+          "free_flight": {
+            "object_transitions": 1809,
+            "position_rmse": 0.08866439014673233,
+            "velocity_rmse": 0.13033199310302734
+          },
+          "all": {
+            "object_transitions": 3168,
+            "position_rmse": 0.0874122753739357,
+            "velocity_rmse": 0.15632224082946777
+          }
+        },
+        "more_objects": {
+          "contact": {
+            "object_transitions": 323,
+            "position_rmse": 0.12826764583587646,
+            "velocity_rmse": 0.3671503961086273
+          },
+          "near_contact": {
+            "object_transitions": 478,
+            "position_rmse": 0.15278831124305725,
+            "velocity_rmse": 0.26310160756111145
+          },
+          "wall": {
+            "object_transitions": 570,
+            "position_rmse": 0.14454995095729828,
+            "velocity_rmse": 0.33868607878685
+          },
+          "forced": {
+            "object_transitions": 2392,
+            "position_rmse": 0.1291429102420807,
+            "velocity_rmse": 0.20149682462215424
+          },
+          "free_flight": {
+            "object_transitions": 3347,
+            "position_rmse": 0.12122784554958344,
+            "velocity_rmse": 0.1753215491771698
+          },
+          "all": {
+            "object_transitions": 6624,
+            "position_rmse": 0.12534363567829132,
+            "velocity_rmse": 0.2081908881664276
+          }
+        },
+        "composition": {
+          "contact": {
+            "object_transitions": 160,
+            "position_rmse": 0.14997467398643494,
+            "velocity_rmse": 0.4055342674255371
+          },
+          "near_contact": {
+            "object_transitions": 184,
+            "position_rmse": 0.1652088463306427,
+            "velocity_rmse": 0.299069881439209
+          },
+          "wall": {
+            "object_transitions": 414,
+            "position_rmse": 0.10927167534828186,
+            "velocity_rmse": 0.4128594696521759
+          },
+          "forced": {
+            "object_transitions": 1164,
+            "position_rmse": 0.13425412774085999,
+            "velocity_rmse": 0.23971958458423615
+          },
+          "free_flight": {
+            "object_transitions": 1707,
+            "position_rmse": 0.11130741983652115,
+            "velocity_rmse": 0.16481313109397888
+          },
+          "all": {
+            "object_transitions": 3328,
+            "position_rmse": 0.12541767954826355,
+            "velocity_rmse": 0.23670482635498047
+          }
+        },
+        "fast": {
+          "contact": {
+            "object_transitions": 86,
+            "position_rmse": 0.24943210184574127,
+            "velocity_rmse": 0.49291685223579407
+          },
+          "near_contact": {
+            "object_transitions": 138,
+            "position_rmse": 0.22630973160266876,
+            "velocity_rmse": 0.42973726987838745
+          },
+          "wall": {
+            "object_transitions": 473,
+            "position_rmse": 0.12819108366966248,
+            "velocity_rmse": 0.5627733469009399
+          },
+          "forced": {
+            "object_transitions": 1232,
+            "position_rmse": 0.1594640165567398,
+            "velocity_rmse": 0.3225521147251129
+          },
+          "free_flight": {
+            "object_transitions": 1463,
+            "position_rmse": 0.15383541584014893,
+            "velocity_rmse": 0.22214607894420624
+          },
+          "all": {
+            "object_transitions": 3136,
+            "position_rmse": 0.15942321717739105,
+            "velocity_rmse": 0.31357255578041077
+          }
+        }
+      }
+    },
+    {
+      "variant": "graph",
+      "seed": 31,
+      "checkpoint": "graph_continuous/seed_31/best.pt",
+      "checkpoint_sha256": "c181755bd3bd1c5d091d16036371a605e8fa612941872a06fd7a2df8333ba129",
+      "selected_step": 750,
+      "splits": {
+        "test": {
+          "contact": {
+            "object_transitions": 66,
+            "position_rmse": 0.06702648103237152,
+            "velocity_rmse": 0.2591454088687897
+          },
+          "near_contact": {
+            "object_transitions": 128,
+            "position_rmse": 0.07200971245765686,
+            "velocity_rmse": 0.17378583550453186
+          },
+          "wall": {
+            "object_transitions": 215,
+            "position_rmse": 0.11355853080749512,
+            "velocity_rmse": 0.32789304852485657
+          },
+          "forced": {
+            "object_transitions": 1072,
+            "position_rmse": 0.08095403760671616,
+            "velocity_rmse": 0.1386307179927826
+          },
+          "free_flight": {
+            "object_transitions": 1809,
+            "position_rmse": 0.09946315735578537,
+            "velocity_rmse": 0.14463864266872406
+          },
+          "all": {
+            "object_transitions": 3168,
+            "position_rmse": 0.09404316544532776,
+            "velocity_rmse": 0.16175606846809387
+          }
+        },
+        "more_objects": {
+          "contact": {
+            "object_transitions": 323,
+            "position_rmse": 0.13216036558151245,
+            "velocity_rmse": 0.3666173219680786
+          },
+          "near_contact": {
+            "object_transitions": 478,
+            "position_rmse": 0.14665909111499786,
+            "velocity_rmse": 0.24633024632930756
+          },
+          "wall": {
+            "object_transitions": 570,
+            "position_rmse": 0.11638341844081879,
+            "velocity_rmse": 0.3089512288570404
+          },
+          "forced": {
+            "object_transitions": 2392,
+            "position_rmse": 0.1239548996090889,
+            "velocity_rmse": 0.1895008385181427
+          },
+          "free_flight": {
+            "object_transitions": 3347,
+            "position_rmse": 0.10452132672071457,
+            "velocity_rmse": 0.15857405960559845
+          },
+          "all": {
+            "object_transitions": 6624,
+            "position_rmse": 0.11390697211027145,
+            "velocity_rmse": 0.1923922300338745
+          }
+        },
+        "composition": {
+          "contact": {
+            "object_transitions": 160,
+            "position_rmse": 0.1436714380979538,
+            "velocity_rmse": 0.38455912470817566
+          },
+          "near_contact": {
+            "object_transitions": 184,
+            "position_rmse": 0.15931591391563416,
+            "velocity_rmse": 0.28875020146369934
+          },
+          "wall": {
+            "object_transitions": 414,
+            "position_rmse": 0.1053910106420517,
+            "velocity_rmse": 0.3798089325428009
+          },
+          "forced": {
+            "object_transitions": 1164,
+            "position_rmse": 0.13116569817066193,
+            "velocity_rmse": 0.22948776185512543
+          },
+          "free_flight": {
+            "object_transitions": 1707,
+            "position_rmse": 0.10302315652370453,
+            "velocity_rmse": 0.1552373617887497
+          },
+          "all": {
+            "object_transitions": 3328,
+            "position_rmse": 0.11933082342147827,
+            "velocity_rmse": 0.22347405552864075
+          }
+        },
+        "fast": {
+          "contact": {
+            "object_transitions": 86,
+            "position_rmse": 0.2667211890220642,
+            "velocity_rmse": 0.49852365255355835
+          },
+          "near_contact": {
+            "object_transitions": 138,
+            "position_rmse": 0.2623925507068634,
+            "velocity_rmse": 0.46539226174354553
+          },
+          "wall": {
+            "object_transitions": 473,
+            "position_rmse": 0.15372757613658905,
+            "velocity_rmse": 0.5604656934738159
+          },
+          "forced": {
+            "object_transitions": 1232,
+            "position_rmse": 0.181627556681633,
+            "velocity_rmse": 0.31623002886772156
+          },
+          "free_flight": {
+            "object_transitions": 1463,
+            "position_rmse": 0.1698841005563736,
+            "velocity_rmse": 0.2422250360250473
+          },
+          "all": {
+            "object_transitions": 3136,
+            "position_rmse": 0.17982202768325806,
+            "velocity_rmse": 0.32154735922813416
+          }
+        }
+      }
+    },
+    {
+      "variant": "graph",
+      "seed": 37,
+      "checkpoint": "graph_continuous/seed_37/best.pt",
+      "checkpoint_sha256": "9ed18b88c6d54436870797d14f60a7317a4bfaf2a5c1583ed9a244fea60af789",
+      "selected_step": 800,
+      "splits": {
+        "test": {
+          "contact": {
+            "object_transitions": 66,
+            "position_rmse": 0.06817852705717087,
+            "velocity_rmse": 0.2880780100822449
+          },
+          "near_contact": {
+            "object_transitions": 128,
+            "position_rmse": 0.07901348173618317,
+            "velocity_rmse": 0.20584231615066528
+          },
+          "wall": {
+            "object_transitions": 215,
+            "position_rmse": 0.0931701585650444,
+            "velocity_rmse": 0.2898274064064026
+          },
+          "forced": {
+            "object_transitions": 1072,
+            "position_rmse": 0.07259010523557663,
+            "velocity_rmse": 0.1393582820892334
+          },
+          "free_flight": {
+            "object_transitions": 1809,
+            "position_rmse": 0.08197518438100815,
+            "velocity_rmse": 0.12975113093852997
+          },
+          "all": {
+            "object_transitions": 3168,
+            "position_rmse": 0.07932712882757187,
+            "velocity_rmse": 0.15023769438266754
+          }
+        },
+        "more_objects": {
+          "contact": {
+            "object_transitions": 323,
+            "position_rmse": 0.1292637288570404,
+            "velocity_rmse": 0.3626919090747833
+          },
+          "near_contact": {
+            "object_transitions": 478,
+            "position_rmse": 0.13904598355293274,
+            "velocity_rmse": 0.24618779122829437
+          },
+          "wall": {
+            "object_transitions": 570,
+            "position_rmse": 0.11666571348905563,
+            "velocity_rmse": 0.29773417115211487
+          },
+          "forced": {
+            "object_transitions": 2392,
+            "position_rmse": 0.11630378663539886,
+            "velocity_rmse": 0.18538081645965576
+          },
+          "free_flight": {
+            "object_transitions": 3347,
+            "position_rmse": 0.10261017084121704,
+            "velocity_rmse": 0.1614217609167099
+          },
+          "all": {
+            "object_transitions": 6624,
+            "position_rmse": 0.10992022603750229,
+            "velocity_rmse": 0.19199368357658386
+          }
+        },
+        "composition": {
+          "contact": {
+            "object_transitions": 160,
+            "position_rmse": 0.16504205763339996,
+            "velocity_rmse": 0.4435814321041107
+          },
+          "near_contact": {
+            "object_transitions": 184,
+            "position_rmse": 0.19319576025009155,
+            "velocity_rmse": 0.3591223657131195
+          },
+          "wall": {
+            "object_transitions": 414,
+            "position_rmse": 0.11747642606496811,
+            "velocity_rmse": 0.3859165906906128
+          },
+          "forced": {
+            "object_transitions": 1164,
+            "position_rmse": 0.13522125780582428,
+            "velocity_rmse": 0.24735641479492188
+          },
+          "free_flight": {
+            "object_transitions": 1707,
+            "position_rmse": 0.10242167115211487,
+            "velocity_rmse": 0.15216967463493347
+          },
+          "all": {
+            "object_transitions": 3328,
+            "position_rmse": 0.12499505281448364,
+            "velocity_rmse": 0.23552916944026947
+          }
+        },
+        "fast": {
+          "contact": {
+            "object_transitions": 86,
+            "position_rmse": 0.27309322357177734,
+            "velocity_rmse": 0.4400695264339447
+          },
+          "near_contact": {
+            "object_transitions": 138,
+            "position_rmse": 0.2494899332523346,
+            "velocity_rmse": 0.4590926766395569
+          },
+          "wall": {
+            "object_transitions": 473,
+            "position_rmse": 0.13657310605049133,
+            "velocity_rmse": 0.6069087982177734
+          },
+          "forced": {
+            "object_transitions": 1232,
+            "position_rmse": 0.16183027625083923,
+            "velocity_rmse": 0.3285578787326813
+          },
+          "free_flight": {
+            "object_transitions": 1463,
+            "position_rmse": 0.14744417369365692,
+            "velocity_rmse": 0.24660202860832214
+          },
+          "all": {
+            "object_transitions": 3136,
+            "position_rmse": 0.15973517298698425,
+            "velocity_rmse": 0.33242517709732056
+          }
+        }
+      }
+    },
+    {
+      "variant": "graph",
+      "seed": 43,
+      "checkpoint": "graph_continuous/seed_43/best.pt",
+      "checkpoint_sha256": "67f11e29b99dcaeef780aa44acdc43e11a2ffcede06d1953e2ae1674b6ea8480",
+      "selected_step": 850,
+      "splits": {
+        "test": {
+          "contact": {
+            "object_transitions": 66,
+            "position_rmse": 0.08562721312046051,
+            "velocity_rmse": 0.2856408357620239
+          },
+          "near_contact": {
+            "object_transitions": 128,
+            "position_rmse": 0.08579544723033905,
+            "velocity_rmse": 0.1888980269432068
+          },
+          "wall": {
+            "object_transitions": 215,
+            "position_rmse": 0.12389492243528366,
+            "velocity_rmse": 0.36484307050704956
+          },
+          "forced": {
+            "object_transitions": 1072,
+            "position_rmse": 0.08384433388710022,
+            "velocity_rmse": 0.16252721846103668
+          },
+          "free_flight": {
+            "object_transitions": 1809,
+            "position_rmse": 0.10695016384124756,
+            "velocity_rmse": 0.14470842480659485
+          },
+          "all": {
+            "object_transitions": 3168,
+            "position_rmse": 0.09930290281772614,
+            "velocity_rmse": 0.17126712203025818
+          }
+        },
+        "more_objects": {
+          "contact": {
+            "object_transitions": 323,
+            "position_rmse": 0.14325757324695587,
+            "velocity_rmse": 0.37706103920936584
+          },
+          "near_contact": {
+            "object_transitions": 478,
+            "position_rmse": 0.14487135410308838,
+            "velocity_rmse": 0.2589813470840454
+          },
+          "wall": {
+            "object_transitions": 570,
+            "position_rmse": 0.12458209693431854,
+            "velocity_rmse": 0.3596874475479126
+          },
+          "forced": {
+            "object_transitions": 2392,
+            "position_rmse": 0.12763504683971405,
+            "velocity_rmse": 0.21180757880210876
+          },
+          "free_flight": {
+            "object_transitions": 3347,
+            "position_rmse": 0.1070583164691925,
+            "velocity_rmse": 0.17132119834423065
+          },
+          "all": {
+            "object_transitions": 6624,
+            "position_rmse": 0.11752210557460785,
+            "velocity_rmse": 0.2108209729194641
+          }
+        },
+        "composition": {
+          "contact": {
+            "object_transitions": 160,
+            "position_rmse": 0.15187501907348633,
+            "velocity_rmse": 0.386879026889801
+          },
+          "near_contact": {
+            "object_transitions": 184,
+            "position_rmse": 0.16087861359119415,
+            "velocity_rmse": 0.32817187905311584
+          },
+          "wall": {
+            "object_transitions": 414,
+            "position_rmse": 0.1201532855629921,
+            "velocity_rmse": 0.41123294830322266
+          },
+          "forced": {
+            "object_transitions": 1164,
+            "position_rmse": 0.13151530921459198,
+            "velocity_rmse": 0.2405645251274109
+          },
+          "free_flight": {
+            "object_transitions": 1707,
+            "position_rmse": 0.10032154619693756,
+            "velocity_rmse": 0.1562499701976776
+          },
+          "all": {
+            "object_transitions": 3328,
+            "position_rmse": 0.1203722432255745,
+            "velocity_rmse": 0.23418299853801727
+          }
+        },
+        "fast": {
+          "contact": {
+            "object_transitions": 86,
+            "position_rmse": 0.3400118350982666,
+            "velocity_rmse": 0.6390143632888794
+          },
+          "near_contact": {
+            "object_transitions": 138,
+            "position_rmse": 0.3473331332206726,
+            "velocity_rmse": 0.6342301368713379
+          },
+          "wall": {
+            "object_transitions": 473,
+            "position_rmse": 0.1469530165195465,
+            "velocity_rmse": 0.6372918486595154
+          },
+          "forced": {
+            "object_transitions": 1232,
+            "position_rmse": 0.2274804711341858,
+            "velocity_rmse": 0.39807069301605225
+          },
+          "free_flight": {
+            "object_transitions": 1463,
+            "position_rmse": 0.20677968859672546,
+            "velocity_rmse": 0.26835596561431885
+          },
+          "all": {
+            "object_transitions": 3136,
+            "position_rmse": 0.2182631492614746,
+            "velocity_rmse": 0.38456013798713684
+          }
+        }
+      }
+    },
+    {
+      "variant": "global_pool",
+      "seed": 23,
+      "checkpoint": "global_pool_continuous/seed_23/best.pt",
+      "checkpoint_sha256": "daefc3ed9a8ac2e409ed80f9b11223822ae5d8b9f360d25c098ebc4d6f9a263d",
+      "selected_step": 1000,
+      "splits": {
+        "test": {
+          "contact": {
+            "object_transitions": 66,
+            "position_rmse": 0.0927215963602066,
+            "velocity_rmse": 0.2844065725803375
+          },
+          "near_contact": {
+            "object_transitions": 128,
+            "position_rmse": 0.08137436211109161,
+            "velocity_rmse": 0.19954240322113037
+          },
+          "wall": {
+            "object_transitions": 215,
+            "position_rmse": 0.11334483325481415,
+            "velocity_rmse": 0.32783597707748413
+          },
+          "forced": {
+            "object_transitions": 1072,
+            "position_rmse": 0.0886295810341835,
+            "velocity_rmse": 0.16092270612716675
+          },
+          "free_flight": {
+            "object_transitions": 1809,
+            "position_rmse": 0.09333775192499161,
+            "velocity_rmse": 0.1409970223903656
+          },
+          "all": {
+            "object_transitions": 3168,
+            "position_rmse": 0.09240484982728958,
+            "velocity_rmse": 0.16647449135780334
+          }
+        },
+        "more_objects": {
+          "contact": {
+            "object_transitions": 323,
+            "position_rmse": 0.1463993340730667,
+            "velocity_rmse": 0.3612860441207886
+          },
+          "near_contact": {
+            "object_transitions": 478,
+            "position_rmse": 0.16313865780830383,
+            "velocity_rmse": 0.2749421000480652
+          },
+          "wall": {
+            "object_transitions": 570,
+            "position_rmse": 0.14264829456806183,
+            "velocity_rmse": 0.37555983662605286
+          },
+          "forced": {
+            "object_transitions": 2392,
+            "position_rmse": 0.1413232684135437,
+            "velocity_rmse": 0.22282500565052032
+          },
+          "free_flight": {
+            "object_transitions": 3347,
+            "position_rmse": 0.12403854727745056,
+            "velocity_rmse": 0.1878385692834854
+          },
+          "all": {
+            "object_transitions": 6624,
+            "position_rmse": 0.13271811604499817,
+            "velocity_rmse": 0.22398307919502258
+          }
+        },
+        "composition": {
+          "contact": {
+            "object_transitions": 160,
+            "position_rmse": 0.1655072569847107,
+            "velocity_rmse": 0.41876640915870667
+          },
+          "near_contact": {
+            "object_transitions": 184,
+            "position_rmse": 0.1735306829214096,
+            "velocity_rmse": 0.3531031310558319
+          },
+          "wall": {
+            "object_transitions": 414,
+            "position_rmse": 0.12689337134361267,
+            "velocity_rmse": 0.45518532395362854
+          },
+          "forced": {
+            "object_transitions": 1164,
+            "position_rmse": 0.14314410090446472,
+            "velocity_rmse": 0.263909250497818
+          },
+          "free_flight": {
+            "object_transitions": 1707,
+            "position_rmse": 0.11836294084787369,
+            "velocity_rmse": 0.16884279251098633
+          },
+          "all": {
+            "object_transitions": 3328,
+            "position_rmse": 0.13413240015506744,
+            "velocity_rmse": 0.2534778416156769
+          }
+        },
+        "fast": {
+          "contact": {
+            "object_transitions": 86,
+            "position_rmse": 0.3520297110080719,
+            "velocity_rmse": 0.5961650013923645
+          },
+          "near_contact": {
+            "object_transitions": 138,
+            "position_rmse": 0.3365565836429596,
+            "velocity_rmse": 0.5675941109657288
+          },
+          "wall": {
+            "object_transitions": 473,
+            "position_rmse": 0.15003333985805511,
+            "velocity_rmse": 0.6680507659912109
+          },
+          "forced": {
+            "object_transitions": 1232,
+            "position_rmse": 0.21744538843631744,
+            "velocity_rmse": 0.39714717864990234
+          },
+          "free_flight": {
+            "object_transitions": 1463,
+            "position_rmse": 0.20502620935440063,
+            "velocity_rmse": 0.25924456119537354
+          },
+          "all": {
+            "object_transitions": 3136,
+            "position_rmse": 0.2137419730424881,
+            "velocity_rmse": 0.3788406252861023
+          }
+        }
+      }
+    },
+    {
+      "variant": "global_pool",
+      "seed": 29,
+      "checkpoint": "global_pool_continuous/seed_29/best.pt",
+      "checkpoint_sha256": "977f009bf2331c1747729b1ca81130aa42acd76f6b1b2bb8c4561981af5d3155",
+      "selected_step": 1000,
+      "splits": {
+        "test": {
+          "contact": {
+            "object_transitions": 66,
+            "position_rmse": 0.07260885834693909,
+            "velocity_rmse": 0.27886340022087097
+          },
+          "near_contact": {
+            "object_transitions": 128,
+            "position_rmse": 0.07813271880149841,
+            "velocity_rmse": 0.1942306011915207
+          },
+          "wall": {
+            "object_transitions": 215,
+            "position_rmse": 0.1084858626127243,
+            "velocity_rmse": 0.33646050095558167
+          },
+          "forced": {
+            "object_transitions": 1072,
+            "position_rmse": 0.07904418557882309,
+            "velocity_rmse": 0.15218402445316315
+          },
+          "free_flight": {
+            "object_transitions": 1809,
+            "position_rmse": 0.09251787513494492,
+            "velocity_rmse": 0.12816745042800903
+          },
+          "all": {
+            "object_transitions": 3168,
+            "position_rmse": 0.0880051925778389,
+            "velocity_rmse": 0.15646760165691376
+          }
+        },
+        "more_objects": {
+          "contact": {
+            "object_transitions": 323,
+            "position_rmse": 0.1314660608768463,
+            "velocity_rmse": 0.36311936378479004
+          },
+          "near_contact": {
+            "object_transitions": 478,
+            "position_rmse": 0.14099068939685822,
+            "velocity_rmse": 0.25581085681915283
+          },
+          "wall": {
+            "object_transitions": 570,
+            "position_rmse": 0.11490378528833389,
+            "velocity_rmse": 0.36403509974479675
+          },
+          "forced": {
+            "object_transitions": 2392,
+            "position_rmse": 0.134124293923378,
+            "velocity_rmse": 0.2072685807943344
+          },
+          "free_flight": {
+            "object_transitions": 3347,
+            "position_rmse": 0.10708224773406982,
+            "velocity_rmse": 0.16383376717567444
+          },
+          "all": {
+            "object_transitions": 6624,
+            "position_rmse": 0.11861209571361542,
+            "velocity_rmse": 0.20551642775535583
+          }
+        },
+        "composition": {
+          "contact": {
+            "object_transitions": 160,
+            "position_rmse": 0.1532873511314392,
+            "velocity_rmse": 0.4299171268939972
+          },
+          "near_contact": {
+            "object_transitions": 184,
+            "position_rmse": 0.16860559582710266,
+            "velocity_rmse": 0.337751179933548
+          },
+          "wall": {
+            "object_transitions": 414,
+            "position_rmse": 0.13151530921459198,
+            "velocity_rmse": 0.4580215811729431
+          },
+          "forced": {
+            "object_transitions": 1164,
+            "position_rmse": 0.13676299154758453,
+            "velocity_rmse": 0.26089075207710266
+          },
+          "free_flight": {
+            "object_transitions": 1707,
+            "position_rmse": 0.10685859620571136,
+            "velocity_rmse": 0.16424445807933807
+          },
+          "all": {
+            "object_transitions": 3328,
+            "position_rmse": 0.12627513706684113,
+            "velocity_rmse": 0.2526721954345703
+          }
+        },
+        "fast": {
+          "contact": {
+            "object_transitions": 86,
+            "position_rmse": 0.3791334629058838,
+            "velocity_rmse": 0.5052142143249512
+          },
+          "near_contact": {
+            "object_transitions": 138,
+            "position_rmse": 0.3362717032432556,
+            "velocity_rmse": 0.5226998329162598
+          },
+          "wall": {
+            "object_transitions": 473,
+            "position_rmse": 0.14388471841812134,
+            "velocity_rmse": 0.6791364550590515
+          },
+          "forced": {
+            "object_transitions": 1232,
+            "position_rmse": 0.22249376773834229,
+            "velocity_rmse": 0.38782185316085815
+          },
+          "free_flight": {
+            "object_transitions": 1463,
+            "position_rmse": 0.20872220396995544,
+            "velocity_rmse": 0.24898391962051392
+          },
+          "all": {
+            "object_transitions": 3136,
+            "position_rmse": 0.21753869950771332,
+            "velocity_rmse": 0.366963267326355
+          }
+        }
+      }
+    },
+    {
+      "variant": "global_pool",
+      "seed": 31,
+      "checkpoint": "global_pool_continuous/seed_31/best.pt",
+      "checkpoint_sha256": "a160828c44056d662aa5a552b91a8a5b4fa4d8926d7f3ca369cf79beba45a468",
+      "selected_step": 800,
+      "splits": {
+        "test": {
+          "contact": {
+            "object_transitions": 66,
+            "position_rmse": 0.06590629369020462,
+            "velocity_rmse": 0.2719680666923523
+          },
+          "near_contact": {
+            "object_transitions": 128,
+            "position_rmse": 0.06020333990454674,
+            "velocity_rmse": 0.19164219498634338
+          },
+          "wall": {
+            "object_transitions": 215,
+            "position_rmse": 0.10296112298965454,
+            "velocity_rmse": 0.3185611963272095
+          },
+          "forced": {
+            "object_transitions": 1072,
+            "position_rmse": 0.07562550157308578,
+            "velocity_rmse": 0.14462685585021973
+          },
+          "free_flight": {
+            "object_transitions": 1809,
+            "position_rmse": 0.0903286561369896,
+            "velocity_rmse": 0.13308678567409515
+          },
+          "all": {
+            "object_transitions": 3168,
+            "position_rmse": 0.08531171083450317,
+            "velocity_rmse": 0.15644368529319763
+          }
+        },
+        "more_objects": {
+          "contact": {
+            "object_transitions": 323,
+            "position_rmse": 0.13509394228458405,
+            "velocity_rmse": 0.4072778820991516
+          },
+          "near_contact": {
+            "object_transitions": 478,
+            "position_rmse": 0.14850570261478424,
+            "velocity_rmse": 0.2766949236392975
+          },
+          "wall": {
+            "object_transitions": 570,
+            "position_rmse": 0.12356376647949219,
+            "velocity_rmse": 0.3616458475589752
+          },
+          "forced": {
+            "object_transitions": 2392,
+            "position_rmse": 0.13086596131324768,
+            "velocity_rmse": 0.21441110968589783
+          },
+          "free_flight": {
+            "object_transitions": 3347,
+            "position_rmse": 0.11058657616376877,
+            "velocity_rmse": 0.17287695407867432
+          },
+          "all": {
+            "object_transitions": 6624,
+            "position_rmse": 0.11965438723564148,
+            "velocity_rmse": 0.2153031826019287
+          }
+        },
+        "composition": {
+          "contact": {
+            "object_transitions": 160,
+            "position_rmse": 0.19082732498645782,
+            "velocity_rmse": 0.4803149998188019
+          },
+          "near_contact": {
+            "object_transitions": 184,
+            "position_rmse": 0.22805124521255493,
+            "velocity_rmse": 0.4265842139720917
+          },
+          "wall": {
+            "object_transitions": 414,
+            "position_rmse": 0.14716088771820068,
+            "velocity_rmse": 0.47193607687950134
+          },
+          "forced": {
+            "object_transitions": 1164,
+            "position_rmse": 0.14608192443847656,
+            "velocity_rmse": 0.27638450264930725
+          },
+          "free_flight": {
+            "object_transitions": 1707,
+            "position_rmse": 0.11485376954078674,
+            "velocity_rmse": 0.18009090423583984
+          },
+          "all": {
+            "object_transitions": 3328,
+            "position_rmse": 0.14084447920322418,
+            "velocity_rmse": 0.2736995220184326
+          }
+        },
+        "fast": {
+          "contact": {
+            "object_transitions": 86,
+            "position_rmse": 0.31831347942352295,
+            "velocity_rmse": 0.6008510589599609
+          },
+          "near_contact": {
+            "object_transitions": 138,
+            "position_rmse": 0.3067322075366974,
+            "velocity_rmse": 0.5640637874603271
+          },
+          "wall": {
+            "object_transitions": 473,
+            "position_rmse": 0.1571952998638153,
+            "velocity_rmse": 0.6331984996795654
+          },
+          "forced": {
+            "object_transitions": 1232,
+            "position_rmse": 0.19040098786354065,
+            "velocity_rmse": 0.36225417256355286
+          },
+          "free_flight": {
+            "object_transitions": 1463,
+            "position_rmse": 0.1838614046573639,
+            "velocity_rmse": 0.2609202563762665
+          },
+          "all": {
+            "object_transitions": 3136,
+            "position_rmse": 0.193788081407547,
+            "velocity_rmse": 0.365055114030838
+          }
+        }
+      }
+    },
+    {
+      "variant": "global_pool",
+      "seed": 37,
+      "checkpoint": "global_pool_continuous/seed_37/best.pt",
+      "checkpoint_sha256": "7ee804f1dfe6ba4396060a482142a3315ca8e97885be5c861e8dafe3b07a999f",
+      "selected_step": 550,
+      "splits": {
+        "test": {
+          "contact": {
+            "object_transitions": 66,
+            "position_rmse": 0.09360449016094208,
+            "velocity_rmse": 0.28830158710479736
+          },
+          "near_contact": {
+            "object_transitions": 128,
+            "position_rmse": 0.0871652290225029,
+            "velocity_rmse": 0.1885727494955063
+          },
+          "wall": {
+            "object_transitions": 215,
+            "position_rmse": 0.09390389919281006,
+            "velocity_rmse": 0.3450516164302826
+          },
+          "forced": {
+            "object_transitions": 1072,
+            "position_rmse": 0.09557399898767471,
+            "velocity_rmse": 0.15271209180355072
+          },
+          "free_flight": {
+            "object_transitions": 1809,
+            "position_rmse": 0.08736033737659454,
+            "velocity_rmse": 0.12990668416023254
+          },
+          "all": {
+            "object_transitions": 3168,
+            "position_rmse": 0.09079314768314362,
+            "velocity_rmse": 0.16161271929740906
+          }
+        },
+        "more_objects": {
+          "contact": {
+            "object_transitions": 323,
+            "position_rmse": 0.14197823405265808,
+            "velocity_rmse": 0.3443447947502136
+          },
+          "near_contact": {
+            "object_transitions": 478,
+            "position_rmse": 0.14516960084438324,
+            "velocity_rmse": 0.2385503202676773
+          },
+          "wall": {
+            "object_transitions": 570,
+            "position_rmse": 0.13299493491649628,
+            "velocity_rmse": 0.35223624110221863
+          },
+          "forced": {
+            "object_transitions": 2392,
+            "position_rmse": 0.13137748837471008,
+            "velocity_rmse": 0.20370517671108246
+          },
+          "free_flight": {
+            "object_transitions": 3347,
+            "position_rmse": 0.11305128037929535,
+            "velocity_rmse": 0.1687420904636383
+          },
+          "all": {
+            "object_transitions": 6624,
+            "position_rmse": 0.1221233382821083,
+            "velocity_rmse": 0.20503032207489014
+          }
+        },
+        "composition": {
+          "contact": {
+            "object_transitions": 160,
+            "position_rmse": 0.14030182361602783,
+            "velocity_rmse": 0.373452752828598
+          },
+          "near_contact": {
+            "object_transitions": 184,
+            "position_rmse": 0.15443561971187592,
+            "velocity_rmse": 0.3263261020183563
+          },
+          "wall": {
+            "object_transitions": 414,
+            "position_rmse": 0.10640371590852737,
+            "velocity_rmse": 0.3996336758136749
+          },
+          "forced": {
+            "object_transitions": 1164,
+            "position_rmse": 0.14045163989067078,
+            "velocity_rmse": 0.2542404532432556
+          },
+          "free_flight": {
+            "object_transitions": 1707,
+            "position_rmse": 0.12051168829202652,
+            "velocity_rmse": 0.17728151381015778
+          },
+          "all": {
+            "object_transitions": 3328,
+            "position_rmse": 0.13063402473926544,
+            "velocity_rmse": 0.24335119128227234
+          }
+        },
+        "fast": {
+          "contact": {
+            "object_transitions": 86,
+            "position_rmse": 0.30601003766059875,
+            "velocity_rmse": 0.5086809992790222
+          },
+          "near_contact": {
+            "object_transitions": 138,
+            "position_rmse": 0.29446882009506226,
+            "velocity_rmse": 0.4870876669883728
+          },
+          "wall": {
+            "object_transitions": 473,
+            "position_rmse": 0.15472497045993805,
+            "velocity_rmse": 0.657693088054657
+          },
+          "forced": {
+            "object_transitions": 1232,
+            "position_rmse": 0.20196551084518433,
+            "velocity_rmse": 0.36554500460624695
+          },
+          "free_flight": {
+            "object_transitions": 1463,
+            "position_rmse": 0.18893662095069885,
+            "velocity_rmse": 0.27296775579452515
+          },
+          "all": {
+            "object_transitions": 3136,
+            "position_rmse": 0.1983032375574112,
+            "velocity_rmse": 0.3668484091758728
+          }
+        }
+      }
+    },
+    {
+      "variant": "global_pool",
+      "seed": 43,
+      "checkpoint": "global_pool_continuous/seed_43/best.pt",
+      "checkpoint_sha256": "220d9a0cac309dd60a8cead8e6828ba5a63e6eb5a57f794e44967fe8463e0744",
+      "selected_step": 1000,
+      "splits": {
+        "test": {
+          "contact": {
+            "object_transitions": 66,
+            "position_rmse": 0.10528622567653656,
+            "velocity_rmse": 0.29167044162750244
+          },
+          "near_contact": {
+            "object_transitions": 128,
+            "position_rmse": 0.09908449649810791,
+            "velocity_rmse": 0.19104169309139252
+          },
+          "wall": {
+            "object_transitions": 215,
+            "position_rmse": 0.12360019236803055,
+            "velocity_rmse": 0.38068243861198425
+          },
+          "forced": {
+            "object_transitions": 1072,
+            "position_rmse": 0.10539933294057846,
+            "velocity_rmse": 0.17962950468063354
+          },
+          "free_flight": {
+            "object_transitions": 1809,
+            "position_rmse": 0.10223868489265442,
+            "velocity_rmse": 0.14445377886295319
+          },
+          "all": {
+            "object_transitions": 3168,
+            "position_rmse": 0.10360387712717056,
+            "velocity_rmse": 0.17765772342681885
+          }
+        },
+        "more_objects": {
+          "contact": {
+            "object_transitions": 323,
+            "position_rmse": 0.13439270853996277,
+            "velocity_rmse": 0.36283791065216064
+          },
+          "near_contact": {
+            "object_transitions": 478,
+            "position_rmse": 0.13261203467845917,
+            "velocity_rmse": 0.2534104883670807
+          },
+          "wall": {
+            "object_transitions": 570,
+            "position_rmse": 0.12330130487680435,
+            "velocity_rmse": 0.3850592374801636
+          },
+          "forced": {
+            "object_transitions": 2392,
+            "position_rmse": 0.1403127759695053,
+            "velocity_rmse": 0.22071956098079681
+          },
+          "free_flight": {
+            "object_transitions": 3347,
+            "position_rmse": 0.11433336138725281,
+            "velocity_rmse": 0.17571580410003662
+          },
+          "all": {
+            "object_transitions": 6624,
+            "position_rmse": 0.12457549571990967,
+            "velocity_rmse": 0.21792177855968475
+          }
+        },
+        "composition": {
+          "contact": {
+            "object_transitions": 160,
+            "position_rmse": 0.1604921817779541,
+            "velocity_rmse": 0.4159203767776489
+          },
+          "near_contact": {
+            "object_transitions": 184,
+            "position_rmse": 0.17272640764713287,
+            "velocity_rmse": 0.3462044894695282
+          },
+          "wall": {
+            "object_transitions": 414,
+            "position_rmse": 0.13371248543262482,
+            "velocity_rmse": 0.46187442541122437
+          },
+          "forced": {
+            "object_transitions": 1164,
+            "position_rmse": 0.1391593962907791,
+            "velocity_rmse": 0.266522079706192
+          },
+          "free_flight": {
+            "object_transitions": 1707,
+            "position_rmse": 0.11081665754318237,
+            "velocity_rmse": 0.18001188337802887
+          },
+          "all": {
+            "object_transitions": 3328,
+            "position_rmse": 0.13082823157310486,
+            "velocity_rmse": 0.2610982656478882
+          }
+        },
+        "fast": {
+          "contact": {
+            "object_transitions": 86,
+            "position_rmse": 0.4088134169578552,
+            "velocity_rmse": 0.7055162787437439
+          },
+          "near_contact": {
+            "object_transitions": 138,
+            "position_rmse": 0.39991849660873413,
+            "velocity_rmse": 0.7356249094009399
+          },
+          "wall": {
+            "object_transitions": 473,
+            "position_rmse": 0.18452078104019165,
+            "velocity_rmse": 0.724113941192627
+          },
+          "forced": {
+            "object_transitions": 1232,
+            "position_rmse": 0.26254960894584656,
+            "velocity_rmse": 0.45006734132766724
+          },
+          "free_flight": {
+            "object_transitions": 1463,
+            "position_rmse": 0.2503049969673157,
+            "velocity_rmse": 0.3160251975059509
+          },
+          "all": {
+            "object_transitions": 3136,
+            "position_rmse": 0.26000097393989563,
+            "velocity_rmse": 0.44093939661979675
+          }
+        }
+      }
+    },
+    {
+      "variant": "multiscale",
+      "seed": 23,
+      "checkpoint": "multiscale_continuous/seed_23/best.pt",
+      "checkpoint_sha256": "d75f395fbb6e3da0f4f6935d2994dd7a881f4bd55ff2b7705471b71e512b7441",
+      "selected_step": 700,
+      "splits": {
+        "test": {
+          "contact": {
+            "object_transitions": 66,
+            "position_rmse": 0.09295528382062912,
+            "velocity_rmse": 0.28073030710220337
+          },
+          "near_contact": {
+            "object_transitions": 128,
+            "position_rmse": 0.09287948906421661,
+            "velocity_rmse": 0.1790197640657425
+          },
+          "wall": {
+            "object_transitions": 215,
+            "position_rmse": 0.13091763854026794,
+            "velocity_rmse": 0.3349139094352722
+          },
+          "forced": {
+            "object_transitions": 1072,
+            "position_rmse": 0.09816624224185944,
+            "velocity_rmse": 0.16574043035507202
+          },
+          "free_flight": {
+            "object_transitions": 1809,
+            "position_rmse": 0.1051381379365921,
+            "velocity_rmse": 0.1463387906551361
+          },
+          "all": {
+            "object_transitions": 3168,
+            "position_rmse": 0.10229304432868958,
+            "velocity_rmse": 0.16769258677959442
+          }
+        },
+        "more_objects": {
+          "contact": {
+            "object_transitions": 323,
+            "position_rmse": 0.1391664743423462,
+            "velocity_rmse": 0.36899828910827637
+          },
+          "near_contact": {
+            "object_transitions": 478,
+            "position_rmse": 0.14425066113471985,
+            "velocity_rmse": 0.24497535824775696
+          },
+          "wall": {
+            "object_transitions": 570,
+            "position_rmse": 0.12802961468696594,
+            "velocity_rmse": 0.33523568511009216
+          },
+          "forced": {
+            "object_transitions": 2392,
+            "position_rmse": 0.14140291512012482,
+            "velocity_rmse": 0.2105044722557068
+          },
+          "free_flight": {
+            "object_transitions": 3347,
+            "position_rmse": 0.110841765999794,
+            "velocity_rmse": 0.16724222898483276
+          },
+          "all": {
+            "object_transitions": 6624,
+            "position_rmse": 0.1247086301445961,
+            "velocity_rmse": 0.20647032558918
+          }
+        },
+        "composition": {
+          "contact": {
+            "object_transitions": 160,
+            "position_rmse": 0.13445651531219482,
+            "velocity_rmse": 0.37428584694862366
+          },
+          "near_contact": {
+            "object_transitions": 184,
+            "position_rmse": 0.1413811296224594,
+            "velocity_rmse": 0.28706836700439453
+          },
+          "wall": {
+            "object_transitions": 414,
+            "position_rmse": 0.11476428806781769,
+            "velocity_rmse": 0.42395493388175964
+          },
+          "forced": {
+            "object_transitions": 1164,
+            "position_rmse": 0.13182830810546875,
+            "velocity_rmse": 0.24862314760684967
+          },
+          "free_flight": {
+            "object_transitions": 1707,
+            "position_rmse": 0.10887876898050308,
+            "velocity_rmse": 0.17449899017810822
+          },
+          "all": {
+            "object_transitions": 3328,
+            "position_rmse": 0.12202946841716766,
+            "velocity_rmse": 0.24364331364631653
+          }
+        },
+        "fast": {
+          "contact": {
+            "object_transitions": 86,
+            "position_rmse": 0.3369200527667999,
+            "velocity_rmse": 0.6529411673545837
+          },
+          "near_contact": {
+            "object_transitions": 138,
+            "position_rmse": 0.3369523286819458,
+            "velocity_rmse": 0.6186731457710266
+          },
+          "wall": {
+            "object_transitions": 473,
+            "position_rmse": 0.15508216619491577,
+            "velocity_rmse": 0.6313820481300354
+          },
+          "forced": {
+            "object_transitions": 1232,
+            "position_rmse": 0.23503758013248444,
+            "velocity_rmse": 0.4053715467453003
+          },
+          "free_flight": {
+            "object_transitions": 1463,
+            "position_rmse": 0.2322789877653122,
+            "velocity_rmse": 0.2998155951499939
+          },
+          "all": {
+            "object_transitions": 3136,
+            "position_rmse": 0.23347124457359314,
+            "velocity_rmse": 0.3955634534358978
+          }
+        }
+      }
+    },
+    {
+      "variant": "multiscale",
+      "seed": 29,
+      "checkpoint": "multiscale_continuous/seed_29/best.pt",
+      "checkpoint_sha256": "b2053efe55ff7be9f98738feb9c144c241c8b0e9c811db0535a4762acdc4aee4",
+      "selected_step": 900,
+      "splits": {
+        "test": {
+          "contact": {
+            "object_transitions": 66,
+            "position_rmse": 0.06363926082849503,
+            "velocity_rmse": 0.27199089527130127
+          },
+          "near_contact": {
+            "object_transitions": 128,
+            "position_rmse": 0.07190805673599243,
+            "velocity_rmse": 0.17918600142002106
+          },
+          "wall": {
+            "object_transitions": 215,
+            "position_rmse": 0.10966203361749649,
+            "velocity_rmse": 0.2890308201313019
+          },
+          "forced": {
+            "object_transitions": 1072,
+            "position_rmse": 0.08991501480340958,
+            "velocity_rmse": 0.15220238268375397
+          },
+          "free_flight": {
+            "object_transitions": 1809,
+            "position_rmse": 0.09072038531303406,
+            "velocity_rmse": 0.13127027451992035
+          },
+          "all": {
+            "object_transitions": 3168,
+            "position_rmse": 0.09082505106925964,
+            "velocity_rmse": 0.1545829176902771
+          }
+        },
+        "more_objects": {
+          "contact": {
+            "object_transitions": 323,
+            "position_rmse": 0.12380842864513397,
+            "velocity_rmse": 0.3795928955078125
+          },
+          "near_contact": {
+            "object_transitions": 478,
+            "position_rmse": 0.1467834711074829,
+            "velocity_rmse": 0.26623761653900146
+          },
+          "wall": {
+            "object_transitions": 570,
+            "position_rmse": 0.12190386652946472,
+            "velocity_rmse": 0.3270665407180786
+          },
+          "forced": {
+            "object_transitions": 2392,
+            "position_rmse": 0.1273370385169983,
+            "velocity_rmse": 0.20729507505893707
+          },
+          "free_flight": {
+            "object_transitions": 3347,
+            "position_rmse": 0.11228746920824051,
+            "velocity_rmse": 0.1730974018573761
+          },
+          "all": {
+            "object_transitions": 6624,
+            "position_rmse": 0.11839473992586136,
+            "velocity_rmse": 0.2074243128299713
+          }
+        },
+        "composition": {
+          "contact": {
+            "object_transitions": 160,
+            "position_rmse": 0.1643107831478119,
+            "velocity_rmse": 0.4410041272640228
+          },
+          "near_contact": {
+            "object_transitions": 184,
+            "position_rmse": 0.19194313883781433,
+            "velocity_rmse": 0.37698525190353394
+          },
+          "wall": {
+            "object_transitions": 414,
+            "position_rmse": 0.1385127604007721,
+            "velocity_rmse": 0.444346159696579
+          },
+          "forced": {
+            "object_transitions": 1164,
+            "position_rmse": 0.1436794102191925,
+            "velocity_rmse": 0.2687799334526062
+          },
+          "free_flight": {
+            "object_transitions": 1707,
+            "position_rmse": 0.11647529155015945,
+            "velocity_rmse": 0.17950645089149475
+          },
+          "all": {
+            "object_transitions": 3328,
+            "position_rmse": 0.136245459318161,
+            "velocity_rmse": 0.2621695101261139
+          }
+        },
+        "fast": {
+          "contact": {
+            "object_transitions": 86,
+            "position_rmse": 0.2894832193851471,
+            "velocity_rmse": 0.4319540560245514
+          },
+          "near_contact": {
+            "object_transitions": 138,
+            "position_rmse": 0.25615549087524414,
+            "velocity_rmse": 0.43878987431526184
+          },
+          "wall": {
+            "object_transitions": 473,
+            "position_rmse": 0.14766333997249603,
+            "velocity_rmse": 0.6199060082435608
+          },
+          "forced": {
+            "object_transitions": 1232,
+            "position_rmse": 0.16832751035690308,
+            "velocity_rmse": 0.36680468916893005
+          },
+          "free_flight": {
+            "object_transitions": 1463,
+            "position_rmse": 0.16512073576450348,
+            "velocity_rmse": 0.2686181664466858
+          },
+          "all": {
+            "object_transitions": 3136,
+            "position_rmse": 0.1721360683441162,
+            "velocity_rmse": 0.35636547207832336
+          }
+        }
+      }
+    },
+    {
+      "variant": "multiscale",
+      "seed": 31,
+      "checkpoint": "multiscale_continuous/seed_31/best.pt",
+      "checkpoint_sha256": "c3c1cc17123e3a631418ad592b1d3fe451be3be8d7ad6b51a812db89a323ae72",
+      "selected_step": 950,
+      "splits": {
+        "test": {
+          "contact": {
+            "object_transitions": 66,
+            "position_rmse": 0.07387526333332062,
+            "velocity_rmse": 0.28576362133026123
+          },
+          "near_contact": {
+            "object_transitions": 128,
+            "position_rmse": 0.07232958823442459,
+            "velocity_rmse": 0.1910630166530609
+          },
+          "wall": {
+            "object_transitions": 215,
+            "position_rmse": 0.14781078696250916,
+            "velocity_rmse": 0.37547749280929565
+          },
+          "forced": {
+            "object_transitions": 1072,
+            "position_rmse": 0.09191673994064331,
+            "velocity_rmse": 0.1770816594362259
+          },
+          "free_flight": {
+            "object_transitions": 1809,
+            "position_rmse": 0.12227949500083923,
+            "velocity_rmse": 0.18208223581314087
+          },
+          "all": {
+            "object_transitions": 3168,
+            "position_rmse": 0.11329866200685501,
+            "velocity_rmse": 0.19776247441768646
+          }
+        },
+        "more_objects": {
+          "contact": {
+            "object_transitions": 323,
+            "position_rmse": 0.15560385584831238,
+            "velocity_rmse": 0.35311779379844666
+          },
+          "near_contact": {
+            "object_transitions": 478,
+            "position_rmse": 0.14644020795822144,
+            "velocity_rmse": 0.2455739676952362
+          },
+          "wall": {
+            "object_transitions": 570,
+            "position_rmse": 0.12724290788173676,
+            "velocity_rmse": 0.32429349422454834
+          },
+          "forced": {
+            "object_transitions": 2392,
+            "position_rmse": 0.13509131968021393,
+            "velocity_rmse": 0.2040400505065918
+          },
+          "free_flight": {
+            "object_transitions": 3347,
+            "position_rmse": 0.10909554362297058,
+            "velocity_rmse": 0.17952986061573029
+          },
+          "all": {
+            "object_transitions": 6624,
+            "position_rmse": 0.121658094227314,
+            "velocity_rmse": 0.20870980620384216
+          }
+        },
+        "composition": {
+          "contact": {
+            "object_transitions": 160,
+            "position_rmse": 0.16808664798736572,
+            "velocity_rmse": 0.4226663410663605
+          },
+          "near_contact": {
+            "object_transitions": 184,
+            "position_rmse": 0.18110954761505127,
+            "velocity_rmse": 0.3569395840167999
+          },
+          "wall": {
+            "object_transitions": 414,
+            "position_rmse": 0.14125587046146393,
+            "velocity_rmse": 0.4496959447860718
+          },
+          "forced": {
+            "object_transitions": 1164,
+            "position_rmse": 0.147914320230484,
+            "velocity_rmse": 0.2660769820213318
+          },
+          "free_flight": {
+            "object_transitions": 1707,
+            "position_rmse": 0.11928287893533707,
+            "velocity_rmse": 0.1818309724330902
+          },
+          "all": {
+            "object_transitions": 3328,
+            "position_rmse": 0.13835544884204865,
+            "velocity_rmse": 0.25996366143226624
+          }
+        },
+        "fast": {
+          "contact": {
+            "object_transitions": 86,
+            "position_rmse": 0.3479437530040741,
+            "velocity_rmse": 0.5473662614822388
+          },
+          "near_contact": {
+            "object_transitions": 138,
+            "position_rmse": 0.3364579677581787,
+            "velocity_rmse": 0.582456648349762
+          },
+          "wall": {
+            "object_transitions": 473,
+            "position_rmse": 0.15539391338825226,
+            "velocity_rmse": 0.6359522938728333
+          },
+          "forced": {
+            "object_transitions": 1232,
+            "position_rmse": 0.21863631904125214,
+            "velocity_rmse": 0.4131246507167816
+          },
+          "free_flight": {
+            "object_transitions": 1463,
+            "position_rmse": 0.20479227602481842,
+            "velocity_rmse": 0.3279438316822052
+          },
+          "all": {
+            "object_transitions": 3136,
+            "position_rmse": 0.215126633644104,
+            "velocity_rmse": 0.40932923555374146
+          }
+        }
+      }
+    },
+    {
+      "variant": "multiscale",
+      "seed": 37,
+      "checkpoint": "multiscale_continuous/seed_37/best.pt",
+      "checkpoint_sha256": "094c64e3546781db4eb913a80903682e41b7d31e122f0c36e5bac64c83d2856f",
+      "selected_step": 800,
+      "splits": {
+        "test": {
+          "contact": {
+            "object_transitions": 66,
+            "position_rmse": 0.08582785725593567,
+            "velocity_rmse": 0.27204176783561707
+          },
+          "near_contact": {
+            "object_transitions": 128,
+            "position_rmse": 0.0850195661187172,
+            "velocity_rmse": 0.1743534356355667
+          },
+          "wall": {
+            "object_transitions": 215,
+            "position_rmse": 0.12118033319711685,
+            "velocity_rmse": 0.35270199179649353
+          },
+          "forced": {
+            "object_transitions": 1072,
+            "position_rmse": 0.08450345695018768,
+            "velocity_rmse": 0.1677989363670349
+          },
+          "free_flight": {
+            "object_transitions": 1809,
+            "position_rmse": 0.09180016070604324,
+            "velocity_rmse": 0.1398329883813858
+          },
+          "all": {
+            "object_transitions": 3168,
+            "position_rmse": 0.09023791551589966,
+            "velocity_rmse": 0.16691870987415314
+          }
+        },
+        "more_objects": {
+          "contact": {
+            "object_transitions": 323,
+            "position_rmse": 0.1516532599925995,
+            "velocity_rmse": 0.37252378463745117
+          },
+          "near_contact": {
+            "object_transitions": 478,
+            "position_rmse": 0.16588470339775085,
+            "velocity_rmse": 0.26770132780075073
+          },
+          "wall": {
+            "object_transitions": 570,
+            "position_rmse": 0.128055140376091,
+            "velocity_rmse": 0.3607689440250397
+          },
+          "forced": {
+            "object_transitions": 2392,
+            "position_rmse": 0.12987995147705078,
+            "velocity_rmse": 0.20494991540908813
+          },
+          "free_flight": {
+            "object_transitions": 3347,
+            "position_rmse": 0.11911164969205856,
+            "velocity_rmse": 0.17443029582500458
+          },
+          "all": {
+            "object_transitions": 6624,
+            "position_rmse": 0.12521187961101532,
+            "velocity_rmse": 0.21200913190841675
+          }
+        },
+        "composition": {
+          "contact": {
+            "object_transitions": 160,
+            "position_rmse": 0.17614653706550598,
+            "velocity_rmse": 0.4462165832519531
+          },
+          "near_contact": {
+            "object_transitions": 184,
+            "position_rmse": 0.20038177073001862,
+            "velocity_rmse": 0.3848039507865906
+          },
+          "wall": {
+            "object_transitions": 414,
+            "position_rmse": 0.13097485899925232,
+            "velocity_rmse": 0.42231306433677673
+          },
+          "forced": {
+            "object_transitions": 1164,
+            "position_rmse": 0.1430223435163498,
+            "velocity_rmse": 0.2633087635040283
+          },
+          "free_flight": {
+            "object_transitions": 1707,
+            "position_rmse": 0.10450120270252228,
+            "velocity_rmse": 0.15213677287101746
+          },
+          "all": {
+            "object_transitions": 3328,
+            "position_rmse": 0.1306196004152298,
+            "velocity_rmse": 0.24618257582187653
+          }
+        },
+        "fast": {
+          "contact": {
+            "object_transitions": 86,
+            "position_rmse": 0.33694928884506226,
+            "velocity_rmse": 0.5243908762931824
+          },
+          "near_contact": {
+            "object_transitions": 138,
+            "position_rmse": 0.3086920976638794,
+            "velocity_rmse": 0.5241622924804688
+          },
+          "wall": {
+            "object_transitions": 473,
+            "position_rmse": 0.14351414144039154,
+            "velocity_rmse": 0.6724281311035156
+          },
+          "forced": {
+            "object_transitions": 1232,
+            "position_rmse": 0.20791305601596832,
+            "velocity_rmse": 0.3923179805278778
+          },
+          "free_flight": {
+            "object_transitions": 1463,
+            "position_rmse": 0.19384892284870148,
+            "velocity_rmse": 0.27475637197494507
+          },
+          "all": {
+            "object_transitions": 3136,
+            "position_rmse": 0.2023947536945343,
+            "velocity_rmse": 0.37880557775497437
+          }
+        }
+      }
+    },
+    {
+      "variant": "multiscale",
+      "seed": 43,
+      "checkpoint": "multiscale_continuous/seed_43/best.pt",
+      "checkpoint_sha256": "8650e150b5e01b068dd9f3ab5cbe5f201734de82a5d72dd29ba397092a4a90e1",
+      "selected_step": 1000,
+      "splits": {
+        "test": {
+          "contact": {
+            "object_transitions": 66,
+            "position_rmse": 0.08793219923973083,
+            "velocity_rmse": 0.2914746403694153
+          },
+          "near_contact": {
+            "object_transitions": 128,
+            "position_rmse": 0.08064094185829163,
+            "velocity_rmse": 0.18923579156398773
+          },
+          "wall": {
+            "object_transitions": 215,
+            "position_rmse": 0.11323609948158264,
+            "velocity_rmse": 0.3437977135181427
+          },
+          "forced": {
+            "object_transitions": 1072,
+            "position_rmse": 0.09324568510055542,
+            "velocity_rmse": 0.1630849838256836
+          },
+          "free_flight": {
+            "object_transitions": 1809,
+            "position_rmse": 0.09495211392641068,
+            "velocity_rmse": 0.13148923218250275
+          },
+          "all": {
+            "object_transitions": 3168,
+            "position_rmse": 0.09461750835180283,
+            "velocity_rmse": 0.16305358707904816
+          }
+        },
+        "more_objects": {
+          "contact": {
+            "object_transitions": 323,
+            "position_rmse": 0.13791711628437042,
+            "velocity_rmse": 0.39737990498542786
+          },
+          "near_contact": {
+            "object_transitions": 478,
+            "position_rmse": 0.14043761789798737,
+            "velocity_rmse": 0.2722867727279663
+          },
+          "wall": {
+            "object_transitions": 570,
+            "position_rmse": 0.117925725877285,
+            "velocity_rmse": 0.3812197744846344
+          },
+          "forced": {
+            "object_transitions": 2392,
+            "position_rmse": 0.131683811545372,
+            "velocity_rmse": 0.2156755030155182
+          },
+          "free_flight": {
+            "object_transitions": 3347,
+            "position_rmse": 0.10679689049720764,
+            "velocity_rmse": 0.16964592039585114
+          },
+          "all": {
+            "object_transitions": 6624,
+            "position_rmse": 0.11824838072061539,
+            "velocity_rmse": 0.2155633419752121
+          }
+        },
+        "composition": {
+          "contact": {
+            "object_transitions": 160,
+            "position_rmse": 0.14638838171958923,
+            "velocity_rmse": 0.3712632954120636
+          },
+          "near_contact": {
+            "object_transitions": 184,
+            "position_rmse": 0.15899980068206787,
+            "velocity_rmse": 0.30843299627304077
+          },
+          "wall": {
+            "object_transitions": 414,
+            "position_rmse": 0.12353664636611938,
+            "velocity_rmse": 0.42398983240127563
+          },
+          "forced": {
+            "object_transitions": 1164,
+            "position_rmse": 0.1307135373353958,
+            "velocity_rmse": 0.23931869864463806
+          },
+          "free_flight": {
+            "object_transitions": 1707,
+            "position_rmse": 0.10660241544246674,
+            "velocity_rmse": 0.1737627536058426
+          },
+          "all": {
+            "object_transitions": 3328,
+            "position_rmse": 0.12309258431196213,
+            "velocity_rmse": 0.24291659891605377
+          }
+        },
+        "fast": {
+          "contact": {
+            "object_transitions": 86,
+            "position_rmse": 0.37725046277046204,
+            "velocity_rmse": 0.7138774991035461
+          },
+          "near_contact": {
+            "object_transitions": 138,
+            "position_rmse": 0.37819236516952515,
+            "velocity_rmse": 0.7041990160942078
+          },
+          "wall": {
+            "object_transitions": 473,
+            "position_rmse": 0.1378699243068695,
+            "velocity_rmse": 0.6443141102790833
+          },
+          "forced": {
+            "object_transitions": 1232,
+            "position_rmse": 0.24963724613189697,
+            "velocity_rmse": 0.4378012716770172
+          },
+          "free_flight": {
+            "object_transitions": 1463,
+            "position_rmse": 0.23429293930530548,
+            "velocity_rmse": 0.2889028489589691
+          },
+          "all": {
+            "object_transitions": 3136,
+            "position_rmse": 0.24171188473701477,
+            "velocity_rmse": 0.4111579358577728
+          }
+        }
+      }
+    }
+  ],
+  "comparisons": {
+    "graph": {
+      "test": {
+        "contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.030297182500362396,
+            -0.009120844304561615,
+            0.006848782300949097,
+            0.0176493301987648,
+            0.0023049861192703247
+          ],
+          "mean_difference": 0.009595887362957,
+          "median_difference": 0.006848782300949097,
+          "sample_std_difference": 0.015036800136302136,
+          "bootstrap_95_ci_mean_difference": [
+            -0.0014816433191299438,
+            0.022169172763824463
+          ],
+          "exact_two_sided_sign_flip_p": 0.25,
+          "relative_mean_difference": 0.1346789592071111
+        },
+        "near_contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.026129938662052155,
+            -0.0034202709794044495,
+            0.0003198757767677307,
+            0.006006084382534027,
+            -0.005154505372047424
+          ],
+          "mean_difference": 0.004776224493980408,
+          "median_difference": 0.0003198757767677307,
+          "sample_std_difference": 0.012680246860016368,
+          "bootstrap_95_ci_mean_difference": [
+            -0.0033659353852272035,
+            0.015848278999328613
+          ],
+          "exact_two_sided_sign_flip_p": 0.5625,
+          "relative_mean_difference": 0.06302808613493009
+        },
+        "wall": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.003804340958595276,
+            0.012761391699314117,
+            0.03425225615501404,
+            0.02801017463207245,
+            -0.01065882295370102
+          ],
+          "mean_difference": 0.013633868098258973,
+          "median_difference": 0.012761391699314117,
+          "sample_std_difference": 0.018161165801065648,
+          "bootstrap_95_ci_mean_difference": [
+            -0.00018951445817947388,
+            0.027457250654697417
+          ],
+          "exact_two_sided_sign_flip_p": 0.1875,
+          "relative_mean_difference": 0.12290790684938456
+        },
+        "forced": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.018816307187080383,
+            0.005279935896396637,
+            0.010962702333927155,
+            0.011913351714611053,
+            0.0094013512134552
+          ],
+          "mean_difference": 0.011274729669094086,
+          "median_difference": 0.010962702333927155,
+          "sample_std_difference": 0.004920053095494297,
+          "bootstrap_95_ci_mean_difference": [
+            0.007743172347545624,
+            0.01555272489786148
+          ],
+          "exact_two_sided_sign_flip_p": 0.0625,
+          "relative_mean_difference": 0.14045184760057827
+        },
+        "free_flight": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.007944881916046143,
+            0.0020559951663017273,
+            0.022816337645053864,
+            0.009824976325035095,
+            -0.011998049914836884
+          ],
+          "mean_difference": 0.006128828227519989,
+          "median_difference": 0.007944881916046143,
+          "sample_std_difference": 0.01265508013260943,
+          "bootstrap_95_ci_mean_difference": [
+            -0.0036448583006858824,
+            0.016065996885299683
+          ],
+          "exact_two_sided_sign_flip_p": 0.4375,
+          "relative_mean_difference": 0.06461653094036392
+        },
+        "all": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.010493464767932892,
+            0.003412775695323944,
+            0.019255496561527252,
+            0.01091078668832779,
+            -0.004685394465923309
+          ],
+          "mean_difference": 0.007877425849437713,
+          "median_difference": 0.010493464767932892,
+          "sample_std_difference": 0.008989757866677762,
+          "bootstrap_95_ci_mean_difference": [
+            0.00017350763082504272,
+            0.014334546029567718
+          ],
+          "exact_two_sided_sign_flip_p": 0.1875,
+          "relative_mean_difference": 0.08716183257370017
+        }
+      },
+      "more_objects": {
+        "contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.0035058557987213135,
+            -0.004459217190742493,
+            0.023443490266799927,
+            0.022389531135559082,
+            -0.005340456962585449
+          ],
+          "mean_difference": 0.007907840609550475,
+          "median_difference": 0.0035058557987213135,
+          "sample_std_difference": 0.014132540007322664,
+          "bootstrap_95_ci_mean_difference": [
+            -0.0032186985015869142,
+            0.019034379720687868
+          ],
+          "exact_two_sided_sign_flip_p": 0.4375,
+          "relative_mean_difference": 0.05913642791041865
+        },
+        "near_contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.0022649765014648438,
+            -0.006004840135574341,
+            -0.00021888315677642822,
+            0.026838719844818115,
+            -0.004433736205101013
+          ],
+          "mean_difference": 0.0036892473697662355,
+          "median_difference": -0.00021888315677642822,
+          "sample_std_difference": 0.013352511957593734,
+          "bootstrap_95_ci_mean_difference": [
+            -0.004219207167625427,
+            0.015669479966163635
+          ],
+          "exact_two_sided_sign_flip_p": 0.875,
+          "relative_mean_difference": 0.025430793478613906
+        },
+        "wall": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            -0.003545626997947693,
+            -0.022646084427833557,
+            0.010859489440917969,
+            0.01138942688703537,
+            -0.006656371057033539
+          ],
+          "mean_difference": -0.00211983323097229,
+          "median_difference": -0.003545626997947693,
+          "sample_std_difference": 0.014097011894963022,
+          "bootstrap_95_ci_mean_difference": [
+            -0.012747026979923248,
+            0.008190441131591796
+          ],
+          "exact_two_sided_sign_flip_p": 0.8125,
+          "relative_mean_difference": -0.016724353071907033
+        },
+        "forced": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.018747784197330475,
+            -0.0018058717250823975,
+            0.01113642007112503,
+            0.013576164841651917,
+            0.004048764705657959
+          ],
+          "mean_difference": 0.009140652418136597,
+          "median_difference": 0.01113642007112503,
+          "sample_std_difference": 0.008088688881723012,
+          "bootstrap_95_ci_mean_difference": [
+            0.0028778374195098876,
+            0.015156863629817963
+          ],
+          "exact_two_sided_sign_flip_p": 0.125,
+          "relative_mean_difference": 0.07375160360336358
+        },
+        "free_flight": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.004839509725570679,
+            -0.008940376341342926,
+            0.004574216902256012,
+            0.016501478850841522,
+            -0.0002614259719848633
+          ],
+          "mean_difference": 0.0033426806330680847,
+          "median_difference": 0.004574216902256012,
+          "sample_std_difference": 0.009230035516017504,
+          "bootstrap_95_ci_mean_difference": [
+            -0.003733006119728088,
+            0.010816504061222077
+          ],
+          "exact_two_sided_sign_flip_p": 0.5,
+          "relative_mean_difference": 0.030869575861370135
+        },
+        "all": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.00930526852607727,
+            -0.006948895752429962,
+            0.0077511221170425415,
+            0.015291653573513031,
+            0.0007262751460075378
+          ],
+          "mean_difference": 0.005225084722042084,
+          "median_difference": 0.0077511221170425415,
+          "sample_std_difference": 0.00855584100821339,
+          "bootstrap_95_ci_mean_difference": [
+            -0.0021630287170410155,
+            0.01138899326324463
+          ],
+          "exact_two_sided_sign_flip_p": 0.1875,
+          "relative_mean_difference": 0.044881617636922694
+        }
+      },
+      "composition": {
+        "contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.0061044842004776,
+            0.014336109161376953,
+            0.024415209889411926,
+            0.011104479432106018,
+            -0.005486637353897095
+          ],
+          "mean_difference": 0.010094729065895081,
+          "median_difference": 0.011104479432106018,
+          "sample_std_difference": 0.010986197084602849,
+          "bootstrap_95_ci_mean_difference": [
+            0.0014680355787277221,
+            0.018367749452590943
+          ],
+          "exact_two_sided_sign_flip_p": 0.125,
+          "relative_mean_difference": 0.06830776247388949
+        },
+        "near_contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.024727262556552887,
+            0.02673429250717163,
+            0.021793633699417114,
+            0.007186010479927063,
+            -0.0018788129091262817
+          ],
+          "mean_difference": 0.015712477266788483,
+          "median_difference": 0.021793633699417114,
+          "sample_std_difference": 0.012468774543760122,
+          "bootstrap_95_ci_mean_difference": [
+            0.005373045802116394,
+            0.02494334876537323
+          ],
+          "exact_two_sided_sign_flip_p": 0.125,
+          "relative_mean_difference": 0.09878917303045968
+        },
+        "wall": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            -0.0009546652436256409,
+            0.029241085052490234,
+            0.03586485981941223,
+            0.01349843293428421,
+            0.003383360803127289
+          ],
+          "mean_difference": 0.016206614673137665,
+          "median_difference": 0.01349843293428421,
+          "sample_std_difference": 0.01598924354705489,
+          "bootstrap_95_ci_mean_difference": [
+            0.0036711648106575014,
+            0.02874206453561783
+          ],
+          "exact_two_sided_sign_flip_p": 0.125,
+          "relative_mean_difference": 0.14266101061721934
+        },
+        "forced": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.008042164146900177,
+            0.00942528247833252,
+            0.016748622059822083,
+            0.007801085710525513,
+            -0.000801771879196167
+          ],
+          "mean_difference": 0.008243076503276825,
+          "median_difference": 0.008042164146900177,
+          "sample_std_difference": 0.00624073152922937,
+          "bootstrap_95_ci_mean_difference": [
+            0.002964210510253906,
+            0.013217823207378387
+          ],
+          "exact_two_sided_sign_flip_p": 0.125,
+          "relative_mean_difference": 0.06283383101173085
+        },
+        "free_flight": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.01198974996805191,
+            0.005167871713638306,
+            0.016259722411632538,
+            0.0020795315504074097,
+            0.006280869245529175
+          ],
+          "mean_difference": 0.008355548977851868,
+          "median_difference": 0.006280869245529175,
+          "sample_std_difference": 0.005690723846544837,
+          "bootstrap_95_ci_mean_difference": [
+            0.0041551351547241214,
+            0.013187357783317566
+          ],
+          "exact_two_sided_sign_flip_p": 0.0625,
+          "relative_mean_difference": 0.08128554022813851
+        },
+        "all": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.010891087353229523,
+            0.010827779769897461,
+            0.019024625420570374,
+            0.005624547600746155,
+            0.0027203410863876343
+          ],
+          "mean_difference": 0.009817676246166229,
+          "median_difference": 0.010827779769897461,
+          "sample_std_difference": 0.0062228395415749324,
+          "bootstrap_95_ci_mean_difference": [
+            0.004935331642627716,
+            0.014705240726470947
+          ],
+          "exact_two_sided_sign_flip_p": 0.0625,
+          "relative_mean_difference": 0.08164330969775699
+        }
+      },
+      "fast": {
+        "contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.10746818780899048,
+            0.04005111753940582,
+            0.08122256398200989,
+            0.06385606527328491,
+            0.037238627672195435
+          ],
+          "mean_difference": 0.06596731245517731,
+          "median_difference": 0.06385606527328491,
+          "sample_std_difference": 0.029395957235710608,
+          "bootstrap_95_ci_mean_difference": [
+            0.043687111139297484,
+            0.08873564898967742
+          ],
+          "exact_two_sided_sign_flip_p": 0.0625,
+          "relative_mean_difference": 0.24275710799621752
+        },
+        "near_contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.12390543520450592,
+            0.02984575927257538,
+            0.07406541705131531,
+            0.0592021644115448,
+            0.03085923194885254
+          ],
+          "mean_difference": 0.0635756015777588,
+          "median_difference": 0.0592021644115448,
+          "sample_std_difference": 0.038655255497716076,
+          "bootstrap_95_ci_mean_difference": [
+            0.03612242937088013,
+            0.09532819092273712
+          ],
+          "exact_two_sided_sign_flip_p": 0.0625,
+          "relative_mean_difference": 0.2447903917425285
+        },
+        "wall": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.04771065711975098,
+            0.019472256302833557,
+            0.001666337251663208,
+            0.0069410353899002075,
+            -0.009083092212677002
+          ],
+          "mean_difference": 0.01334143877029419,
+          "median_difference": 0.0069410353899002075,
+          "sample_std_difference": 0.021788545398203286,
+          "bootstrap_95_ci_mean_difference": [
+            -0.001578494906425476,
+            0.031402808427810666
+          ],
+          "exact_two_sided_sign_flip_p": 0.3125,
+          "relative_mean_difference": 0.09914622267478802
+        },
+        "forced": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.07193270325660706,
+            0.008863493800163269,
+            0.03700876235961914,
+            0.04608277976512909,
+            0.02215677499771118
+          ],
+          "mean_difference": 0.03720890283584595,
+          "median_difference": 0.03700876235961914,
+          "sample_std_difference": 0.02405492064777418,
+          "bootstrap_95_ci_mean_difference": [
+            0.019809859991073608,
+            0.05680753290653229
+          ],
+          "exact_two_sided_sign_flip_p": 0.0625,
+          "relative_mean_difference": 0.20821826024449083
+        },
+        "free_flight": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.07192365825176239,
+            0.011285319924354553,
+            0.034908175468444824,
+            0.046404749155044556,
+            0.027513250708580017
+          ],
+          "mean_difference": 0.03840703070163727,
+          "median_difference": 0.034908175468444824,
+          "sample_std_difference": 0.02265960860628623,
+          "bootstrap_95_ci_mean_difference": [
+            0.021554791927337648,
+            0.05711746513843537
+          ],
+          "exact_two_sided_sign_flip_p": 0.0625,
+          "relative_mean_difference": 0.22907723897179946
+        },
+        "all": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.07325281202793121,
+            0.012712851166725159,
+            0.03530460596084595,
+            0.04265958070755005,
+            0.02344873547554016
+          ],
+          "mean_difference": 0.0374757170677185,
+          "median_difference": 0.03530460596084595,
+          "sample_std_difference": 0.023030102201709396,
+          "bootstrap_95_ci_mean_difference": [
+            0.020849373936653138,
+            0.05717335045337677
+          ],
+          "exact_two_sided_sign_flip_p": 0.0625,
+          "relative_mean_difference": 0.21354609705299496
+        }
+      }
+    },
+    "global_pool": {
+      "test": {
+        "contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.00023368746042251587,
+            -0.008969597518444061,
+            0.007968969643115997,
+            -0.007776632905006409,
+            -0.017354026436805725
+          ],
+          "mean_difference": -0.0051795199513435366,
+          "median_difference": -0.007776632905006409,
+          "sample_std_difference": 0.009637347728001887,
+          "bootstrap_95_ci_mean_difference": [
+            -0.012159597873687745,
+            0.002904370427131653
+          ],
+          "exact_two_sided_sign_flip_p": 0.375,
+          "relative_mean_difference": -0.06020912847959608
+        },
+        "near_contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.011505126953125,
+            -0.0062246620655059814,
+            0.012126248329877853,
+            -0.0021456629037857056,
+            -0.018443554639816284
+          ],
+          "mean_difference": -0.0006365008652210235,
+          "median_difference": -0.0021456629037857056,
+          "sample_std_difference": 0.01285401856314372,
+          "bootstrap_95_ci_mean_difference": [
+            -0.010296419262886047,
+            0.009023417532444001
+          ],
+          "exact_two_sided_sign_flip_p": 0.9375,
+          "relative_mean_difference": -0.007839450140155784
+        },
+        "wall": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.017572805285453796,
+            0.0011761710047721863,
+            0.044849663972854614,
+            0.027276434004306793,
+            -0.010364092886447906
+          ],
+          "mean_difference": 0.016102196276187898,
+          "median_difference": 0.017572805285453796,
+          "sample_std_difference": 0.021660412456118768,
+          "bootstrap_95_ci_mean_difference": [
+            -0.000527934730052948,
+            0.03260031938552856
+          ],
+          "exact_two_sided_sign_flip_p": 0.1875,
+          "relative_mean_difference": 0.1484631910996284
+        },
+        "forced": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.009536661207675934,
+            0.010870829224586487,
+            0.016291238367557526,
+            -0.01107054203748703,
+            -0.01215364784002304
+          ],
+          "mean_difference": 0.0026949077844619753,
+          "median_difference": 0.009536661207675934,
+          "sample_std_difference": 0.013308669162974077,
+          "bootstrap_95_ci_mean_difference": [
+            -0.007382343709468842,
+            0.012772159278392791
+          ],
+          "exact_two_sided_sign_flip_p": 0.75,
+          "relative_mean_difference": 0.030329439445155607
+        },
+        "free_flight": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.011800386011600494,
+            -0.0017974898219108582,
+            0.03195083886384964,
+            0.0044398233294487,
+            -0.007286570966243744
+          ],
+          "mean_difference": 0.007821397483348846,
+          "median_difference": 0.0044398233294487,
+          "sample_std_difference": 0.015250172445471551,
+          "bootstrap_95_ci_mean_difference": [
+            -0.002745659649372101,
+            0.021171082556247712
+          ],
+          "exact_two_sided_sign_flip_p": 0.375,
+          "relative_mean_difference": 0.08395961589392807
+        },
+        "all": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.009888194501399994,
+            0.002819858491420746,
+            0.027986951172351837,
+            -0.0005552321672439575,
+            -0.008986368775367737
+          ],
+          "mean_difference": 0.006230680644512177,
+          "median_difference": 0.002819858491420746,
+          "sample_std_difference": 0.013927972110017613,
+          "bootstrap_95_ci_mean_difference": [
+            -0.003525228798389435,
+            0.01724509596824646
+          ],
+          "exact_two_sided_sign_flip_p": 0.375,
+          "relative_mean_difference": 0.06770730669718328
+        }
+      },
+      "more_objects": {
+        "contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            -0.00723285973072052,
+            -0.007657632231712341,
+            0.020509913563728333,
+            0.009675025939941406,
+            0.003524407744407654
+          ],
+          "mean_difference": 0.003763771057128906,
+          "median_difference": 0.003524407744407654,
+          "sample_std_difference": 0.011903863445401027,
+          "bootstrap_95_ci_mean_difference": [
+            -0.005251315236091614,
+            0.012794381380081177
+          ],
+          "exact_two_sided_sign_flip_p": 0.5625,
+          "relative_mean_difference": 0.027300201131980225
+        },
+        "near_contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            -0.018887996673583984,
+            0.005792781710624695,
+            -0.002065494656562805,
+            0.020715102553367615,
+            0.007825583219528198
+          ],
+          "mean_difference": 0.0026759952306747437,
+          "median_difference": 0.005792781710624695,
+          "sample_std_difference": 0.014569913182770566,
+          "bootstrap_95_ci_mean_difference": [
+            -0.010180780291557312,
+            0.013174518942832947
+          ],
+          "exact_two_sided_sign_flip_p": 0.6875,
+          "relative_mean_difference": 0.018318278349699006
+        },
+        "wall": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            -0.014618679881095886,
+            0.007000081241130829,
+            0.003679141402244568,
+            -0.0049397945404052734,
+            -0.005375578999519348
+          ],
+          "mean_difference": -0.0028509661555290223,
+          "median_difference": -0.0049397945404052734,
+          "sample_std_difference": 0.00849854987465113,
+          "bootstrap_95_ci_mean_difference": [
+            -0.009110495448112488,
+            0.003860761225223541
+          ],
+          "exact_two_sided_sign_flip_p": 0.5625,
+          "relative_mean_difference": -0.02236360289967265
+        },
+        "forced": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            7.964670658111572e-05,
+            -0.0067872554063797,
+            0.0042253583669662476,
+            -0.0014975368976593018,
+            -0.0086289644241333
+          ],
+          "mean_difference": -0.0025217503309249876,
+          "median_difference": -0.0014975368976593018,
+          "sample_std_difference": 0.005216137292427201,
+          "bootstrap_95_ci_mean_difference": [
+            -0.006518900394439697,
+            0.001422494649887085
+          ],
+          "exact_two_sided_sign_flip_p": 0.375,
+          "relative_mean_difference": -0.01859687494065942
+        },
+        "free_flight": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            -0.013196781277656555,
+            0.005205221474170685,
+            -0.0014910325407981873,
+            0.006060369312763214,
+            -0.007536470890045166
+          ],
+          "mean_difference": -0.002191738784313202,
+          "median_difference": -0.0014910325407981873,
+          "sample_std_difference": 0.008261059555430224,
+          "bootstrap_95_ci_mean_difference": [
+            -0.008591507375240327,
+            0.004037000238895416
+          ],
+          "exact_two_sided_sign_flip_p": 0.5625,
+          "relative_mean_difference": -0.019256453565244497
+        },
+        "all": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            -0.008009485900402069,
+            -0.00021735578775405884,
+            0.002003706991672516,
+            0.003088541328907013,
+            -0.006327114999294281
+          ],
+          "mean_difference": -0.001892341673374176,
+          "median_difference": -0.00021735578775405884,
+          "sample_std_difference": 0.004997015017648174,
+          "bootstrap_95_ci_mean_difference": [
+            -0.005778111517429352,
+            0.001993428170681
+          ],
+          "exact_two_sided_sign_flip_p": 0.4375,
+          "relative_mean_difference": -0.015318054300038138
+        }
+      },
+      "composition": {
+        "contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            -0.03105074167251587,
+            0.01102343201637268,
+            -0.022740676999092102,
+            0.03584471344947815,
+            -0.014103800058364868
+          ],
+          "mean_difference": -0.0042054146528244015,
+          "median_difference": -0.014103800058364868,
+          "sample_std_difference": 0.027377619046223333,
+          "bootstrap_95_ci_mean_difference": [
+            -0.02433732748031616,
+            0.017501366138458253
+          ],
+          "exact_two_sided_sign_flip_p": 0.75,
+          "relative_mean_difference": -0.02594602631227803
+        },
+        "near_contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            -0.032149553298950195,
+            0.02333754301071167,
+            -0.04694169759750366,
+            0.0459461510181427,
+            -0.013726606965065002
+          ],
+          "mean_difference": -0.004706832766532898,
+          "median_difference": -0.013726606965065002,
+          "sample_std_difference": 0.03863435913513108,
+          "bootstrap_95_ci_mean_difference": [
+            -0.03438182175159454,
+            0.025805288553237916
+          ],
+          "exact_two_sided_sign_flip_p": 0.8125,
+          "relative_mean_difference": -0.0262263059005755
+        },
+        "wall": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            -0.012129083275794983,
+            0.006997451186180115,
+            -0.005905017256736755,
+            0.024571143090724945,
+            -0.010175839066505432
+          ],
+          "mean_difference": 0.0006717309355735779,
+          "median_difference": -0.005905017256736755,
+          "sample_std_difference": 0.015296902253885976,
+          "bootstrap_95_ci_mean_difference": [
+            -0.010102972388267517,
+            0.014026927947998046
+          ],
+          "exact_two_sided_sign_flip_p": 0.9375,
+          "relative_mean_difference": 0.0052016860768934635
+        },
+        "forced": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            -0.011315792798995972,
+            0.006916418671607971,
+            0.0018323957920074463,
+            0.002570703625679016,
+            -0.0084458589553833
+          ],
+          "mean_difference": -0.0016884267330169677,
+          "median_difference": 0.0018323957920074463,
+          "sample_std_difference": 0.0077930869158315385,
+          "bootstrap_95_ci_mean_difference": [
+            -0.00796450674533844,
+            0.004161328077316284
+          ],
+          "exact_two_sided_sign_flip_p": 0.75,
+          "relative_mean_difference": -0.011964474249017223
+        },
+        "free_flight": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            -0.009484171867370605,
+            0.00961669534444809,
+            0.0044291093945503235,
+            -0.016010485589504242,
+            -0.004214242100715637
+          ],
+          "mean_difference": -0.0031326189637184143,
+          "median_difference": -0.004214242100715637,
+          "sample_std_difference": 0.01033291261966554,
+          "bootstrap_95_ci_mean_difference": [
+            -0.011040711402893066,
+            0.0047754734754562374
+          ],
+          "exact_two_sided_sign_flip_p": 0.625,
+          "relative_mean_difference": -0.027411611304886396
+        },
+        "all": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            -0.01210293173789978,
+            0.009970322251319885,
+            -0.002489030361175537,
+            -1.4424324035644531e-05,
+            -0.007735647261142731
+          ],
+          "mean_difference": -0.0024743422865867613,
+          "median_difference": -0.002489030361175537,
+          "sample_std_difference": 0.008386181378319214,
+          "bootstrap_95_ci_mean_difference": [
+            -0.00860910415649414,
+            0.004432179033756256
+          ],
+          "exact_two_sided_sign_flip_p": 0.4375,
+          "relative_mean_difference": -0.01866824352798293
+        }
+      },
+      "fast": {
+        "contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            -0.015109658241271973,
+            -0.0896502435207367,
+            0.029630273580551147,
+            0.0309392511844635,
+            -0.03156295418739319
+          ],
+          "mean_difference": -0.015150666236877441,
+          "median_difference": -0.015109658241271973,
+          "sample_std_difference": 0.049872750454878295,
+          "bootstrap_95_ci_mean_difference": [
+            -0.054176682233810426,
+            0.021205878257751463
+          ],
+          "exact_two_sided_sign_flip_p": 0.5625,
+          "relative_mean_difference": -0.04293676049941007
+        },
+        "near_contact": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.00039574503898620605,
+            -0.08011621236801147,
+            0.029725760221481323,
+            0.014223277568817139,
+            -0.021726131439208984
+          ],
+          "mean_difference": -0.011499512195587158,
+          "median_difference": 0.00039574503898620605,
+          "sample_std_difference": 0.042765399061356575,
+          "bootstrap_95_ci_mean_difference": [
+            -0.047911429405212404,
+            0.017658764123916627
+          ],
+          "exact_two_sided_sign_flip_p": 0.75,
+          "relative_mean_difference": -0.03434847884489006
+        },
+        "wall": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.005048826336860657,
+            0.003778621554374695,
+            -0.0018013864755630493,
+            -0.011210829019546509,
+            -0.046650856733322144
+          ],
+          "mean_difference": -0.01016712486743927,
+          "median_difference": -0.0018013864755630493,
+          "sample_std_difference": 0.021378415530466988,
+          "bootstrap_95_ci_mean_difference": [
+            -0.029222914576530458,
+            0.003170701861381531
+          ],
+          "exact_two_sided_sign_flip_p": 0.4375,
+          "relative_mean_difference": -0.06431965383475317
+        },
+        "forced": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.017592191696166992,
+            -0.05416625738143921,
+            0.028235331177711487,
+            0.005947545170783997,
+            -0.012912362813949585
+          ],
+          "mean_difference": -0.0030607104301452635,
+          "median_difference": 0.005947545170783997,
+          "sample_std_difference": 0.03238813532535346,
+          "bootstrap_95_ci_mean_difference": [
+            -0.030120736360549925,
+            0.01952051818370819
+          ],
+          "exact_two_sided_sign_flip_p": 0.875,
+          "relative_mean_difference": -0.01397769427275939
+        },
+        "free_flight": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.02725277841091156,
+            -0.043601468205451965,
+            0.02093087136745453,
+            0.0049123018980026245,
+            -0.016012057662010193
+          ],
+          "mean_difference": -0.0013035148382186889,
+          "median_difference": 0.0049123018980026245,
+          "sample_std_difference": 0.028956537616001296,
+          "bootstrap_95_ci_mean_difference": [
+            -0.024195960164070128,
+            0.02025592029094696
+          ],
+          "exact_two_sided_sign_flip_p": 1.0,
+          "relative_mean_difference": -0.006285928692800408
+        },
+        "all": {
+          "seeds": [
+            23,
+            29,
+            31,
+            37,
+            43
+          ],
+          "n_pairs": 5,
+          "differences": [
+            0.01972927153110504,
+            -0.04540263116359711,
+            0.021338552236557007,
+            0.004091516137123108,
+            -0.01828908920288086
+          ],
+          "mean_difference": -0.003706476092338562,
+          "median_difference": 0.004091516137123108,
+          "sample_std_difference": 0.028233483429847387,
+          "bootstrap_95_ci_mean_difference": [
+            -0.02695354223251343,
+            0.016923576593399048
+          ],
+          "exact_two_sided_sign_flip_p": 0.875,
+          "relative_mean_difference": -0.0171061869297325
+        }
+      }
+    }
+  },
+  "claim_boundary": "Post-result exploratory localization. It cannot change or confirm the frozen advancement decision.",
+  "signature": "c7c1b01b8e2921766ab5eb4deecb120541bb9a96f8ac8eb3873efdc7042567b5"
+}

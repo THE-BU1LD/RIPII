@@ -15,6 +15,11 @@ The complete audit is indexed by [`audit/REPOSITORY_MAP.md`](audit/REPOSITORY_MA
 and [`FINAL_RESEARCH_REPORT.md`](FINAL_RESEARCH_REPORT.md). The current verdict is
 **EVIDENCE_PARTIAL**: implementation quality is substantially verified, while all
 scientific evidence is synthetic and the proposed mechanisms have negative results.
+The actionable post-audit backlog—including explicit pseudocode, scaffold, bad-
+implementation, improvement, addition, and abstraction classifications—is
+[`audit/ULTIMATE_CHECKLIST.md`](audit/ULTIMATE_CHECKLIST.md).
+Focused guides under `docs/` cover research status, architecture, experiments,
+reproducibility, and preserved failures.
 
 ## Object-state world model
 
@@ -42,6 +47,12 @@ study also returned `no_advance`: multiscale lost the graph OOD comparison on
 all five seeds. The current evidence therefore argues against advancing the
 hierarchy without a materially new hypothesis.
 
+A targeted extension supplied that new hypothesis by adding a symmetric long-range
+force. Its prospectively specified three-seed local-versus-coupled study again returned
+`no_advance`: multiscale did not earn a consistent 5% advantage over global pooling.
+The self-checksummed result is
+`research/results/development/world_v4_coupling_capsule.json`.
+
 ## What is included
 
 - End-to-end training, evaluation, diagnostics, and benchmark scripts
@@ -51,6 +62,9 @@ hierarchy without a materially new hypothesis.
 - Hierarchical vector quantization
 - Ablation presets, benchmark sweeps, and benchmark reports
 - Smoke tests, CLI tests, and model inspection
+- Validated dataset adapters with split metadata and deterministic content hashes
+- Immutable protocol records and manifested `planned -> running -> complete/failed` states
+- Self-checksummed failure-localization artifacts and a repeatable rollout profiling CLI
 
 ## Quick start
 
@@ -93,6 +107,18 @@ Canonical repository-wide entry points are:
 ./scripts/analyze.sh
 ./scripts/verify_artifact.sh
 ```
+
+Profile a retained world-model checkpoint with warmup, repeated synchronized timing,
+a bootstrap interval, throughput, environment metadata, and a clearly labeled
+PyTorch-recognized FLOP lower bound:
+
+```bash
+python3 scripts/profile_world.py runs/world_experiment/graph_continuous/seed_3/best.pt \
+  --output runs/world_experiment/graph_profile.json
+```
+
+`python3 scripts/clean_generated.py` is dry-run only. Add `--apply` to remove explicit
+build/test caches; the cleaner never considers `runs/` eligible.
 
 `configs/smoke.yaml` is a plumbing-only profile: it intentionally disables the
 projective, graph, quantizer, and action paths and cannot be used for mechanism

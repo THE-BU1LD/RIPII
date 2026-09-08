@@ -232,7 +232,9 @@ class WorldModel(nn.Module):
             utilization, effective = [], []
             for dimension in range(active_codes.shape[-1]):
                 indices = active_codes[:, dimension] + int(self.quantizer.half)
-                counts = torch.bincount(indices, minlength=self.quantizer.levels).float()
+                counts = torch.bincount(
+                    indices, minlength=self.quantizer.levels
+                ).float()
                 probabilities = counts / counts.sum().clamp_min(1)
                 nonzero = probabilities > 0
                 entropy = -(probabilities[nonzero] * probabilities[nonzero].log()).sum()

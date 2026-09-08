@@ -1,14 +1,22 @@
 from __future__ import annotations
 
 import os
-from pathlib import Path
+import tempfile
+
+_MATPLOTLIB_TEMP_CACHE: tempfile.TemporaryDirectory[str] | None = None
 
 os.environ.setdefault("OMP_NUM_THREADS", "1")
 os.environ.setdefault("MKL_NUM_THREADS", "1")
 os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+if "MPLCONFIGDIR" not in os.environ:
+    _MATPLOTLIB_TEMP_CACHE = tempfile.TemporaryDirectory(
+        prefix="ripii-matplotlib-"
+    )
+    os.environ["MPLCONFIGDIR"] = _MATPLOTLIB_TEMP_CACHE.name
 import argparse
-import runpy
+import subprocess
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -16,12 +24,15 @@ if str(ROOT) not in sys.path:
 
 
 def run_script(script: str, argv: list[str]) -> None:
-    old_argv = sys.argv[:]
-    sys.argv = [script, *argv]
-    try:
-        runpy.run_path(str(ROOT / script), run_name="__main__")
-    finally:
-        sys.argv = old_argv
+    # Each stage owns libraries with process-global state (PyTorch thread pools and
+    # Matplotlib backends). Separate processes make the canonical pipeline match
+    # standalone execution and avoid order-dependent warnings or behavior.
+    subprocess.run(
+        [sys.executable, str(ROOT / script), *argv],
+        check=True,
+        cwd=ROOT,
+        env=os.environ.copy(),
+    )
 
 
 def main() -> None:

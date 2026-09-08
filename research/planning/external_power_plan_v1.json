@@ -1,0 +1,50 @@
+{
+  "format": "ripii-paired-power-plan-v1",
+  "development_pairs": 5,
+  "development_differences": [
+    0.08063262496128742,
+    -0.05543876013190718,
+    0.06804782862227965,
+    0.1391158446237315,
+    0.006179902431602269
+  ],
+  "development_mean": 0.04770748810139873,
+  "development_sample_std": 0.07452679153839702,
+  "minimum_detectable_effect": 0.05,
+  "two_sided_alpha": 0.05,
+  "target_power": 0.8,
+  "normal_approximation_pairs": 18,
+  "recommended_minimum_pairs": 18,
+  "exact_sign_flip_resolution_floor_pairs": 6,
+  "method": "paired normal approximation using development-seed sample SD",
+  "claim_boundary": "Planning estimate only; freeze the final count and effect threshold before external test evaluation, and revise upward if external pilot variance is larger.",
+  "evidence_status": "prospective_planning_from_development_variance",
+  "input": {
+    "name": "world_v3_convergence_capsule_v2.json",
+    "sha256": "b9dfd7d9ffec4c5936bcbed46a83548bea8588c28785846a0a14fc96d573069e",
+    "capsule_verification": {
+      "status": "PASS",
+      "result_sha256": "ce4ffcfd9e5fcda6b07d3f6905ca9ea720f7b5623a761d06f8c0c540690ad370",
+      "retained_files": 4,
+      "full_run_artifacts_verified_before_capture": 124,
+      "format": "ripii-world-result-capsule-v2",
+      "content_hashes_verified": true
+    }
+  },
+  "candidate": "multiscale",
+  "baseline": "graph",
+  "bottleneck": "continuous",
+  "metric": "more_objects position_rmse relative difference",
+  "seeds": [
+    23,
+    29,
+    31,
+    37,
+    43
+  ],
+  "source_sha256": {
+    "scripts/plan_power.py": "a5464cfc7a5b563872e524b4a4eee2b2df8a2600f32b35fc7a3a612bd006b10e",
+    "ripii/utils/power.py": "85ebca13f266bcc5d871122d72d6f0f89bda31684572894ceb3366ab8c23cb66"
+  },
+  "signature": "3b6831cfafae292e7dc9b478b42267a9f465464be1724d6e7271d8a3d6ffa247"
+}

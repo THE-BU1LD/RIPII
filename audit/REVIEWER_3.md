@@ -3,7 +3,7 @@
 ## Post-audit review
 
 Summary: an unusually careful prototype with exact CPU resume, source snapshots,
-artifact hashes, signed capsules, fail-closed checks, package builds and canonical
+artifact hashes, self-checksummed capsules, fail-closed checks, package builds and canonical
 commands. Strengths: negative evidence is immutable, mutable runs are labeled, model
 selection is explicit, and tests cover core contracts. Fatal release concern: no license
 or authorship metadata. Major concerns: ignored full checkpoints are not portable in the

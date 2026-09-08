@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import replace
 from pathlib import Path
@@ -40,6 +41,28 @@ def test_physics_identity_motion_and_pair_momentum():
     still[..., :2] *= 3
     still[..., 2:4] = 0
     assert torch.equal(simulate(still, torch.zeros(1, 2, 2), mask), still)
+
+
+def test_global_coupling_is_distinct_and_preserves_pair_momentum():
+    state = torch.tensor(
+        [[[-0.5, 0.0, 0.0, 0.0, 0.05, 1.0], [0.5, 0.0, 0.0, 0.0, 0.05, 1.0]]]
+    )
+    mask = torch.ones(1, 2, dtype=torch.bool)
+    action = torch.zeros(1, 2, 2)
+    uncoupled = simulate(state, action, mask, Physics(drag=0))
+    coupled = simulate(
+        state,
+        action,
+        mask,
+        Physics(drag=0, global_coupling=1.0),
+    )
+    assert torch.equal(uncoupled, state)
+    assert coupled[0, 0, 2] > 0
+    assert coupled[0, 1, 2] < 0
+    momentum = (coupled[..., 2:4] * coupled[..., 5:6]).sum(1)
+    assert torch.allclose(momentum, torch.zeros_like(momentum), atol=1e-7)
+    with pytest.raises(ValueError):
+        Physics(global_coupling=-1.0)
 
 
 def test_walls_actions_and_masked_objects():
@@ -145,6 +168,10 @@ def test_split_reproducibility_and_actual_heldout_properties():
     assert not ((properties[:, 0] > 0.1) & (properties[:, 1] > 1)).any()
     assert (composed["states"][:, 0, :, 5][composed["mask"]] > 1).all()
     assert (larger["mask"].sum(1) > 4).all()
+    globally_coupled = make_dataset(
+        "train", 8, 4, 7, physics=Physics(global_coupling=1.0)
+    )
+    assert not torch.equal(a["states"], globally_coupled["states"])
 
 
 @pytest.mark.parametrize("variant", list(VARIANTS))
@@ -250,7 +277,25 @@ def test_benchmark_verification_and_demo_interventions(
     assert "ripii/models/quantizer.py" in protocol["source_sha256"]
     assert "pyproject.toml" in protocol["source_sha256"]
     assert "uv.lock" in protocol["source_sha256"]
+    assert protocol["format"] == "ripii-world-protocol-v1"
+    assert protocol["datasets"]["test"]["license"] == "NOASSERTION"
     assert (output / "source/ripii/models/quantizer.py").is_file()
+    registry = json.loads((output / "datasets.json").read_text(encoding="utf-8"))
+    assert set(registry["datasets"]) == {
+        "test",
+        "more_objects",
+        "composition",
+        "fast",
+    }
+    assert result["dataset_registry_sha256"] == hashlib.sha256(
+        (output / "datasets.json").read_bytes()
+    ).hexdigest()
+    status = json.loads((output / "status.json").read_text(encoding="utf-8"))
+    assert [event["state"] for event in status["events"]] == [
+        "planned",
+        "running",
+        "complete",
+    ]
     assert set(result["analytic_baselines"]) == {
         "persistence",
         "constant_velocity",
@@ -264,6 +309,11 @@ def test_benchmark_verification_and_demo_interventions(
     multiscale_metrics = result["runs"][1]["metrics"]["test"]
     assert "assignment_effective_groups" in multiscale_metrics
     assert "assignment_temporal_change" in multiscale_metrics
+    assert "position_rmse_growth_final_over_h1" in multiscale_metrics
+    assert "per_scene_position_rmse_p95" in multiscale_metrics
+    assert "max_abs_property_drift" in multiscale_metrics
+    assert "scene_momentum_rmse" in multiscale_metrics
+    assert 0 <= multiscale_metrics["outside_arena_scene_fraction"] <= 1
     from ripii.world.demo import main
 
     demo = main(output / "multiscale_continuous/seed_3/best.pt", tmp_path / "demo.png")
@@ -319,6 +369,73 @@ def test_benchmark_verification_and_demo_interventions(
     (output / "summary.json").write_text("{}")
     with pytest.raises(ValueError, match="verification failed"):
         verify(output)
+
+    checkpoint = torch.load(
+        output / "graph_continuous/seed_3/best.pt", weights_only=True
+    )
+    first_weight = next(iter(checkpoint["model"]))
+    checkpoint["model"][first_weight].view(-1)[0] = torch.nan
+    invalid_checkpoint = tmp_path / "nonfinite.pt"
+    torch.save(checkpoint, invalid_checkpoint)
+    with pytest.raises(ValueError, match="not a RIPII"):
+        load_model(invalid_checkpoint)
+
+
+def test_manifest_rejects_nonstandard_or_overflowed_json(tmp_path: Path) -> None:
+    for text in ('{"value": NaN}\n', '{"value": 1e999}\n'):
+        directory = tmp_path / hashlib.sha256(text.encode()).hexdigest()[:8]
+        directory.mkdir()
+        artifact = directory / "summary.json"
+        artifact.write_text(text, encoding="utf-8")
+        manifest = {
+            "format": "ripii-world-manifest-v1",
+            "artifacts": [
+                {
+                    "path": "summary.json",
+                    "sha256": hashlib.sha256(artifact.read_bytes()).hexdigest(),
+                    "bytes": artifact.stat().st_size,
+                }
+            ],
+        }
+        (directory / "manifest.json").write_text(
+            json.dumps(manifest), encoding="utf-8"
+        )
+        with pytest.raises(ValueError, match="verification failed"):
+            verify(directory)
+
+
+def test_benchmark_records_failed_state_after_execution_starts(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import ripii.world.experiment as experiment_module
+
+    def fail_train(*args, **kwargs):
+        del args, kwargs
+        raise RuntimeError("injected training failure")
+
+    monkeypatch.setattr(experiment_module, "train", fail_train)
+    cfg = Experiment(
+        steps=1,
+        hidden=28,
+        train_scenes=2,
+        eval_scenes=2,
+        train_horizon=2,
+        test_horizon=2,
+        rollout_steps=1,
+        batch_size=1,
+        validate_every=1,
+    )
+    output = tmp_path / "failed"
+    with pytest.raises(RuntimeError, match="injected"):
+        benchmark(cfg, output, seeds=[3], variants=["graph", "multiscale"])
+    status = json.loads((output / "status.json").read_text(encoding="utf-8"))
+    assert [event["state"] for event in status["events"]] == [
+        "planned",
+        "running",
+        "failed",
+    ]
+    assert status["events"][-1]["error_type"] == "RuntimeError"
+    assert not (output / "manifest.json").exists()
 
 
 def test_scene_rejects_invalid_capacity():

@@ -17,15 +17,28 @@ class Physics:
     stiffness: float = 100.0
     damping: float = 1.5
     drag: float = 0.06
+    global_coupling: float = 0.0
 
     def __post_init__(self):
-        numeric = (self.dt, self.stiffness, self.damping, self.drag)
+        numeric = (
+            self.dt,
+            self.stiffness,
+            self.damping,
+            self.drag,
+            self.global_coupling,
+        )
         if (
             not all(math.isfinite(value) for value in numeric)
             or self.dt <= 0
             or not isinstance(self.substeps, int)
             or self.substeps < 1
-            or min(self.stiffness, self.damping, self.drag) < 0
+            or min(
+                self.stiffness,
+                self.damping,
+                self.drag,
+                self.global_coupling,
+            )
+            < 0
         ):
             raise ValueError("invalid physics parameters")
 
@@ -42,8 +55,8 @@ def simulate(
     """Semi-implicit integration of damped soft-disc contacts and wall contacts.
 
     Actions are forces, held constant across integration substeps. Padded objects
-    exert no forces. Contact forces are symmetric, so pair momentum is conserved
-    in the absence of external forces, walls, and drag.
+    exert no forces. Contact and optional all-pairs harmonic forces are symmetric,
+    so pair momentum is conserved in the absence of external forces, walls, and drag.
     """
     if state.ndim != 3 or state.shape[-1] != STATE_DIM:
         raise ValueError("state must have shape [batch, objects, 6]")
@@ -81,6 +94,16 @@ def simulate(
         )
         contact = (overlap > 0) & pairs.unsqueeze(-1)
         force = (normal * strength * contact).sum(-2)
+        if physics.global_coupling:
+            # A momentum-preserving long-range regime. Dividing by the live-object
+            # count keeps the acceleration scale comparable across scene sizes.
+            count = mask.sum(-1, keepdim=True).clamp_min(1).unsqueeze(-1)
+            global_force = (
+                -physics.global_coupling
+                * (relative * pairs.unsqueeze(-1)).sum(-2)
+                / count
+            )
+            force = force + global_force
         low, high = -1 + radius, 1 - radius
         wall_low = (
             physics.stiffness * (low - position) - physics.damping * velocity

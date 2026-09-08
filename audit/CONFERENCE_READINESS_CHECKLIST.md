@@ -1,6 +1,6 @@
 # Conference readiness checklist
 
-Updated 2026-09-08. Evidence references are repository-relative. An unchecked item is
+Updated 2026-09-09. Evidence references are repository-relative. An unchecked item is
 not silently satisfied by prose.
 
 ## A–F: question, mathematics, implementation, data, baselines
@@ -38,9 +38,11 @@ not silently satisfied by prose.
 - [x] **J/P1 — reusable statistics.** State: raw seed metrics, descriptive CI, exact
   paired sign-flip, Holm adjustment. Evidence: `ripii/utils/statistics.py`. Verify:
   `tests/test_statistics.py`.
-- [ ] **J/P1 — adequate power missing.** State: 3 and 5 seeds; exact two-sided p-value
-  resolution is limited. Required: prospective power analysis and >=10 seeds/dataset.
-  Verify: frozen protocol and retained failures.
+- [x] **J/P1 — prospective power design.** State: current studies remain underpowered at
+  3 and 5 seeds, but a self-checksummed development-only calculation fixes a 5% MDE, two-sided
+  alpha 0.05, 80% target power, and recommends 18 paired seeds per external dataset.
+  Evidence: `research/planning/external_power_plan_v1.json`. External pilot variance may
+  raise, but must not lower, this count.
 - [x] **K/P2 — bounded robustness.** State: more objects, composition, faster motion.
   Evidence: v3 capsule. Verify: capsule signature.
 - [ ] **L/P1 — true external OOD missing.** State: same simulator law only. Required:
@@ -52,8 +54,10 @@ not silently satisfied by prose.
 
 - [x] **N/P2 — partial efficiency.** State: parameters, wall time, inference latency,
   checkpoint size available. Evidence: world summaries/manifests. Verify: generated rows.
-- [ ] **N/P2 — FLOPs/memory missing.** Required: validated measurement tool and hardware
-  context. Verify: repeated measurements with limitations.
+- [x] **N/P2 — profiling harness.** State: synchronized repeated measurements now report
+  bootstrap timing intervals, throughput, checkpoint size, accelerator peak memory when
+  available, environment, and a labeled recognized-operator FLOP lower bound. Evidence:
+  `scripts/profile_world.py`. Comparative 5%-tolerance compute matching remains open in F.
 - [x] **O/P0 — provenance.** State: configs, source hashes, versions, seeds, data seed,
   checkpoints, metrics, manifests. Evidence: `ripii/world/experiment.py`. Verify: verifier.
 - [x] **O/P1 — canonical path.** State: preflight/test/smoke/experiment/analyze/paper/
@@ -76,7 +80,7 @@ not silently satisfied by prose.
   `paper/MANUSCRIPT.md`. Verify: every number maps to ledger.
 - [ ] **U/P1 — submission paper unavailable.** Required: external/powered evidence,
   authorship, venue formatting. Verify: independent review and build.
-- [x] **V/P1 — portable verification.** State: frozen summaries and signed capsule verify.
+- [x] **V/P1 — portable verification.** State: frozen summaries and self-checksummed capsule verify.
   Evidence: `scripts/verify_artifact.sh`. Verify: script exits zero.
 - [ ] **V/P0 — license/authorship unresolved.** Required: owner-approved files. Verify:
   package metadata and legal review. This cannot be inferred by the maintainer.

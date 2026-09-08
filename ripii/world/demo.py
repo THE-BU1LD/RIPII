@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+import tempfile
 from pathlib import Path
 
 import torch
@@ -8,11 +10,24 @@ from .experiment import load_model
 from .models import rollout
 from .physics import sample_scene, simulate
 
+_MATPLOTLIB_TEMP_CACHE: tempfile.TemporaryDirectory[str] | None = None
+
+
+def _configure_matplotlib_cache() -> None:
+    """Give headless/restricted runs a writable cache before importing Matplotlib."""
+    global _MATPLOTLIB_TEMP_CACHE
+    if "MPLCONFIGDIR" not in os.environ:
+        _MATPLOTLIB_TEMP_CACHE = tempfile.TemporaryDirectory(
+            prefix="ripii-matplotlib-"
+        )
+        os.environ["MPLCONFIGDIR"] = _MATPLOTLIB_TEMP_CACHE.name
+
 
 class WorldDemo:
     """Native interactive workbench; predictions always come from the loaded weights."""
 
     def __init__(self, checkpoint: Path, seed=42):
+        _configure_matplotlib_cache()
         import matplotlib.pyplot as plt
         from matplotlib.animation import FuncAnimation
         from matplotlib.widgets import Button, RadioButtons, Slider
@@ -268,6 +283,7 @@ class WorldDemo:
 
 
 def main(checkpoint: Path, export: Path | None = None, seed=42):
+    _configure_matplotlib_cache()
     if export:
         import matplotlib
 

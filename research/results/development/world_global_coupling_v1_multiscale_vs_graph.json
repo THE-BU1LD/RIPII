@@ -1,0 +1,103 @@
+{
+  "evidence_status": "development_evidence",
+  "experimental_unit": "initialization/minibatch seed on one fixed synthetic dataset",
+  "input": {
+    "name": "world_global_coupling_v1_capsule.json",
+    "sha256": "af9ce9210af7c15233ba9d689a1a28d1c29220204105dfa91a1e19cad27a103d",
+    "capsule_verification": {
+      "status": "PASS",
+      "result_sha256": "eb860a4b933bebd21d68141bfc89f5429aff7311dc36b2329e220a4d5c9a0416",
+      "retained_files": 4,
+      "full_run_artifacts_verified_before_capture": 90,
+      "format": "ripii-world-result-capsule-v2",
+      "content_hashes_verified": true
+    }
+  },
+  "source_sha256": {
+    "scripts/analyze_world.py": "7a65d831683db9e3956235ce13860c4242b6601554122fb8099c85911b6eb584",
+    "ripii/utils/statistics.py": "51ae1918fdc2dc079164246e05fe4477ae5b2e4ff8c69ccff6996016b4c7d293"
+  },
+  "candidate": "multiscale",
+  "baseline": "graph",
+  "bottleneck": "continuous",
+  "seeds": [
+    103,
+    107,
+    109
+  ],
+  "metrics": {
+    "test": {
+      "n_pairs": 3,
+      "differences": [
+        -0.017938420176506042,
+        -0.013615816831588745,
+        -0.013891279697418213
+      ],
+      "mean_difference": -0.015148505568504333,
+      "median_difference": -0.013891279697418213,
+      "sample_std_difference": 0.002420059418189715,
+      "bootstrap_95_ci_mean_difference": [
+        -0.017938420176506042,
+        -0.013615816831588745
+      ],
+      "exact_two_sided_sign_flip_p": 0.25,
+      "relative_mean_difference": -0.08764650369769289,
+      "holm_adjusted_p": 1.0
+    },
+    "more_objects": {
+      "n_pairs": 3,
+      "differences": [
+        -0.021016821265220642,
+        -0.0065613240003585815,
+        -0.030161410570144653
+      ],
+      "mean_difference": -0.01924651861190796,
+      "median_difference": -0.021016821265220642,
+      "sample_std_difference": 0.011899222669510545,
+      "bootstrap_95_ci_mean_difference": [
+        -0.030161410570144653,
+        -0.0065613240003585815
+      ],
+      "exact_two_sided_sign_flip_p": 0.25,
+      "relative_mean_difference": -0.1089452044002567,
+      "holm_adjusted_p": 1.0
+    },
+    "composition": {
+      "n_pairs": 3,
+      "differences": [
+        0.005034014582633972,
+        -0.0040208399295806885,
+        -0.007069975137710571
+      ],
+      "mean_difference": -0.0020189334948857627,
+      "median_difference": -0.0040208399295806885,
+      "sample_std_difference": 0.006295424037942664,
+      "bootstrap_95_ci_mean_difference": [
+        -0.007069975137710571,
+        0.005034014582633972
+      ],
+      "exact_two_sided_sign_flip_p": 0.75,
+      "relative_mean_difference": -0.01172685798853306,
+      "holm_adjusted_p": 1.0
+    },
+    "fast": {
+      "n_pairs": 3,
+      "differences": [
+        -0.0022385120391845703,
+        0.00995597243309021,
+        -0.012279897928237915
+      ],
+      "mean_difference": -0.0015208125114440918,
+      "median_difference": -0.0022385120391845703,
+      "sample_std_difference": 0.011135295332434467,
+      "bootstrap_95_ci_mean_difference": [
+        -0.012279897928237915,
+        0.00995597243309021
+      ],
+      "exact_two_sided_sign_flip_p": 0.75,
+      "relative_mean_difference": -0.004465212034424571,
+      "holm_adjusted_p": 1.0
+    }
+  },
+  "interpretation_limit": "Exact tests have very low resolution at this seed count; bootstrap intervals describe these seeds and are not population confidence intervals."
+}

@@ -132,9 +132,22 @@ loses 7.49% on mean ID relative error, and passes the descriptive 5% OOD/no-more
 than-5%-ID-regression check on 2/5 seeds. Its grouping remains active (2.77 mean
 effective groups out of four), but again does not establish utility. This stronger
 negative result argues against advancing the multiscale mechanism in its current
-form. A signed compact copy of the protocol, full summary, report, and manifest is
+form. A self-checksummed compact copy of the protocol, full summary, report, and manifest is
 retained at `research/results/development/world_v3_convergence_capsule_v2.json`; its
 signature is
 `ce4ffcfd9e5fcda6b07d3f6905ca9ea720f7b5623a761d06f8c0c540690ad370`.
 The v2 capsule verifies the exact embedded byte count and SHA-256 of every retained
 file; the earlier v1 capsule is preserved as superseded development provenance.
+
+## Conditional hierarchy extension (2026-09-08)
+
+A prospectively written development protocol introduced a symmetric long-range force
+and compared local and coupled regimes. Across seeds 53, 59, and 61, multiscale's mean
+coupled more-objects RMSE was 0.00204 lower (about 1.09%) than global pool, but seed
+directions were mixed and the predeclared 5%-on-every-seed rule failed. The change in
+relative advantage averaged -0.00089; exact two-sided sign-flip p=1.0. The self-checksummed
+capsule records that 185 full-run artifacts verified at capture time.
+
+A new-seed 300-update follow-up put global pool first in mean IID and every mean OOD
+regime. Retained v3 failure localization also shows the hierarchy deficit is broad,
+not contact-specific. Global information can matter; learned grouping remains unsupported.

@@ -6,8 +6,12 @@ import json
 import math
 from pathlib import Path
 
-from ripii.utils.statistics import holm_adjust, paired_summary
-from ripii.world.experiment import verify_capsule
+from ripii.utils.statistics import (
+    holm_adjust,
+    paired_summary,
+    practical_equivalence_summary,
+)
+from ripii.world.experiment import verify_capsule, write_json
 
 
 def _sha256(path: Path) -> str:
@@ -91,11 +95,15 @@ def analyze(
         candidate_values = [
             _metric(selected[(candidate, seed)], split) for seed in seeds
         ]
-        baseline_values = [
-            _metric(selected[(baseline, seed)], split) for seed in seeds
-        ]
+        baseline_values = [_metric(selected[(baseline, seed)], split) for seed in seeds]
         analyses[split] = paired_summary(
             candidate_values, baseline_values, bootstrap_seed=10_000 + offset
+        )
+        analyses[split]["practical_equivalence"] = practical_equivalence_summary(
+            candidate_values,
+            baseline_values,
+            margin=0.05,
+            bootstrap_seed=20_000 + offset,
         )
     adjusted = holm_adjust(
         [analyses[split]["exact_two_sided_sign_flip_p"] for split in splits]
@@ -116,6 +124,11 @@ def analyze(
         "bottleneck": bottleneck,
         "seeds": seeds,
         "metrics": analyses,
+        "multiplicity_family": {
+            "metrics": list(splits),
+            "method": "Holm adjustment over the four position-RMSE split comparisons",
+        },
+        "practical_equivalence_margin": 0.05,
         "interpretation_limit": "Exact tests have very low resolution at this seed count; bootstrap intervals describe these seeds and are not population confidence intervals.",
     }
 
@@ -136,10 +149,9 @@ def main() -> None:
         baseline=args.baseline,
         bottleneck=args.bottleneck,
     )
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(
-        json.dumps(result, indent=2, allow_nan=False) + "\n", encoding="utf-8"
-    )
+    if args.output.exists() or args.output.is_symlink():
+        raise FileExistsError(f"refusing existing analysis output: {args.output}")
+    write_json(args.output, result)
 
 
 if __name__ == "__main__":

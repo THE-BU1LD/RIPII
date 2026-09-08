@@ -18,3 +18,13 @@ does not contain checkpoints. No new confirmatory experiment was run in this aud
 The simplest evidence-supported method is the flat object graph model. The appropriate
 next scientific action is an externally grounded, compute-matched comparison—not
 post-hoc tuning of the failed hierarchy.
+
+## Long-range extension
+
+A prospectively specified development extension added a symmetric, momentum-preserving
+long-range force. This makes global information relevant, but multiscale did not gain
+the required consistent 5% advantage over a simple global-pool control. Its mean
+coupling-specific interaction was essentially zero across three seeds. A separate
+300-update follow-up likewise put global pool first in mean IID and every mean OOD
+regime. Neither extension is confirmatory or external evidence. Under known nonlocal
+dynamics, current evidence supports simple global aggregation, not learned grouping.

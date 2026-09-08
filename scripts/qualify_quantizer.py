@@ -34,9 +34,7 @@ def _dataset(
 ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, tuple[torch.Tensor, torch.Tensor]]:
     generator = torch.Generator().manual_seed(seed)
     if centers is None:
-        basis, _ = torch.linalg.qr(
-            torch.randn(code_dim, code_dim, generator=generator)
-        )
+        basis, _ = torch.linalg.qr(torch.randn(code_dim, code_dim, generator=generator))
         coarse_centers = 3.0 * basis[:coarse_codes]
         fine_centers = 0.7 * torch.roll(basis, shifts=coarse_codes, dims=0)[:fine_codes]
     else:
@@ -89,9 +87,7 @@ def run_qualification(
         seed=seed + 1_000_003,
         centers=centers,
     )
-    quantizer = HierarchicalVectorQuantizer(
-        coarse_codes, fine_codes, code_dim
-    )
+    quantizer = HierarchicalVectorQuantizer(coarse_codes, fine_codes, code_dim)
     optimizer = torch.optim.Adam(quantizer.parameters(), lr=learning_rate)
     for _ in range(steps):
         _, stats = quantizer(train_x)
@@ -109,12 +105,8 @@ def run_qualification(
             test_x, quantizer.coarse
         )
         residual = test_x - coarse_quant
-        fine_quant, fine_idx, fine_probs = quantizer._quantize(
-            residual, quantizer.fine
-        )
-        reconstruction_mse = float(
-            F.mse_loss(coarse_quant + fine_quant, test_x).item()
-        )
+        fine_quant, fine_idx, fine_probs = quantizer._quantize(residual, quantizer.fine)
+        reconstruction_mse = float(F.mse_loss(coarse_quant + fine_quant, test_x).item())
         coarse_fraction = float((coarse_probs > 0).float().mean().item())
         fine_fraction = float((fine_probs > 0).float().mean().item())
         coarse_purity = _purity(coarse_idx, coarse_y)

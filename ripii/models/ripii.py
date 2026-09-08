@@ -453,8 +453,12 @@ class RIPIIModel(nn.Module):
             "spectral": self.use_projective and self.use_spectral_loss,
             "depth": self.use_projective and self.use_depth_loss,
             "vq": self.use_quantizer,
-            "equiv": self.use_action and self.use_equivariance_loss and x_view is not None,
-            "identity": self.use_action and self.use_identity_loss and transform is not None,
+            "equiv": self.use_action
+            and self.use_equivariance_loss
+            and x_view is not None,
+            "identity": self.use_action
+            and self.use_identity_loss
+            and transform is not None,
         }
         for key, enabled in active.items():
             if not enabled:

@@ -45,6 +45,9 @@ def test_analysis_records_portable_provenance(tmp_path: Path) -> None:
         "scripts/analyze_world.py",
         "ripii/utils/statistics.py",
     }
+    assert result["multiplicity_family"]["method"].startswith("Holm")
+    assert result["practical_equivalence_margin"] == 0.05
+    assert "practical_equivalence" in result["metrics"]["test"]
 
 
 def test_analysis_rejects_duplicate_and_unpaired_seeds(tmp_path: Path) -> None:
@@ -76,7 +79,9 @@ def test_analysis_verifies_capsule_before_using_retained_summary(
     tmp_path: Path,
 ) -> None:
     repository = Path(__file__).resolve().parents[1]
-    source = repository / "research/results/development/world_v3_convergence_capsule_v2.json"
+    source = (
+        repository / "research/results/development/world_v3_convergence_capsule_v2.json"
+    )
     payload = json.loads(source.read_text(encoding="utf-8"))
     payload["retained"]["summary.json"]["content_text"] += " "
     tampered = tmp_path / "tampered.json"

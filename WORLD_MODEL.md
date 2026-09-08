@@ -120,10 +120,41 @@ every seed. Its mean OOD advantage over global-pool is only 1.58%, paired direct
 is mixed, and mean ID error is worse. This is the current strongest local evidence
 and it does not support advancing the hierarchy.
 
-Because `runs/` is intentionally ignored, the compact signed capsule at
+Because `runs/` is intentionally ignored, the compact self-checksummed capsule at
 `research/results/development/world_v3_convergence_capsule_v2.json` retains the
 protocol, full summary, report, and complete-run manifest without pretending that
 the omitted checkpoints can be re-evaluated from the capsule alone.
+
+## Long-range coupling study
+
+The optional `--global-coupling` coefficient adds symmetric harmonic attraction
+between all live object pairs. Pair momentum is conserved without actions, drag, or
+walls; zero exactly recovers the original simulator. This creates a controlled need
+for nonlocal information. The decisive simple control is global mean pooling, not the
+radius-limited graph alone.
+
+The prospectively written v4 development intervention compared coupling 0 versus 1
+using graph, global-pool, and multiscale models; seeds 53, 59, 61; and 100 updates. It
+returned `no_advance`. On coupled larger-object scenes, mean RMSE was 0.2043 graph,
+0.1867 global-pool, and 0.1846 multiscale. Multiscale's 1.09% mean advantage over
+global-pool was mixed by seed and far below the all-seed 5% rule. The coupling-specific
+interaction was -0.09 percentage points (exact sign-flip p=1.0).
+
+A separate 300-update coupled run with seeds 103, 107, 109 also returned `no_advance`.
+Global-pool had the best mean IID and all three mean OOD errors; multiscale versus
+global-pool differences were not directionally consistent. Both studies are synthetic
+development evidence, not a confirmatory novelty claim.
+
+```bash
+python scripts/run_coupling_study.py --output runs/world_v4_coupling
+python scripts/run_coupling_study.py --verify runs/world_v4_coupling
+python scripts/run_coupling_study.py --capture runs/world_v4_coupling \
+  --capsule-output research/results/development/world_v4_coupling_capsule.json
+python scripts/run_coupling_study.py --verify-capsule \
+  research/results/development/world_v4_coupling_capsule.json
+python scripts/analyze_failures.py runs/world_v3_convergence \
+  --output runs/world_v3_failure_analysis.json
+```
 
 ## Train and resume one model
 

@@ -29,7 +29,7 @@ OOD relative improvement versus graph is -13.05% and it loses all five paired se
 Versus global pool, its mean OOD advantage is 1.58%, but paired direction is mixed and
 ID error is 7.49% worse. Learned assignments remain active (2.77 effective groups of
 four), ruling out numerical inactivity but not showing utility. Exact unrounded values
-and provenance are in the signed v3 capsule cited by `EVIDENCE_LEDGER.md`.
+and provenance are in the self-checksummed v3 capsule cited by `EVIDENCE_LEDGER.md`.
 
 ## Failure analysis and limitations
 
@@ -39,6 +39,21 @@ known states, one dynamics law, limited object counts, and small seed samples. P
 and update counts are approximately matched, but FLOPs are not. No real-world data,
 learned perception, external simulator, scaling study, or independent reproduction is
 available. Thus the study falsifies only the current implementation at the tested scale.
+
+Post-result failure localization over the five retained seeds shows the deficit is not
+specific to collisions: multiscale is worse than graph in contact, near-contact, forced,
+and free-flight subsets, with the largest relative deficits under faster motion.
+
+## Targeted long-range intervention
+
+We introduced a symmetric all-pairs harmonic force as a prospectively specified
+development intervention. It preserves momentum and makes nonlocal information
+relevant. The primary control is global pooling rather than the deliberately local
+graph. Across three seeds, multiscale improved coupled more-objects RMSE over global
+pool by only 1.09% on average with mixed directions; the coupled-minus-local relative
+advantage was -0.09 percentage points (exact sign-flip p=1.0). A separate 300-update,
+new-seed follow-up placed global pooling first in mean IID and all OOD regimes. Thus
+the observed boundary condition is access to global information, not learned hierarchy.
 
 ## Related work and conclusion
 
@@ -52,6 +67,7 @@ matching, and analysis that localizes when grouping harms prediction.
 
 The code records source hashes, complete experiment configuration, seeds, validation
 selection, per-seed raw metrics, timing, checkpoints, success state, and artifact hashes.
-Canonical commands are in the README. The signed compact capsule omits checkpoints; full
-local runs are ignored mutable storage. No license has been selected, so reuse rights are
-not granted by this manuscript.
+Canonical commands are in the README. The self-checksummed compact capsule omits
+checkpoints; full local runs are ignored mutable storage. A SHA-256 digest detects
+corruption but does not authenticate an author. No license has been selected, so reuse
+rights are not granted by this manuscript.

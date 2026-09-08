@@ -104,6 +104,48 @@ def paired_summary(
     }
 
 
+def practical_equivalence_summary(
+    candidate: Sequence[float],
+    baseline: Sequence[float],
+    *,
+    margin: float = 0.05,
+    bootstrap_seed: int = 0,
+) -> dict[str, float | int | bool | list[float] | str]:
+    """Describe whether paired relative errors stay inside a practical margin.
+
+    This is deliberately descriptive: a percentile bootstrap over a small, fixed
+    seed set is not a population-level equivalence test.
+    """
+    left, right = _finite(candidate, "candidate"), _finite(baseline, "baseline")
+    if len(left) != len(right):
+        raise ValueError("paired samples must have equal length")
+    if (
+        not math.isfinite(margin)
+        or not 0 < margin < 1
+        or any(value <= 0 for value in right)
+    ):
+        raise ValueError("equivalence margin must be in (0, 1) and baselines positive")
+    relative = [a / b - 1.0 for a, b in zip(left, right)]
+    interval = bootstrap_mean_ci(relative, seed=bootstrap_seed)
+    within_seeds = all(abs(value) <= margin for value in relative)
+    within_interval = interval[0] >= -margin and interval[1] <= margin
+    return {
+        "n_pairs": len(relative),
+        "margin": margin,
+        "relative_differences": relative,
+        "mean_relative_difference": sum(relative) / len(relative),
+        "bootstrap_95_ci_mean_relative_difference": [interval[0], interval[1]],
+        "all_executed_seeds_within_margin": within_seeds,
+        "bootstrap_interval_within_margin": within_interval,
+        "descriptive_decision": (
+            "within_margin_for_executed_seeds"
+            if within_seeds and within_interval
+            else "not_within_margin"
+        ),
+        "claim_boundary": "Descriptive fixed-seed analysis; not a population equivalence test.",
+    }
+
+
 def holm_adjust(p_values: Sequence[float]) -> list[float]:
     values = _finite(p_values, "p_values")
     if any(not 0.0 <= value <= 1.0 for value in values):
