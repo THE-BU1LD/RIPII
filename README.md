@@ -10,6 +10,12 @@ the full model reconstructed worse than both quantizer bypass and the four-mecha
 removal, while its codebooks remained near collapse. See
 [`research/results/pilot_v2/analysis.md`](research/results/pilot_v2/analysis.md).
 
+The complete audit is indexed by [`audit/REPOSITORY_MAP.md`](audit/REPOSITORY_MAP.md),
+[`audit/CONFERENCE_READINESS_CHECKLIST.md`](audit/CONFERENCE_READINESS_CHECKLIST.md),
+and [`FINAL_RESEARCH_REPORT.md`](FINAL_RESEARCH_REPORT.md). The current verdict is
+**EVIDENCE_PARTIAL**: implementation quality is substantially verified, while all
+scientific evidence is synthetic and the proposed mechanisms have negative results.
+
 ## Object-state world model
 
 A complete action-conditioned dynamics workflow is now available: a 2D contact
@@ -76,6 +82,16 @@ python3 scripts/benchmark.py --config configs/mechanism_smoke.yaml --seeds 3 7 -
 python3 scripts/qualify_quantizer.py --seed 17 --steps 300
 python3 scripts/run_suite.py --config configs/mechanism_smoke.yaml
 python3 scripts/inspect_model.py --config configs/default.yaml
+```
+
+Canonical repository-wide entry points are:
+
+```bash
+./scripts/preflight.sh
+./scripts/test.sh
+./scripts/run_smoke.sh
+./scripts/analyze.sh
+./scripts/verify_artifact.sh
 ```
 
 `configs/smoke.yaml` is a plumbing-only profile: it intentionally disables the

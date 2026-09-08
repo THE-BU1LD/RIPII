@@ -11,6 +11,7 @@ from pathlib import Path
 
 import torch
 
+from ..utils.statistics import descriptive_summary, paired_sign_flip_test
 from .models import VARIANTS, WorldModel
 from .physics import Physics, make_dataset
 
@@ -648,6 +649,11 @@ def benchmark(
                 "id_relative_improvement_mean": sum(id_values) / len(id_values),
                 "ood_seed_wins": sum(value > 0 for value in ood_values),
                 "seeds": len(pairs),
+                "ood_relative_improvement_summary": descriptive_summary(ood_values),
+                "id_relative_improvement_summary": descriptive_summary(id_values),
+                "ood_exact_paired_sign_flip": paired_sign_flip_test(
+                    ood_values, [0.0] * len(ood_values)
+                ),
                 "all_pass_5pct_gate": all(
                     pair["passes_5pct_ood_with_at_most_5pct_id_regression"]
                     for pair in pairs

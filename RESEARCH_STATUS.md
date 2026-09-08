@@ -2,6 +2,16 @@
 
 Status: **experimental implementation; no publication claim**.
 
+## Repository and verification status
+
+The public source repository is `https://github.com/THE-BU1LD/RIPII`. Commit
+`0dba137d49e9f827c6ca48724cb9f2106c81daf4` passed both hosted workflows:
+[CI run 34230280332](https://github.com/THE-BU1LD/RIPII/actions/runs/34230280332)
+and [quality run 34230280341](https://github.com/THE-BU1LD/RIPII/actions/runs/34230280341).
+This verifies repository mechanics, not the scientific hypothesis. The method
+remains a negative-result experimental prototype and still lacks an owner-approved
+license.
+
 Two frozen local pilots failed their predefined advancement conditions. The corrected
 pilot v2 used three new seeds and exact retained initial states. Relative to `no_vq`,
 base mean test reconstruction MSE was worse by 0.06155; relative to `no_structured`,

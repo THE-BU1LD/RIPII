@@ -1,5 +1,7 @@
-include README.md RESEARCH_STATUS.md SECURITY.md CONTRIBUTING.md WORLD_MODEL.md EXECUTION_CHECKLIST.md uv.lock
+include README.md RESEARCH_STATUS.md SECURITY.md CONTRIBUTING.md WORLD_MODEL.md EXECUTION_CHECKLIST.md EVIDENCE_LEDGER.md FINAL_RESEARCH_REPORT.md RESEARCH_TRUTH.md uv.lock
 recursive-include configs *.yaml
-recursive-include scripts *.py
+recursive-include scripts *.py *.sh
 recursive-include tests *.py
 recursive-include research *.md *.json *.csv
+recursive-include audit *.md
+recursive-include paper *.md

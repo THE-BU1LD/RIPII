@@ -40,10 +40,16 @@ remain immutable and are not upgraded by later code changes.
   outside the source checkout.
 - [x] Run lint, compilation, lockfile, tests, retained-pilot verification, benchmark
   verification, and headless demo rendering.
+- [x] Attach local `main` to the public source remote at commit
+  `0dba137d49e9f827c6ca48724cb9f2106c81daf4`.
+- [x] Verify portable retained-pilot summaries from a clean checkout without
+  pretending the ignored full-run files are present.
 - [ ] Add an owner-approved license and authorship metadata. Blocked on owner/legal
   choice; no license is inferred automatically.
-- [ ] Verify hosted CI. Blocked because this supplied directory has no `.git`
-  metadata or configured remote.
+- [x] Verify hosted CI for commit `0dba137d49e9f827c6ca48724cb9f2106c81daf4`:
+  [CI run 34230280332](https://github.com/THE-BU1LD/RIPII/actions/runs/34230280332)
+  and [quality run 34230280341](https://github.com/THE-BU1LD/RIPII/actions/runs/34230280341)
+  both completed successfully.
 
 ## External scientific gates
 
@@ -57,6 +63,7 @@ remain immutable and are not upgraded by later code changes.
 ruff check .
 python -m compileall -q ripii scripts tests
 pytest
+uv build
 python scripts/verify_artifact.py --manifest research/results/pilot_v1/manifest.json --protocol research/protocols/pilot_v1.md --portable-summary
 python scripts/verify_artifact.py --manifest research/results/pilot_v2/manifest.json --protocol research/protocols/pilot_v2.md --portable-summary
 python -m ripii.world verify runs/world_v2_controls
