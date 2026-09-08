@@ -1,17 +1,18 @@
-
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field, replace
+import math
+import os
+from collections.abc import Mapping
+from dataclasses import asdict, dataclass, field, fields, replace
 from pathlib import Path
 from typing import Any
 
-import os
 import yaml
 
 
 @dataclass
 class LossWeights:
-    rec: float = 1.0
+    recon: float = 1.0
     equiv: float = 0.8
     inv: float = 0.8
     scale: float = 0.3
@@ -28,6 +29,8 @@ class LossWeights:
 
 @dataclass
 class Config:
+    model_variant: str = "ripii"
+    profile: str = "research"
     seed: int = 7
     device: str = "cpu"
     output_dir: str = "runs/ripii"
@@ -71,13 +74,32 @@ class Config:
     loss_weights: LossWeights = field(default_factory=LossWeights)
 
     @classmethod
-    def from_mapping(cls, mapping: dict[str, Any]) -> "Config":
-        mapping = dict(mapping or {})
+    def from_mapping(cls, mapping: Mapping[str, Any]) -> "Config":
+        if not isinstance(mapping, Mapping):
+            raise ValueError("configuration must be a mapping")
+        mapping = dict(mapping)
         loss = mapping.pop("loss_weights", {})
-        allowed = {f.name for f in cls.__dataclass_fields__.values()}
-        filtered = {k: v for k, v in mapping.items() if k in allowed}
-        cfg = cls(**filtered)
-        cfg.loss_weights = LossWeights(**{k: v for k, v in dict(loss).items() if k in LossWeights.__dataclass_fields__})
+        allowed = {item.name for item in fields(cls)}
+        unknown = sorted(set(mapping) - allowed)
+        if unknown:
+            raise ValueError(f"unknown configuration keys: {', '.join(unknown)}")
+        if not isinstance(loss, Mapping):
+            raise ValueError("loss_weights must be a mapping")
+        loss = dict(loss)
+        # Historical configs used ``rec`` while the model objective is named
+        # ``recon``.  Accept the old spelling explicitly so retained runs remain
+        # readable, but never allow both spellings to disagree.
+        if "rec" in loss:
+            if "recon" in loss:
+                raise ValueError("loss_weights cannot contain both rec and recon")
+            loss["recon"] = loss.pop("rec")
+        allowed_loss = {item.name for item in fields(LossWeights)}
+        unknown_loss = sorted(set(loss) - allowed_loss)
+        if unknown_loss:
+            raise ValueError(f"unknown loss-weight keys: {', '.join(unknown_loss)}")
+        cfg = cls(**mapping)
+        cfg.loss_weights = LossWeights(**loss)
+        validate_config(cfg)
         return cfg
 
     def as_dict(self) -> dict[str, Any]:
@@ -86,11 +108,15 @@ class Config:
         return data
 
 
-def load_config(path: str | Path | None = None, overrides: dict[str, Any] | None = None) -> Config:
+def load_config(
+    path: str | Path | None = None, overrides: dict[str, Any] | None = None
+) -> Config:
     data: dict[str, Any] = {}
     if path:
         with open(path, "r", encoding="utf-8") as f:
             loaded = yaml.safe_load(f) or {}
+        if not isinstance(loaded, Mapping):
+            raise ValueError("configuration document must contain a mapping")
         data.update(loaded)
     if overrides:
         data.update(overrides)
@@ -98,6 +124,97 @@ def load_config(path: str | Path | None = None, overrides: dict[str, Any] | None
     if out_dir:
         data["output_dir"] = out_dir
     return Config.from_mapping(data)
+
+
+def validate_config(cfg: Config) -> None:
+    if cfg.model_variant not in {"ripii", "plain_ae"}:
+        raise ValueError("model_variant must be ripii or plain_ae")
+    if cfg.profile not in {"research", "plumbing_smoke", "mechanism_smoke"}:
+        raise ValueError("profile must be research, plumbing_smoke, or mechanism_smoke")
+
+    positive_ints = (
+        "batch_size",
+        "val_batch_size",
+        "steps",
+        "input_dim",
+        "latent_dim",
+        "hidden_dim",
+        "node_dim",
+        "num_nodes",
+        "num_projectors",
+        "codebook_size",
+        "fine_codebook_size",
+        "codebook_dim",
+        "dataset_size",
+        "transform_dim",
+        "num_classes",
+        "eval_every",
+        "log_every",
+    )
+    for name in positive_ints:
+        value = getattr(cfg, name)
+        if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+            raise ValueError(f"{name} must be a positive integer")
+    for name in (
+        "warmup_steps",
+        "num_levels",
+        "graph_steps",
+        "graph_topk",
+        "transform_shift",
+    ):
+        value = getattr(cfg, name)
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+            raise ValueError(f"{name} must be a non-negative integer")
+
+    if cfg.transform_dim != 4:
+        raise ValueError(
+            "transform_dim must be exactly 4 for the implemented transform"
+        )
+    if cfg.input_dim < max(8, cfg.num_classes + 4):
+        raise ValueError("input_dim is too small for the configured semantic basis")
+    if cfg.dataset_size < 3:
+        raise ValueError(
+            "dataset_size must provide train, validation, and test examples"
+        )
+    if cfg.use_graph and cfg.graph_steps > 0 and not 0 < cfg.graph_topk < cfg.num_nodes:
+        raise ValueError(
+            "graph_topk must be between 1 and num_nodes - 1 when graph refinement is active"
+        )
+
+    finite_names = (
+        "lr",
+        "weight_decay",
+        "noise_std",
+        "transform_scale",
+        "depth_target",
+    )
+    for name in finite_names:
+        value = getattr(cfg, name)
+        if (
+            isinstance(value, bool)
+            or not isinstance(value, (int, float))
+            or not math.isfinite(float(value))
+        ):
+            raise ValueError(f"{name} must be finite")
+    if (
+        cfg.lr <= 0
+        or cfg.weight_decay < 0
+        or cfg.noise_std < 0
+        or cfg.transform_scale < 0
+    ):
+        raise ValueError(
+            "lr must be positive and regularization/noise/transform scales non-negative"
+        )
+    if not 0.0 <= cfg.depth_target <= 1.0:
+        raise ValueError("depth_target must be in [0, 1]")
+    for name, value in asdict(cfg.loss_weights).items():
+        if (
+            isinstance(value, bool)
+            or not isinstance(value, (int, float))
+            or not math.isfinite(float(value))
+            or value < 0
+        ):
+            raise ValueError(f"loss weight {name} must be finite and non-negative")
 
 
 def save_config(cfg: Config, path: str | Path) -> None:
@@ -108,8 +225,7 @@ def save_config(cfg: Config, path: str | Path) -> None:
 
 
 def runtime_profile(cfg: Config) -> Config:
-    small = cfg.input_dim <= 32 and cfg.dataset_size <= 64 and cfg.steps <= 12
-    if not small:
+    if cfg.profile != "plumbing_smoke":
         return cfg
     return replace(
         cfg,

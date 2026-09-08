@@ -39,7 +39,7 @@ use_equivariance_loss: false
 use_identity_loss: false
 use_depth_loss: true
 loss_weights:
-  rec: 1.0
+  recon: 1.0
   equiv: 0.0
   inv: 0.8
   scale: 0.2

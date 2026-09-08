@@ -1,8 +1,8 @@
-
 from __future__ import annotations
 
-from pathlib import Path
 import os
+from pathlib import Path
+
 os.environ.setdefault("OMP_NUM_THREADS", "1")
 os.environ.setdefault("MKL_NUM_THREADS", "1")
 os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
@@ -32,15 +32,60 @@ def main() -> None:
     parser.add_argument("--run-benchmark", action="store_true")
     parser.add_argument("--benchmark-steps", type=int, default=3)
     args = parser.parse_args()
-    run_script("scripts/train.py", ["--config", args.config, "--output-dir", args.output_dir, "--mode", args.mode])
-    cfg_path = Path(args.config)
+    run_script(
+        "scripts/train.py",
+        ["--config", args.config, "--output-dir", args.output_dir, "--mode", args.mode],
+    )
+    cfg_path = Path(args.output_dir) / "config.yaml"
     checkpoint = Path(args.output_dir) / "final.pt"
-    run_script("scripts/evaluate.py", ["--config", str(cfg_path), "--checkpoint", str(checkpoint)])
-    run_script("scripts/diagnostics.py", ["--config", str(cfg_path), "--checkpoint", str(checkpoint), "--output", str(Path(args.output_dir) / "diagnostics.png")])
+    run_script(
+        "scripts/evaluate.py",
+        [
+            "--config",
+            str(cfg_path),
+            "--checkpoint",
+            str(checkpoint),
+            "--output",
+            str(Path(args.output_dir) / "eval.json"),
+        ],
+    )
+    run_script(
+        "scripts/diagnostics.py",
+        [
+            "--config",
+            str(cfg_path),
+            "--checkpoint",
+            str(checkpoint),
+            "--output",
+            str(Path(args.output_dir) / "diagnostics.png"),
+        ],
+    )
     if args.run_benchmark:
         benchmark = Path(args.output_dir) / "benchmark.json"
-        run_script("scripts/benchmark.py", ["--config", args.config, "--seeds", "3", "--steps", str(args.benchmark_steps), "--modes", "base", "--output", str(benchmark)])
-        run_script("scripts/report.py", ["--benchmark", str(benchmark), "--output", str(Path(args.output_dir) / "benchmark.md")])
+        run_script(
+            "scripts/benchmark.py",
+            [
+                "--config",
+                args.config,
+                "--seeds",
+                "3",
+                "--steps",
+                str(args.benchmark_steps),
+                "--modes",
+                "base",
+                "--output",
+                str(benchmark),
+            ],
+        )
+        run_script(
+            "scripts/report.py",
+            [
+                "--benchmark",
+                str(benchmark),
+                "--output",
+                str(Path(args.output_dir) / "benchmark.md"),
+            ],
+        )
 
 
 if __name__ == "__main__":

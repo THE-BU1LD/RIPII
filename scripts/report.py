@@ -1,10 +1,9 @@
-
 from __future__ import annotations
 
-from pathlib import Path
 import argparse
 import json
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -22,7 +21,11 @@ def main() -> None:
     benchmark_path = Path(args.benchmark)
     data = json.loads(benchmark_path.read_text(encoding="utf-8"))
     out = Path(args.output) if args.output else benchmark_path.with_suffix(".md")
-    summary_json = Path(args.summary_json) if args.summary_json else out.with_suffix(".summary.json")
+    summary_json = (
+        Path(args.summary_json)
+        if args.summary_json
+        else out.with_suffix(".summary.json")
+    )
     summary = write_report(data, out, summary_json=summary_json)
     print(json.dumps(summary, indent=2))
 

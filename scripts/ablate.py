@@ -1,8 +1,8 @@
-
 from __future__ import annotations
 
-from pathlib import Path
 import os
+from pathlib import Path
+
 os.environ.setdefault("OMP_NUM_THREADS", "1")
 os.environ.setdefault("MKL_NUM_THREADS", "1")
 os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
@@ -26,9 +26,15 @@ def main() -> None:
     parser.add_argument("--mode", type=str, default="no_graph")
     parser.add_argument("--output", type=str, default="runs/ripii/ablation.json")
     args = parser.parse_args()
+    base = load_config(args.config)
+    if base.profile == "plumbing_smoke":
+        parser.error(
+            "plumbing_smoke disables RIPII mechanisms and cannot support an ablation; "
+            "use configs/mechanism_smoke.yaml"
+        )
     with tempfile.TemporaryDirectory() as tmpdir:
         tmpdir = Path(tmpdir)
-        cfg = runtime_profile(apply_mode(load_config(args.config), args.mode))
+        cfg = runtime_profile(apply_mode(base, args.mode))
         cfg.output_dir = str(tmpdir / args.mode)
         cfg.amp = False
         cfg.compile_model = False
@@ -36,13 +42,39 @@ def main() -> None:
         cfg.eval_every = max(1, cfg.steps)
         cfg_path = tmpdir / "cfg.yaml"
         save_config(cfg, cfg_path)
-        subprocess.run([sys.executable, "scripts/train.py", "--config", str(cfg_path), "--mode", "base"], check=True, cwd=ROOT)
+        subprocess.run(
+            [
+                sys.executable,
+                "scripts/train.py",
+                "--config",
+                str(cfg_path),
+                "--mode",
+                "base",
+            ],
+            check=True,
+            cwd=ROOT,
+        )
         checkpoint = Path(cfg.output_dir) / "final.pt"
-        proc = subprocess.run([sys.executable, "scripts/evaluate.py", "--config", str(cfg_path), "--checkpoint", str(checkpoint)], check=True, capture_output=True, text=True, cwd=ROOT)
+        proc = subprocess.run(
+            [
+                sys.executable,
+                "scripts/evaluate.py",
+                "--config",
+                str(cfg_path),
+                "--checkpoint",
+                str(checkpoint),
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+            cwd=ROOT,
+        )
         summary = json.loads(proc.stdout.strip())
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps({"mode": args.mode, "summary": summary}, indent=2), encoding="utf-8")
+    out.write_text(
+        json.dumps({"mode": args.mode, "summary": summary}, indent=2), encoding="utf-8"
+    )
     print(out)
 
 

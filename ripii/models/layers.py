@@ -4,11 +4,6 @@ import torch
 from torch import nn
 
 
-def safe_mean(x: torch.Tensor, dim=None, keepdim: bool = False) -> torch.Tensor:
-    x = torch.nan_to_num(x)
-    return x.mean(dim=dim, keepdim=keepdim)
-
-
 class ResidualMLPBlock(nn.Module):
     def __init__(self, dim: int, hidden_dim: int, dropout: float = 0.0) -> None:
         super().__init__()
@@ -34,12 +29,15 @@ class StochasticLatentHead(nn.Module):
         self.mean = nn.Linear(dim, latent_dim)
         self.logvar = nn.Linear(dim, latent_dim)
 
-    def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    def forward(
+        self, x: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         mu = self.mean(x)
         logvar = self.logvar(x).clamp(-6.0, 2.0)
         std = torch.exp(0.5 * logvar)
-        eps = torch.randn_like(std)
-        z = mu + eps * std
+        # Checkpoint evaluation must be deterministic. Sampling is part of the
+        # variational training objective, not the evaluation function.
+        z = mu + torch.randn_like(std) * std if self.training else mu
         return z, mu, logvar
 
 
@@ -60,4 +58,6 @@ class TransformEmbed(nn.Module):
 
 
 def kl_divergence(mu: torch.Tensor, logvar: torch.Tensor) -> torch.Tensor:
-    return 0.5 * torch.mean(torch.sum(torch.exp(logvar) + mu.pow(2) - 1.0 - logvar, dim=-1))
+    return 0.5 * torch.mean(
+        torch.sum(torch.exp(logvar) + mu.pow(2) - 1.0 - logvar, dim=-1)
+    )

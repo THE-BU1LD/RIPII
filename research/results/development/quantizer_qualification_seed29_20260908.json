@@ -1,0 +1,35 @@
+{
+  "study": "isolated_hierarchical_quantizer_qualification",
+  "evidence_status": "development_only",
+  "seed": 29,
+  "steps": 120,
+  "train_samples": 512,
+  "test_samples": 256,
+  "code_dim": 16,
+  "coarse_codes": 4,
+  "fine_codes": 4,
+  "metrics": {
+    "coarse_effective_fraction": 0.75,
+    "fine_effective_fraction": 1.0,
+    "coarse_assignment_purity": 0.75,
+    "fine_assignment_purity": 0.25,
+    "reconstruction_mse": 0.02379651553928852
+  },
+  "gates": {
+    "coarse_effective_fraction_at_least_0_5": true,
+    "fine_effective_fraction_at_least_0_5": true,
+    "coarse_purity_at_least_0_8": false,
+    "fine_purity_at_least_0_8": false,
+    "reconstruction_mse_at_most_0_1": true
+  },
+  "qualified": false,
+  "limitations": [
+    "synthetic known-cluster mechanism test only",
+    "does not establish benefit inside RIPII",
+    "does not compare downstream task performance"
+  ],
+  "source_sha256": {
+    "scripts/qualify_quantizer.py": "2c7f26e72c910799fdc65b41f07f6e19125fd286d43e4f9322be089098d80c04",
+    "ripii/models/quantizer.py": "f750db745a9d5f29c201dfaf0467d6f56db5868e780bb33cc4dc8d36da8cc882"
+  }
+}

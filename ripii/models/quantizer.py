@@ -22,13 +22,9 @@ class HierarchicalVectorQuantizer(nn.Module):
         self.code_dim = int(code_dim)
         self.beta = float(beta)
 
-        self.coarse = nn.Parameter(
-            torch.randn(self.num_coarse, self.code_dim) * 0.02
-        )
+        self.coarse = nn.Parameter(torch.randn(self.num_coarse, self.code_dim) * 0.02)
 
-        self.fine = nn.Parameter(
-            torch.randn(self.num_fine, self.code_dim) * 0.02
-        )
+        self.fine = nn.Parameter(torch.randn(self.num_fine, self.code_dim) * 0.02)
 
     def _pairwise_distance(
         self,

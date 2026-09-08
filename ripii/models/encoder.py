@@ -38,7 +38,9 @@ class ResidualEncoder(nn.Module):
         )
         self.head = StochasticLatentHead(latent_dim, latent_dim)
 
-    def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    def forward(
+        self, x: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         h = self.input_proj(x)
         for block in self.blocks:
             h = block(h)

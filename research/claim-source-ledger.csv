@@ -1,0 +1,8 @@
+claim_id,repository_claim,status,evidence_or_source,required_next_evidence
+RIPII-C01,"RIPII contains hierarchical vector quantization",implemented,"ripii/models/quantizer.py; https://arxiv.org/abs/1711.00937","paired utilization and task evaluation"
+RIPII-C02,"RIPII performs latent graph refinement",implemented,"ripii/models/graph.py; https://proceedings.mlr.press/v70/gilmer17a.html","no-graph ablation and graph-specific diagnostics"
+RIPII-C03,"RIPII is equivariant",unsupported,"ripii/models/latent_action.py; https://proceedings.mlr.press/v48/cohenc16.html","formal action definition and equivariance-error evaluation on held-out transformations"
+RIPII-C04,"RIPII implements useful renormalization",unsupported,"ripii/models/projective.py; https://arxiv.org/abs/1410.3831","scale-specific observables and matched no-projection comparisons"
+RIPII-C05,"RIPII avoids codebook collapse",contradicted_by_two_pilots,"research/results/pilot_v1/analysis.md; research/results/pilot_v2/analysis.md; https://proceedings.mlr.press/v162/takida22a.html","new quantizer design must first pass a frozen utilization gate"
+RIPII-C06,"RIPII outperforms a simpler representation model",not_supported,"research/results/pilot_v1/analysis.md; research/results/pilot_v2/analysis.md","only revisit after a revised hypothesis, parameter-matched baseline, and external data"
+RIPII-C07,"RIPII is novel",unverified,"research/report-source.md","systematic expert-reviewed prior-art search and contribution-level comparison"

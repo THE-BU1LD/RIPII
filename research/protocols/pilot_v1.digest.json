@@ -1,0 +1,14 @@
+{
+  "study_id": "ripii_component_pilot_v1",
+  "protocol": "research/protocols/pilot_v1.md",
+  "protocol_sha256": "a081c76696ed09168d2a783def08ea3fdf487bf6ed913d8af3e2b1d61e5066e5",
+  "config": "configs/pilot_v1.yaml",
+  "config_sha256": "8b85a3db55b44caee7bf3cb3b726fcaac90ddf50f7201634e06cb3e035a69d1d",
+  "amendments": [
+    {
+      "path": "research/protocols/pilot_v1_amendment_1.md",
+      "sha256": "f2a15dffa6d44eae83a0f05d4817da40cf1217644a212115d671f1df17b5152a"
+    }
+  ],
+  "chronology": "local digest record only; no external timestamp or VCS anchor"
+}

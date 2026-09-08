@@ -1,0 +1,20 @@
+{
+  "study_id": "ripii_corrected_component_pilot_v2",
+  "evidence_status": "completed_corrected_local_pilot",
+  "protocol_sha256": "c8c6c6d1b692513e15a81e2a853f04358cbf16e649e4448521ca4d7a4983e0e0",
+  "manifest_sha256": "dfe6f6924216489d4e37f6e01f37dabbc3574094510e03f47511dc8ae3a1af10",
+  "declared_artifacts_verified": 51,
+  "quantizer_advancement": false,
+  "full_stack_advancement": false,
+  "primary_outcomes": {
+    "base_reconstruction_mean": 0.2979114005963008,
+    "no_vq_reconstruction_mean": 0.23636200030644736,
+    "no_structured_reconstruction_mean": 0.23622085650761923,
+    "base_probe_accuracy_mean": 0.49122807017543857,
+    "no_vq_probe_accuracy_mean": 0.5087719298245613,
+    "no_structured_probe_accuracy_mean": 0.5789473684210527,
+    "base_coarse_effective_code_fraction_mean": 0.14778167506059012,
+    "base_fine_effective_code_fraction_mean": 0.18150320649147034
+  },
+  "authorized_conclusion": "The current quantizer and full mechanism stack did not earn advancement on the synthetic pilot."
+}

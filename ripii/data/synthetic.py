@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -18,9 +17,13 @@ class StructuralSample:
     complexity: torch.Tensor
 
 
-def _orthonormal_basis(generator: torch.Generator, components: int, dim: int) -> torch.Tensor:
+def _orthonormal_basis(
+    generator: torch.Generator, components: int, dim: int
+) -> torch.Tensor:
     components = max(1, min(int(components), int(dim)))
-    basis, _ = torch.linalg.qr(torch.randn(dim, dim, generator=generator), mode='reduced')
+    basis, _ = torch.linalg.qr(
+        torch.randn(dim, dim, generator=generator), mode="reduced"
+    )
     return basis[:, :components].T.contiguous()
 
 
@@ -54,15 +57,24 @@ class SyntheticStructuralDataset(Dataset[StructuralSample]):
         self.semantic_basis = _orthonormal_basis(gen, semantic_dim, self.input_dim)
         self.style_basis = _orthonormal_basis(gen, style_dim, self.input_dim)
         self.nuisance_basis = _orthonormal_basis(gen, nuisance_dim, self.input_dim)
-        self.class_embeddings = torch.randn(self.num_classes, semantic_dim, generator=gen) * 0.7
-        self.orbit_embeddings = torch.randn(orbit_count, semantic_dim, generator=gen) * 0.4
+        self.class_embeddings = (
+            torch.randn(self.num_classes, semantic_dim, generator=gen) * 0.7
+        )
+        self.orbit_embeddings = (
+            torch.randn(orbit_count, semantic_dim, generator=gen) * 0.4
+        )
         self.motif_basis = torch.randn(motif_count, semantic_dim, generator=gen) * 0.45
         self.scale_templates = torch.randn(4, self.input_dim, generator=gen) * 0.08
         self.samples = [self._make_sample(i, gen) for i in range(self.size)]
 
-    def _semantic_state(self, idx: int, generator: torch.Generator) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+    def _semantic_state(
+        self, idx: int, generator: torch.Generator
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         label = torch.tensor(idx % self.num_classes, dtype=torch.long)
-        orbit = torch.tensor((idx // max(1, self.num_classes)) % self.orbit_embeddings.shape[0], dtype=torch.long)
+        orbit = torch.tensor(
+            (idx // max(1, self.num_classes)) % self.orbit_embeddings.shape[0],
+            dtype=torch.long,
+        )
         motif = torch.tensor(idx % self.motif_basis.shape[0], dtype=torch.long)
         complexity = torch.tensor((idx % 5) + 1, dtype=torch.long)
         semantic = self.class_embeddings[label].clone()
@@ -79,7 +91,13 @@ class SyntheticStructuralDataset(Dataset[StructuralSample]):
         coeffs = torch.randn(self.nuisance_basis.shape[0], generator=generator)
         return coeffs / coeffs.norm().clamp_min(1e-6)
 
-    def _render(self, semantic: torch.Tensor, style: torch.Tensor, nuisance: torch.Tensor, scale_id: int) -> torch.Tensor:
+    def _render(
+        self,
+        semantic: torch.Tensor,
+        style: torch.Tensor,
+        nuisance: torch.Tensor,
+        scale_id: int,
+    ) -> torch.Tensor:
         x = semantic @ self.semantic_basis
         x = x + style @ self.style_basis
         x = x + nuisance @ self.nuisance_basis
@@ -88,15 +106,20 @@ class SyntheticStructuralDataset(Dataset[StructuralSample]):
 
     def _transform(self, x: torch.Tensor, transform: torch.Tensor) -> torch.Tensor:
         scale = 1.0 + self.transform_scale * transform[0]
-        shift = int(abs(float(transform[1])) * self.transform_shift) % max(1, self.input_dim)
+        shift = int(abs(float(transform[1])) * self.transform_shift) % max(
+            1, self.input_dim
+        )
         flip = bool(transform[2] > 0)
         warp = transform[3]
         y = torch.roll(x, shifts=shift, dims=-1)
         if flip:
             y = torch.flip(y, dims=[-1])
         y = y * scale
-        freqs = torch.linspace(1.0, 3.0, steps=self.input_dim, dtype=y.dtype, device=y.device)
-        y = y + 0.05 * torch.sin(freqs * (warp + 1.0))
+        freqs = torch.linspace(
+            1.0, 3.0, steps=self.input_dim, dtype=y.dtype, device=y.device
+        )
+        # Zero is the identity transform, including its warp component.
+        y = y + 0.05 * (torch.sin(freqs * (warp + 1.0)) - torch.sin(freqs))
         return y
 
     def _make_sample(self, idx: int, generator: torch.Generator) -> StructuralSample:
@@ -107,12 +130,10 @@ class SyntheticStructuralDataset(Dataset[StructuralSample]):
         x = self._render(semantic, style, nuisance, scale_id)
         transform = torch.randn(self.transform_dim, generator=generator)
         x_view = self._transform(x, transform)
-        alt_transform = transform.clone()
-        alt_transform[0] = -alt_transform[0]
-        alt_transform[1] = alt_transform[1] * 0.5 + 0.5
         x = x + self.noise_std * torch.randn(x.shape, generator=generator)
-        x_view = x_view + self.noise_std * torch.randn(x_view.shape, generator=generator)
-        _ = self._transform(x, alt_transform)
+        x_view = x_view + self.noise_std * torch.randn(
+            x_view.shape, generator=generator
+        )
         return StructuralSample(
             x=x.float(),
             x_view=x_view.float(),

@@ -34,7 +34,21 @@ def test_one_training_epoch():
         use_action=True,
     )
     train_loader, val_loader = build_dataloaders(cfg)
-    model = RIPIIModel(cfg.input_dim, cfg.latent_dim, cfg.hidden_dim, cfg.node_dim, cfg.num_nodes, cfg.num_levels, cfg.num_projectors, cfg.codebook_size, cfg.codebook_dim, cfg.graph_steps, transform_dim=cfg.transform_dim, depth_target=cfg.depth_target, graph_topk=cfg.graph_topk)
+    model = RIPIIModel(
+        cfg.input_dim,
+        cfg.latent_dim,
+        cfg.hidden_dim,
+        cfg.node_dim,
+        cfg.num_nodes,
+        cfg.num_levels,
+        cfg.num_projectors,
+        cfg.codebook_size,
+        cfg.codebook_dim,
+        cfg.graph_steps,
+        transform_dim=cfg.transform_dim,
+        depth_target=cfg.depth_target,
+        graph_topk=cfg.graph_topk,
+    )
     opt = torch.optim.AdamW(model.parameters(), lr=1e-3)
     batch = next(iter(train_loader))
     losses = model.losses(batch, vars(cfg.loss_weights), warmup=False)

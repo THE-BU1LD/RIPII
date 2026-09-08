@@ -4,19 +4,38 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ripii"
-version = "1.0.0"
+version = "0.1.0"
 description = "Renormalized Invariant Projective Inductive Intelligence"
+readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-  "torch>=2.1",
-  "numpy>=1.24",
-  "pyyaml>=6.0",
-  "tqdm>=4.66",
-  "matplotlib>=3.8",
+  "torch>=2.1,<3",
+  "numpy>=1.24,<3",
+  "pyyaml>=6.0,<7",
+  "tqdm>=4.66,<5",
+  "matplotlib>=3.8,<4",
 ]
 
-[tool.setuptools]
-packages = ["ripii", "ripii.models", "ripii.data", "ripii.utils"]
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "ruff>=0.9,<1"]
+
+[project.scripts]
+ripii-world = "ripii.world.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["ripii*"]
 
 [tool.pytest.ini_options]
 addopts = "-q"
+
+[tool.ruff]
+extend-exclude = ["build", "dist", "runs"]
+
+[tool.ruff.lint]
+# Enforce import hygiene plus correctness-focused pyflakes/pycodestyle rules.
+# Broader style policy should be expanded deliberately rather than inherited
+# from whichever Ruff version happens to be installed.
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/*.py" = ["E402"]

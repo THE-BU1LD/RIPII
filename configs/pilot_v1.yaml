@@ -1,0 +1,55 @@
+profile: research
+seed: 101
+device: cpu
+output_dir: research/results/pilot_v1/runs/base/seed_101
+batch_size: 16
+val_batch_size: 32
+steps: 30
+warmup_steps: 5
+lr: 0.001
+weight_decay: 0.0
+input_dim: 32
+latent_dim: 16
+hidden_dim: 32
+node_dim: 4
+num_nodes: 4
+num_levels: 2
+num_projectors: 2
+codebook_size: 8
+fine_codebook_size: 8
+codebook_dim: 8
+graph_steps: 1
+graph_topk: 2
+dataset_size: 128
+noise_std: 0.05
+transform_scale: 0.15
+transform_shift: 2
+transform_dim: 4
+num_classes: 4
+eval_every: 10
+log_every: 10
+compile_model: false
+amp: false
+depth_target: 0.5
+use_projective: true
+use_graph: true
+use_quantizer: true
+use_action: true
+use_spectral_loss: true
+use_equivariance_loss: true
+use_identity_loss: true
+use_depth_loss: true
+loss_weights:
+  rec: 1.0
+  equiv: 0.8
+  inv: 0.8
+  scale: 0.2
+  proj: 0.2
+  spectral: 0.1
+  geom: 0.1
+  vq: 1.0
+  node: 0.1
+  moment: 0.05
+  identity: 0.05
+  kl: 0.01
+  depth: 0.05

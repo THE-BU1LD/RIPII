@@ -5,8 +5,8 @@ from torch import nn
 
 from ..utils.loss_balancer import AdaptiveLossBalancer
 from ..utils.metrics import (
-    covariance_penalty,
     cosine_distance,
+    covariance_penalty,
     effective_rank,
     mse,
     sanitize,
@@ -151,6 +151,17 @@ class RIPIIModel(nn.Module):
             ]
         )
 
+        # Do not expose parameters to the optimizer when their modules are
+        # bypassed.  Besides making parameter counts honest, this prevents
+        # unused ablation parameters from acquiring optimizer state.
+        for enabled, module in (
+            (self.use_graph, self.graph),
+            (self.use_quantizer, self.quantizer),
+            (self.use_action, self.action),
+        ):
+            if not enabled:
+                module.requires_grad_(False)
+
     def _zero(self, ref: torch.Tensor) -> torch.Tensor:
         return torch.zeros((), device=ref.device, dtype=ref.dtype)
 
@@ -173,7 +184,13 @@ class RIPIIModel(nn.Module):
     def encode_hierarchy(
         self,
         x: torch.Tensor,
-    ) -> tuple[list[torch.Tensor], dict[str, torch.Tensor], torch.Tensor, torch.Tensor, torch.Tensor]:
+    ) -> tuple[
+        list[torch.Tensor],
+        dict[str, torch.Tensor],
+        torch.Tensor,
+        torch.Tensor,
+        torch.Tensor,
+    ]:
         z0, mu, logvar = self.encoder(x)
         stages, stack_stats = self.renorm(z0)
         return stages, stack_stats, mu, logvar, stages[-1]
@@ -303,31 +320,30 @@ class RIPIIModel(nn.Module):
         spectral = self._zero(x)
 
         if x_view is not None:
-            view = self._forward_core(x_view, transform=transform)
-
             if self.use_action and transform is not None:
-                equiv = mse(out["action_latent"], view["latent"].detach())
+                equiv = mse(out["action_latent"], out["view_latent"].detach())
                 equiv = equiv + 0.2 * mse(
                     out["struct_gate_mean"],
-                    view["struct_gate_mean"].detach(),
+                    out["view_gate_mean"].detach(),
                 )
             else:
-                equiv = mse(out["latent"], view["latent"].detach())
+                equiv = mse(out["latent"], out["view_latent"].detach())
 
-            inv = mse(out["pooled"], view["pooled"].detach())
-            inv = inv + cosine_distance(out["quantized"], view["quantized"].detach())
+            inv = mse(out["pooled"], out["view_pooled"].detach())
+            inv = inv + cosine_distance(
+                out["quantized"], out["view_quantized"].detach()
+            )
 
             spectral = spectral_distance(
                 out["stages"][-1],
-                view["stages"][-1].detach(),
+                out["view_stages"][-1].detach(),
             )
             spectral = spectral + spectral_distance(
-                out["pooled"],
-                view["pooled"].detach(),
+                out["pooled"], out["view_pooled"].detach()
             )
 
             scale = scale + sum(
-                mse(a, b.detach()) for a, b in zip(out["stages"], view["stages"])
+                mse(a, b.detach()) for a, b in zip(out["stages"], out["view_stages"])
             ) / max(1, len(out["stages"]))
 
         for a, b in zip(out["stages"][:-1], out["stages"][1:]):
@@ -344,10 +360,14 @@ class RIPIIModel(nn.Module):
         proj = self._zero(x)
         for i in range(self.num_levels):
             proj = proj + self._stack_stat(out, f"renorm_{i}_projection_energy", x)
-            proj = proj + 0.5 * self._stack_stat(out, f"renorm_{i}_projection_residual", x)
+            proj = proj + 0.5 * self._stack_stat(
+                out, f"renorm_{i}_projection_residual", x
+            )
 
         node_flat = out["nodes"].reshape(x.shape[0], -1)
-        node_entropy_floor = torch.log(self._num_nodes_tensor.to(device=x.device, dtype=x.dtype))
+        node_entropy_floor = torch.log(
+            self._num_nodes_tensor.to(device=x.device, dtype=x.dtype)
+        )
         node = out["node_separation"]
         node = node + variance_penalty(node_flat)
         node = node + covariance_penalty(node_flat)
@@ -366,7 +386,10 @@ class RIPIIModel(nn.Module):
         else:
             identity = self._zero(x)
 
-        depth = (out["expected_depth"] - self._depth_target.to(device=x.device, dtype=x.dtype)).abs()
+        depth = (
+            out["expected_depth"]
+            - self._depth_target.to(device=x.device, dtype=x.dtype)
+        ).abs()
         depth = depth + torch.relu(0.15 - out["stack_depth"])
 
         geom = geom + align
@@ -418,6 +441,25 @@ class RIPIIModel(nn.Module):
         out = self.forward(x, x_view=x_view, transform=transform)
         base = self._base_losses(out, batch)
 
+        effective_weights = dict(weights)
+        if "rec" in effective_weights and "recon" not in effective_weights:
+            effective_weights["recon"] = effective_weights.pop("rec")
+
+        # Mechanism flags also disable their uncertainty offsets, even when a
+        # custom config retains positive weights for an unavailable objective.
+        active = {
+            "proj": self.use_projective,
+            "geom": self.use_projective,
+            "spectral": self.use_projective and self.use_spectral_loss,
+            "depth": self.use_projective and self.use_depth_loss,
+            "vq": self.use_quantizer,
+            "equiv": self.use_action and self.use_equivariance_loss and x_view is not None,
+            "identity": self.use_action and self.use_identity_loss and transform is not None,
+        }
+        for key, enabled in active.items():
+            if not enabled:
+                effective_weights[key] = 0.0
+
         if warmup:
             for key in [
                 "equiv",
@@ -433,9 +475,9 @@ class RIPIIModel(nn.Module):
                 "depth",
             ]:
                 base[key] = self._zero(x)
+                effective_weights[key] = 0.0
 
-        total, bal_terms = self.loss_balancer(base, weights)
-        total = total + 0.05 * base["kl"]
+        total, bal_terms = self.loss_balancer(base, effective_weights)
 
         losses = {**base, **bal_terms, "total": total}
         losses.update(

@@ -39,14 +39,16 @@ class GraphMessageBlock(nn.Module):
         self.norm = nn.LayerNorm(node_dim)
         self.scale = nn.Parameter(torch.tensor(0.1))
 
-    def forward(self, nodes: torch.Tensor, topk: int = 2) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
+    def forward(
+        self, nodes: torch.Tensor, topk: int = 2
+    ) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
         b, n, d = nodes.shape
         left = nodes.unsqueeze(2).expand(b, n, n, d)
         right = nodes.unsqueeze(1).expand(b, n, n, d)
         pair = torch.cat([left, right, left - right, left * right], dim=-1)
         logits = self.edge_logits(pair).squeeze(-1)
         if topk and topk > 0 and topk < n:
-            topv, topi = torch.topk(logits, k=topk, dim=-1)
+            _, topi = torch.topk(logits, k=topk, dim=-1)
             mask = torch.zeros_like(logits, dtype=torch.bool)
             mask.scatter_(-1, topi, True)
             logits = logits.masked_fill(~mask, float("-inf"))
@@ -58,9 +60,17 @@ class GraphMessageBlock(nn.Module):
         upd = self.update(torch.cat([nodes, agg], dim=-1))
         gate = self.node_gate(nodes)
         out = nodes + self.scale * gate * self.norm(upd)
-        sims = torch.nn.functional.cosine_similarity(nodes.unsqueeze(2), nodes.unsqueeze(1), dim=-1)
-        tri = torch.triu(torch.ones(n, n, device=nodes.device, dtype=torch.bool), diagonal=1)
-        sep = sims.masked_select(tri).abs().mean() if tri.any() else torch.zeros((), device=nodes.device, dtype=nodes.dtype)
+        sims = torch.nn.functional.cosine_similarity(
+            nodes.unsqueeze(2), nodes.unsqueeze(1), dim=-1
+        )
+        tri = torch.triu(
+            torch.ones(n, n, device=nodes.device, dtype=torch.bool), diagonal=1
+        )
+        sep = (
+            sims.masked_select(tri).abs().mean()
+            if tri.any()
+            else torch.zeros((), device=nodes.device, dtype=nodes.dtype)
+        )
         ent = -(adj * adj.clamp_min(1e-9).log()).sum(dim=-1).mean()
         sparse = (adj > 0).float().mean()
         degree = adj.sum(dim=-1).mean()
@@ -79,19 +89,29 @@ class LatentGraphModule(nn.Module):
         super().__init__()
         self.steps = max(0, int(steps))
         self.topk = int(topk)
-        self.blocks = nn.ModuleList([GraphMessageBlock(node_dim) for _ in range(self.steps)])
-        self.readout = nn.Sequential(nn.Linear(node_dim, node_dim), nn.GELU(), nn.Linear(node_dim, node_dim))
+        self.blocks = nn.ModuleList(
+            [GraphMessageBlock(node_dim) for _ in range(self.steps)]
+        )
+        self.readout = nn.Sequential(
+            nn.Linear(node_dim, node_dim), nn.GELU(), nn.Linear(node_dim, node_dim)
+        )
         self.attn = nn.Linear(node_dim, 1)
         self.post = nn.LayerNorm(node_dim)
 
-    def forward(self, nodes: torch.Tensor) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
+    def forward(
+        self, nodes: torch.Tensor
+    ) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
         if self.steps == 0:
             pooled = nodes.mean(dim=1)
             entropy = torch.zeros((), device=nodes.device, dtype=nodes.dtype)
             stats = {
-                "node_separation": torch.zeros((), device=nodes.device, dtype=nodes.dtype),
+                "node_separation": torch.zeros(
+                    (), device=nodes.device, dtype=nodes.dtype
+                ),
                 "edge_entropy": torch.zeros((), device=nodes.device, dtype=nodes.dtype),
-                "edge_sparsity": torch.zeros((), device=nodes.device, dtype=nodes.dtype),
+                "edge_sparsity": torch.zeros(
+                    (), device=nodes.device, dtype=nodes.dtype
+                ),
                 "avg_degree": torch.zeros((), device=nodes.device, dtype=nodes.dtype),
                 "node_entropy": entropy,
                 "graph_energy": pooled.pow(2).mean(),
@@ -115,12 +135,14 @@ class LatentGraphModule(nn.Module):
         weights = torch.softmax(logits, dim=-1)
         pooled = torch.sum(weights.unsqueeze(-1) * read, dim=1)
         entropy = -(weights * weights.clamp_min(1e-9).log()).sum(dim=-1).mean()
-        stats.update({
-            "node_separation": sep_total / len(self.blocks),
-            "edge_entropy": ent_total / len(self.blocks),
-            "edge_sparsity": sparse_total / len(self.blocks),
-            "avg_degree": deg_total / len(self.blocks),
-            "node_entropy": entropy,
-            "graph_energy": read.pow(2).mean(),
-        })
+        stats.update(
+            {
+                "node_separation": sep_total / len(self.blocks),
+                "edge_entropy": ent_total / len(self.blocks),
+                "edge_sparsity": sparse_total / len(self.blocks),
+                "avg_degree": deg_total / len(self.blocks),
+                "node_entropy": entropy,
+                "graph_energy": read.pow(2).mean(),
+            }
+        )
         return pooled, stats

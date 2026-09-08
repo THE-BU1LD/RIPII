@@ -1,0 +1,29 @@
+{
+  "study_id": "ripii_component_pilot_v1",
+  "evidence_status": "completed_local_pilot_with_post_run_validity_limitation",
+  "protocol_sha256": "a081c76696ed09168d2a783def08ea3fdf487bf6ed913d8af3e2b1d61e5066e5",
+  "manifest_sha256": "f3014d42829c4e7566c20556b59a0f3f1712999cf099fe20efd177e510441672",
+  "declared_artifacts_verified": 129,
+  "advancement": false,
+  "gates": {
+    "base_reconstruction_lower_than_no_structured": false,
+    "base_probe_within_0.05_of_no_structured": false
+  },
+  "primary_outcomes": {
+    "base_reconstruction_mean": 0.22909263769785562,
+    "no_structured_reconstruction_mean": 0.20257612566153207,
+    "base_minus_no_structured_reconstruction": 0.026516512036323547,
+    "base_probe_accuracy_mean": 0.3508771929824561,
+    "no_structured_probe_accuracy_mean": 0.5263157894736842,
+    "base_minus_no_structured_probe_accuracy": -0.17543859649122806
+  },
+  "validity_limitations": [
+    "zero-weight losses contributed adaptive-balancer offsets and gradients",
+    "global gradient clipping makes the defect relevant to component comparisons",
+    "three seeds and 19 held-out examples per seed",
+    "single bundled synthetic generator",
+    "component removals were not parameter matched",
+    "local protocol was not externally timestamped"
+  ],
+  "authorized_conclusion": "The current method did not earn advancement; no superiority or component-benefit claim is supported."
+}

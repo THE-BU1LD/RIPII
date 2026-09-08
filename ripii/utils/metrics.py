@@ -1,11 +1,12 @@
-
 from __future__ import annotations
 
 import torch
 
 
 def sanitize(x: torch.Tensor) -> torch.Tensor:
-    return torch.nan_to_num(x, nan=0.0, posinf=1e4, neginf=-1e4)
+    if not torch.isfinite(x).all():
+        raise FloatingPointError("non-finite tensor encountered")
+    return x
 
 
 def mse(x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
@@ -81,18 +82,21 @@ def subspace_overlap(u: torch.Tensor, v: torch.Tensor) -> torch.Tensor:
     u = sanitize(u)
     v = sanitize(v)
     svals = torch.linalg.svdvals(u.T @ v).clamp(0.0, 1.0)
-    return (svals ** 2).mean()
+    return (svals**2).mean()
 
 
 def effective_rank(x: torch.Tensor, eps: float = 1e-12) -> torch.Tensor:
     cov = covariance_matrix(x)
-    vals = torch.linalg.svdvals(cov).clamp_min(eps)
-    p = vals / vals.sum().clamp_min(eps)
-    ent = -(p * p.log()).sum()
-    return torch.exp(ent)
+    vals = torch.linalg.svdvals(cov).clamp_min(0)
+    mass = vals.sum()
+    p = vals / mass.clamp_min(eps)
+    ent = -(p * p.clamp_min(eps).log()).sum()
+    return torch.where(mass > eps, torch.exp(ent), torch.zeros_like(mass))
 
 
-def probe_accuracy(features: torch.Tensor, labels: torch.Tensor, num_classes: int, ridge: float = 1e-2) -> float:
+def probe_accuracy(
+    features: torch.Tensor, labels: torch.Tensor, num_classes: int, ridge: float = 1e-2
+) -> float:
     x = sanitize(features.detach()).double()
     y = torch.nn.functional.one_hot(labels.long(), num_classes=num_classes).double()
     xtx = x.T @ x
@@ -102,8 +106,40 @@ def probe_accuracy(features: torch.Tensor, labels: torch.Tensor, num_classes: in
     return float((preds == labels.long()).double().mean().item())
 
 
-def ridge_probe_accuracy(features: torch.Tensor, labels: torch.Tensor, num_classes: int, ridge: float = 1e-2) -> float:
+def ridge_probe_accuracy(
+    features: torch.Tensor, labels: torch.Tensor, num_classes: int, ridge: float = 1e-2
+) -> float:
     return probe_accuracy(features, labels, num_classes, ridge)
+
+
+def heldout_ridge_probe_accuracy(
+    train_features: torch.Tensor,
+    train_labels: torch.Tensor,
+    test_features: torch.Tensor,
+    test_labels: torch.Tensor,
+    num_classes: int,
+    ridge: float = 1e-2,
+) -> float:
+    train_x = sanitize(train_features.detach()).double()
+    test_x = sanitize(test_features.detach()).double()
+    train_y = torch.nn.functional.one_hot(
+        train_labels.long(), num_classes=num_classes
+    ).double()
+    if train_x.ndim != 2 or test_x.ndim != 2 or train_x.shape[1] != test_x.shape[1]:
+        raise ValueError("probe feature matrices must be rank-2 with matching widths")
+    if train_x.shape[0] != train_y.shape[0] or test_x.shape[0] != test_labels.numel():
+        raise ValueError("probe feature and label counts must match")
+    train_x = torch.cat(
+        [train_x, torch.ones(train_x.shape[0], 1, dtype=train_x.dtype)], dim=1
+    )
+    test_x = torch.cat(
+        [test_x, torch.ones(test_x.shape[0], 1, dtype=test_x.dtype)], dim=1
+    )
+    eye = torch.eye(train_x.shape[1], dtype=train_x.dtype)
+    eye[-1, -1] = 0.0
+    weights = torch.linalg.solve(train_x.T @ train_x + ridge * eye, train_x.T @ train_y)
+    predictions = (test_x @ weights).argmax(dim=-1)
+    return float((predictions == test_labels.long()).double().mean().item())
 
 
 def hutchinson_jacobian_norm(fn, x: torch.Tensor, num_samples: int = 1) -> torch.Tensor:

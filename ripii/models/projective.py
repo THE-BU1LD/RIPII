@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import torch
@@ -29,12 +28,16 @@ class SubspaceProjector(nn.Module):
     def basis(self) -> torch.Tensor:
         return _orthonormal_basis(self.raw_basis)
 
-    def project(self, x: torch.Tensor, basis: torch.Tensor | None = None) -> torch.Tensor:
+    def project(
+        self, x: torch.Tensor, basis: torch.Tensor | None = None
+    ) -> torch.Tensor:
         if basis is None:
             basis = self.basis()
         return (x @ basis) @ basis.T
 
-    def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, dict[str, torch.Tensor], torch.Tensor]:
+    def forward(
+        self, x: torch.Tensor
+    ) -> tuple[torch.Tensor, dict[str, torch.Tensor], torch.Tensor]:
         basis = self.basis()
         x_n = self.norm(x)
         proj = self.project(x_n, basis)
@@ -44,10 +47,20 @@ class SubspaceProjector(nn.Module):
         update = proj + 0.25 * residual + 0.1 * mix
         out = self.post(x + gate * update)
         proj2 = self.project(out, basis)
-        orth = torch.linalg.norm(basis.T @ basis - torch.eye(basis.shape[1], device=basis.device, dtype=basis.dtype)) ** 2
+        orth = (
+            torch.linalg.norm(
+                basis.T @ basis
+                - torch.eye(basis.shape[1], device=basis.device, dtype=basis.dtype)
+            )
+            ** 2
+        )
         idempotence = torch.mean((proj2 - self.project(proj2, basis)) ** 2)
-        projection_energy = torch.mean(proj.pow(2)) / torch.mean(x_n.pow(2)).clamp_min(1e-6)
-        projection_residual = torch.mean((x_n - proj).pow(2)) / torch.mean(x_n.pow(2)).clamp_min(1e-6)
+        projection_energy = torch.mean(proj.pow(2)) / torch.mean(x_n.pow(2)).clamp_min(
+            1e-6
+        )
+        projection_residual = torch.mean((x_n - proj).pow(2)) / torch.mean(
+            x_n.pow(2)
+        ).clamp_min(1e-6)
         alignment = cosine_distance(x_n, proj)
         active_depth = gate.mean()
         stats = {
@@ -62,28 +75,38 @@ class SubspaceProjector(nn.Module):
 
 
 class ProjectiveRenormStack(nn.Module):
-    def __init__(self, dim: int, num_levels: int, num_projectors: int, rank: int | None = None) -> None:
+    def __init__(
+        self, dim: int, num_levels: int, num_projectors: int, rank: int | None = None
+    ) -> None:
         super().__init__()
         self.dim = int(dim)
         self.num_levels = max(0, int(num_levels))
         self.num_projectors = max(1, int(num_projectors))
         rank = rank or max(4, dim // 3)
-        self.projectors = nn.ModuleList([SubspaceProjector(dim, rank) for _ in range(self.num_levels)])
-        self.mixer = nn.ModuleList([
-            nn.Sequential(nn.Linear(dim, dim), nn.GELU(), nn.Linear(dim, dim))
-            for _ in range(self.num_levels)
-        ])
+        self.projectors = nn.ModuleList(
+            [SubspaceProjector(dim, rank) for _ in range(self.num_levels)]
+        )
+        self.mixer = nn.ModuleList(
+            [
+                nn.Sequential(nn.Linear(dim, dim), nn.GELU(), nn.Linear(dim, dim))
+                for _ in range(self.num_levels)
+            ]
+        )
         self.norm = nn.LayerNorm(dim)
 
-    def forward(self, z: torch.Tensor) -> tuple[list[torch.Tensor], dict[str, torch.Tensor]]:
+    def forward(
+        self, z: torch.Tensor
+    ) -> tuple[list[torch.Tensor], dict[str, torch.Tensor]]:
         stages = [self.norm(z)]
         stats: dict[str, torch.Tensor] = {}
         if self.num_levels == 0:
-            stats.update({
-                "stack_depth": torch.zeros((), device=z.device, dtype=z.dtype),
-                "stack_alignment": torch.zeros((), device=z.device, dtype=z.dtype),
-                "stack_geodesic": torch.zeros((), device=z.device, dtype=z.dtype),
-            })
+            stats.update(
+                {
+                    "stack_depth": torch.zeros((), device=z.device, dtype=z.dtype),
+                    "stack_alignment": torch.zeros((), device=z.device, dtype=z.dtype),
+                    "stack_geodesic": torch.zeros((), device=z.device, dtype=z.dtype),
+                }
+            )
             return stages, stats
         prev_basis = None
         depths = []

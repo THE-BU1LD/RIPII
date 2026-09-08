@@ -1,0 +1,56 @@
+model_variant: plain_ae
+profile: research
+seed: 7
+device: cpu
+output_dir: runs/plain_ae
+batch_size: 64
+val_batch_size: 128
+steps: 600
+warmup_steps: 0
+lr: 0.0005
+weight_decay: 0.01
+input_dim: 128
+latent_dim: 96
+hidden_dim: 192
+node_dim: 24
+num_nodes: 4
+num_levels: 0
+num_projectors: 1
+codebook_size: 1
+fine_codebook_size: 1
+codebook_dim: 64
+graph_steps: 0
+graph_topk: 0
+dataset_size: 4096
+noise_std: 0.07
+transform_scale: 0.25
+transform_shift: 3
+transform_dim: 4
+num_classes: 8
+eval_every: 20
+log_every: 20
+compile_model: false
+amp: false
+depth_target: 0.55
+use_projective: false
+use_graph: false
+use_quantizer: false
+use_action: false
+use_spectral_loss: false
+use_equivariance_loss: false
+use_identity_loss: false
+use_depth_loss: false
+loss_weights:
+  recon: 1.0
+  equiv: 0.0
+  inv: 0.0
+  scale: 0.0
+  proj: 0.0
+  spectral: 0.0
+  geom: 0.0
+  vq: 0.0
+  node: 0.0
+  moment: 0.0
+  identity: 0.0
+  kl: 0.01
+  depth: 0.0
