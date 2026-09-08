@@ -1,17 +1,13 @@
 # Final research report
 
-The audit reconstructs RIPII as two falsification-stage studies of learned hierarchy.
-Both current hypotheses fail their local advancement criteria. The repository is
-engineering-functional and unusually careful about negative evidence, but scientifically
-underpowered and externally unvalidated. The strongest justified change is conceptual
-simplification: retain the flat graph as the reference method and treat hierarchy as a
-failed candidate until a new, prospectively frozen external hypothesis warrants testing.
+RIPII now has two distinct falsification-stage research paths, and neither supports advancing the current hierarchy.
 
-Implemented during this audit: formal mathematical and hypothesis specifications,
-repository/evidence maps, bounded primary-source novelty review, three adversarial
-reviews, a negative-result manuscript draft, canonical shell execution stages, and
-fail-closed seed-level descriptive/exact paired statistics with unit tests. Frozen
-historical results were not altered.
+The corrected frozen legacy pilot rejects the structured projective/graph/vector-quantized stack under its local advancement rule: the full model reconstructs worse than the quantizer bypass and the structured-mechanism removal, while its codebooks remain near collapse. The later object-state world-model path independently tests learned multiscale grouping against flat graph and global-context controls. Its strongest retained study uses a new dataset seed, five fresh training/minibatch seeds, a 1,000-update ceiling, validation-selected checkpoints, and a prospectively written protocol. It again returns `no_advance`: graph has the lowest mean IID error and the lowest mean error on every retained OOD split, and multiscale loses the graph OOD comparison on all five paired seeds even though its learned grouping remains active.
 
-Current verdict: **EVIDENCE_PARTIAL**. See `audit/FINAL_AUDIT.md` for verification and
-remaining blockers.
+The current evidence therefore supports **simplification, not rescue tuning**. The flat graph is the reference model. The present quantizer and learned multiscale hierarchy should not be promoted as useful mechanisms. This does not establish that hierarchy is universally harmful: the outcome-bearing evidence is synthetic/local, seed counts remain limited, FLOPs are not fully matched, and no external physical-dynamics dataset has been evaluated.
+
+`research/NEGATIVE_RESULT_SYNTHESIS.md` records the mechanism/failure analysis and the successor decision boundary. A genuinely new successor is possible, such as a conservation-aware residual with an explicit graph and analytic-force control, but it must be separately preregistered before any test-outcome access. The higher-value immediate experiment remains external negative confirmation on at least two public physical-dynamics datasets under validation-only tuning and matched wall-clock/FLOP budgets.
+
+Implemented during the broader audit: formal mathematical and hypothesis specifications, repository/evidence maps, bounded primary-source novelty review, three adversarial reviews, canonical execution stages, fail-closed seed-level descriptive/exact paired statistics with tests, a negative-result manuscript, signed world-model evidence capsules, and this cross-path negative-result synthesis. Frozen historical results were not altered.
+
+Current verdict: **EVIDENCE_PARTIAL; NEGATIVE_DEVELOPMENT_EVIDENCE_PACKAGE_COMPLETE; EXTERNAL_CONFIRMATION_REQUIRED**. The repository is not a submission-ready external validation package and must not be presented as one.
