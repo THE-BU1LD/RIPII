@@ -154,7 +154,13 @@ python scripts/run_coupling_study.py --verify-capsule \
   research/results/development/world_v4_coupling_capsule.json
 python scripts/analyze_failures.py runs/world_v3_convergence \
   --output runs/world_v3_failure_analysis.json
+python scripts/profile_world_efficiency.py runs/world_global_coupling_v1 \
+  --output runs/world_global_coupling_v1_efficiency.json
 ```
+
+The retained nine-checkpoint CPU profile is host- and load-specific. Repeated sessions
+changed latency ordering, and PyTorch's recognized-operator FLOP counts are explicitly
+incomplete, so this does not close the compute-matched training requirement.
 
 ## Train and resume one model
 

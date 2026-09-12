@@ -1,18 +1,10 @@
 from __future__ import annotations
 
 import os
-import tempfile
-
-_MATPLOTLIB_TEMP_CACHE: tempfile.TemporaryDirectory[str] | None = None
 
 os.environ.setdefault("OMP_NUM_THREADS", "1")
 os.environ.setdefault("MKL_NUM_THREADS", "1")
 os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
-if "MPLCONFIGDIR" not in os.environ:
-    _MATPLOTLIB_TEMP_CACHE = tempfile.TemporaryDirectory(
-        prefix="ripii-matplotlib-"
-    )
-    os.environ["MPLCONFIGDIR"] = _MATPLOTLIB_TEMP_CACHE.name
 import argparse
 import subprocess
 import sys

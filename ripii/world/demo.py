@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import os
 import tempfile
 from pathlib import Path
@@ -21,6 +22,7 @@ def _configure_matplotlib_cache() -> None:
             prefix="ripii-matplotlib-"
         )
         os.environ["MPLCONFIGDIR"] = _MATPLOTLIB_TEMP_CACHE.name
+    logging.getLogger("matplotlib.font_manager").setLevel(logging.ERROR)
 
 
 class WorldDemo:

@@ -55,6 +55,21 @@ advantage was -0.09 percentage points (exact sign-flip p=1.0). A separate 300-up
 new-seed follow-up placed global pooling first in mean IID and all OOD regimes. Thus
 the observed boundary condition is access to global information, not learned hierarchy.
 
+## Objective simplification and efficiency boundary
+
+In a separately frozen 39-run local study, reconstruction+KL outperformed every
+one-term addition and the complete legacy objective on all three paired seeds at 30
+updates. The complete objective increased reconstruction error by 26.4%, 60.0%, and
+89.5%. A post-training diagnostic found the invariance term's mean weighted gradient
+norm was 6.04 versus 1.32 for reconstruction and found a negative cosine on at least
+one seed for 63/78 term pairs. These diagnostics motivate simplification but do not
+prove which conflict caused the result.
+
+Machine-local profiling records parameters, repeated latency, throughput, checkpoint
+size, and profiler-recognized operations. Recognized operation counts differ despite
+similar parameter counts, while repeated sessions change latency ordering. We therefore
+make neither an efficiency claim nor a compute-matched performance claim.
+
 ## Related work and conclusion
 
 Object-centric interaction networks, differentiable graph pooling, multiscale graph

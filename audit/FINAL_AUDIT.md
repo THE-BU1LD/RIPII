@@ -36,7 +36,18 @@ mechanism. It failed its prospective development rule. Failure-regime evaluation
 also implemented and run across all retained v3 checkpoints. The second pass added
 validated/fingerprinted dataset adapters, immutable protocol validation, manifested run
 states, self-checksummed analysis artifacts, practical-equivalence summaries, stability diagnostics,
-and a repeatable machine-local profiler.
+and a repeatable machine-local profiler. The retained coupled checkpoints were profiled
+under one CPU protocol. Repeated sessions changed latency ordering, so the result is
+correctly bounded as load-sensitive and nonportable; profiler FLOPs remain explicitly
+incomplete.
+
+The final 39-run legacy objective study also completed without dropped cells. No single
+auxiliary objective passed its paired 5% reconstruction-improvement rule; every addition
+was worse on every seed, and the complete objective was worse by 26.4%/60.0%/89.5%.
+This is short-budget development evidence and does not establish asymptotic behavior.
+The signed gradient diagnostic additionally finds strong scale imbalance (invariance
+mean weighted norm 6.04 versus reconstruction 1.32) and at least one negative seed for
+63/78 objective pairs. It is diagnostic rather than causal evidence.
 
 ## Second hostile-audit result
 
@@ -55,7 +66,8 @@ and checkpoint archival. Owner action is also required for license and authorshi
 
 ## Final verification record
 
-- Full suite: **97 tests passed** (`./scripts/test.sh`).
+- Full suite: **106 tests passed** (`./scripts/test.sh`), including the post-cleanup
+  cache-disabled rerun.
 - Targeted post-build regression: statistics, research-boundary, and world artifact/
   demo integration tests passed.
 - Ruff: **pass**. Python compilation: **pass**. `git diff --check`: **pass**.
@@ -66,9 +78,10 @@ and checkpoint archival. Owner action is also required for license and authorshi
 - Pilot v1/v2 portable summaries: **pass** (3/129 and 3/51 declared files checked;
   omitted run files explicitly skipped). Self-checksummed v3 capsule: **pass**, digest field
   `ce4ffcfd9e5fcda6b07d3f6905ca9ea720f7b5623a761d06f8c0c540690ad370`.
-- Wheel and source distribution: **built successfully** with `uv build`.
+- Wheel and source distribution: **built successfully** with `uv build`; the sdist was
+  inspected and contains no ignored `research/results/**/runs/` subtree.
 
-The canonical runner now isolates stages in subprocesses and uses a private temporary
-Matplotlib cache, eliminating the earlier process-global PyTorch thread warning and
-shared-cache fragility. No manuscript PDF was built because this repository has only an
-evidence-limited Markdown negative-result draft.
+The canonical runner now isolates stages in subprocesses and gives Matplotlib a private
+writable cache while suppressing only its benign first-use font-cache notice. The final
+mechanism smoke had no thread/cache warnings. No manuscript PDF was built because this
+repository has only an evidence-limited Markdown negative-result draft.

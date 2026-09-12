@@ -14,6 +14,10 @@ development intervention. The actual machine-readable protocol was written befor
 training and is retained verbatim in its self-checksummed capsule. The index must not be called
 an external preregistration.
 
+`objective_study_v1.md` is a frozen local development protocol for fresh-seed,
+fixed-budget reconstruction+KL and one-term-addition controls. It remains synthetic
+and is not externally timestamped.
+
 `../planning/external_power_plan_v1.json` is a self-checksummed provisional planning artifact,
 not a frozen external protocol. It uses only retained synthetic development variance
 and a fixed 5% effect threshold; external pilot variance may justify increasing its

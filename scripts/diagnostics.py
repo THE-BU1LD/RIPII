@@ -17,12 +17,15 @@ os.environ.setdefault(
 )
 import argparse
 import json
+import logging
 import sys
 import warnings
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+
+logging.getLogger("matplotlib.font_manager").setLevel(logging.ERROR)
 
 import matplotlib
 

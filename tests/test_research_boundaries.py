@@ -216,3 +216,27 @@ def test_disabled_modules_are_not_reported_as_trainable() -> None:
     assert not any(
         parameter.requires_grad for parameter in model.quantizer.parameters()
     )
+
+
+def test_simple_objective_controls_change_executed_loss_weights() -> None:
+    from dataclasses import asdict
+
+    from ripii.utils.ablation import apply_mode
+    from ripii.utils.config import Config
+
+    simple = asdict(apply_mode(Config(), "simple_objective").loss_weights)
+    assert simple["recon"] == 1.0
+    assert simple["kl"] == 0.01
+    assert all(
+        value == 0.0 for name, value in simple.items() if name not in {"recon", "kl"}
+    )
+
+    plus_node = asdict(apply_mode(Config(), "simple_plus_node").loss_weights)
+    assert plus_node["node"] == Config().loss_weights.node
+    assert all(
+        value == 0.0
+        for name, value in plus_node.items()
+        if name not in {"recon", "kl", "node"}
+    )
+    with pytest.raises(ValueError, match="unknown objective term"):
+        apply_mode(Config(), "simple_plus_not_a_term")

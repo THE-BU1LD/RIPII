@@ -4,11 +4,43 @@ from dataclasses import replace
 
 from .config import Config
 
+_AUXILIARY_LOSSES = (
+    "equiv",
+    "inv",
+    "scale",
+    "proj",
+    "spectral",
+    "geom",
+    "vq",
+    "node",
+    "moment",
+    "identity",
+    "depth",
+)
+
+
+def _simple_objective(cfg: Config, added: str | None = None) -> Config:
+    if added is not None and added not in _AUXILIARY_LOSSES:
+        raise ValueError(f"unknown objective term: {added}")
+    original = cfg.loss_weights
+    weights = replace(
+        original,
+        **{
+            name: getattr(original, name) if name == added else 0.0
+            for name in _AUXILIARY_LOSSES
+        },
+    )
+    return replace(cfg, loss_weights=weights)
+
 
 def apply_mode(cfg: Config, mode: str) -> Config:
     mode = mode or "base"
     if mode == "base":
         return cfg
+    if mode == "simple_objective":
+        return _simple_objective(cfg)
+    if mode.startswith("simple_plus_"):
+        return _simple_objective(cfg, mode.removeprefix("simple_plus_"))
     if mode == "plain_ae":
         return replace(
             cfg,

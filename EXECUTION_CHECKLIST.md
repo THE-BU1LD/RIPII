@@ -1,7 +1,11 @@
 # RIPII execution checklist
 
-Updated: 2026-09-08. A checked item has executable local evidence. Historical pilots
+Updated: 2026-09-09. A checked item has executable local evidence. Historical pilots
 remain immutable and are not upgraded by later code changes.
+
+All justified work executable with the bundled data and current machine is complete.
+The exhaustive classification and remaining external gates are in
+`audit/ULTIMATE_CHECKLIST.md`.
 
 ## P0 — correctness and artifact integrity
 
@@ -32,6 +36,17 @@ remain immutable and are not upgraded by later code changes.
   `no_advance`; multiscale loses the graph OOD comparison on all five seeds.
 - [x] Capture the ignored 55 MB full run as a compact signed research capsule that
   retains its protocol, complete summary, human-readable report, and full manifest.
+- [x] Execute contact/near-contact/free-flight failure localization on every retained
+  v3 checkpoint and retain a self-signed analysis artifact.
+- [x] Implement and execute a prospectively specified symmetric long-range-force
+  intervention; retain its `no_advance` result without post-hoc rule changes.
+- [x] Execute 39/39 paired legacy-objective cells. Reconstruction+KL beats every
+  single auxiliary addition and the complete objective on all three seeds.
+- [x] Measure raw objective magnitudes, weighted gradient norms, and all 78 pairwise
+  gradient cosines on the trained full-objective checkpoints.
+- [x] Profile every retained v3/coupled checkpoint under the canonical rollout
+  profiler and explicitly reject an efficiency claim because timing is load-sensitive
+  and profiler-recognized operations are incomplete.
 
 ## P1 — product and release path
 
@@ -40,6 +55,10 @@ remain immutable and are not upgraded by later code changes.
   outside the source checkout.
 - [x] Run lint, compilation, lockfile, tests, retained-pilot verification, benchmark
   verification, and headless demo rendering.
+- [x] Pass 106 tests, a warning-free mechanism smoke, all semantic artifact verifiers,
+  and a post-cleanup cache-disabled test rerun.
+- [x] Build wheel/sdist, inspect the sdist, and exclude every ignored local `runs/`
+  subtree from release packaging.
 - [x] Attach local `main` to the public source remote at commit
   `0dba137d49e9f827c6ca48724cb9f2106c81daf4`.
 - [x] Verify portable retained-pilot summaries from a clean checkout without
@@ -69,4 +88,8 @@ python scripts/verify_artifact.py --manifest research/results/pilot_v2/manifest.
 python -m ripii.world verify runs/world_v2_controls
 python -m ripii.world verify runs/world_v3_convergence
 python -m ripii.world verify-capsule research/results/development/world_v3_convergence_capsule_v2.json
+python scripts/analyze_objective_study.py --verify-output research/results/development/objective_study_v1/analysis.json
+python scripts/audit_objective_gradients.py --verify-output research/results/development/objective_study_v1/gradient_diagnostics.json
+python scripts/profile_world_efficiency.py --verify-output research/results/development/world_v3_efficiency.json
+./scripts/verify_artifact.sh
 ```

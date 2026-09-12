@@ -1,0 +1,727 @@
+{
+  "format": "ripii-world-suite-profile-v1",
+  "evidence_status": "engineering_efficiency_measurement",
+  "created_at_utc": "2026-09-09T02:56:47.342381+00:00",
+  "source_run": "world_v3_convergence",
+  "source_protocol_sha256": "fb8c3a1ca56f68a848b32c3e012b170b3a171ef3e4b5aeed96129854f82c116f",
+  "run_verification": {
+    "status": "PASS",
+    "artifacts_verified": 124,
+    "unexpected_files": 0
+  },
+  "dataset": {
+    "format": "ripii-dataset-spec-v1",
+    "dataset_id": "ripii.synthetic.soft_discs",
+    "version": "1",
+    "license": "NOASSERTION",
+    "split": "test",
+    "scenes": 8,
+    "horizon": 1,
+    "seed": 9091,
+    "max_objects": 8,
+    "physics": {
+      "dt": 0.05,
+      "substeps": 4,
+      "stiffness": 100.0,
+      "damping": 1.5,
+      "drag": 0.06,
+      "global_coupling": 0.0
+    },
+    "feature_contract": {
+      "state": [
+        "x",
+        "y",
+        "vx",
+        "vy",
+        "radius",
+        "mass"
+      ],
+      "state_units": [
+        "arena_unit",
+        "arena_unit",
+        "arena_unit/time",
+        "arena_unit/time",
+        "arena_unit",
+        "mass_unit"
+      ],
+      "action": [
+        "force_x",
+        "force_y"
+      ],
+      "action_units": [
+        "mass*arena_unit/time^2",
+        "mass*arena_unit/time^2"
+      ],
+      "mask": "true for live objects; padded states/actions are zero"
+    },
+    "split_policy": "deterministic disjoint RNG domain per named split; more_objects, composition, and fast alter one declared factor",
+    "preprocessing": "none; generated object states are consumed directly",
+    "license_boundary": "Adapter metadata is provenance, not a legal determination; verify redistribution terms before retaining external data",
+    "content_sha256": "ee4f0606f4af6d3bb4f1258f528b0569203d2a0d230f73f7a4a412814660d262",
+    "tensor_bytes": 3712
+  },
+  "environment": {
+    "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "processor": "arm",
+    "python": "3.14.0",
+    "torch": "2.14.0",
+    "torch_threads": 1
+  },
+  "measurement_protocol": {
+    "device": "cpu",
+    "batch_scenes": 8,
+    "trajectory_steps_per_forward": 1,
+    "warmup": 5,
+    "repeats": 20,
+    "timing": "perf_counter around individual no-grad rollouts"
+  },
+  "source_sha256": {
+    "scripts/profile_world_efficiency.py": "903cf4991c489771663ee02d7e3bb0ad557a70bc92cd813778f0cafe74dc38a3",
+    "ripii/world/profiling.py": "0265539bc487b485db33b294007ae6a87aa314b0c30f9a522a5af327a1340fa4"
+  },
+  "rows": [
+    {
+      "variant": "graph",
+      "bottleneck": "continuous",
+      "seed": 23,
+      "selected_step": 700,
+      "parameters": 101896,
+      "checkpoint_bytes": 1265883,
+      "checkpoint_sha256": "7afb0d848a5b6d47a09aec36594437d1ef7f49f1acd804eb89e3a5e7d7b7295b",
+      "profile": {
+        "format": "ripii-world-profile-v1",
+        "warmup_runs": 5,
+        "measured_runs": 20,
+        "batch_scenes": 8,
+        "rollout_steps": 1,
+        "timing_seconds": {
+          "n": 20,
+          "mean": 0.0019981812984042335,
+          "median": 0.0019815839987131767,
+          "sample_std": 0.0004096110991146758,
+          "min": 0.0011646669881884009,
+          "max": 0.002904792010667734
+        },
+        "bootstrap_95_ci_mean_seconds": [
+          0.0018228251472464762,
+          0.002176643750135554
+        ],
+        "scene_steps_per_second_at_mean": 4003.6407138776026,
+        "recognized_operator_flops_per_rollout": 51682049,
+        "flop_boundary": "PyTorch profiler count for recognized operators; a lower-bound proxy, not a complete hardware-independent FLOP accounting",
+        "peak_accelerator_memory_bytes": null,
+        "trainable_parameters": 101896,
+        "environment": {
+          "python": "3.14.0",
+          "torch": "2.14.0",
+          "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+          "device": "cpu",
+          "torch_threads": 1
+        }
+      }
+    },
+    {
+      "variant": "graph",
+      "bottleneck": "continuous",
+      "seed": 29,
+      "selected_step": 900,
+      "parameters": 101896,
+      "checkpoint_bytes": 1265883,
+      "checkpoint_sha256": "ecf81f730ecdf5677a8e47b34511624c132776afd719173440fe7313314ccf66",
+      "profile": {
+        "format": "ripii-world-profile-v1",
+        "warmup_runs": 5,
+        "measured_runs": 20,
+        "batch_scenes": 8,
+        "rollout_steps": 1,
+        "timing_seconds": {
+          "n": 20,
+          "mean": 0.0023568521486595274,
+          "median": 0.0022596455019083805,
+          "sample_std": 0.0005822138144595699,
+          "min": 0.0011569999915082008,
+          "max": 0.003523000006680377
+        },
+        "bootstrap_95_ci_mean_seconds": [
+          0.002111860498553142,
+          0.002607627299585147
+        ],
+        "scene_steps_per_second_at_mean": 3394.3580230732946,
+        "recognized_operator_flops_per_rollout": 51682049,
+        "flop_boundary": "PyTorch profiler count for recognized operators; a lower-bound proxy, not a complete hardware-independent FLOP accounting",
+        "peak_accelerator_memory_bytes": null,
+        "trainable_parameters": 101896,
+        "environment": {
+          "python": "3.14.0",
+          "torch": "2.14.0",
+          "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+          "device": "cpu",
+          "torch_threads": 1
+        }
+      }
+    },
+    {
+      "variant": "graph",
+      "bottleneck": "continuous",
+      "seed": 31,
+      "selected_step": 750,
+      "parameters": 101896,
+      "checkpoint_bytes": 1265883,
+      "checkpoint_sha256": "c181755bd3bd1c5d091d16036371a605e8fa612941872a06fd7a2df8333ba129",
+      "profile": {
+        "format": "ripii-world-profile-v1",
+        "warmup_runs": 5,
+        "measured_runs": 20,
+        "batch_scenes": 8,
+        "rollout_steps": 1,
+        "timing_seconds": {
+          "n": 20,
+          "mean": 0.0021236686989141162,
+          "median": 0.002037791498878505,
+          "sample_std": 0.0005743339413832555,
+          "min": 0.0010442089987918735,
+          "max": 0.0034553750010672957
+        },
+        "bootstrap_95_ci_mean_seconds": [
+          0.0018814686496625654,
+          0.0023738478994346224
+        ],
+        "scene_steps_per_second_at_mean": 3767.065928923186,
+        "recognized_operator_flops_per_rollout": 51682049,
+        "flop_boundary": "PyTorch profiler count for recognized operators; a lower-bound proxy, not a complete hardware-independent FLOP accounting",
+        "peak_accelerator_memory_bytes": null,
+        "trainable_parameters": 101896,
+        "environment": {
+          "python": "3.14.0",
+          "torch": "2.14.0",
+          "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+          "device": "cpu",
+          "torch_threads": 1
+        }
+      }
+    },
+    {
+      "variant": "graph",
+      "bottleneck": "continuous",
+      "seed": 37,
+      "selected_step": 800,
+      "parameters": 101896,
+      "checkpoint_bytes": 1265883,
+      "checkpoint_sha256": "9ed18b88c6d54436870797d14f60a7317a4bfaf2a5c1583ed9a244fea60af789",
+      "profile": {
+        "format": "ripii-world-profile-v1",
+        "warmup_runs": 5,
+        "measured_runs": 20,
+        "batch_scenes": 8,
+        "rollout_steps": 1,
+        "timing_seconds": {
+          "n": 20,
+          "mean": 0.0029006437500356695,
+          "median": 0.002577708502940368,
+          "sample_std": 0.001160864370733944,
+          "min": 0.001696791994618252,
+          "max": 0.006200082993018441
+        },
+        "bootstrap_95_ci_mean_seconds": [
+          0.0024543147010263056,
+          0.003446239399636397
+        ],
+        "scene_steps_per_second_at_mean": 2758.0084592951557,
+        "recognized_operator_flops_per_rollout": 51682049,
+        "flop_boundary": "PyTorch profiler count for recognized operators; a lower-bound proxy, not a complete hardware-independent FLOP accounting",
+        "peak_accelerator_memory_bytes": null,
+        "trainable_parameters": 101896,
+        "environment": {
+          "python": "3.14.0",
+          "torch": "2.14.0",
+          "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+          "device": "cpu",
+          "torch_threads": 1
+        }
+      }
+    },
+    {
+      "variant": "graph",
+      "bottleneck": "continuous",
+      "seed": 43,
+      "selected_step": 850,
+      "parameters": 101896,
+      "checkpoint_bytes": 1265883,
+      "checkpoint_sha256": "67f11e29b99dcaeef780aa44acdc43e11a2ffcede06d1953e2ae1674b6ea8480",
+      "profile": {
+        "format": "ripii-world-profile-v1",
+        "warmup_runs": 5,
+        "measured_runs": 20,
+        "batch_scenes": 8,
+        "rollout_steps": 1,
+        "timing_seconds": {
+          "n": 20,
+          "mean": 0.0019248667005740572,
+          "median": 0.0019788955032709055,
+          "sample_std": 0.0006888980144278486,
+          "min": 0.001034959001117386,
+          "max": 0.0032675410038791597
+        },
+        "bootstrap_95_ci_mean_seconds": [
+          0.0016365667521313298,
+          0.0022235291013203095
+        ],
+        "scene_steps_per_second_at_mean": 4156.131953248577,
+        "recognized_operator_flops_per_rollout": 51682049,
+        "flop_boundary": "PyTorch profiler count for recognized operators; a lower-bound proxy, not a complete hardware-independent FLOP accounting",
+        "peak_accelerator_memory_bytes": null,
+        "trainable_parameters": 101896,
+        "environment": {
+          "python": "3.14.0",
+          "torch": "2.14.0",
+          "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+          "device": "cpu",
+          "torch_threads": 1
+        }
+      }
+    },
+    {
+      "variant": "global_pool",
+      "bottleneck": "continuous",
+      "seed": 23,
+      "selected_step": 1000,
+      "parameters": 101160,
+      "checkpoint_bytes": 1259707,
+      "checkpoint_sha256": "daefc3ed9a8ac2e409ed80f9b11223822ae5d8b9f360d25c098ebc4d6f9a263d",
+      "profile": {
+        "format": "ripii-world-profile-v1",
+        "warmup_runs": 5,
+        "measured_runs": 20,
+        "batch_scenes": 8,
+        "rollout_steps": 1,
+        "timing_seconds": {
+          "n": 20,
+          "mean": 0.0029428394496790133,
+          "median": 0.0028537290054373443,
+          "sample_std": 0.0008967324934320231,
+          "min": 0.0020171659998595715,
+          "max": 0.005994999999529682
+        },
+        "bootstrap_95_ci_mean_seconds": [
+          0.0026098748974618504,
+          0.0033655540508334527
+        ],
+        "scene_steps_per_second_at_mean": 2718.46294600699,
+        "recognized_operator_flops_per_rollout": 44634625,
+        "flop_boundary": "PyTorch profiler count for recognized operators; a lower-bound proxy, not a complete hardware-independent FLOP accounting",
+        "peak_accelerator_memory_bytes": null,
+        "trainable_parameters": 101160,
+        "environment": {
+          "python": "3.14.0",
+          "torch": "2.14.0",
+          "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+          "device": "cpu",
+          "torch_threads": 1
+        }
+      }
+    },
+    {
+      "variant": "global_pool",
+      "bottleneck": "continuous",
+      "seed": 29,
+      "selected_step": 1000,
+      "parameters": 101160,
+      "checkpoint_bytes": 1259707,
+      "checkpoint_sha256": "977f009bf2331c1747729b1ca81130aa42acd76f6b1b2bb8c4561981af5d3155",
+      "profile": {
+        "format": "ripii-world-profile-v1",
+        "warmup_runs": 5,
+        "measured_runs": 20,
+        "batch_scenes": 8,
+        "rollout_steps": 1,
+        "timing_seconds": {
+          "n": 20,
+          "mean": 0.001972831250168383,
+          "median": 0.0017601044964976609,
+          "sample_std": 0.0008122088042229996,
+          "min": 0.0011464590061223134,
+          "max": 0.0038219580019358546
+        },
+        "bootstrap_95_ci_mean_seconds": [
+          0.0016489749992615542,
+          0.00232632269980968
+        ],
+        "scene_steps_per_second_at_mean": 4055.085805903162,
+        "recognized_operator_flops_per_rollout": 44634625,
+        "flop_boundary": "PyTorch profiler count for recognized operators; a lower-bound proxy, not a complete hardware-independent FLOP accounting",
+        "peak_accelerator_memory_bytes": null,
+        "trainable_parameters": 101160,
+        "environment": {
+          "python": "3.14.0",
+          "torch": "2.14.0",
+          "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+          "device": "cpu",
+          "torch_threads": 1
+        }
+      }
+    },
+    {
+      "variant": "global_pool",
+      "bottleneck": "continuous",
+      "seed": 31,
+      "selected_step": 800,
+      "parameters": 101160,
+      "checkpoint_bytes": 1259707,
+      "checkpoint_sha256": "a160828c44056d662aa5a552b91a8a5b4fa4d8926d7f3ca369cf79beba45a468",
+      "profile": {
+        "format": "ripii-world-profile-v1",
+        "warmup_runs": 5,
+        "measured_runs": 20,
+        "batch_scenes": 8,
+        "rollout_steps": 1,
+        "timing_seconds": {
+          "n": 20,
+          "mean": 0.002353385448077461,
+          "median": 0.0024111244929372333,
+          "sample_std": 0.0007251563768200247,
+          "min": 0.0011629159998847172,
+          "max": 0.004084542000782676
+        },
+        "bootstrap_95_ci_mean_seconds": [
+          0.002056466548674507,
+          0.002667958496749634
+        ],
+        "scene_steps_per_second_at_mean": 3399.3581487194965,
+        "recognized_operator_flops_per_rollout": 44634625,
+        "flop_boundary": "PyTorch profiler count for recognized operators; a lower-bound proxy, not a complete hardware-independent FLOP accounting",
+        "peak_accelerator_memory_bytes": null,
+        "trainable_parameters": 101160,
+        "environment": {
+          "python": "3.14.0",
+          "torch": "2.14.0",
+          "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+          "device": "cpu",
+          "torch_threads": 1
+        }
+      }
+    },
+    {
+      "variant": "global_pool",
+      "bottleneck": "continuous",
+      "seed": 37,
+      "selected_step": 550,
+      "parameters": 101160,
+      "checkpoint_bytes": 1259707,
+      "checkpoint_sha256": "7ee804f1dfe6ba4396060a482142a3315ca8e97885be5c861e8dafe3b07a999f",
+      "profile": {
+        "format": "ripii-world-profile-v1",
+        "warmup_runs": 5,
+        "measured_runs": 20,
+        "batch_scenes": 8,
+        "rollout_steps": 1,
+        "timing_seconds": {
+          "n": 20,
+          "mean": 0.002472077150014229,
+          "median": 0.002435458001855295,
+          "sample_std": 0.0007998868882923141,
+          "min": 0.0011293339921394363,
+          "max": 0.0036850000033155084
+        },
+        "bootstrap_95_ci_mean_seconds": [
+          0.002125470848113764,
+          0.0028111896019254344
+        ],
+        "scene_steps_per_second_at_mean": 3236.1449560560654,
+        "recognized_operator_flops_per_rollout": 44634625,
+        "flop_boundary": "PyTorch profiler count for recognized operators; a lower-bound proxy, not a complete hardware-independent FLOP accounting",
+        "peak_accelerator_memory_bytes": null,
+        "trainable_parameters": 101160,
+        "environment": {
+          "python": "3.14.0",
+          "torch": "2.14.0",
+          "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+          "device": "cpu",
+          "torch_threads": 1
+        }
+      }
+    },
+    {
+      "variant": "global_pool",
+      "bottleneck": "continuous",
+      "seed": 43,
+      "selected_step": 1000,
+      "parameters": 101160,
+      "checkpoint_bytes": 1259707,
+      "checkpoint_sha256": "220d9a0cac309dd60a8cead8e6828ba5a63e6eb5a57f794e44967fe8463e0744",
+      "profile": {
+        "format": "ripii-world-profile-v1",
+        "warmup_runs": 5,
+        "measured_runs": 20,
+        "batch_scenes": 8,
+        "rollout_steps": 1,
+        "timing_seconds": {
+          "n": 20,
+          "mean": 0.003154981247644173,
+          "median": 0.0030581875034840778,
+          "sample_std": 0.0007748332025595325,
+          "min": 0.002047417001449503,
+          "max": 0.00453449999622535
+        },
+        "bootstrap_95_ci_mean_seconds": [
+          0.002830418696248671,
+          0.003488658447167836
+        ],
+        "scene_steps_per_second_at_mean": 2535.6727574763263,
+        "recognized_operator_flops_per_rollout": 44634625,
+        "flop_boundary": "PyTorch profiler count for recognized operators; a lower-bound proxy, not a complete hardware-independent FLOP accounting",
+        "peak_accelerator_memory_bytes": null,
+        "trainable_parameters": 101160,
+        "environment": {
+          "python": "3.14.0",
+          "torch": "2.14.0",
+          "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+          "device": "cpu",
+          "torch_threads": 1
+        }
+      }
+    },
+    {
+      "variant": "multiscale",
+      "bottleneck": "continuous",
+      "seed": 23,
+      "selected_step": 700,
+      "parameters": 97672,
+      "checkpoint_bytes": 1234075,
+      "checkpoint_sha256": "d75f395fbb6e3da0f4f6935d2994dd7a881f4bd55ff2b7705471b71e512b7441",
+      "profile": {
+        "format": "ripii-world-profile-v1",
+        "warmup_runs": 5,
+        "measured_runs": 20,
+        "batch_scenes": 8,
+        "rollout_steps": 1,
+        "timing_seconds": {
+          "n": 20,
+          "mean": 0.004123393802001374,
+          "median": 0.0037917080044280738,
+          "sample_std": 0.0022325499098796225,
+          "min": 0.0019593339966377243,
+          "max": 0.010616917003062554
+        },
+        "bootstrap_95_ci_mean_seconds": [
+          0.0032505521528946703,
+          0.005151535449840594
+        ],
+        "scene_steps_per_second_at_mean": 1940.1493973525003,
+        "recognized_operator_flops_per_rollout": 35910401,
+        "flop_boundary": "PyTorch profiler count for recognized operators; a lower-bound proxy, not a complete hardware-independent FLOP accounting",
+        "peak_accelerator_memory_bytes": null,
+        "trainable_parameters": 97672,
+        "environment": {
+          "python": "3.14.0",
+          "torch": "2.14.0",
+          "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+          "device": "cpu",
+          "torch_threads": 1
+        }
+      }
+    },
+    {
+      "variant": "multiscale",
+      "bottleneck": "continuous",
+      "seed": 29,
+      "selected_step": 900,
+      "parameters": 97672,
+      "checkpoint_bytes": 1234075,
+      "checkpoint_sha256": "b2053efe55ff7be9f98738feb9c144c241c8b0e9c811db0535a4762acdc4aee4",
+      "profile": {
+        "format": "ripii-world-profile-v1",
+        "warmup_runs": 5,
+        "measured_runs": 20,
+        "batch_scenes": 8,
+        "rollout_steps": 1,
+        "timing_seconds": {
+          "n": 20,
+          "mean": 0.0016625958487566095,
+          "median": 0.0012362920024315827,
+          "sample_std": 0.000784069728807139,
+          "min": 0.0011710420076269656,
+          "max": 0.0036209999962011352
+        },
+        "bootstrap_95_ci_mean_seconds": [
+          0.0013544251502025872,
+          0.0020299393974710254
+        ],
+        "scene_steps_per_second_at_mean": 4811.7526613475475,
+        "recognized_operator_flops_per_rollout": 35910401,
+        "flop_boundary": "PyTorch profiler count for recognized operators; a lower-bound proxy, not a complete hardware-independent FLOP accounting",
+        "peak_accelerator_memory_bytes": null,
+        "trainable_parameters": 97672,
+        "environment": {
+          "python": "3.14.0",
+          "torch": "2.14.0",
+          "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+          "device": "cpu",
+          "torch_threads": 1
+        }
+      }
+    },
+    {
+      "variant": "multiscale",
+      "bottleneck": "continuous",
+      "seed": 31,
+      "selected_step": 950,
+      "parameters": 97672,
+      "checkpoint_bytes": 1234075,
+      "checkpoint_sha256": "c3c1cc17123e3a631418ad592b1d3fe451be3be8d7ad6b51a812db89a323ae72",
+      "profile": {
+        "format": "ripii-world-profile-v1",
+        "warmup_runs": 5,
+        "measured_runs": 20,
+        "batch_scenes": 8,
+        "rollout_steps": 1,
+        "timing_seconds": {
+          "n": 20,
+          "mean": 0.0019490645492624026,
+          "median": 0.0018304164987057447,
+          "sample_std": 0.000727471828841966,
+          "min": 0.0012342090049060062,
+          "max": 0.0035373339924262837
+        },
+        "bootstrap_95_ci_mean_seconds": [
+          0.0016562311509915161,
+          0.002263195849081967
+        ],
+        "scene_steps_per_second_at_mean": 4104.53312232655,
+        "recognized_operator_flops_per_rollout": 35910401,
+        "flop_boundary": "PyTorch profiler count for recognized operators; a lower-bound proxy, not a complete hardware-independent FLOP accounting",
+        "peak_accelerator_memory_bytes": null,
+        "trainable_parameters": 97672,
+        "environment": {
+          "python": "3.14.0",
+          "torch": "2.14.0",
+          "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+          "device": "cpu",
+          "torch_threads": 1
+        }
+      }
+    },
+    {
+      "variant": "multiscale",
+      "bottleneck": "continuous",
+      "seed": 37,
+      "selected_step": 800,
+      "parameters": 97672,
+      "checkpoint_bytes": 1234075,
+      "checkpoint_sha256": "094c64e3546781db4eb913a80903682e41b7d31e122f0c36e5bac64c83d2856f",
+      "profile": {
+        "format": "ripii-world-profile-v1",
+        "warmup_runs": 5,
+        "measured_runs": 20,
+        "batch_scenes": 8,
+        "rollout_steps": 1,
+        "timing_seconds": {
+          "n": 20,
+          "mean": 0.0011538750506588258,
+          "median": 0.0010327705022064038,
+          "sample_std": 0.00038596344017169533,
+          "min": 0.0010140840022359043,
+          "max": 0.0026667920028558
+        },
+        "bootstrap_95_ci_mean_seconds": [
+          0.001032745750126196,
+          0.001344937700923765
+        ],
+        "scene_steps_per_second_at_mean": 6933.159699945202,
+        "recognized_operator_flops_per_rollout": 35910401,
+        "flop_boundary": "PyTorch profiler count for recognized operators; a lower-bound proxy, not a complete hardware-independent FLOP accounting",
+        "peak_accelerator_memory_bytes": null,
+        "trainable_parameters": 97672,
+        "environment": {
+          "python": "3.14.0",
+          "torch": "2.14.0",
+          "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+          "device": "cpu",
+          "torch_threads": 1
+        }
+      }
+    },
+    {
+      "variant": "multiscale",
+      "bottleneck": "continuous",
+      "seed": 43,
+      "selected_step": 1000,
+      "parameters": 97672,
+      "checkpoint_bytes": 1234075,
+      "checkpoint_sha256": "8650e150b5e01b068dd9f3ab5cbe5f201734de82a5d72dd29ba397092a4a90e1",
+      "profile": {
+        "format": "ripii-world-profile-v1",
+        "warmup_runs": 5,
+        "measured_runs": 20,
+        "batch_scenes": 8,
+        "rollout_steps": 1,
+        "timing_seconds": {
+          "n": 20,
+          "mean": 0.002438783349498408,
+          "median": 0.0024006879903026856,
+          "sample_std": 0.00030532463515087514,
+          "min": 0.0018755839992081746,
+          "max": 0.003236750009818934
+        },
+        "bootstrap_95_ci_mean_seconds": [
+          0.0023109479487175124,
+          0.0025722188504005315
+        ],
+        "scene_steps_per_second_at_mean": 3280.3241836325415,
+        "recognized_operator_flops_per_rollout": 35910401,
+        "flop_boundary": "PyTorch profiler count for recognized operators; a lower-bound proxy, not a complete hardware-independent FLOP accounting",
+        "peak_accelerator_memory_bytes": null,
+        "trainable_parameters": 97672,
+        "environment": {
+          "python": "3.14.0",
+          "torch": "2.14.0",
+          "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+          "device": "cpu",
+          "torch_threads": 1
+        }
+      }
+    }
+  ],
+  "by_model": {
+    "graph": {
+      "seeds": 5,
+      "median_latency_ms_mean_across_seeds": 2.167125001142267,
+      "throughput_mean_across_seeds": 3615.8410156835635,
+      "supported_flops_per_batch": [
+        51682049
+      ],
+      "parameters": [
+        101896
+      ]
+    },
+    "global_pool": {
+      "seeds": 5,
+      "median_latency_ms_mean_across_seeds": 2.5037207000423223,
+      "throughput_mean_across_seeds": 3188.944922832408,
+      "supported_flops_per_batch": [
+        44634625
+      ],
+      "parameters": [
+        101160
+      ]
+    },
+    "multiscale": {
+      "seeds": 5,
+      "median_latency_ms_mean_across_seeds": 2.058374999614898,
+      "throughput_mean_across_seeds": 4213.983812920868,
+      "supported_flops_per_batch": [
+        35910401
+      ],
+      "parameters": [
+        97672
+      ]
+    }
+  },
+  "limitations": [
+    "single host and process; latency is not portable",
+    "profiler FLOPs omit unsupported operators",
+    "CPU process peak memory is not reported",
+    "inference measurements do not compute-match training"
+  ],
+  "signature": "8e0a5fc9e593f963c554c07400bdf8883a4c6ce598fd3b576377bb6af8b22c92"
+}

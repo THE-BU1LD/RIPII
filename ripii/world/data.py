@@ -32,12 +32,17 @@ def register_dataset_adapter(adapter: DatasetAdapter) -> None:
         or not adapter.dataset_id
         or not adapter.versions
         or len(set(adapter.versions)) != len(adapter.versions)
-        or any(not isinstance(version, str) or not version for version in adapter.versions)
+        or any(
+            not isinstance(version, str) or not version for version in adapter.versions
+        )
         or not isinstance(adapter.license_id, str)
         or not adapter.license_id
         or not adapter.supported_splits
         or len(set(adapter.supported_splits)) != len(adapter.supported_splits)
-        or any(not isinstance(split, str) or not split for split in adapter.supported_splits)
+        or any(
+            not isinstance(split, str) or not split
+            for split in adapter.supported_splits
+        )
         or not isinstance(adapter.feature_contract, dict)
         or not {"state", "action", "mask"} <= adapter.feature_contract.keys()
         or not isinstance(adapter.split_policy, str)
@@ -124,35 +129,51 @@ def _tensor_sha256(data: dict[str, torch.Tensor]) -> str:
     return digest.hexdigest()
 
 
-def validate_dataset(spec: DatasetSpec, data: dict[str, torch.Tensor]) -> None:
-    spec.validate()
+def validate_tensor_dataset(
+    scenes: int, horizon: int, max_objects: int, data: dict[str, torch.Tensor]
+) -> None:
+    """Validate the tensor contract shared by generated and external adapters."""
+    if (
+        not isinstance(scenes, int)
+        or isinstance(scenes, bool)
+        or not isinstance(horizon, int)
+        or isinstance(horizon, bool)
+        or not isinstance(max_objects, int)
+        or isinstance(max_objects, bool)
+        or scenes < 1
+        or horizon < 1
+        or not 5 <= max_objects <= 16
+    ):
+        raise ValueError("invalid dataset tensor dimensions")
     if set(data) != {"states", "actions", "mask", "ids"} or not all(
         isinstance(value, torch.Tensor) for value in data.values()
     ):
         raise ValueError("dataset must contain exactly states, actions, mask, and ids")
-    expected_state = (spec.scenes, spec.horizon + 1, spec.max_objects, 6)
-    expected_action = (spec.scenes, spec.horizon, spec.max_objects, 2)
+    expected_state = (scenes, horizon + 1, max_objects, 6)
+    expected_action = (scenes, horizon, max_objects, 2)
     if (
         data["states"].shape != expected_state
         or data["actions"].shape != expected_action
-        or data["mask"].shape != (spec.scenes, spec.max_objects)
-        or data["ids"].shape != (spec.scenes,)
+        or data["mask"].shape != (scenes, max_objects)
+        or data["ids"].shape != (scenes,)
         or not data["states"].is_floating_point()
         or not data["actions"].is_floating_point()
         or data["mask"].dtype != torch.bool
         or data["ids"].dtype != torch.int64
     ):
         raise ValueError("dataset tensors violate the declared shape or dtype contract")
-    if not torch.isfinite(data["states"]).all() or not torch.isfinite(
-        data["actions"]
-    ).all():
+    if (
+        not torch.isfinite(data["states"]).all()
+        or not torch.isfinite(data["actions"]).all()
+    ):
         raise FloatingPointError("dataset contains non-finite states or actions")
-    if not data["mask"].any(dim=1).all() or data["ids"].unique().numel() != spec.scenes:
+    if not data["mask"].any(dim=1).all() or data["ids"].unique().numel() != scenes:
         raise ValueError("dataset requires live objects and unique trajectory IDs")
     padded = ~data["mask"]
-    if data["states"].masked_select(padded[:, None, :, None]).ne(0).any() or data[
-        "actions"
-    ].masked_select(padded[:, None, :, None]).ne(0).any():
+    if (
+        data["states"].masked_select(padded[:, None, :, None]).ne(0).any()
+        or data["actions"].masked_select(padded[:, None, :, None]).ne(0).any()
+    ):
         raise ValueError("padded states and actions must be zero")
     live_properties = data["states"][..., 4:][
         data["mask"][:, None, :, None].expand_as(data["states"][..., 4:])
@@ -162,6 +183,11 @@ def validate_dataset(spec: DatasetSpec, data: dict[str, torch.Tensor]) -> None:
     properties = data["states"][..., 4:]
     if (properties[data["mask"][:, None, :].expand_as(properties[..., 0])] <= 0).any():
         raise ValueError("live radius and mass values must be positive")
+
+
+def validate_dataset(spec: DatasetSpec, data: dict[str, torch.Tensor]) -> None:
+    spec.validate()
+    validate_tensor_dataset(spec.scenes, spec.horizon, spec.max_objects, data)
 
 
 def load_dataset(spec: DatasetSpec) -> tuple[dict[str, torch.Tensor], dict]:

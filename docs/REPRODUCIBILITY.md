@@ -29,3 +29,15 @@ python scripts/plan_power.py \
 The retained self-checksummed plan recommends 18 paired seeds from synthetic development
 variance. It is planning support, not confirmatory evidence; an external pilot may
 require a larger frozen count.
+
+Profile every retained checkpoint in a complete world run under one shared protocol:
+
+```bash
+python scripts/profile_world_efficiency.py runs/world_global_coupling_v1 \
+  --output runs/world_global_coupling_v1_efficiency.json
+python scripts/profile_world_efficiency.py \
+  --verify-output runs/world_global_coupling_v1_efficiency.json
+```
+
+This is inference profiling on the recorded host. It does not compute-match training,
+and its profiler count covers only supported PyTorch operators.

@@ -5,13 +5,14 @@ import shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TOP_LEVEL = (".pytest_cache", ".ruff_cache", "build", "dist")
+TOP_LEVEL = (".pytest_cache", ".ruff_cache", ".runtime-cache", "build", "dist")
 SEARCH_ROOTS = ("ripii", "scripts", "tests")
 
 
 def generated_targets(root: Path) -> list[Path]:
     root = root.resolve()
     targets = [root / name for name in TOP_LEVEL if (root / name).exists()]
+    targets.extend(path for path in root.glob("*.egg-info") if path.is_dir())
     for relative in SEARCH_ROOTS:
         base = root / relative
         if not base.is_dir():

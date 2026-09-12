@@ -1,18 +1,22 @@
 # Reviewer 3 — reproducibility and systems
 
-## Post-audit review
+## Final hostile review
 
-Summary: an unusually careful prototype with exact CPU resume, source snapshots,
-artifact hashes, self-checksummed capsules, fail-closed checks, package builds and canonical
-commands. Strengths: negative evidence is immutable, mutable runs are labeled, model
-selection is explicit, and tests cover core contracts. Fatal release concern: no license
-or authorship metadata. Major concerns: ignored full checkpoints are not portable in the
-compact capsule; external datasets are absent; platform-level determinism beyond tested
-CPU execution is not promised. Minor concerns: generated caches/build outputs exist in
-the working directory and shell scripts assume the local `.venv` unless `PYTHON` is set.
-Missing work: clean-machine reproduction by an independent researcher and archived full
-run storage. Novelty: outside systems scope. Reproducibility: high for local mechanics,
-low for publication evidence.
+**Summary.** The repository has exact CPU resume, validation-only selection, immutable
+protocol hashes, status transitions, manifests, signed compact artifacts, source/data
+hashes, fail-closed CLIs, canonical scripts, package builds, and broad tests. New
+objective and efficiency artifacts have independent semantic verifiers.
 
-Likely score: **4/10 (reject)**. Confidence: **5/5**. Artifact mechanics approach a good
-standard, but release permissions and external evidence block a conference package.
+**Fatal concern.** No owner-approved license, authorship, affiliations, or conflicts
+statement exists. **Major concerns.** Compact capsules omit checkpoints; durable
+content-addressed archival is absent; external data and anonymous clean-machine
+reproduction are untested. CPU timings are visibly load-sensitive and profiler FLOPs
+are incomplete, so no efficiency claim is justified. **Minor concerns.** Shell entry
+points default to `.venv`, and ignored local runs are needed for checkpoint-level
+re-evaluation. **Missing work.** Archive full runs, add owner metadata, and have an
+independent researcher reproduce installation, one external experiment, analysis, and
+paper generation.
+
+**Novelty assessment.** Outside the systems contribution claimed by the project.
+**Reproducibility assessment.** High locally, incomplete for release evidence.
+**Likely score:** 4/10 (reject). **Confidence:** 5/5.

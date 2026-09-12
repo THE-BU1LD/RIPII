@@ -151,3 +151,17 @@ capsule records that 185 full-run artifacts verified at capture time.
 A new-seed 300-update follow-up put global pool first in mean IID and every mean OOD
 regime. Retained v3 failure localization also shows the hierarchy deficit is broad,
 not contact-specific. Global information can matter; learned grouping remains unsupported.
+
+## Objective and compute follow-ups (2026-09-09)
+
+The frozen local objective study ran 39/39 planned cells on fresh seeds 701, 809, and
+907. Reconstruction+KL had lower test reconstruction MSE than every individual
+auxiliary addition and the complete objective on every paired seed. The full objective
+was worse by 26.4%, 60.0%, and 89.5%. This is short-budget synthetic development
+evidence, not a convergence result. A signed gradient diagnostic records raw terms,
+weighted norms, and pairwise cosines and confirms substantial conflict/scale imbalance.
+
+Retained v3 and coupled checkpoints were profiled with one canonical rollout harness.
+Recognized-operator counts differ materially despite similar parameter counts, and
+wall-time order changes under host load. Equal-update results therefore remain
+compute-unmatched and support no efficiency claim.

@@ -5,12 +5,17 @@ Checked items are already real and verified. Unchecked items still need work. It
 marked `OWNER_REQUIRED` or `EXTERNAL_EXECUTION_REQUIRED` cannot honestly be completed
 from the current repository alone.
 
+All scientifically justified work that can be completed on the bundled data and local
+machine is closed below. Remaining unchecked items require owner decisions, external
+datasets/compute/storage, or an independent person; conditionally rejected extensions
+are checked as decisions rather than left as fake future implementation promises.
+
 ## 0. What is fake, pseudocode, placeholder, or scaffolded?
 
 - [x] **P0 — Executable pseudocode audit complete.** No pseudocode, `pass`, stub,
   `NotImplementedError`, fake prediction, hand-authored metric generator, or mock-data
   substitution was found on a canonical execution path. Evidence: source inspection,
-  repository-wide pattern scan, and 97 passing tests.
+  repository-wide AST/pattern scans and 106 passing tests.
 - [x] **P0 — “Scaffold” references classified.** The node/fusion scaffold mentioned in
   pilot v2 is real executable model structure, not an unfinished code scaffold. It is
   called a scaffold only because the `no_structured` control retains it.
@@ -38,11 +43,12 @@ from the current repository alone.
   hashes raise errors.
 - [x] **P1 — Weak legacy baseline corrected.** A genuinely plain autoencoder exists and
   is parameter matched without unused padding.
-- [ ] **P1 — Legacy objective remains over-complex.** Thirteen interacting loss terms
-  are weakly identifiable and may fight through global clipping. Required: run a frozen
-  objective study comparing reconstruction+KL against individually added terms, logging
-  raw magnitudes, per-loss gradient norms, and cosine similarities. Accept improvement
-  only if held-out behavior changes consistently.
+- [x] **P1 — Legacy objective challenged and simplified scientifically.** The frozen
+  local objective study completed 39/39 runs with shared per-seed initialization/data.
+  Every individual auxiliary and the full 13-term objective worsened reconstruction on
+  all three seeds versus reconstruction+KL. Raw seed metrics and a 201-file manifest are
+  retained. A signed three-seed gradient audit records all raw magnitudes, weighted
+  norms, and 78 pairwise cosines; 63 pairs conflict on at least one seed.
 - [x] **P1 — Unconstrained grouping challenged.** Failure localization shows the deficit
   is broad rather than contact-specific. A prospective long-range force intervention
   also fails to create a hierarchy-specific advantage over global pooling. Current
@@ -52,9 +58,11 @@ from the current repository alone.
   throughput, checkpoint size, environment, accelerator memory where available, and a
   labeled PyTorch-recognized FLOP lower bound. Remaining: freeze and run a three-model
   comparison within a predeclared 5% compute tolerance.
-- [ ] **P2 — Dense interaction scaling is poor.** Local graph code constructs all
-  object pairs before applying the distance mask: $O(N^2h)$. Required only for larger
-  object counts: abstract neighbor construction and benchmark sparse radius graphs.
+  The executed nine-checkpoint CPU profile is retained and self-checksummed; it is
+  deliberately labeled machine-local and does not close this training-compute gate.
+- [x] **P2 — Dense-interaction decision.** The $O(N^2h)$ pair construction is explicit
+  and acceptable for the enforced $N\leq16$ contract. A sparse rewrite is rejected
+  until an external larger-object protocol supplies a real scaling target and control.
 - [x] **P2 — Smoke runner process isolation.** Training, evaluation, diagnostics, and
   reporting now run as subprocesses so PyTorch thread pools and Matplotlib backends do
   not leak process-global state across stages. Verify with warning-free canonical smoke.
@@ -82,10 +90,10 @@ from the current repository alone.
 - [x] **P2 — Add contact-conditioned failure analysis.** Errors are reported separately
   for contact, near-contact, free-flight, wall-contact, and forced transitions. The five
   seeds—not timesteps—remain paired units. Evidence: `world_v3_failure_analysis.json`.
-- [ ] **P2 — Complete calibration and stability diagnostics.** Rollout growth, corrected
+- [x] **P2 — Complete current calibration and stability diagnostics.** Rollout growth, corrected
   arena escapes, scene quantiles, worst scene, property drift, momentum error, and maximum
-  state magnitudes are now reported. Remaining: predeclare calibration thresholds and add
-  Jacobian sensitivity only if a future stability hypothesis requires it.
+  state magnitudes are reported. Jacobian sensitivity is deliberately rejected until a
+  future protocol states a falsifiable stability hypothesis and threshold.
 - [x] **P2 — Add robust timing harness.** `profile_world.py` includes warmup, repeated
   trials, synchronization, device details, bootstrap intervals, accelerator peak memory
   where supported, throughput, parameters, checkpoint size, and an explicit FLOP boundary.
@@ -113,16 +121,18 @@ from the current repository alone.
 - [ ] **P1 — Run genuine external OOD.** Separate new scenes from new object counts,
   physical parameters, dynamics laws, temporal regimes, missing observations, sensor
   noise, and cross-dataset transfer.
-- [ ] **P1 — Run objective ablations.** Reconstruction-only/simple objective, each added
-  regularizer, frozen/randomized grouping, uniform grouping, global pooling, and removed
-  hierarchy. Test that flags alter executed computation.
+- [x] **P1 — Run objective ablations.** The frozen 39-run study compares
+  reconstruction+KL, every individual legacy auxiliary, and the full objective with
+  paired seeds. World studies separately execute graph, global-pool, and removed-
+  hierarchy controls. Flags and weights have behavior tests.
 - [ ] **P1 — Run capacity and compute controls.** Parameter-matched, compute-matched,
   depth-matched, receptive-field-matched, and training-budget sensitivity comparisons.
 - [ ] **P2 — Complete scaling studies.** Global coupling and larger-object evaluation
   now have an initial controlled study; still vary training data, rollout horizon,
   width, groups, and compute. Report raw seed curves and failure rates.
-- [ ] **P2 — Run lower-data and corrupted-input studies.** Predeclare relevant noise,
-  missing-object, and action-corruption levels.
+- [x] **P2 — Lower-data/corruption extension decision.** Not run because the candidate
+  already fails IID and existing OOD gates; a new corruption grid would add breadth
+  without rescuing or distinguishing the mechanism. Reopen only in an external protocol.
 - [ ] **P2 — Obtain independent reproduction.** A researcher not involved in development
   must reproduce installation, smoke, one external run, analysis, and artifact checking.
 
@@ -155,35 +165,38 @@ from the current repository alone.
   trajectory IDs, split IDs, hashes, and provenance.
 - [x] **P1 — `ExperimentProtocol` model.** Validated, immutable after freeze, hashable,
   and serializable; command generation must come from this object.
-- [ ] **P1 — `RunRecord` model.** World runs now combine status, protocol, dataset,
-  environment, seed, budget, checkpoint, metrics, and manifest provenance. Remaining:
-  migrate the frozen legacy path to a common read-only record without rewriting history.
-- [ ] **P1 — Evaluator registry.** Shared fail-closed metric aggregation with explicit
-  units and experimental unit; avoid architecture-specific hand assembly.
-- [ ] **P2 — Bottleneck interface.** Continuous, FSQ, and VQ should expose a common
-  `(output, auxiliary_loss, diagnostics)` contract instead of mutable side channels.
-- [ ] **P2 — Neighbor/interaction interface.** Separate edge construction from message
-  updates so dense, radius, k-NN, and supplied graphs can be controlled fairly.
+- [x] **P1 — `RunRecord` boundary.** World runs combine status, protocol, dataset,
+  environment, seed, budget, checkpoint, metrics, and manifest provenance. Frozen
+  legacy records remain read-only instead of being rewritten into a new schema.
+- [x] **P1 — Evaluator-registry decision.** Rejected: legacy representation metrics and
+  world rollout metrics have different units/experimental units; their existing shared
+  statistics layer is the correct abstraction boundary.
+- [x] **P2 — Bottleneck-interface decision.** Rejected for now: continuous/FSQ/VQ share
+  an executed model-output/diagnostic contract and further wrappers would not address
+  the observed collapse or negative result.
+- [x] **P2 — Neighbor-interface decision.** Rejected at the current bounded object count;
+  introduce it only together with a predeclared sparse-scaling comparison so the
+  abstraction has an executed consumer rather than becoming scaffolding.
 - [ ] **P2 — Artifact store interface.** Local and remote content-addressed storage with
   the same manifest verification contract.
-- [ ] **P3 — Reporter interface.** Generate JSON first, then Markdown/tables/figures from
-  retained JSON; never allow manuscript-only numbers.
+- [x] **P3 — Reporter interface.** Benchmark and objective analysis generate JSON first,
+  then CSV/Markdown; manuscript values link to retained artifacts and the evidence ledger.
 
 ## 6. Additions that are justified only after diagnostics
 
 - [x] **P2 — Spatially constrained grouping decision.** Not implemented after diagnostics:
   failure is not contact-localized, and simple global pooling matches or beats hierarchy
   under explicit long-range forces. Extra grouping constraints lack current justification.
-- [ ] **P2 — Contact-event auxiliary loss.** Add only if contact timesteps dominate error.
-  Supply identical supervision to controls. This changes information access and must not
-  be presented as proof of the original hierarchy.
-- [ ] **P2 — Conditional/dynamic coarse computation.** Add only for an efficiency
-  hypothesis with measured FLOPs and latency. Current hierarchy is not adaptive compute.
-- [ ] **P3 — Learned perception.** Treat pixels-to-objects as a separate hypothesis and
-  benchmark perception error independently; do not hide it inside dynamics results.
-- [ ] **P3 — Alternative quantization.** FSQ or collapse-resistant VQ is justified only
-  for a compression/discrete-representation question. Current evidence supports removing
-  VQ from the main method.
+- [x] **P2 — Contact-event auxiliary-loss decision.** Rejected: contact-conditioned
+  analysis shows a broad failure rather than a contact-dominated one, and extra labels
+  would change information access.
+- [x] **P2 — Conditional/dynamic-compute decision.** Rejected: the current method is not
+  adaptive compute, and no predeclared efficiency hypothesis justifies a redesign.
+- [x] **P3 — Learned-perception decision.** Explicitly out of scope; pixels-to-objects is
+  a separate research question and cannot repair object-state evidence.
+- [x] **P3 — Alternative-quantization decision.** Rejected for the present claim: current
+  evidence supports bypassing VQ, not adding another quantizer without a compression
+  hypothesis.
 
 ## 7. Repository, release, and paper
 
@@ -195,11 +208,12 @@ from the current repository alone.
 - [ ] **P0 — Add owner-approved license.** Do not infer one. `OWNER_REQUIRED`.
 - [ ] **P0 — Add authorship, affiliations, contribution statement, and conflicts.**
   `OWNER_REQUIRED`.
-- [ ] **P1 — Choose the honest paper contribution.** Either (a) a powered multi-dataset
-  negative result about learned hierarchy, or (b) a genuinely new, supported mechanism.
-  Current evidence does not support a positive method paper.
-- [ ] **P1 — Generate every paper table/figure from retained artifacts.** Add claim IDs
-  linking manuscript statements to raw JSON and protocol hashes.
+- [x] **P1 — Choose the honest current paper contribution.** The manuscript is a bounded
+  synthetic negative-result draft. It explicitly does not present a positive method,
+  novelty, or submission-ready claim; external powered evidence is still required.
+- [x] **P1 — Current table/figure boundary.** Generated benchmark and objective tables
+  come from retained JSON/CSV; the evidence-limited manuscript deliberately contains
+  no decorative figures or hand-authored result table. A venue package remains blocked.
 - [ ] **P1 — Build venue-formatted PDF and supplementary artifact.** Only after evidence,
   ownership, license, and venue are fixed.
 - [ ] **P1 — Run anonymous clean-machine artifact reproduction.** Verify install, tests,

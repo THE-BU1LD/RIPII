@@ -1,0 +1,448 @@
+{
+  "format": "ripii-objective-study-analysis-v1",
+  "evidence_status": "frozen_local_development",
+  "input": {
+    "summary": "research/results/development/objective_study_v1/summary.json",
+    "summary_sha256": "6c37349a6f8f092ad22cc254b74db7aa7b44fc4c07d90ee8e68466dadbf34751",
+    "protocol": "research/protocols/objective_study_v1.md",
+    "protocol_sha256": "8a9f765fc66cd9331de82c47f9e49840cde8eca30034f56cbdc7e309a3ae749e"
+  },
+  "source_sha256": {
+    "scripts/analyze_objective_study.py": "229ffcd6c93d56288fe95032d8ed07aa9dda348533140a828ddd1302d518acca",
+    "ripii/utils/statistics.py": "b11718e2ef416f7fe429ae80a50e55abea0c43055eed310098540a5bbdb489ef"
+  },
+  "experimental_unit": "paired initialization/minibatch seed",
+  "seeds": [
+    701,
+    809,
+    907
+  ],
+  "reference": "simple_objective",
+  "effect_threshold": 0.05,
+  "comparisons": {
+    "base": {
+      "candidate_reconstruction": [
+        0.22021730244159698,
+        0.2491465061903,
+        0.34489312767982483
+      ],
+      "simple_reconstruction": [
+        0.17428462207317352,
+        0.15576055645942688,
+        0.18198852241039276
+      ],
+      "relative_reduction_by_seed": [
+        -0.2635498176605541,
+        -0.59954812600582,
+        -0.8951366993467558
+      ],
+      "all_seed_five_percent_rule": false,
+      "paired_statistics_candidate_minus_simple": {
+        "n_pairs": 3,
+        "differences": [
+          0.04593268036842346,
+          0.09338594973087311,
+          0.16290460526943207
+        ],
+        "mean_difference": 0.10074107845624287,
+        "median_difference": 0.09338594973087311,
+        "sample_std_difference": 0.05883180468663926,
+        "bootstrap_95_ci_mean_difference": [
+          0.04593268036842346,
+          0.16290460526943207
+        ],
+        "exact_two_sided_sign_flip_p": 0.25,
+        "relative_mean_difference": 0.5902409056515918
+      }
+    },
+    "simple_plus_depth": {
+      "candidate_reconstruction": [
+        0.1759251356124878,
+        0.15742605924606323,
+        0.1864795684814453
+      ],
+      "simple_reconstruction": [
+        0.17428462207317352,
+        0.15576055645942688,
+        0.18198852241039276
+      ],
+      "relative_reduction_by_seed": [
+        -0.009412841590955163,
+        -0.010692712099228981,
+        -0.024677633575841827
+      ],
+      "all_seed_five_percent_rule": false,
+      "paired_statistics_candidate_minus_simple": {
+        "n_pairs": 3,
+        "differences": [
+          0.00164051353931427,
+          0.0016655027866363525,
+          0.004491046071052551
+        ],
+        "mean_difference": 0.002599020799001058,
+        "median_difference": 0.0016655027866363525,
+        "sample_std_difference": 0.0016385895880853072,
+        "bootstrap_95_ci_mean_difference": [
+          0.00164051353931427,
+          0.004491046071052551
+        ],
+        "exact_two_sided_sign_flip_p": 0.25,
+        "relative_mean_difference": 0.01522763517839474
+      }
+    },
+    "simple_plus_equiv": {
+      "candidate_reconstruction": [
+        0.17885646224021912,
+        0.16548772156238556,
+        0.21089734137058258
+      ],
+      "simple_reconstruction": [
+        0.17428462207317352,
+        0.15576055645942688,
+        0.18198852241039276
+      ],
+      "relative_reduction_by_seed": [
+        -0.026232034201652644,
+        -0.06244947581124268,
+        -0.1588496822618245
+      ],
+      "all_seed_five_percent_rule": false,
+      "paired_statistics_candidate_minus_simple": {
+        "n_pairs": 3,
+        "differences": [
+          0.004571840167045593,
+          0.00972716510295868,
+          0.02890881896018982
+        ],
+        "mean_difference": 0.014402608076731363,
+        "median_difference": 0.00972716510295868,
+        "sample_std_difference": 0.012824467218767344,
+        "bootstrap_95_ci_mean_difference": [
+          0.004571840167045593,
+          0.02890881896018982
+        ],
+        "exact_two_sided_sign_flip_p": 0.25,
+        "relative_mean_difference": 0.08438472731505733
+      }
+    },
+    "simple_plus_geom": {
+      "candidate_reconstruction": [
+        0.1760191023349762,
+        0.1565639078617096,
+        0.1834060102701187
+      ],
+      "simple_reconstruction": [
+        0.17428462207317352,
+        0.15576055645942688,
+        0.18198852241039276
+      ],
+      "relative_reduction_by_seed": [
+        -0.009951998295491902,
+        -0.005157604855449877,
+        -0.007788886029468659
+      ],
+      "all_seed_five_percent_rule": false,
+      "paired_statistics_candidate_minus_simple": {
+        "n_pairs": 3,
+        "differences": [
+          0.0017344802618026733,
+          0.0008033514022827148,
+          0.0014174878597259521
+        ],
+        "mean_difference": 0.0013184398412704468,
+        "median_difference": 0.0014174878597259521,
+        "sample_std_difference": 0.0004734005922342158,
+        "bootstrap_95_ci_mean_difference": [
+          0.0008033514022827148,
+          0.0017344802618026733
+        ],
+        "exact_two_sided_sign_flip_p": 0.25,
+        "relative_mean_difference": 0.007724724986904138
+      }
+    },
+    "simple_plus_identity": {
+      "candidate_reconstruction": [
+        0.1756555587053299,
+        0.15742088854312897,
+        0.18594631552696228
+      ],
+      "simple_reconstruction": [
+        0.17428462207317352,
+        0.15576055645942688,
+        0.18198852241039276
+      ],
+      "relative_reduction_by_seed": [
+        -0.007866079151726785,
+        -0.010659515614497546,
+        -0.021747487501681605
+      ],
+      "all_seed_five_percent_rule": false,
+      "paired_statistics_candidate_minus_simple": {
+        "n_pairs": 3,
+        "differences": [
+          0.001370936632156372,
+          0.0016603320837020874,
+          0.003957793116569519
+        ],
+        "mean_difference": 0.0023296872774759927,
+        "median_difference": 0.0016603320837020874,
+        "sample_std_difference": 0.0014173862914927825,
+        "bootstrap_95_ci_mean_difference": [
+          0.001370936632156372,
+          0.003957793116569519
+        ],
+        "exact_two_sided_sign_flip_p": 0.25,
+        "relative_mean_difference": 0.01364961294453175
+      }
+    },
+    "simple_plus_inv": {
+      "candidate_reconstruction": [
+        0.2270803451538086,
+        0.24680280685424805,
+        0.3560184836387634
+      ],
+      "simple_reconstruction": [
+        0.17428462207317352,
+        0.15576055645942688,
+        0.18198852241039276
+      ],
+      "relative_reduction_by_seed": [
+        -0.3029281783591254,
+        -0.5845013170490067,
+        -0.9562688840119534
+      ],
+      "all_seed_five_percent_rule": false,
+      "paired_statistics_candidate_minus_simple": {
+        "n_pairs": 3,
+        "differences": [
+          0.05279572308063507,
+          0.09104225039482117,
+          0.17402996122837067
+        ],
+        "mean_difference": 0.10595597823460896,
+        "median_difference": 0.09104225039482117,
+        "sample_std_difference": 0.06197781525170852,
+        "bootstrap_95_ci_mean_difference": [
+          0.05279572308063507,
+          0.17402996122837067
+        ],
+        "exact_two_sided_sign_flip_p": 0.25,
+        "relative_mean_difference": 0.6207949479075723
+      }
+    },
+    "simple_plus_moment": {
+      "candidate_reconstruction": [
+        0.17550139129161835,
+        0.15729837119579315,
+        0.18573449552059174
+      ],
+      "simple_reconstruction": [
+        0.17428462207317352,
+        0.15576055645942688,
+        0.18198852241039276
+      ],
+      "relative_reduction_by_seed": [
+        -0.0069815064804395815,
+        -0.009872940693858192,
+        -0.020583567911780874
+      ],
+      "all_seed_five_percent_rule": false,
+      "paired_statistics_candidate_minus_simple": {
+        "n_pairs": 3,
+        "differences": [
+          0.0012167692184448242,
+          0.001537814736366272,
+          0.0037459731101989746
+        ],
+        "mean_difference": 0.002166852355003357,
+        "median_difference": 0.001537814736366272,
+        "sample_std_difference": 0.001376947466594694,
+        "bootstrap_95_ci_mean_difference": [
+          0.0012167692184448242,
+          0.0037459731101989746
+        ],
+        "exact_two_sided_sign_flip_p": 0.25,
+        "relative_mean_difference": 0.012695564868168325
+      }
+    },
+    "simple_plus_node": {
+      "candidate_reconstruction": [
+        0.1776420921087265,
+        0.15899658203125,
+        0.1880689114332199
+      ],
+      "simple_reconstruction": [
+        0.17428462207317352,
+        0.15576055645942688,
+        0.18198852241039276
+      ],
+      "relative_reduction_by_seed": [
+        -0.01926429306048208,
+        -0.020775642084111666,
+        -0.03341083790501679
+      ],
+      "all_seed_five_percent_rule": false,
+      "paired_statistics_candidate_minus_simple": {
+        "n_pairs": 3,
+        "differences": [
+          0.0033574700355529785,
+          0.00323602557182312,
+          0.0060803890228271484
+        ],
+        "mean_difference": 0.004224628210067749,
+        "median_difference": 0.0033574700355529785,
+        "sample_std_difference": 0.001608282728587461,
+        "bootstrap_95_ci_mean_difference": [
+          0.00323602557182312,
+          0.0060803890228271484
+        ],
+        "exact_two_sided_sign_flip_p": 0.25,
+        "relative_mean_difference": 0.024752051685000873
+      }
+    },
+    "simple_plus_proj": {
+      "candidate_reconstruction": [
+        0.17924146354198456,
+        0.15913885831832886,
+        0.19731250405311584
+      ],
+      "simple_reconstruction": [
+        0.17428462207317352,
+        0.15576055645942688,
+        0.18198852241039276
+      ],
+      "relative_reduction_by_seed": [
+        -0.02844107190782387,
+        -0.021689071583292467,
+        -0.08420301148534398
+      ],
+      "all_seed_five_percent_rule": false,
+      "paired_statistics_candidate_minus_simple": {
+        "n_pairs": 3,
+        "differences": [
+          0.004956841468811035,
+          0.0033783018589019775,
+          0.015323981642723083
+        ],
+        "mean_difference": 0.007886374990145365,
+        "median_difference": 0.004956841468811035,
+        "sample_std_difference": 0.0064893328905107186,
+        "bootstrap_95_ci_mean_difference": [
+          0.0033783018589019775,
+          0.015323981642723083
+        ],
+        "exact_two_sided_sign_flip_p": 0.25,
+        "relative_mean_difference": 0.046206187067109016
+      }
+    },
+    "simple_plus_scale": {
+      "candidate_reconstruction": [
+        0.1765114665031433,
+        0.16044023633003235,
+        0.20025581121444702
+      ],
+      "simple_reconstruction": [
+        0.17428462207317352,
+        0.15576055645942688,
+        0.18198852241039276
+      ],
+      "relative_reduction_by_seed": [
+        -0.012777056308702012,
+        -0.030044062354287044,
+        -0.10037604878653092
+      ],
+      "all_seed_five_percent_rule": false,
+      "paired_statistics_candidate_minus_simple": {
+        "n_pairs": 3,
+        "differences": [
+          0.0022268444299697876,
+          0.004679679870605469,
+          0.01826728880405426
+        ],
+        "mean_difference": 0.008391271034876505,
+        "median_difference": 0.004679679870605469,
+        "sample_std_difference": 0.008640364324352631,
+        "bootstrap_95_ci_mean_difference": [
+          0.0022268444299697876,
+          0.01826728880405426
+        ],
+        "exact_two_sided_sign_flip_p": 0.25,
+        "relative_mean_difference": 0.04916436761538909
+      }
+    },
+    "simple_plus_spectral": {
+      "candidate_reconstruction": [
+        0.19100995361804962,
+        0.18097223341464996,
+        0.23481817543506622
+      ],
+      "simple_reconstruction": [
+        0.17428462207317352,
+        0.15576055645942688,
+        0.18198852241039276
+      ],
+      "relative_reduction_by_seed": [
+        -0.09596561845745608,
+        -0.16186175453084184,
+        -0.2902911256432979
+      ],
+      "all_seed_five_percent_rule": false,
+      "paired_statistics_candidate_minus_simple": {
+        "n_pairs": 3,
+        "differences": [
+          0.0167253315448761,
+          0.025211676955223083,
+          0.05282965302467346
+        ],
+        "mean_difference": 0.03158888717492422,
+        "median_difference": 0.025211676955223083,
+        "sample_std_difference": 0.01887808557610741,
+        "bootstrap_95_ci_mean_difference": [
+          0.0167253315448761,
+          0.05282965302467346
+        ],
+        "exact_two_sided_sign_flip_p": 0.25,
+        "relative_mean_difference": 0.18507895349514
+      }
+    },
+    "simple_plus_vq": {
+      "candidate_reconstruction": [
+        0.18399420380592346,
+        0.16225726902484894,
+        0.18681614100933075
+      ],
+      "simple_reconstruction": [
+        0.17428462207317352,
+        0.15576055645942688,
+        0.18198852241039276
+      ],
+      "relative_reduction_by_seed": [
+        -0.05571106398976133,
+        -0.04170961322364271,
+        -0.02652704981060003
+      ],
+      "all_seed_five_percent_rule": false,
+      "paired_statistics_candidate_minus_simple": {
+        "n_pairs": 3,
+        "differences": [
+          0.009709581732749939,
+          0.006496712565422058,
+          0.004827618598937988
+        ],
+        "mean_difference": 0.007011304299036662,
+        "median_difference": 0.006496712565422058,
+        "sample_std_difference": 0.002481329179936252,
+        "bootstrap_95_ci_mean_difference": [
+          0.004827618598937988,
+          0.009709581732749939
+        ],
+        "exact_two_sided_sign_flip_p": 0.25,
+        "relative_mean_difference": 0.041079157208544326
+      }
+    }
+  },
+  "supported_additions": [],
+  "decision": "no_auxiliary_advance",
+  "interpretation": "Prefer reconstruction+KL for this fixed-budget synthetic setting; three seeds do not establish population noninferiority or external utility.",
+  "signature": "c599edb8efbe3578e788e1631d3b1634e49fe62be3aaf28f37416a5b80e4a341"
+}

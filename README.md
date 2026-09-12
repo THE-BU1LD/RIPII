@@ -53,6 +53,11 @@ force. Its prospectively specified three-seed local-versus-coupled study again r
 The self-checksummed result is
 `research/results/development/world_v4_coupling_capsule.json`.
 
+A fresh-seed 39-run legacy objective study also found that reconstruction+KL beat
+every individual auxiliary addition and the complete objective on every paired seed
+at the fixed 30-update budget. Use `--mode simple_objective` for that executable
+reference. This is synthetic development evidence, not a convergence claim.
+
 ## What is included
 
 - End-to-end training, evaluation, diagnostics, and benchmark scripts
@@ -115,6 +120,8 @@ PyTorch-recognized FLOP lower bound:
 ```bash
 python3 scripts/profile_world.py runs/world_experiment/graph_continuous/seed_3/best.pt \
   --output runs/world_experiment/graph_profile.json
+python3 scripts/profile_world_efficiency.py runs/world_experiment \
+  --output runs/world_experiment/suite_profile.json
 ```
 
 `python3 scripts/clean_generated.py` is dry-run only. Add `--apply` to remove explicit

@@ -46,6 +46,19 @@ dataset choices must be frozen in a new versioned protocol before any test evalu
   seed directions were mixed, and the coupling-interaction mean was -0.00089 with exact
   two-sided sign-flip p=1.0. This is development evidence, not confirmation.
 
+## H-OBJ-1 — legacy objective simplification (executed; frozen local development)
+
+- **H0:** no individual auxiliary term or complete objective reduces held-out
+  reconstruction MSE by at least 5% on every paired seed versus reconstruction+KL.
+- **H1(term):** the addition meets that 5%-on-every-seed rule under the frozen 30-update
+  protocol.
+- Setup: paired seeds 701, 809, 907; identical model, data, initialization, minibatch
+  order, and final-checkpoint evaluation; 39/39 cells completed.
+- Decision: **H1 rejected for every addition.** All twelve comparisons moved in the
+  wrong direction on every seed; the decision is `no_auxiliary_advance`.
+- Boundary: three synthetic seeds and a short fixed budget do not determine
+  asymptotic or external behavior.
+
 ## Ranked extensions
 
 1. **Simplify to graph:** tests whether hierarchy is unnecessary; lowest cost and

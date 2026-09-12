@@ -1,17 +1,23 @@
 # Reviewer 2 — theory and method
 
-## Post-audit review
+## Final hostile review
 
-Summary: RIPII combines stochastic encoding, learned projectors, latent graph updates,
-action conditioning and residual VQ; a separate world model uses soft object grouping.
-Strengths: equations are now explicit, simpler explanations have direct controls, and
-the authors do not call active assignments useful. Fatal concern: “renormalization” is
-not theoretically justified—no scale semantics, conserved measure, flow or fixed point
-is demonstrated. Major concerns: the legacy multi-loss objective is under-motivated and
-weakly identifiable; soft grouping overlaps DiffPool-like methods; the multiscale model
-loses the flat graph control. Minor concern: assignment identifiability is only up to
-permutation. Missing work: a theorem or operational scale-flow test, or a narrower
-failure-analysis contribution. Novelty: not established. Reproducibility: good.
+**Summary.** RIPII combines stochastic encoding, learned projectors, latent graph
+updates, action conditioning, and residual VQ; the world path tests soft object
+grouping. Equations and limiting controls are explicit, and the repository now tests
+the simplest competing explanations rather than inferring mechanism from assignments.
 
-Likely score: **2/10 (strong reject)**. Confidence: **4/5**. The scientifically justified
-model choice today is the simpler graph, not another speculative hierarchy extension.
+**Fatal concern.** “Renormalization” lacks physical scale semantics, a conserved
+coarse measure, flow, fixed point, or theorem. **Major concerns.** Multiscale grouping
+loses the flat graph and does not beat global pooling under long-range forces. In the
+fresh-seed objective study, every auxiliary term hurts fixed-budget reconstruction;
+the full objective is substantially worse. The gradient audit finds major scale
+imbalance and frequent conflict but is diagnostic, not causal. **Minor concerns.**
+Group identity is permutation-nonidentifiable and the synthetic laws are narrow.
+**Missing experiments.** Either establish an operational scale-flow property and a
+compute-matched external benefit, or frame the work strictly as a powered negative
+result.
+
+**Novelty assessment.** The combination is not enough to establish novelty.
+**Reproducibility assessment.** Good. **Likely score:** 2/10 (strong reject).
+**Confidence:** 5/5.

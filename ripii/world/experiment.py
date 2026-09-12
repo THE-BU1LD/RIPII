@@ -75,7 +75,9 @@ def _finite_json(value) -> bool:
     if isinstance(value, float):
         return math.isfinite(value)
     if isinstance(value, dict):
-        return all(isinstance(key, str) and _finite_json(item) for key, item in value.items())
+        return all(
+            isinstance(key, str) and _finite_json(item) for key, item in value.items()
+        )
     if isinstance(value, list):
         return all(_finite_json(item) for item in value)
     return value is None or isinstance(value, (str, int, bool))
@@ -231,22 +233,20 @@ def evaluate(model, data, horizons=(1, 4, 16, 32)):
         )
     first_error = error[:, 0, :, :2]
     last_error = error[:, -1, :, :2]
-    first_rmse = ((first_error.square() * mask[..., None]).sum() / (mask.sum() * 2)).sqrt()
-    last_rmse = ((last_error.square() * mask[..., None]).sum() / (mask.sum() * 2)).sqrt()
+    first_rmse = (
+        (first_error.square() * mask[..., None]).sum() / (mask.sum() * 2)
+    ).sqrt()
+    last_rmse = (
+        (last_error.square() * mask[..., None]).sum() / (mask.sum() * 2)
+    ).sqrt()
     result["position_rmse_growth_final_over_h1"] = float(
         last_rmse / first_rmse.clamp_min(1e-12)
     )
     result["max_abs_predicted_position"] = float(
-        predicted[:, 1:, :, :2]
-        .masked_select(mask[:, None, :, None])
-        .abs()
-        .max()
+        predicted[:, 1:, :, :2].masked_select(mask[:, None, :, None]).abs().max()
     )
     result["max_abs_predicted_velocity"] = float(
-        predicted[:, 1:, :, 2:4]
-        .masked_select(mask[:, None, :, None])
-        .abs()
-        .max()
+        predicted[:, 1:, :, 2:4].masked_select(mask[:, None, :, None]).abs().max()
     )
     property_error = predicted[:, 1:, :, 4:] - data["states"][:, 1:, :, 4:]
     result["max_abs_property_drift"] = float(
@@ -256,16 +256,12 @@ def evaluate(model, data, horizons=(1, 4, 16, 32)):
         predicted[:, 1:, :, 2:4] * predicted[:, 1:, :, 5:6] * live
     ).sum(2)
     target_momentum = (
-        data["states"][:, 1:, :, 2:4]
-        * data["states"][:, 1:, :, 5:6]
-        * live
+        data["states"][:, 1:, :, 2:4] * data["states"][:, 1:, :, 5:6] * live
     ).sum(2)
     result["scene_momentum_rmse"] = float(
         (predicted_momentum - target_momentum).square().mean().sqrt()
     )
-    outside = (
-        predicted[:, 1:, :, :2].abs() > 1.0 - predicted[:, 1:, :, 4:5]
-    ).any(-1)
+    outside = (predicted[:, 1:, :, :2].abs() > 1.0 - predicted[:, 1:, :, 4:5]).any(-1)
     result["outside_arena_fraction"] = float(
         (outside * mask[:, None]).sum() / (mask.sum() * error.shape[1])
     )
@@ -295,11 +291,68 @@ def train(
     bottleneck="continuous",
     hidden=None,
     resume: Path | None = None,
+    prepared_datasets: tuple[tuple[dict, dict], tuple[dict, dict]] | None = None,
 ):
     cfg.validate()
     if output.exists() and any(output.iterdir()) and resume is None:
         raise ValueError(f"refusing nonempty output directory: {output}")
     output.mkdir(parents=True, exist_ok=True)
+    if prepared_datasets is None:
+        physics = Physics(global_coupling=cfg.global_coupling)
+        train_data, train_dataset_record = load_dataset(
+            DatasetSpec(
+                "train",
+                cfg.train_scenes,
+                cfg.train_horizon,
+                cfg.data_seed,
+                cfg.max_objects,
+                physics,
+            )
+        )
+        validation, validation_dataset_record = load_dataset(
+            DatasetSpec(
+                "validation",
+                cfg.eval_scenes,
+                cfg.rollout_steps,
+                cfg.data_seed,
+                cfg.max_objects,
+                physics,
+            )
+        )
+    else:
+        if (
+            not isinstance(prepared_datasets, tuple)
+            or len(prepared_datasets) != 2
+            or any(
+                not isinstance(item, tuple)
+                or len(item) != 2
+                or not isinstance(item[0], dict)
+                or not isinstance(item[1], dict)
+                for item in prepared_datasets
+            )
+        ):
+            raise ValueError(
+                "prepared datasets must contain train and validation pairs"
+            )
+        (
+            (train_data, train_dataset_record),
+            (
+                validation,
+                validation_dataset_record,
+            ),
+        ) = prepared_datasets
+        if (
+            train_data["states"].shape[:2] != (cfg.train_scenes, cfg.train_horizon + 1)
+            or validation["states"].shape[0] != cfg.eval_scenes
+            or validation["actions"].shape[1] < cfg.rollout_steps
+            or train_dataset_record.get("split") != "train"
+            or validation_dataset_record.get("split") != "validation"
+        ):
+            raise ValueError("prepared datasets do not match the experiment contract")
+    dataset_records = {
+        "train": train_dataset_record,
+        "validation": validation_dataset_record,
+    }
     torch.manual_seed(seed)
     model = WorldModel(
         variant, hidden or cfg.hidden, cfg.max_objects, bottleneck=bottleneck
@@ -325,6 +378,8 @@ def train(
         ).spec
         if saved["model_spec"] != expected_spec or saved["seed"] != seed:
             raise ValueError("resume model specification or seed differs")
+        if prepared_datasets is not None and saved.get("datasets") != dataset_records:
+            raise ValueError("resume external dataset identity differs")
         expected = asdict(cfg)
         previous = dict(saved["experiment"])
         expected.pop("steps")
@@ -345,37 +400,13 @@ def train(
             import shutil
 
             shutil.copy2(best_source, output / "best.pt")
-    physics = Physics(global_coupling=cfg.global_coupling)
-    train_data, train_dataset_record = load_dataset(
-        DatasetSpec(
-            "train",
-            cfg.train_scenes,
-            cfg.train_horizon,
-            cfg.data_seed,
-            cfg.max_objects,
-            physics,
-        )
-    )
-    validation, validation_dataset_record = load_dataset(
-        DatasetSpec(
-            "validation",
-            cfg.eval_scenes,
-            cfg.rollout_steps,
-            cfg.data_seed,
-            cfg.max_objects,
-            physics,
-        )
-    )
     write_json(
         output / "config.json",
         {
             "experiment": asdict(cfg),
             "model_spec": model.spec,
             "seed": seed,
-            "datasets": {
-                "train": train_dataset_record,
-                "validation": validation_dataset_record,
-            },
+            "datasets": dataset_records,
         },
     )
     train_start = time.perf_counter()
@@ -425,6 +456,7 @@ def train(
                 "torch_rng": torch.get_rng_state(),
                 "best_validation": best,
                 "metrics": record,
+                "datasets": dataset_records,
                 "train_seconds": elapsed_before + time.perf_counter() - train_start,
             }
             atomic_save(output / "latest.pt", payload)
@@ -604,9 +636,7 @@ def _benchmark_impl(
         "capacity_match_tolerance": CAPACITY_MATCH_TOLERANCE,
         "source_sha256": sources,
         "physics": physics.as_dict(),
-        "datasets": {
-            split: spec.as_record() for split, spec in dataset_specs.items()
-        },
+        "datasets": {split: spec.as_record() for split, spec in dataset_specs.items()},
         "selection": "minimum validation position RMSE + 0.25 * velocity RMSE",
         "training": "same scenes, updates, sampler seeds and fixed objective weights",
         "uncertainty": "initialization/minibatch seeds on one fixed dataset; not population inference",
@@ -1037,9 +1067,7 @@ def capture(directory: Path, output: Path):
             "bytes": path.stat().st_size,
             "content_text": content_text,
         }
-    summary = _parse_json_object(
-        retained["summary.json"]["content_text"], "summary"
-    )
+    summary = _parse_json_object(retained["summary.json"]["content_text"], "summary")
     if summary.get("protocol_sha256") != retained["protocol.json"]["sha256"]:
         raise ValueError("summary does not reference the retained protocol")
     payload = {

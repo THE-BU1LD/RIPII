@@ -1,0 +1,1082 @@
+{
+  "format": "ripii-objective-gradient-audit-v1",
+  "evidence_status": "development_diagnostic",
+  "experimental_unit": "trained seed; one deterministic training batch per seed",
+  "seeds": [
+    701,
+    809,
+    907
+  ],
+  "source_sha256": {
+    "scripts/audit_objective_gradients.py": "a6be92a5c6bc49706f5c8075d7e88ef2ad55d0f9c2bef5b9eb7a4a929d2ea967",
+    "ripii/utils/objective_diagnostics.py": "6402601308b0a857ea973d8f5c139a28202c0c86a79f18715254ae86a7216660",
+    "ripii/models/ripii.py": "2778cd448301baf151f88522d5960a2034827ec0590813f826626f15f3d82fe0"
+  },
+  "rows": [
+    {
+      "seed": 701,
+      "checkpoint_step": 30,
+      "checkpoint_sha256": "1d4326bc547f12dc1c9754aaf7b4feaa034feb355a700927c75644e54e0bc88b",
+      "config_sha256": "a0aab30bca342ba814e712371e599a795ad2dd3cfec5fb7129784766ff1a747a",
+      "diagnostic": {
+        "boundary": "raw weighted terms before adaptive uncertainty balancing and global gradient clipping; one fixed batch is diagnostic, not causal evidence",
+        "active_terms": [
+          "recon",
+          "equiv",
+          "inv",
+          "scale",
+          "proj",
+          "spectral",
+          "geom",
+          "vq",
+          "node",
+          "moment",
+          "identity",
+          "kl",
+          "depth"
+        ],
+        "terms": {
+          "recon": {
+            "raw_value": 0.22867371141910553,
+            "weight": 1.0,
+            "weighted_value": 0.22867371141910553,
+            "weighted_gradient_l2": 1.1148269350374573,
+            "connected_parameter_tensors": 177
+          },
+          "equiv": {
+            "raw_value": 0.4102216362953186,
+            "weight": 0.8,
+            "weighted_value": 0.3281773090362549,
+            "weighted_gradient_l2": 0.8870329682951482,
+            "connected_parameter_tensors": 129
+          },
+          "inv": {
+            "raw_value": 0.10042016953229904,
+            "weight": 0.8,
+            "weighted_value": 0.08033613562583924,
+            "weighted_gradient_l2": 1.4923784941609861,
+            "connected_parameter_tensors": 141
+          },
+          "scale": {
+            "raw_value": 0.37541547417640686,
+            "weight": 0.2,
+            "weighted_value": 0.07508309483528137,
+            "weighted_gradient_l2": 0.38893461249359285,
+            "connected_parameter_tensors": 76
+          },
+          "proj": {
+            "raw_value": 1.716917634010315,
+            "weight": 0.2,
+            "weighted_value": 0.343383526802063,
+            "weighted_gradient_l2": 1.539170356243948,
+            "connected_parameter_tensors": 61
+          },
+          "spectral": {
+            "raw_value": 1.2758355140686035,
+            "weight": 0.1,
+            "weighted_value": 0.12758355140686037,
+            "weighted_gradient_l2": 1.7182713742240425,
+            "connected_parameter_tensors": 111
+          },
+          "geom": {
+            "raw_value": 0.3111107349395752,
+            "weight": 0.1,
+            "weighted_value": 0.03111107349395752,
+            "weighted_gradient_l2": 0.9372245036952311,
+            "connected_parameter_tensors": 72
+          },
+          "vq": {
+            "raw_value": 2.0695815086364746,
+            "weight": 1.0,
+            "weighted_value": 2.0695815086364746,
+            "weighted_gradient_l2": 1.77060318872103,
+            "connected_parameter_tensors": 143
+          },
+          "node": {
+            "raw_value": 1.8050318956375122,
+            "weight": 0.1,
+            "weighted_value": 0.18050318956375122,
+            "weighted_gradient_l2": 0.2815843496540547,
+            "connected_parameter_tensors": 111
+          },
+          "moment": {
+            "raw_value": 0.8939077854156494,
+            "weight": 0.05,
+            "weighted_value": 0.044695389270782475,
+            "weighted_gradient_l2": 0.04083057216676175,
+            "connected_parameter_tensors": 141
+          },
+          "identity": {
+            "raw_value": 0.0032817877363413572,
+            "weight": 0.05,
+            "weighted_value": 0.00016408938681706787,
+            "weighted_gradient_l2": 0.0010738951344037152,
+            "connected_parameter_tensors": 54
+          },
+          "kl": {
+            "raw_value": 2.375875473022461,
+            "weight": 0.01,
+            "weighted_value": 0.02375875473022461,
+            "weighted_gradient_l2": 0.09807281365040625,
+            "connected_parameter_tensors": 40
+          },
+          "depth": {
+            "raw_value": 0.009816288948059082,
+            "weight": 0.05,
+            "weighted_value": 0.0004908144474029541,
+            "weighted_gradient_l2": 0.027049522020594352,
+            "connected_parameter_tensors": 64
+          }
+        },
+        "pairwise_gradient_cosine": {
+          "recon::equiv": 0.02930086055560229,
+          "recon::inv": -0.06490791316733695,
+          "recon::scale": -0.050033698575616965,
+          "recon::proj": 0.1342899590775228,
+          "recon::spectral": 0.007810877229306251,
+          "recon::geom": -0.13645227211810992,
+          "recon::vq": -0.06772560855725021,
+          "recon::node": -0.10693597771648099,
+          "recon::moment": -0.012131837989915297,
+          "recon::identity": -0.012108366192382848,
+          "recon::kl": 0.01491947198800867,
+          "recon::depth": -0.03998738268357168,
+          "equiv::inv": 0.0038659599228524086,
+          "equiv::scale": 0.44564341272153674,
+          "equiv::proj": -0.025365695316381658,
+          "equiv::spectral": 0.1508240559478124,
+          "equiv::geom": 0.026244720821802448,
+          "equiv::vq": 0.06331681951740084,
+          "equiv::node": -0.08127094310537421,
+          "equiv::moment": -0.34562248419652947,
+          "equiv::identity": 0.04306472985330215,
+          "equiv::kl": 0.05900383407455579,
+          "equiv::depth": -0.043013833983648324,
+          "inv::scale": 0.04986297328397004,
+          "inv::proj": -0.15108331604612046,
+          "inv::spectral": 0.005404522578471825,
+          "inv::geom": 0.14701930366438248,
+          "inv::vq": -0.5613510456839879,
+          "inv::node": -0.0573680618384456,
+          "inv::moment": -0.12499868662597723,
+          "inv::identity": -0.031344967482007685,
+          "inv::kl": -0.08262343323421109,
+          "inv::depth": 0.04705167240965634,
+          "scale::proj": -0.5530445531746576,
+          "scale::spectral": 0.4641281661386765,
+          "scale::geom": 0.5418570034586875,
+          "scale::vq": 0.04608960316642441,
+          "scale::node": -0.5308927725374802,
+          "scale::moment": -0.2355009277576027,
+          "scale::identity": 0.01116368011610529,
+          "scale::kl": 0.0367686705021963,
+          "scale::depth": 0.0822715107864364,
+          "proj::spectral": -0.06695529741735032,
+          "proj::geom": -0.9989979932666991,
+          "proj::vq": -0.008041395847950489,
+          "proj::node": 0.32708320675847147,
+          "proj::moment": 0.09304787874357413,
+          "proj::identity": -0.0010985381598153023,
+          "proj::kl": -8.548492456112461e-05,
+          "proj::depth": -0.22473001128268527,
+          "spectral::geom": 0.06497682473374454,
+          "spectral::vq": 0.025101400252106575,
+          "spectral::node": -0.5113389167868831,
+          "spectral::moment": -0.1484943898171513,
+          "spectral::identity": 0.0015019231963084437,
+          "spectral::kl": -0.009035923962070432,
+          "spectral::depth": 0.12744403950533253,
+          "geom::vq": 0.009253080801203916,
+          "geom::node": -0.32245797499693163,
+          "geom::moment": -0.09298324057695656,
+          "geom::identity": 0.0009920867038317092,
+          "geom::kl": -0.0005826168645390595,
+          "geom::depth": 0.2325642693496661,
+          "vq::node": -0.04505657477153332,
+          "vq::moment": -0.008719682645434008,
+          "vq::identity": 0.04985428672863649,
+          "vq::kl": 0.050264155317275294,
+          "vq::depth": -0.00860774617187284,
+          "node::moment": 0.11001016256648351,
+          "node::identity": -0.007480226138607153,
+          "node::kl": -0.005381742086897286,
+          "node::depth": -0.12637240681617032,
+          "moment::identity": -0.030266820046781735,
+          "moment::kl": 0.06059354867791798,
+          "moment::depth": 0.028080066810420506,
+          "identity::kl": -0.012292352600057578,
+          "identity::depth": 0.003908379491317888,
+          "kl::depth": -0.03266995203241838
+        }
+      }
+    },
+    {
+      "seed": 809,
+      "checkpoint_step": 30,
+      "checkpoint_sha256": "186052894e694280f2667adbcd48c9fc3951c918034f915c8e12367a2e1a2efa",
+      "config_sha256": "9a6eb1fc8967f432a41081c8dac0651526158ebe288c0dcdd4ed2004751472db",
+      "diagnostic": {
+        "boundary": "raw weighted terms before adaptive uncertainty balancing and global gradient clipping; one fixed batch is diagnostic, not causal evidence",
+        "active_terms": [
+          "recon",
+          "equiv",
+          "inv",
+          "scale",
+          "proj",
+          "spectral",
+          "geom",
+          "vq",
+          "node",
+          "moment",
+          "identity",
+          "kl",
+          "depth"
+        ],
+        "terms": {
+          "recon": {
+            "raw_value": 0.2424386441707611,
+            "weight": 1.0,
+            "weighted_value": 0.2424386441707611,
+            "weighted_gradient_l2": 0.9108252752529327,
+            "connected_parameter_tensors": 177
+          },
+          "equiv": {
+            "raw_value": 0.5641562342643738,
+            "weight": 0.8,
+            "weighted_value": 0.45132498741149907,
+            "weighted_gradient_l2": 0.9945085978210154,
+            "connected_parameter_tensors": 129
+          },
+          "inv": {
+            "raw_value": 0.07550545781850815,
+            "weight": 0.8,
+            "weighted_value": 0.060404366254806524,
+            "weighted_gradient_l2": 15.234718216836765,
+            "connected_parameter_tensors": 141
+          },
+          "scale": {
+            "raw_value": 0.5363286137580872,
+            "weight": 0.2,
+            "weighted_value": 0.10726572275161744,
+            "weighted_gradient_l2": 0.377580323344224,
+            "connected_parameter_tensors": 76
+          },
+          "proj": {
+            "raw_value": 1.4083898067474365,
+            "weight": 0.2,
+            "weighted_value": 0.2816779613494873,
+            "weighted_gradient_l2": 1.6447229127861933,
+            "connected_parameter_tensors": 61
+          },
+          "spectral": {
+            "raw_value": 2.966872453689575,
+            "weight": 0.1,
+            "weighted_value": 0.2966872453689575,
+            "weighted_gradient_l2": 1.968448918848242,
+            "connected_parameter_tensors": 111
+          },
+          "geom": {
+            "raw_value": 0.7370193004608154,
+            "weight": 0.1,
+            "weighted_value": 0.07370193004608154,
+            "weighted_gradient_l2": 1.3224425278965724,
+            "connected_parameter_tensors": 72
+          },
+          "vq": {
+            "raw_value": 2.174072265625,
+            "weight": 1.0,
+            "weighted_value": 2.174072265625,
+            "weighted_gradient_l2": 1.738350764570021,
+            "connected_parameter_tensors": 143
+          },
+          "node": {
+            "raw_value": 1.7234913110733032,
+            "weight": 0.1,
+            "weighted_value": 0.17234913110733033,
+            "weighted_gradient_l2": 0.2821907458104065,
+            "connected_parameter_tensors": 111
+          },
+          "moment": {
+            "raw_value": 0.7848290205001831,
+            "weight": 0.05,
+            "weighted_value": 0.03924145102500916,
+            "weighted_gradient_l2": 0.09346457876305043,
+            "connected_parameter_tensors": 141
+          },
+          "identity": {
+            "raw_value": 0.01112860906869173,
+            "weight": 0.05,
+            "weighted_value": 0.0005564304534345865,
+            "weighted_gradient_l2": 0.003395019966911871,
+            "connected_parameter_tensors": 54
+          },
+          "kl": {
+            "raw_value": 2.046705484390259,
+            "weight": 0.01,
+            "weighted_value": 0.02046705484390259,
+            "weighted_gradient_l2": 0.08092122563943466,
+            "connected_parameter_tensors": 40
+          },
+          "depth": {
+            "raw_value": 0.014835387468338013,
+            "weight": 0.05,
+            "weighted_value": 0.0007417693734169007,
+            "weighted_gradient_l2": 0.02995357959151827,
+            "connected_parameter_tensors": 64
+          }
+        },
+        "pairwise_gradient_cosine": {
+          "recon::equiv": 0.036022684329795156,
+          "recon::inv": -0.024260925070105372,
+          "recon::scale": 0.05516184183908053,
+          "recon::proj": -0.0498636310757481,
+          "recon::spectral": 0.027243948985147048,
+          "recon::geom": 0.05018627508861051,
+          "recon::vq": -0.03947080890377754,
+          "recon::node": -0.18091338027693032,
+          "recon::moment": -0.005172184916238766,
+          "recon::identity": 0.007513701440837624,
+          "recon::kl": 0.011557816636140186,
+          "recon::depth": 0.15842417358796182,
+          "equiv::inv": 0.014503012710904586,
+          "equiv::scale": 0.5101634002088645,
+          "equiv::proj": -0.030711321475587885,
+          "equiv::spectral": 0.21465530828237642,
+          "equiv::geom": 0.03480459871822507,
+          "equiv::vq": -0.19514264879954196,
+          "equiv::node": -0.036084731095412666,
+          "equiv::moment": -0.053694881119220446,
+          "equiv::identity": 0.11006372733964126,
+          "equiv::kl": -0.06634856559683806,
+          "equiv::depth": -0.047812499071901673,
+          "inv::scale": 0.046828390628121205,
+          "inv::proj": -0.040406803344153,
+          "inv::spectral": -0.063341173937709,
+          "inv::geom": 0.04457681251671339,
+          "inv::vq": 0.016852558828365782,
+          "inv::node": -0.17306645869830728,
+          "inv::moment": 0.3130601121783505,
+          "inv::identity": 0.005274401620379099,
+          "inv::kl": 0.0376599730586178,
+          "inv::depth": -0.011989750725269543,
+          "scale::proj": -0.5160574644963977,
+          "scale::spectral": 0.5540483629142539,
+          "scale::geom": 0.5186762188570617,
+          "scale::vq": -0.20840164207874398,
+          "scale::node": -0.32302057266875284,
+          "scale::moment": -0.14921698991607948,
+          "scale::identity": -4.204620323939979e-06,
+          "scale::kl": -0.034632876336224735,
+          "scale::depth": -0.13127322680563294,
+          "proj::spectral": -0.5312755503679378,
+          "proj::geom": -0.9984794184903284,
+          "proj::vq": 0.1211151545166237,
+          "proj::node": 0.42039356430454555,
+          "proj::moment": 0.1850284970556259,
+          "proj::identity": -0.0180644200132215,
+          "proj::kl": -0.015619838923572084,
+          "proj::depth": 0.0038590096391706795,
+          "spectral::geom": 0.5371209934190108,
+          "spectral::vq": 0.02343447683363144,
+          "spectral::node": -0.1728166460608999,
+          "spectral::moment": -0.08023100359692188,
+          "spectral::identity": 0.019858545666187225,
+          "spectral::kl": 0.024440509921732086,
+          "spectral::depth": -0.10269351072114978,
+          "geom::vq": -0.1192859409446644,
+          "geom::node": -0.4143276320997379,
+          "geom::moment": -0.18102118483108004,
+          "geom::identity": 0.01782486617726183,
+          "geom::kl": 0.014369806412587078,
+          "geom::depth": 0.0012755980743077808,
+          "vq::node": 0.1711680600699343,
+          "vq::moment": 0.22103034827340662,
+          "vq::identity": -0.009155909348602912,
+          "vq::kl": 0.12227595893263803,
+          "vq::depth": -0.020803154398157046,
+          "node::moment": 0.07723871670179054,
+          "node::identity": 0.019632228707828638,
+          "node::kl": 0.10288699381796058,
+          "node::depth": -0.07484601654090633,
+          "moment::identity": 0.020619764780312435,
+          "moment::kl": 0.05747729082760537,
+          "moment::depth": -0.00048145962040944593,
+          "identity::kl": 0.01597964090617963,
+          "identity::depth": -0.004480974143568531,
+          "kl::depth": -0.04633507476919173
+        }
+      }
+    },
+    {
+      "seed": 907,
+      "checkpoint_step": 30,
+      "checkpoint_sha256": "6f41feb2ac03432982635f12ffb1bb7ff1eabb34bf082ece1836b15b708d0363",
+      "config_sha256": "4b98e42c56620274f49f5ad073f43c4786b748c4aba6c2739d94de58140f21c3",
+      "diagnostic": {
+        "boundary": "raw weighted terms before adaptive uncertainty balancing and global gradient clipping; one fixed batch is diagnostic, not causal evidence",
+        "active_terms": [
+          "recon",
+          "equiv",
+          "inv",
+          "scale",
+          "proj",
+          "spectral",
+          "geom",
+          "vq",
+          "node",
+          "moment",
+          "identity",
+          "kl",
+          "depth"
+        ],
+        "terms": {
+          "recon": {
+            "raw_value": 0.3814336061477661,
+            "weight": 1.0,
+            "weighted_value": 0.3814336061477661,
+            "weighted_gradient_l2": 1.9342108875674888,
+            "connected_parameter_tensors": 177
+          },
+          "equiv": {
+            "raw_value": 0.27195271849632263,
+            "weight": 0.8,
+            "weighted_value": 0.2175621747970581,
+            "weighted_gradient_l2": 0.8810736296031234,
+            "connected_parameter_tensors": 129
+          },
+          "inv": {
+            "raw_value": 0.024387165904045105,
+            "weight": 0.8,
+            "weighted_value": 0.019509732723236084,
+            "weighted_gradient_l2": 1.4007506717712668,
+            "connected_parameter_tensors": 141
+          },
+          "scale": {
+            "raw_value": 0.3390716314315796,
+            "weight": 0.2,
+            "weighted_value": 0.06781432628631592,
+            "weighted_gradient_l2": 0.327286779533473,
+            "connected_parameter_tensors": 76
+          },
+          "proj": {
+            "raw_value": 1.3210153579711914,
+            "weight": 0.2,
+            "weighted_value": 0.2642030715942383,
+            "weighted_gradient_l2": 1.4611923181502662,
+            "connected_parameter_tensors": 61
+          },
+          "spectral": {
+            "raw_value": 1.468382477760315,
+            "weight": 0.1,
+            "weighted_value": 0.1468382477760315,
+            "weighted_gradient_l2": 1.96630114070554,
+            "connected_parameter_tensors": 111
+          },
+          "geom": {
+            "raw_value": 0.8800851702690125,
+            "weight": 0.1,
+            "weighted_value": 0.08800851702690125,
+            "weighted_gradient_l2": 1.2800176560760248,
+            "connected_parameter_tensors": 72
+          },
+          "vq": {
+            "raw_value": 1.9789602756500244,
+            "weight": 1.0,
+            "weighted_value": 1.9789602756500244,
+            "weighted_gradient_l2": 2.02926173233512,
+            "connected_parameter_tensors": 143
+          },
+          "node": {
+            "raw_value": 1.5953749418258667,
+            "weight": 0.1,
+            "weighted_value": 0.15953749418258667,
+            "weighted_gradient_l2": 0.37386714379620267,
+            "connected_parameter_tensors": 111
+          },
+          "moment": {
+            "raw_value": 0.8758092522621155,
+            "weight": 0.05,
+            "weighted_value": 0.04379046261310578,
+            "weighted_gradient_l2": 0.06394073425953703,
+            "connected_parameter_tensors": 141
+          },
+          "identity": {
+            "raw_value": 0.005858294665813446,
+            "weight": 0.05,
+            "weighted_value": 0.0002929147332906723,
+            "weighted_gradient_l2": 0.001996012121519821,
+            "connected_parameter_tensors": 54
+          },
+          "kl": {
+            "raw_value": 1.3538391590118408,
+            "weight": 0.01,
+            "weighted_value": 0.01353839159011841,
+            "weighted_gradient_l2": 0.059077399104317745,
+            "connected_parameter_tensors": 40
+          },
+          "depth": {
+            "raw_value": 0.04037785530090332,
+            "weight": 0.05,
+            "weighted_value": 0.002018892765045166,
+            "weighted_gradient_l2": 0.026332488022964583,
+            "connected_parameter_tensors": 64
+          }
+        },
+        "pairwise_gradient_cosine": {
+          "recon::equiv": -0.03478862666924029,
+          "recon::inv": -0.16393094918830142,
+          "recon::scale": -0.23981889333757475,
+          "recon::proj": -0.0431326611468952,
+          "recon::spectral": -0.12899132028532248,
+          "recon::geom": 0.04687270720282372,
+          "recon::vq": -0.055738310212721034,
+          "recon::node": -0.06345500549117927,
+          "recon::moment": 0.06199696229599466,
+          "recon::identity": -0.014043259425756722,
+          "recon::kl": -0.009659308234203837,
+          "recon::depth": -0.050352349509691224,
+          "equiv::inv": 0.07028026140048012,
+          "equiv::scale": 0.5821798330349062,
+          "equiv::proj": 0.0017546838411332609,
+          "equiv::spectral": 0.18483979737485956,
+          "equiv::geom": 0.002799615356806455,
+          "equiv::vq": -0.04859525411347823,
+          "equiv::node": 0.14829580595745165,
+          "equiv::moment": -0.16452511189024896,
+          "equiv::identity": 0.10288517740726842,
+          "equiv::kl": 0.14560263267017917,
+          "equiv::depth": -0.051171976912242394,
+          "inv::scale": 0.0961630182949192,
+          "inv::proj": 0.0007350995407204599,
+          "inv::spectral": 0.11717638882991627,
+          "inv::geom": 0.004355638655194517,
+          "inv::vq": -0.07576142993102804,
+          "inv::node": 0.07672127503817192,
+          "inv::moment": -0.10279067325995853,
+          "inv::identity": -0.001133297015374522,
+          "inv::kl": -0.00914684738669986,
+          "inv::depth": -0.024706372668449418,
+          "scale::proj": 0.16488970398798505,
+          "scale::spectral": 0.5588123186772711,
+          "scale::geom": -0.17325506645189226,
+          "scale::vq": 0.04060543348319342,
+          "scale::node": 0.2079456559472736,
+          "scale::moment": -0.10299287843423732,
+          "scale::identity": 0.023715845092420237,
+          "scale::kl": 0.08994362350776143,
+          "scale::depth": 0.267135566817008,
+          "proj::spectral": -0.2114726837289044,
+          "proj::geom": -0.9956217254978295,
+          "proj::vq": 0.05764595832568163,
+          "proj::node": 0.373615365756644,
+          "proj::moment": 0.11800087674495266,
+          "proj::identity": 0.018593752430899457,
+          "proj::kl": 0.027618879769049007,
+          "proj::depth": 0.20171246626114667,
+          "spectral::geom": 0.21139778138635715,
+          "spectral::vq": 0.07040325806721363,
+          "spectral::node": 0.0912454992443294,
+          "spectral::moment": -0.07912767451527661,
+          "spectral::identity": 0.0012333117935392265,
+          "spectral::kl": 0.03430573465053795,
+          "spectral::depth": 0.11462192894089886,
+          "geom::vq": -0.06041191222456594,
+          "geom::node": -0.3667141918235009,
+          "geom::moment": -0.1252121398948487,
+          "geom::identity": -0.019779841235877237,
+          "geom::kl": -0.027969931676002164,
+          "geom::depth": -0.2186831408691817,
+          "vq::node": -0.007205941227443943,
+          "vq::moment": -0.0329179143642439,
+          "vq::identity": -0.024428697438196208,
+          "vq::kl": -0.06065228847981674,
+          "vq::depth": 0.06655123426754363,
+          "node::moment": 0.03090069964544408,
+          "node::identity": 0.05276650073348086,
+          "node::kl": 0.168797841115822,
+          "node::depth": 0.08291355359047488,
+          "moment::identity": -0.036077013450151504,
+          "moment::kl": 0.04413759874237373,
+          "moment::depth": 0.08170564911474223,
+          "identity::kl": 0.08502864114480603,
+          "identity::depth": 0.015282897642434562,
+          "kl::depth": 0.06324695706852189
+        }
+      }
+    }
+  ],
+  "aggregate_terms": {
+    "recon": {
+      "raw_value_mean": 0.28418198724587757,
+      "weighted_gradient_l2_mean": 1.3199543659526263,
+      "weighted_gradient_l2_min": 0.9108252752529327,
+      "weighted_gradient_l2_max": 1.9342108875674888
+    },
+    "equiv": {
+      "raw_value_mean": 0.4154435296853383,
+      "weighted_gradient_l2_mean": 0.9208717319064291,
+      "weighted_gradient_l2_min": 0.8810736296031234,
+      "weighted_gradient_l2_max": 0.9945085978210154
+    },
+    "inv": {
+      "raw_value_mean": 0.06677093108495076,
+      "weighted_gradient_l2_mean": 6.042615794256339,
+      "weighted_gradient_l2_min": 1.4007506717712668,
+      "weighted_gradient_l2_max": 15.234718216836765
+    },
+    "scale": {
+      "raw_value_mean": 0.41693857312202454,
+      "weighted_gradient_l2_mean": 0.36460057179042993,
+      "weighted_gradient_l2_min": 0.327286779533473,
+      "weighted_gradient_l2_max": 0.38893461249359285
+    },
+    "proj": {
+      "raw_value_mean": 1.4821075995763142,
+      "weighted_gradient_l2_mean": 1.5483618623934692,
+      "weighted_gradient_l2_min": 1.4611923181502662,
+      "weighted_gradient_l2_max": 1.6447229127861933
+    },
+    "spectral": {
+      "raw_value_mean": 1.9036968151728313,
+      "weighted_gradient_l2_mean": 1.8843404779259414,
+      "weighted_gradient_l2_min": 1.7182713742240425,
+      "weighted_gradient_l2_max": 1.968448918848242
+    },
+    "geom": {
+      "raw_value_mean": 0.642738401889801,
+      "weighted_gradient_l2_mean": 1.179894895889276,
+      "weighted_gradient_l2_min": 0.9372245036952311,
+      "weighted_gradient_l2_max": 1.3224425278965724
+    },
+    "vq": {
+      "raw_value_mean": 2.074204683303833,
+      "weighted_gradient_l2_mean": 1.8460718952087236,
+      "weighted_gradient_l2_min": 1.738350764570021,
+      "weighted_gradient_l2_max": 2.02926173233512
+    },
+    "node": {
+      "raw_value_mean": 1.7079660495122273,
+      "weighted_gradient_l2_mean": 0.31254741308688794,
+      "weighted_gradient_l2_min": 0.2815843496540547,
+      "weighted_gradient_l2_max": 0.37386714379620267
+    },
+    "moment": {
+      "raw_value_mean": 0.8515153527259827,
+      "weighted_gradient_l2_mean": 0.06607862839644973,
+      "weighted_gradient_l2_min": 0.04083057216676175,
+      "weighted_gradient_l2_max": 0.09346457876305043
+    },
+    "identity": {
+      "raw_value_mean": 0.006756230490282178,
+      "weighted_gradient_l2_mean": 0.0021549757409451355,
+      "weighted_gradient_l2_min": 0.0010738951344037152,
+      "weighted_gradient_l2_max": 0.003395019966911871
+    },
+    "kl": {
+      "raw_value_mean": 1.9254733721415203,
+      "weighted_gradient_l2_mean": 0.07935714613138621,
+      "weighted_gradient_l2_min": 0.059077399104317745,
+      "weighted_gradient_l2_max": 0.09807281365040625
+    },
+    "depth": {
+      "raw_value_mean": 0.02167651057243347,
+      "weighted_gradient_l2_mean": 0.027778529878359066,
+      "weighted_gradient_l2_min": 0.026332488022964583,
+      "weighted_gradient_l2_max": 0.02995357959151827
+    }
+  },
+  "aggregate_pairwise_cosines": {
+    "recon::equiv": {
+      "defined_seeds": 3,
+      "mean": 0.010178306072052385,
+      "negative_seeds": 1
+    },
+    "recon::inv": {
+      "defined_seeds": 3,
+      "mean": -0.08436659580858125,
+      "negative_seeds": 3
+    },
+    "recon::scale": {
+      "defined_seeds": 3,
+      "mean": -0.07823025002470373,
+      "negative_seeds": 2
+    },
+    "recon::proj": {
+      "defined_seeds": 3,
+      "mean": 0.01376455561829317,
+      "negative_seeds": 2
+    },
+    "recon::spectral": {
+      "defined_seeds": 3,
+      "mean": -0.031312164690289725,
+      "negative_seeds": 1
+    },
+    "recon::geom": {
+      "defined_seeds": 3,
+      "mean": -0.013131096608891897,
+      "negative_seeds": 1
+    },
+    "recon::vq": {
+      "defined_seeds": 3,
+      "mean": -0.054311575891249596,
+      "negative_seeds": 3
+    },
+    "recon::node": {
+      "defined_seeds": 3,
+      "mean": -0.11710145449486353,
+      "negative_seeds": 3
+    },
+    "recon::moment": {
+      "defined_seeds": 3,
+      "mean": 0.0148976464632802,
+      "negative_seeds": 2
+    },
+    "recon::identity": {
+      "defined_seeds": 3,
+      "mean": -0.0062126413924339825,
+      "negative_seeds": 2
+    },
+    "recon::kl": {
+      "defined_seeds": 3,
+      "mean": 0.005605993463315005,
+      "negative_seeds": 1
+    },
+    "recon::depth": {
+      "defined_seeds": 3,
+      "mean": 0.02269481379823297,
+      "negative_seeds": 2
+    },
+    "equiv::inv": {
+      "defined_seeds": 3,
+      "mean": 0.029549744678079037,
+      "negative_seeds": 0
+    },
+    "equiv::scale": {
+      "defined_seeds": 3,
+      "mean": 0.5126622153217691,
+      "negative_seeds": 0
+    },
+    "equiv::proj": {
+      "defined_seeds": 3,
+      "mean": -0.018107444316945425,
+      "negative_seeds": 2
+    },
+    "equiv::spectral": {
+      "defined_seeds": 3,
+      "mean": 0.18343972053501612,
+      "negative_seeds": 0
+    },
+    "equiv::geom": {
+      "defined_seeds": 3,
+      "mean": 0.021282978298944658,
+      "negative_seeds": 0
+    },
+    "equiv::vq": {
+      "defined_seeds": 3,
+      "mean": -0.06014036113187312,
+      "negative_seeds": 2
+    },
+    "equiv::node": {
+      "defined_seeds": 3,
+      "mean": 0.010313377252221591,
+      "negative_seeds": 2
+    },
+    "equiv::moment": {
+      "defined_seeds": 3,
+      "mean": -0.18794749240199962,
+      "negative_seeds": 3
+    },
+    "equiv::identity": {
+      "defined_seeds": 3,
+      "mean": 0.0853378782000706,
+      "negative_seeds": 0
+    },
+    "equiv::kl": {
+      "defined_seeds": 3,
+      "mean": 0.046085967049298966,
+      "negative_seeds": 1
+    },
+    "equiv::depth": {
+      "defined_seeds": 3,
+      "mean": -0.04733276998926413,
+      "negative_seeds": 3
+    },
+    "inv::scale": {
+      "defined_seeds": 3,
+      "mean": 0.06428479406900349,
+      "negative_seeds": 0
+    },
+    "inv::proj": {
+      "defined_seeds": 3,
+      "mean": -0.06358500661651767,
+      "negative_seeds": 2
+    },
+    "inv::spectral": {
+      "defined_seeds": 3,
+      "mean": 0.019746579156893034,
+      "negative_seeds": 1
+    },
+    "inv::geom": {
+      "defined_seeds": 3,
+      "mean": 0.0653172516120968,
+      "negative_seeds": 0
+    },
+    "inv::vq": {
+      "defined_seeds": 3,
+      "mean": -0.20675330559555005,
+      "negative_seeds": 2
+    },
+    "inv::node": {
+      "defined_seeds": 3,
+      "mean": -0.05123774849952698,
+      "negative_seeds": 2
+    },
+    "inv::moment": {
+      "defined_seeds": 3,
+      "mean": 0.028423584097471585,
+      "negative_seeds": 2
+    },
+    "inv::identity": {
+      "defined_seeds": 3,
+      "mean": -0.00906795429233437,
+      "negative_seeds": 2
+    },
+    "inv::kl": {
+      "defined_seeds": 3,
+      "mean": -0.01803676918743105,
+      "negative_seeds": 2
+    },
+    "inv::depth": {
+      "defined_seeds": 3,
+      "mean": 0.0034518496719791263,
+      "negative_seeds": 2
+    },
+    "scale::proj": {
+      "defined_seeds": 3,
+      "mean": -0.3014041045610234,
+      "negative_seeds": 2
+    },
+    "scale::spectral": {
+      "defined_seeds": 3,
+      "mean": 0.5256629492434005,
+      "negative_seeds": 0
+    },
+    "scale::geom": {
+      "defined_seeds": 3,
+      "mean": 0.2957593852879523,
+      "negative_seeds": 1
+    },
+    "scale::vq": {
+      "defined_seeds": 3,
+      "mean": -0.040568868476375385,
+      "negative_seeds": 1
+    },
+    "scale::node": {
+      "defined_seeds": 3,
+      "mean": -0.2153225630863198,
+      "negative_seeds": 2
+    },
+    "scale::moment": {
+      "defined_seeds": 3,
+      "mean": -0.1625702653693065,
+      "negative_seeds": 3
+    },
+    "scale::identity": {
+      "defined_seeds": 3,
+      "mean": 0.011625106862733861,
+      "negative_seeds": 1
+    },
+    "scale::kl": {
+      "defined_seeds": 3,
+      "mean": 0.030693139224577667,
+      "negative_seeds": 1
+    },
+    "scale::depth": {
+      "defined_seeds": 3,
+      "mean": 0.07271128359927048,
+      "negative_seeds": 1
+    },
+    "proj::spectral": {
+      "defined_seeds": 3,
+      "mean": -0.2699011771713975,
+      "negative_seeds": 3
+    },
+    "proj::geom": {
+      "defined_seeds": 3,
+      "mean": -0.9976997124182857,
+      "negative_seeds": 3
+    },
+    "proj::vq": {
+      "defined_seeds": 3,
+      "mean": 0.05690657233145161,
+      "negative_seeds": 1
+    },
+    "proj::node": {
+      "defined_seeds": 3,
+      "mean": 0.37369737893988697,
+      "negative_seeds": 0
+    },
+    "proj::moment": {
+      "defined_seeds": 3,
+      "mean": 0.1320257508480509,
+      "negative_seeds": 0
+    },
+    "proj::identity": {
+      "defined_seeds": 3,
+      "mean": -0.0001897352473791157,
+      "negative_seeds": 2
+    },
+    "proj::kl": {
+      "defined_seeds": 3,
+      "mean": 0.0039711853069719335,
+      "negative_seeds": 2
+    },
+    "proj::depth": {
+      "defined_seeds": 3,
+      "mean": -0.006386178460789309,
+      "negative_seeds": 1
+    },
+    "spectral::geom": {
+      "defined_seeds": 3,
+      "mean": 0.27116519984637083,
+      "negative_seeds": 0
+    },
+    "spectral::vq": {
+      "defined_seeds": 3,
+      "mean": 0.03964637838431722,
+      "negative_seeds": 0
+    },
+    "spectral::node": {
+      "defined_seeds": 3,
+      "mean": -0.19763668786781788,
+      "negative_seeds": 2
+    },
+    "spectral::moment": {
+      "defined_seeds": 3,
+      "mean": -0.10261768930978327,
+      "negative_seeds": 3
+    },
+    "spectral::identity": {
+      "defined_seeds": 3,
+      "mean": 0.007531260218678298,
+      "negative_seeds": 0
+    },
+    "spectral::kl": {
+      "defined_seeds": 3,
+      "mean": 0.016570106870066534,
+      "negative_seeds": 1
+    },
+    "spectral::depth": {
+      "defined_seeds": 3,
+      "mean": 0.04645748590836054,
+      "negative_seeds": 1
+    },
+    "geom::vq": {
+      "defined_seeds": 3,
+      "mean": -0.05681492412267547,
+      "negative_seeds": 2
+    },
+    "geom::node": {
+      "defined_seeds": 3,
+      "mean": -0.36783326630672347,
+      "negative_seeds": 3
+    },
+    "geom::moment": {
+      "defined_seeds": 3,
+      "mean": -0.1330721884342951,
+      "negative_seeds": 3
+    },
+    "geom::identity": {
+      "defined_seeds": 3,
+      "mean": -0.0003209627849278999,
+      "negative_seeds": 1
+    },
+    "geom::kl": {
+      "defined_seeds": 3,
+      "mean": -0.004727580709318048,
+      "negative_seeds": 2
+    },
+    "geom::depth": {
+      "defined_seeds": 3,
+      "mean": 0.0050522421849307254,
+      "negative_seeds": 1
+    },
+    "vq::node": {
+      "defined_seeds": 3,
+      "mean": 0.039635181356985676,
+      "negative_seeds": 2
+    },
+    "vq::moment": {
+      "defined_seeds": 3,
+      "mean": 0.05979758375457624,
+      "negative_seeds": 2
+    },
+    "vq::identity": {
+      "defined_seeds": 3,
+      "mean": 0.005423226647279122,
+      "negative_seeds": 2
+    },
+    "vq::kl": {
+      "defined_seeds": 3,
+      "mean": 0.03729594192336553,
+      "negative_seeds": 1
+    },
+    "vq::depth": {
+      "defined_seeds": 3,
+      "mean": 0.012380111232504579,
+      "negative_seeds": 2
+    },
+    "node::moment": {
+      "defined_seeds": 3,
+      "mean": 0.07271652630457272,
+      "negative_seeds": 0
+    },
+    "node::identity": {
+      "defined_seeds": 3,
+      "mean": 0.021639501100900783,
+      "negative_seeds": 1
+    },
+    "node::kl": {
+      "defined_seeds": 3,
+      "mean": 0.08876769761562843,
+      "negative_seeds": 1
+    },
+    "node::depth": {
+      "defined_seeds": 3,
+      "mean": -0.03943495658886726,
+      "negative_seeds": 2
+    },
+    "moment::identity": {
+      "defined_seeds": 3,
+      "mean": -0.0152413562388736,
+      "negative_seeds": 2
+    },
+    "moment::kl": {
+      "defined_seeds": 3,
+      "mean": 0.0540694794159657,
+      "negative_seeds": 0
+    },
+    "moment::depth": {
+      "defined_seeds": 3,
+      "mean": 0.03643475210158443,
+      "negative_seeds": 1
+    },
+    "identity::kl": {
+      "defined_seeds": 3,
+      "mean": 0.029571976483642695,
+      "negative_seeds": 1
+    },
+    "identity::depth": {
+      "defined_seeds": 3,
+      "mean": 0.004903434330061306,
+      "negative_seeds": 1
+    },
+    "kl::depth": {
+      "defined_seeds": 3,
+      "mean": -0.005252689911029407,
+      "negative_seeds": 2
+    }
+  },
+  "claim_boundary": "Post-training local diagnostic on three synthetic seeds. It describes scale and conflict but cannot assign causal responsibility for outcomes.",
+  "signature": "98d1b8424f835b9b5a24b4fba89b9886e7c29fed4bfa787ce71a2d4df7073940"
+}

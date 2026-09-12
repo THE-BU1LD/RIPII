@@ -3,6 +3,9 @@ recursive-include configs *.yaml
 recursive-include scripts *.py *.sh
 recursive-include tests *.py
 recursive-include research *.md *.json *.csv
+prune research/results/pilot_v1/runs
+prune research/results/pilot_v2/runs
+prune research/results/development/objective_study_v1/runs
 recursive-include audit *.md
 recursive-include paper *.md
 recursive-include docs *.md

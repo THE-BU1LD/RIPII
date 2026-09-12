@@ -28,3 +28,17 @@ coupling-specific interaction was essentially zero across three seeds. A separat
 300-update follow-up likewise put global pool first in mean IID and every mean OOD
 regime. Neither extension is confirmatory or external evidence. Under known nonlocal
 dynamics, current evidence supports simple global aggregation, not learned grouping.
+
+## Objective simplification and compute boundary
+
+A frozen local 39-run study compared reconstruction+KL with eleven individual
+auxiliary additions and the complete objective on three fresh paired seeds. Every
+addition worsened fixed-budget reconstruction on every seed; the complete objective
+was worse by 26.4%, 60.0%, and 89.5%. A post-training gradient diagnostic found large
+scale differences and negative gradient cosines, including near-opposition between
+projective and geometry terms. This supports reconstruction+KL as the legacy reference
+at this budget, but it is not a convergence or external-data claim.
+
+Machine-local profiling also shows that similar parameter counts do not imply equal
+recognized operations and that latency ordering changes with host load. No efficiency
+or compute-matched conclusion is authorized.

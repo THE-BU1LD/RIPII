@@ -15,6 +15,9 @@
 | Multiscale failure is not contact-specific | exploratory development negative | `world_v3_failure_analysis.json` | post-result localization; regimes overlap except free flight |
 | Long-range coupling does not establish hierarchy-specific value | prospective development negative | `world_v4_coupling_capsule.json` | one simulator, 3 seeds, 100 updates |
 | Longer coupled follow-up favors global pool in mean errors | exploratory development | `world_global_coupling_v1_capsule.json` | 3 new seeds, 300 updates; generic benchmark rule compares graph |
+| Retained v3/coupled models have measured but nonportable inference costs | engineering-verified | `world_v3_efficiency.json`; `world_global_coupling_v1_efficiency.json` | one CPU host; profiler FLOPs omit unsupported operators; not training compute matching |
+| No legacy auxiliary objective improves reconstruction in the fixed objective study | negative development | `objective_study_v1/summary.json`; 39-run manifest | 3 seeds, 30 updates, synthetic; reconstruction is the primary outcome |
+| Legacy objectives have materially unequal and conflicting gradients | mechanistic development | `objective_study_v1/gradient_diagnostics.json` | one deterministic batch per trained seed; diagnostic, not causal attribution |
 
 Raw values remain in retained JSON/CSV and self-checksummed capsules; prose rounding is
 never the authoritative source. These SHA-256 digests detect corruption but are not
