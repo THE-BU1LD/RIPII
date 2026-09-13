@@ -66,11 +66,18 @@ def run_qualification(
     coarse_codes: int,
     fine_codes: int,
     learning_rate: float,
+    reset_dead_every: int = 0,
 ) -> dict[str, Any]:
     if min(steps, samples, code_dim, coarse_codes, fine_codes) <= 0:
         raise ValueError("qualification dimensions and steps must be positive")
     if code_dim < coarse_codes + fine_codes:
         raise ValueError("code_dim must be at least coarse_codes + fine_codes")
+    if (
+        not isinstance(reset_dead_every, int)
+        or isinstance(reset_dead_every, bool)
+        or reset_dead_every < 0
+    ):
+        raise ValueError("reset_dead_every must be a nonnegative integer")
     seed_everything(seed)
     train_x, _, _, centers = _dataset(
         samples=samples,
@@ -89,9 +96,10 @@ def run_qualification(
     )
     quantizer = HierarchicalVectorQuantizer(coarse_codes, fine_codes, code_dim)
     optimizer = torch.optim.Adam(quantizer.parameters(), lr=learning_rate)
-    for _ in range(steps):
+    reset_events = []
+    for step in range(steps):
         _, stats = quantizer(train_x)
-        loss = stats["vq_commit"] + stats["vq_code"]
+        loss = stats["vq_commit"] + stats["vq_code"] + stats["vq_balance"]
         sanitize(loss)
         optimizer.zero_grad(set_to_none=True)
         loss.backward()
@@ -99,13 +107,19 @@ def run_qualification(
             if parameter.grad is not None:
                 sanitize(parameter.grad)
         optimizer.step()
+        if reset_dead_every and (step + 1) % reset_dead_every == 0:
+            reset_events.append(
+                {"step": step + 1, **quantizer.revive_dead_codes(train_x)}
+            )
 
     with torch.no_grad():
-        coarse_quant, coarse_idx, coarse_probs = quantizer._quantize(
+        coarse_quant, coarse_idx, coarse_probs, _ = quantizer._quantize(
             test_x, quantizer.coarse
         )
         residual = test_x - coarse_quant
-        fine_quant, fine_idx, fine_probs = quantizer._quantize(residual, quantizer.fine)
+        fine_quant, fine_idx, fine_probs, _ = quantizer._quantize(
+            residual, quantizer.fine
+        )
         reconstruction_mse = float(F.mse_loss(coarse_quant + fine_quant, test_x).item())
         coarse_fraction = float((coarse_probs > 0).float().mean().item())
         fine_fraction = float((fine_probs > 0).float().mean().item())
@@ -129,6 +143,8 @@ def run_qualification(
         "code_dim": code_dim,
         "coarse_codes": coarse_codes,
         "fine_codes": fine_codes,
+        "dead_code_reset_every": reset_dead_every,
+        "dead_code_reset_events": reset_events,
         "metrics": {
             "coarse_effective_fraction": coarse_fraction,
             "fine_effective_fraction": fine_fraction,
@@ -155,6 +171,7 @@ def main() -> None:
     parser.add_argument("--coarse-codes", type=int, default=4)
     parser.add_argument("--fine-codes", type=int, default=4)
     parser.add_argument("--learning-rate", type=float, default=0.03)
+    parser.add_argument("--reset-dead-every", type=int, default=0)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     result = run_qualification(
@@ -165,6 +182,7 @@ def main() -> None:
         coarse_codes=args.coarse_codes,
         fine_codes=args.fine_codes,
         learning_rate=args.learning_rate,
+        reset_dead_every=args.reset_dead_every,
     )
     result["source_sha256"] = {
         "scripts/qualify_quantizer.py": _sha256(Path(__file__)),

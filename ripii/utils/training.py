@@ -11,6 +11,9 @@ from tqdm import tqdm
 
 from ..data.synthetic import SyntheticStructuralDataset
 
+CHECKPOINT_FORMAT = "ripii-structured-latent-v2"
+CHECKPOINT_VERSION = 3
+
 
 def collate(samples):
     return {
@@ -111,7 +114,7 @@ def run_epoch(
     scaler=None,
 ):
     model.train(train)
-    totals = {}
+    totals: dict[str, float] = {}
     sample_count = 0
     iterator = tqdm(
         loader,
@@ -176,8 +179,9 @@ def save_checkpoint(
     temporary = path.with_name(f".{path.name}.tmp")
     torch.save(
         {
+            "format": CHECKPOINT_FORMAT,
             "model": getattr(model, "_orig_mod", model).state_dict(),
-            "checkpoint_version": 2,
+            "checkpoint_version": CHECKPOINT_VERSION,
             "training_state": training_state,
             "optimizer": optimizer.state_dict(),
             "cfg": asdict(cfg),
@@ -196,6 +200,14 @@ def load_checkpoint(path: str | Path, model, optimizer=None, map_location: str =
     ckpt = torch.load(path, map_location=map_location, weights_only=True)
     if not isinstance(ckpt, dict) or not isinstance(ckpt.get("model"), dict):
         raise ValueError("checkpoint has an invalid schema")
+    version = ckpt.get("checkpoint_version")
+    if version == CHECKPOINT_VERSION and ckpt.get("format") != CHECKPOINT_FORMAT:
+        raise ValueError("checkpoint format and version disagree")
+    if version != CHECKPOINT_VERSION:
+        raise ValueError(
+            "checkpoint predates the 0.2 mechanism correction; evaluate it with "
+            "its recorded source revision or import compatible tensors as an initial state"
+        )
     getattr(model, "_orig_mod", model).load_state_dict(ckpt["model"])
     if optimizer is not None and "optimizer" in ckpt:
         optimizer.load_state_dict(ckpt["optimizer"])

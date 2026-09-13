@@ -87,6 +87,7 @@ def verify_dataset(root: Path) -> dict:
             or not isinstance(entry.get("path"), str)
             or not isinstance(entry.get("sha256"), str)
             or not isinstance(entry.get("bytes"), int)
+            or isinstance(entry.get("bytes"), bool)
         ):
             raise ValueError("invalid NRI artifact entry")
         relative = entry["path"]

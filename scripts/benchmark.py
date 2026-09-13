@@ -33,9 +33,17 @@ from ripii.utils.seed import seed_everything
 
 
 def run(cmd: list[str]) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
-        [sys.executable, *cmd], check=True, capture_output=True, text=True, cwd=ROOT
+    process = subprocess.run(
+        [sys.executable, *cmd], capture_output=True, text=True, cwd=ROOT
     )
+    if process.returncode:
+        details = "\n".join(
+            part for part in (process.stdout.strip(), process.stderr.strip()) if part
+        )
+        raise RuntimeError(
+            f"command failed with exit code {process.returncode}: {cmd}\n{details}"
+        )
+    return process
 
 
 def sha256(path: Path) -> str:
@@ -217,6 +225,9 @@ def main() -> None:
                         "mode": mode,
                         "seed": seed,
                         "initialization": run_metadata["initialization"],
+                        "objective_semantics_version": run_metadata[
+                            "objective_semantics_version"
+                        ],
                         "retained_run": str(retained_path) if retained_path else None,
                         **eval_summary,
                     }
@@ -297,7 +308,7 @@ def main() -> None:
     csv_path = out.with_suffix(".csv")
     with open(csv_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(
-            f, fieldnames=sorted({k for row in results for k in row.keys()})
+            f, fieldnames=sorted({k for row in results for k in row})
         )
         writer.writeheader()
         for row in results:

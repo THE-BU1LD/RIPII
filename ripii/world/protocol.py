@@ -21,7 +21,9 @@ def _validate_seeds(value, minimum: int) -> None:
             for seed in value
         )
     ):
-        raise ValueError(f"protocol requires at least {minimum} unique nonnegative seeds")
+        raise ValueError(
+            f"protocol requires at least {minimum} unique nonnegative seeds"
+        )
 
 
 def _validate_source_hashes(value) -> None:
@@ -72,14 +74,24 @@ def _validate_experiment(value) -> None:
             or not math.isfinite(item)
         ):
             raise ValueError(f"protocol experiment has invalid {key}")
-    if not 0 < value["lr"] < 1 or min(
-        value["quantizer_weight"], value["global_coupling"]
-    ) < 0:
+    if (
+        not 0 < value["lr"] < 1
+        or min(value["quantizer_weight"], value["global_coupling"]) < 0
+    ):
         raise ValueError("protocol experiment has out-of-range numeric fields")
     if not isinstance(value.get("data_seed"), int) or isinstance(
         value.get("data_seed"), bool
     ):
         raise ValueError("protocol experiment requires an integer data seed")
+    if "dt" in value:
+        dt = value["dt"]
+        if (
+            not isinstance(dt, (int, float))
+            or isinstance(dt, bool)
+            or not math.isfinite(dt)
+            or dt <= 0
+        ):
+            raise ValueError("protocol experiment has invalid dt")
 
 
 def _validate_world(payload: dict) -> None:
@@ -90,7 +102,15 @@ def _validate_world(payload: dict) -> None:
         or not variants
         or len(set(variants)) != len(variants)
         or any(
-            item not in {"mlp", "graph", "transformer", "global_pool", "multiscale"}
+            item
+            not in {
+                "mlp",
+                "graph",
+                "transformer",
+                "global_pool",
+                "multiscale",
+                "equivariant",
+            }
             for item in variants
         )
     ):
@@ -103,6 +123,10 @@ def _validate_world(payload: dict) -> None:
         or any(item not in {"continuous", "fsq", "vq"} for item in bottlenecks)
     ):
         raise ValueError("world protocol has invalid bottlenecks")
+    if "equivariant" in variants and any(
+        item != "continuous" for item in bottlenecks
+    ):
+        raise ValueError("equivariant protocols require a continuous bottleneck")
     _validate_experiment(payload.get("experiment"))
     _validate_source_hashes(payload.get("source_sha256"))
     datasets = payload.get("datasets")
@@ -133,7 +157,9 @@ def _validate_world(payload: dict) -> None:
 def _validate_coupling(payload: dict) -> None:
     _validate_seeds(payload.get("seeds"), 2)
     if payload.get("models") != ["graph", "global_pool", "multiscale"]:
-        raise ValueError("coupling protocol requires graph/global-pool/multiscale controls")
+        raise ValueError(
+            "coupling protocol requires graph/global-pool/multiscale controls"
+        )
     if payload.get("bottleneck") != "continuous":
         raise ValueError("coupling protocol requires the continuous bottleneck")
     regimes = payload.get("regimes")

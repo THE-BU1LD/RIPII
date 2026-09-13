@@ -86,8 +86,7 @@ def analyze(run_root: Path, seeds: list[int]) -> dict:
     for term in terms:
         raw = [row["diagnostic"]["terms"][term]["raw_value"] for row in rows]
         norms = [
-            row["diagnostic"]["terms"][term]["weighted_gradient_l2"]
-            for row in rows
+            row["diagnostic"]["terms"][term]["weighted_gradient_l2"] for row in rows
         ]
         aggregate_terms[term] = {
             "raw_value_mean": sum(raw) / len(raw),
@@ -98,9 +97,7 @@ def analyze(run_root: Path, seeds: list[int]) -> dict:
     cosine_keys = rows[0]["diagnostic"]["pairwise_gradient_cosine"]
     aggregate_cosines = {}
     for key in cosine_keys:
-        values = [
-            row["diagnostic"]["pairwise_gradient_cosine"][key] for row in rows
-        ]
+        values = [row["diagnostic"]["pairwise_gradient_cosine"][key] for row in rows]
         finite = [value for value in values if value is not None]
         aggregate_cosines[key] = {
             "defined_seeds": len(finite),

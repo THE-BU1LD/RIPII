@@ -59,9 +59,7 @@ def verify_output(path: Path) -> dict:
         if passed:
             expected_supported.append(mode)
     if supported != expected_supported or payload.get("decision") != (
-        "one_or_more_additions_passed"
-        if expected_supported
-        else "no_auxiliary_advance"
+        "one_or_more_additions_passed" if expected_supported else "no_auxiliary_advance"
     ):
         raise ValueError("objective analysis decision is inconsistent")
     return {
@@ -111,7 +109,9 @@ def analyze(summary_path: Path, protocol_path: Path) -> dict:
         baseline = [float(reference[seed]["recon"]) for seed in seeds]
         reductions = [
             (baseline_value - candidate_value) / baseline_value
-            for candidate_value, baseline_value in zip(candidate, baseline)
+            for candidate_value, baseline_value in zip(
+                candidate, baseline, strict=False
+            )
         ]
         passes = all(value >= 0.05 for value in reductions)
         if passes:

@@ -69,7 +69,13 @@ class SyntheticStructuralDataset(Dataset[StructuralSample]):
 
     def _semantic_state(
         self, idx: int, generator: torch.Generator
-    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+    ) -> tuple[
+        torch.Tensor,
+        torch.Tensor,
+        torch.Tensor,
+        torch.Tensor,
+        torch.Tensor,
+    ]:
         label = torch.tensor(idx % self.num_classes, dtype=torch.long)
         orbit = torch.tensor(
             (idx // max(1, self.num_classes)) % self.orbit_embeddings.shape[0],
@@ -119,8 +125,7 @@ class SyntheticStructuralDataset(Dataset[StructuralSample]):
             1.0, 3.0, steps=self.input_dim, dtype=y.dtype, device=y.device
         )
         # Zero is the identity transform, including its warp component.
-        y = y + 0.05 * (torch.sin(freqs * (warp + 1.0)) - torch.sin(freqs))
-        return y
+        return y + 0.05 * (torch.sin(freqs * (warp + 1.0)) - torch.sin(freqs))
 
     def _make_sample(self, idx: int, generator: torch.Generator) -> StructuralSample:
         semantic, label, orbit, motif, complexity = self._semantic_state(idx, generator)

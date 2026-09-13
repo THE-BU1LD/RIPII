@@ -80,6 +80,10 @@ def test_nri_adapter_maps_state_without_using_edges(tmp_path: Path) -> None:
     assert (data["states"][:, :, 5:] == 0).all()
     assert (data["actions"] == 0).all()
     assert record["edge_labels_used"] is False
+    assert record["field_provenance"]["radius"].endswith("not_observed")
+    assert record["field_provenance"]["edge_labels"].endswith("not_model_input")
+    assert record["metric_applicability"]["property_drift"] is False
+    assert record["metric_applicability"]["relation_recovery"] is False
     assert record["license"] == "MIT"
     assert record["claim_boundary"].startswith("external simulator development")
 

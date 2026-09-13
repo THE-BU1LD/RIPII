@@ -105,6 +105,7 @@ def verify_run(output: Path) -> dict:
             or not isinstance(entry.get("path"), str)
             or not isinstance(entry.get("sha256"), str)
             or not isinstance(entry.get("bytes"), int)
+            or isinstance(entry.get("bytes"), bool)
         ):
             raise ValueError("invalid study artifact entry")
         relative = entry["path"]
@@ -231,13 +232,17 @@ def verify_capsule(path: Path) -> dict:
             key not in expected_cells
             or key in indexed
             or not isinstance(row.get("parameters"), int)
+            or isinstance(row.get("parameters"), bool)
             or row["parameters"] < 1
             or not isinstance(row.get("selected_step"), int)
+            or isinstance(row.get("selected_step"), bool)
             or not 1 <= row["selected_step"] <= frozen_experiment().steps
             or not isinstance(metrics, dict)
             or set(metrics) != {"iid", "law_shift"}
         ):
-            raise ValueError("NRI capsule contains a missing, duplicate, or invalid cell")
+            raise ValueError(
+                "NRI capsule contains a missing, duplicate, or invalid cell"
+            )
         for split_metrics in metrics.values():
             if (
                 not isinstance(split_metrics, dict)
@@ -261,9 +266,7 @@ def verify_capsule(path: Path) -> dict:
         for domain in DOMAINS
         for seed in FROZEN_SEEDS
     ]
-    stored_relative = summary.get(
-        "multiscale_vs_global_pool_iid_relative_improvements"
-    )
+    stored_relative = summary.get("multiscale_vs_global_pool_iid_relative_improvements")
     expected_decision = (
         "development_gate_pass"
         if all(value >= 0.05 for value in relative)
@@ -278,7 +281,10 @@ def verify_capsule(path: Path) -> dict:
             or not math.isfinite(value)
             for value in stored_relative
         )
-        or any(abs(left - right) > 1e-12 for left, right in zip(relative, stored_relative))
+        or any(
+            abs(left - right) > 1e-12
+            for left, right in zip(relative, stored_relative, strict=False)
+        )
         or summary.get("decision") != expected_decision
         or f"Decision: **{expected_decision}**."
         not in payload["retained"]["report.md"]["content_text"]
@@ -293,7 +299,9 @@ def verify_capsule(path: Path) -> dict:
         or payload.get("verification", {}).get("artifacts_verified") != len(artifacts)
     ):
         raise ValueError("NRI capsule manifest or verification record is invalid")
-    declared = {entry.get("path"): entry for entry in artifacts if isinstance(entry, dict)}
+    declared = {
+        entry.get("path"): entry for entry in artifacts if isinstance(entry, dict)
+    }
     if len(declared) != len(artifacts):
         raise ValueError("NRI capsule manifest has duplicate or invalid entries")
     for name in ("protocol.json", "datasets.json", "summary.json", "report.md"):
@@ -382,7 +390,9 @@ def _run_impl(
         raise ValueError(
             "configuration differs from the frozen NRI development protocol"
         )
-    if tuple(VARIANT_ORDER) != tuple(VARIANTS):
+    if tuple(VARIANT_ORDER) != tuple(
+        variant for variant in VARIANTS if variant != "equivariant"
+    ):
         raise ValueError("model registry drifted from the frozen external protocol")
     if len(seeds) != 3 or len(set(seeds)) != 3 or any(seed < 0 for seed in seeds):
         raise ValueError(

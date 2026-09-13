@@ -9,8 +9,10 @@ historical negative evidence. Corrected pilot v2 is credible local negative evid
 the full model reconstructs worse than quantizer bypass and the structured-removal
 control, with near-collapsed codebooks. The stronger world-model v3 development study
 also rejects advancement: multiscale loses the graph OOD comparison on all five seeds.
+The later NRI Springs/Charged external-simulator study likewise returns `no_advance`.
 
-Synthetic validation is not external validation. A smoke test is not an experiment.
+External-simulator development is not real-world or confirmatory validation. A smoke
+test is not an experiment.
 Assignment activity is not mechanism efficacy. Equal updates and similar parameter
 counts are not equal compute. The compact v3 capsule verifies summaries/provenance but
 does not contain checkpoints. No new confirmatory experiment was run in this audit.

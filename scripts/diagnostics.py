@@ -37,7 +37,7 @@ try:
     torch.set_num_threads(1)
     torch.set_num_interop_threads(1)
 except RuntimeError as exc:
-    warnings.warn(f"PyTorch thread limits could not be set: {exc}")
+    warnings.warn(f"PyTorch thread limits could not be set: {exc}", stacklevel=2)
 
 from ripii.models.factory import build_model
 from ripii.utils.config import load_config, runtime_profile

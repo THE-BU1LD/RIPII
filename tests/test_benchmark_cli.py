@@ -6,6 +6,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from ripii.utils.loss_balancer import OBJECTIVE_SEMANTICS_VERSION
+
 
 def test_benchmark_cli(tmp_path: Path):
     env = os.environ.copy()
@@ -47,6 +49,9 @@ def test_benchmark_cli(tmp_path: Path):
     assert summary["profile"] == "mechanism_smoke"
     assert summary["paired_design"]["shared_initial_state"] is True
     assert len({row["initialization"]["sha256"] for row in summary["runs"]}) == 1
+    assert {
+        row["objective_semantics_version"] for row in summary["runs"]
+    } == {OBJECTIVE_SEMANTICS_VERSION}
     assert {row["mode"] for row in summary["runs"]} == {
         "base",
         "no_graph",

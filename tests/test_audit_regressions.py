@@ -4,6 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
 import torch
 
 from ripii.data.synthetic import SyntheticStructuralDataset
@@ -11,6 +12,7 @@ from ripii.models.factory import build_model
 from ripii.utils.ablation import apply_mode
 from ripii.utils.config import load_config
 from ripii.utils.metrics import effective_rank
+from ripii.utils.training import load_checkpoint
 
 
 def test_disabled_geometry_has_no_uncertainty_gradient():
@@ -112,3 +114,12 @@ def test_epoch_metrics_weight_samples_including_short_batch():
     batches = [{"x": torch.zeros(4, 1)}, {"x": torch.ones(1, 1)}]
     metrics = run_epoch(MeanModel(), batches, None, cfg, "cpu", False)
     assert abs(metrics["recon"] - 0.2) < 1e-7
+
+
+def test_pre_correction_checkpoint_is_not_reinterpreted(tmp_path: Path):
+    cfg = load_config("configs/mechanism_smoke.yaml")
+    model = build_model(cfg)
+    path = tmp_path / "old.pt"
+    torch.save({"model": model.state_dict(), "checkpoint_version": 2}, path)
+    with pytest.raises(ValueError, match="predates the 0.2 mechanism correction"):
+        load_checkpoint(path, model)

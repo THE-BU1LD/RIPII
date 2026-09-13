@@ -108,7 +108,7 @@ def analyze(
     adjusted = holm_adjust(
         [analyses[split]["exact_two_sided_sign_flip_p"] for split in splits]
     )
-    for split, value in zip(splits, adjusted):
+    for split, value in zip(splits, adjusted, strict=False):
         analyses[split]["holm_adjusted_p"] = value
     root = Path(__file__).resolve().parents[1]
     return {

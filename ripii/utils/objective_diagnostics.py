@@ -25,10 +25,12 @@ def objective_gradient_diagnostics(
     # includes weighting and balancing. This audit intentionally observes that
     # internal pre-balancing boundary without changing the trained model source.
     terms = model._base_losses(out, batch)
-    parameters = [parameter for parameter in model.parameters() if parameter.requires_grad]
-    active = []
+    parameters = [
+        parameter for parameter in model.parameters() if parameter.requires_grad
+    ]
+    active: list[str] = []
     gradients: dict[str, tuple[torch.Tensor | None, ...]] = {}
-    rows = {}
+    rows: dict[str, dict[str, float | int]] = {}
     for name, term in terms.items():
         weight = weights.get(name, 0.0)
         if (
@@ -72,7 +74,7 @@ def objective_gradient_diagnostics(
     if not active:
         raise ValueError("objective diagnostic requires at least one active term")
 
-    cosine = {}
+    cosine: dict[str, float | None] = {}
     for left_index, left in enumerate(active):
         for right in active[left_index + 1 :]:
             left_norm = rows[left]["weighted_gradient_l2"]
@@ -83,7 +85,7 @@ def objective_gradient_diagnostics(
                 continue
             dot = sum(
                 float((a.detach().float() * b.detach().float()).sum().cpu())
-                for a, b in zip(gradients[left], gradients[right])
+                for a, b in zip(gradients[left], gradients[right], strict=False)
                 if a is not None and b is not None
             )
             value = dot / (left_norm * right_norm)

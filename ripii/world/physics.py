@@ -28,9 +28,12 @@ class Physics:
             self.global_coupling,
         )
         if (
-            not all(math.isfinite(value) for value in numeric)
+            not all(isinstance(value, (int, float)) for value in numeric)
+            or any(isinstance(value, bool) for value in numeric)
+            or not all(math.isfinite(value) for value in numeric)
             or self.dt <= 0
             or not isinstance(self.substeps, int)
+            or isinstance(self.substeps, bool)
             or self.substeps < 1
             or min(
                 self.stiffness,
@@ -46,11 +49,14 @@ class Physics:
         return asdict(self)
 
 
+_DEFAULT_PHYSICS = Physics()
+
+
 def simulate(
     state: torch.Tensor,
     action: torch.Tensor,
     mask: torch.Tensor,
-    physics: Physics = Physics(),
+    physics: Physics = _DEFAULT_PHYSICS,
 ) -> torch.Tensor:
     """Semi-implicit integration of damped soft-disc contacts and wall contacts.
 
@@ -130,8 +136,12 @@ def sample_scene(
 ) -> tuple[torch.Tensor, torch.Tensor]:
     if (
         not isinstance(objects, int)
+        or isinstance(objects, bool)
         or not isinstance(max_objects, int)
+        or isinstance(max_objects, bool)
         or not 1 <= objects <= max_objects <= 16
+        or not isinstance(speed, (int, float))
+        or isinstance(speed, bool)
         or not math.isfinite(speed)
         or speed < 0
     ):
@@ -166,15 +176,19 @@ def make_dataset(
     horizon: int,
     seed: int,
     max_objects: int = 8,
-    physics: Physics = Physics(),
+    physics: Physics = _DEFAULT_PHYSICS,
 ) -> dict[str, torch.Tensor]:
     """Independent trajectory splits, with IDs that encode their seed domains."""
     if (
         split not in SPLITS
         or not isinstance(scenes, int)
+        or isinstance(scenes, bool)
         or not isinstance(horizon, int)
+        or isinstance(horizon, bool)
         or not isinstance(seed, int)
+        or isinstance(seed, bool)
         or not isinstance(max_objects, int)
+        or isinstance(max_objects, bool)
         or scenes < 1
         or horizon < 1
         or not 5 <= max_objects <= 16

@@ -22,7 +22,7 @@ try:
     torch.set_num_threads(1)
     torch.set_num_interop_threads(1)
 except RuntimeError as exc:
-    warnings.warn(f"PyTorch thread limits could not be set: {exc}")
+    warnings.warn(f"PyTorch thread limits could not be set: {exc}", stacklevel=2)
 
 from ripii.models.factory import build_model
 from ripii.utils.ablation import apply_mode
@@ -32,8 +32,10 @@ from ripii.utils.config import (
     save_config,
     validate_config,
 )
+from ripii.utils.loss_balancer import OBJECTIVE_SEMANTICS_VERSION
 from ripii.utils.seed import seed_everything
 from ripii.utils.training import (
+    CHECKPOINT_VERSION,
     build_dataloaders,
     collate,
     load_checkpoint,
@@ -100,7 +102,10 @@ def main() -> None:
     ckpt = None
     if args.resume:
         ckpt = load_checkpoint(args.resume, model, opt, map_location=str(device))
-        if ckpt.get("checkpoint_version") != 2 or not ckpt.get("training_state"):
+        if (
+            ckpt.get("checkpoint_version") != CHECKPOINT_VERSION
+            or not ckpt.get("training_state")
+        ):
             raise SystemExit(
                 "legacy checkpoint cannot resume exactly; use --initial-state for a new run"
             )
@@ -140,6 +145,7 @@ def main() -> None:
     save_config(cfg, out_dir / "config.yaml")
     metadata = {
         "evidence_status": "development_only",
+        "objective_semantics_version": OBJECTIVE_SEMANTICS_VERSION,
         "profile": cfg.profile,
         "seed": cfg.seed,
         "mode": args.mode,

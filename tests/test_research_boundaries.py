@@ -161,6 +161,53 @@ def test_zero_weight_loss_has_no_balancer_gradient() -> None:
     assert losses["disabled"].grad is None
 
 
+def test_zero_weight_objective_is_scalar_and_gradient_equivalent_to_omission() -> None:
+    from ripii.utils.loss_balancer import AdaptiveLossBalancer
+
+    active_with_disabled = torch.tensor(2.0, requires_grad=True)
+    disabled = torch.tensor(3.0, requires_grad=True)
+    full = AdaptiveLossBalancer(["active", "disabled"])
+    full.log_vars.data.copy_(torch.tensor([0.25, -0.75]))
+    full_total, _ = full(
+        {"active": active_with_disabled, "disabled": disabled},
+        {"active": 1.5, "disabled": 0.0},
+    )
+    full_total.backward()
+
+    active_only = torch.tensor(2.0, requires_grad=True)
+    reference = AdaptiveLossBalancer(["active"])
+    reference.log_vars.data.copy_(torch.tensor([0.25]))
+    reference_total, _ = reference({"active": active_only}, {"active": 1.5})
+    reference_total.backward()
+
+    assert full_total.item() == pytest.approx(reference_total.item())
+    assert active_with_disabled.grad.item() == pytest.approx(active_only.grad.item())
+    assert full.log_vars.grad[0].item() == pytest.approx(reference.log_vars.grad[0].item())
+    assert full.log_vars.grad[1].item() == 0.0
+    assert disabled.grad is None
+
+
+def test_balancer_exposes_fixed_and_effective_weights() -> None:
+    from ripii.utils.loss_balancer import AdaptiveLossBalancer
+
+    balancer = AdaptiveLossBalancer(["recon"])
+    loss = torch.tensor(0.25, requires_grad=True)
+    _, terms = balancer({"recon": loss}, {"recon": 2.0})
+    assert terms["fixed_weight_total"].item() == pytest.approx(0.5)
+    assert terms["adaptive_precision_recon"].item() == pytest.approx(1.0)
+    assert terms["effective_weight_recon"].item() == pytest.approx(2.0)
+    assert terms["log_variance_recon"].item() == pytest.approx(0.0)
+
+
+@pytest.mark.parametrize("weight", [-1.0, float("nan"), float("inf")])
+def test_balancer_rejects_invalid_weights(weight) -> None:
+    from ripii.utils.loss_balancer import AdaptiveLossBalancer
+
+    balancer = AdaptiveLossBalancer(["recon"])
+    with pytest.raises(ValueError, match="finite and nonnegative"):
+        balancer({"recon": torch.tensor(1.0)}, {"recon": weight})
+
+
 def test_warmup_disables_balancer_offsets_for_inactive_losses() -> None:
     from ripii.utils.config import Config
 

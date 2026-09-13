@@ -89,6 +89,12 @@ def test_failure_analysis_signature_and_schema_fail_closed(tmp_path) -> None:
     payload["signature"] = _analysis_signature(payload)
     path.write_text(json.dumps(payload), encoding="utf-8")
     assert verify_analysis(path)["rows_verified"] == 1
+    payload["full_run_verification"]["artifacts_verified"] = True
+    payload["signature"] = _analysis_signature(payload)
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(ValueError, match="invalid full_run_verification"):
+        verify_analysis(path)
+    payload["full_run_verification"]["artifacts_verified"] = 3
     payload["rows"][0]["seed"] = 7
     path.write_text(json.dumps(payload), encoding="utf-8")
     with pytest.raises(ValueError, match="signature mismatch"):

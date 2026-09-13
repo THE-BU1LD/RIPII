@@ -18,6 +18,9 @@
 | Retained v3/coupled models have measured but nonportable inference costs | engineering-verified | `world_v3_efficiency.json`; `world_global_coupling_v1_efficiency.json` | one CPU host; profiler FLOPs omit unsupported operators; not training compute matching |
 | No legacy auxiliary objective improves reconstruction in the fixed objective study | negative development | `objective_study_v1/summary.json`; 39-run manifest | 3 seeds, 30 updates, synthetic; reconstruction is the primary outcome |
 | Legacy objectives have materially unequal and conflicting gradients | mechanistic development | `objective_study_v1/gradient_diagnostics.json` | one deterministic batch per trained seed; diagnostic, not causal attribution |
+| NRI multiscale study did not advance | negative external-simulator development | `nri_external_development_v1.json`; 185-file local manifest | 3 seeds/domain, 100 updates, compute-unmatched; not real-world or confirmatory |
+| Version 0.2 mechanism defects are repaired | prospective engineering verification | semantic gradient/configuration tests | historical results predate these repairs and are not 0.2 evidence |
+| Generic external trajectory interface executes | engineering-verified | manifest loader and end-to-end train/evaluate/benchmark tests | enables studies; does not supply a dataset or result |
 
 Raw values remain in retained JSON/CSV and self-checksummed capsules; prose rounding is
 never the authoritative source. These SHA-256 digests detect corruption but are not

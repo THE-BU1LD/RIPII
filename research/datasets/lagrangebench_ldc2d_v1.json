@@ -1,0 +1,15 @@
+{
+  "format": "ripii-external-source-v1",
+  "dataset_id": "lagrangebench-ldc-2d",
+  "version": "zenodo-10491868",
+  "doi": "10.5281/zenodo.10491868",
+  "license": "CC-BY-4.0",
+  "source_url": "https://zenodo.org/api/records/10491868/files/2D_LDC_2708_10kevery100.zip/content",
+  "filename": "2D_LDC_2708_10kevery100.zip",
+  "bytes": 358811551,
+  "checksum_algorithm": "md5",
+  "checksum": "f527ab73f69afc0d176a229f4b812cd5",
+  "retrieved_sha256": "8e94edec374e1ba4ae59e56ac3a42b633016a8bd1f846cc2e1a7a201d63ce769",
+  "publisher": "Toshev, Artur P.; Adams, Nikolaus A.",
+  "retrieved_metadata_utc": "2026-09-13T00:00:00Z"
+}

@@ -3,7 +3,7 @@
 The audit reconstructs RIPII as two falsification-stage studies of learned hierarchy.
 Both current hypotheses fail their local advancement criteria. The repository is
 engineering-functional and unusually careful about negative evidence, but scientifically
-underpowered and externally unvalidated. The strongest justified change is conceptual
+underpowered and not externally confirmed. The strongest justified change is conceptual
 simplification: retain the flat graph as the reference method and treat hierarchy as a
 failed candidate until a new, prospectively frozen external hypothesis warrants testing.
 
@@ -15,6 +15,12 @@ historical results were not altered.
 
 Current verdict: **EVIDENCE_PARTIAL**. See `audit/FINAL_AUDIT.md` for verification and
 remaining blockers.
+
+A later commit-pinned NRI Springs/Charged development study adds independently
+implemented simulators but does not change the conclusion. Multiscale met its 5%
+global-pool improvement gate in only one of six domain-seed cells and was not best on
+either domain. This is external-simulator development evidence, not powered confirmation
+or evidence from real observations.
 
 The executed long-range extension sharpens the negative conclusion. A symmetric
 all-pairs force creates a controlled need for global information while preserving

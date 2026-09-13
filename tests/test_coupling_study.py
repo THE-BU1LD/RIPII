@@ -26,7 +26,7 @@ def _summary(multiscale: list[float], global_pool: list[float]) -> dict:
                 "seed": seed,
                 "metrics": {"more_objects": {"position_rmse": value}},
             }
-            for seed, value in zip((3, 7, 11), values)
+            for seed, value in zip((3, 7, 11), values, strict=False)
         )
     return {"runs": rows}
 

@@ -21,7 +21,7 @@ def paired_differences(
     left, right = _finite(candidate, "candidate"), _finite(baseline, "baseline")
     if len(left) != len(right):
         raise ValueError("paired samples must have equal length")
-    return [a - b for a, b in zip(left, right)]
+    return [a - b for a, b in zip(left, right, strict=False)]
 
 
 def exact_sign_flip_pvalue(differences: Sequence[float]) -> float:
@@ -44,7 +44,8 @@ def exact_sign_flip_pvalue(differences: Sequence[float]) -> float:
     tolerance = 1e-15
     for signs in itertools.product((-1.0, 1.0), repeat=len(values)):
         statistic = abs(
-            sum(sign * value for sign, value in zip(signs, values)) / len(values)
+            sum(sign * value for sign, value in zip(signs, values, strict=False))
+            / len(values)
         )
         extreme += statistic + tolerance >= observed
     return extreme / total
@@ -125,7 +126,7 @@ def practical_equivalence_summary(
         or any(value <= 0 for value in right)
     ):
         raise ValueError("equivalence margin must be in (0, 1) and baselines positive")
-    relative = [a / b - 1.0 for a, b in zip(left, right)]
+    relative = [a / b - 1.0 for a, b in zip(left, right, strict=False)]
     interval = bootstrap_mean_ci(relative, seed=bootstrap_seed)
     within_seeds = all(abs(value) <= margin for value in relative)
     within_interval = interval[0] >= -margin and interval[1] <= margin

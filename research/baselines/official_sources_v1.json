@@ -1,0 +1,32 @@
+{
+  "format": "ripii-official-baseline-source-registry-v1",
+  "retrieved_utc": "2026-09-13T00:00:00Z",
+  "entries": [
+    {
+      "name": "LagrangeBench GNS/EGNN/SEGNN",
+      "repository": "https://github.com/tumaer/lagrangebench.git",
+      "commit": "b880a6c84a93792d2499d2a9b8ba3a077ddf44e2",
+      "license": "MIT",
+      "status": "official_code_pinned_not_integrated"
+    },
+    {
+      "name": "Learning to Simulate / MeshGraphNets",
+      "repository": "https://github.com/google-deepmind/deepmind-research.git",
+      "commit": "f5de0ede8430809180254ee957abf36ed62579ef",
+      "license": "Apache-2.0 repository; recheck path-specific notices before use",
+      "status": "official_code_pinned_not_integrated"
+    },
+    {
+      "name": "BSMS-GNN",
+      "repository": "https://github.com/Eydcao/BSMS-GNN.git",
+      "commit": "accc09213cf94cdd56c416d4a047e4f6cda3b0a3",
+      "license": "Apache-2.0",
+      "status": "official_code_pinned_not_integrated"
+    },
+    {
+      "name": "Constraint-based Graph Network Simulator",
+      "paper": "https://proceedings.mlr.press/v162/rubanova22a.html",
+      "status": "no_official_code_identified; independent implementation would require parity tests"
+    }
+  ]
+}

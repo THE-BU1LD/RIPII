@@ -23,9 +23,10 @@ def test_dataset_spec_is_deterministic_validated_and_fingerprinted() -> None:
     assert len(first_record["content_sha256"]) == 64
     assert first_record["license"] == "NOASSERTION"
     assert torch.equal(first["states"], second["states"])
-    assert load_dataset(replace(spec, split="test"))[1]["content_sha256"] != first_record[
-        "content_sha256"
-    ]
+    assert (
+        load_dataset(replace(spec, split="test"))[1]["content_sha256"]
+        != first_record["content_sha256"]
+    )
 
 
 def test_dataset_contract_rejects_corruption() -> None:

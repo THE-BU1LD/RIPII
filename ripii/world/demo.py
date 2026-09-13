@@ -18,9 +18,7 @@ def _configure_matplotlib_cache() -> None:
     """Give headless/restricted runs a writable cache before importing Matplotlib."""
     global _MATPLOTLIB_TEMP_CACHE
     if "MPLCONFIGDIR" not in os.environ:
-        _MATPLOTLIB_TEMP_CACHE = tempfile.TemporaryDirectory(
-            prefix="ripii-matplotlib-"
-        )
+        _MATPLOTLIB_TEMP_CACHE = tempfile.TemporaryDirectory(prefix="ripii-matplotlib-")
         os.environ["MPLCONFIGDIR"] = _MATPLOTLIB_TEMP_CACHE.name
     logging.getLogger("matplotlib.font_manager").setLevel(logging.ERROR)
 
@@ -227,6 +225,7 @@ class WorldDemo:
             self.axes,
             (self.truth, self.prediction),
             ("SIMULATOR", "LEARNED PREDICTION"),
+            strict=False,
         ):
             ax.clear()
             ax.set_facecolor("#182630")

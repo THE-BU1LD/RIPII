@@ -1,8 +1,8 @@
 # RIPII
 
-RIPII is an experimental structured-latent learning implementation built around
-adaptive coarse-graining, sparse latent graph refinement, and hierarchical discrete
-motifs. It has no validated performance, novelty, or publication claim; see
+RIPII is an experimental object-state dynamics and structured-latent toolkit built
+around learned soft grouping, latent graph refinement, and optional discrete motifs.
+It has no validated performance, novelty, or publication claim; see
 [`RESEARCH_STATUS.md`](RESEARCH_STATUS.md).
 
 Both frozen local pilots failed their advancement rules. In the corrected follow-up,
@@ -10,11 +10,13 @@ the full model reconstructed worse than both quantizer bypass and the four-mecha
 removal, while its codebooks remained near collapse. See
 [`research/results/pilot_v2/analysis.md`](research/results/pilot_v2/analysis.md).
 
-The complete audit is indexed by [`audit/REPOSITORY_MAP.md`](audit/REPOSITORY_MAP.md),
-[`audit/CONFERENCE_READINESS_CHECKLIST.md`](audit/CONFERENCE_READINESS_CHECKLIST.md),
-and [`FINAL_RESEARCH_REPORT.md`](FINAL_RESEARCH_REPORT.md). The current verdict is
-**EVIDENCE_PARTIAL**: implementation quality is substantially verified, while all
-scientific evidence is synthetic and the proposed mechanisms have negative results.
+The authoritative audit is
+[`audit/END_TO_END_AUDIT_2026-09-13.md`](audit/END_TO_END_AUDIT_2026-09-13.md),
+with status and historical reports indexed by [`audit/README.md`](audit/README.md).
+The current verdict is
+**EVIDENCE_PARTIAL**: implementation quality is substantially verified, while the
+evidence is synthetic or external-simulator development work and the proposed
+mechanisms have negative results.
 The actionable post-audit backlog—including explicit pseudocode, scaffold, bad-
 implementation, improvement, addition, and abstraction classifications—is
 [`audit/ULTIMATE_CHECKLIST.md`](audit/ULTIMATE_CHECKLIST.md).
@@ -24,7 +26,7 @@ reproducibility, and preserved failures.
 ## Object-state world model
 
 A complete action-conditioned dynamics workflow is now available: a 2D contact
-simulator, MLP/graph/Transformer/global-pool/multiscale predictors,
+simulator, MLP/graph/Transformer/global-pool/multiscale/E(2)-equivariant predictors,
 continuous/FSQ/VQ bottlenecks, validation-selected checkpoints, three explicit
 analytic references, multi-seed generalization reports, and an interactive
 prediction workbench. See [WORLD_MODEL.md](WORLD_MODEL.md) for the model contracts,
@@ -58,11 +60,23 @@ every individual auxiliary addition and the complete objective on every paired s
 at the fixed 30-update budget. Use `--mode simple_objective` for that executable
 reference. This is synthetic development evidence, not a convergence claim.
 
+## External-simulator evidence
+
+The NRI Springs and Charged study uses the independently implemented, commit-pinned
+MIT-licensed NRI simulator. It trained five neural controls across three paired seeds
+per domain and retained 185 verified artifacts. Its gate returned `no_advance`:
+multiscale reached the required 5% improvement over global pooling in only one of six
+domain-seed cells and was not the best model on either domain. On Charged, the analytic
+constant-velocity baseline beat every neural model. This is external-simulator
+development evidence, not real-world or confirmatory validation. See
+[`research/protocols/nri_external_development_v1.md`](research/protocols/nri_external_development_v1.md)
+and the self-checksummed capsule under `research/results/development/`.
+
 ## What is included
 
 - End-to-end training, evaluation, diagnostics, and benchmark scripts
 - Synthetic structured dataset with paired transformed views
-- Adaptive projective renormalization stack
+- Multi-projector structured-refinement stack
 - Sparse latent graph refinement
 - Hierarchical vector quantization
 - Ablation presets, benchmark sweeps, and benchmark reports
@@ -70,6 +84,8 @@ reference. This is synthetic development evidence, not a convergence claim.
 - Validated dataset adapters with split metadata and deterministic content hashes
 - Immutable protocol records and manifested `planned -> running -> complete/failed` states
 - Self-checksummed failure-localization artifacts and a repeatable rollout profiling CLI
+- Explicit energy/contact/wall/momentum and symmetry diagnostics
+- Deterministic complete-run archival and a rendered manuscript build
 
 ## Quick start
 
@@ -103,6 +119,16 @@ python3 scripts/run_suite.py --config configs/mechanism_smoke.yaml
 python3 scripts/inspect_model.py --config configs/default.yaml
 ```
 
+For the supported object-state inference API and its exact tensor/NPZ contracts, see
+[`docs/USAGE.md`](docs/USAGE.md). Installed environments expose `ripii` and the legacy
+`ripii-world` alias:
+
+```bash
+ripii inspect runs/world_experiment/graph_continuous/seed_3/best.pt
+ripii rollout runs/world_experiment/graph_continuous/seed_3/best.pt \
+  --input rollout.npz --output prediction.npz
+```
+
 Canonical repository-wide entry points are:
 
 ```bash
@@ -111,6 +137,8 @@ Canonical repository-wide entry points are:
 ./scripts/run_smoke.sh
 ./scripts/analyze.sh
 ./scripts/verify_artifact.sh
+./scripts/build_paper.sh
+python3 scripts/index_runs.py
 ```
 
 Profile a retained world-model checkpoint with warmup, repeated synchronized timing,
@@ -169,6 +197,19 @@ real hidden width within 2% of the full model's trainable parameter count; it do
 pad the model with unused parameters. This controls parameter count only—not training
 compute or convergence. `qualify_quantizer.py` is an isolated, deterministic
 development gate and does not establish that quantization helps the full model.
+Dead-code revival is an explicit, opt-in intervention through
+`HierarchicalVectorQuantizer.revive_dead_codes` or
+`qualify_quantizer.py --reset-dead-every`; it never mutates evaluation silently and its
+schedule must be recorded in a new protocol.
+
+Create a deterministic full archive of a retained run, including checkpoints and logs:
+
+```bash
+python3 scripts/archive_research_run.py runs/world_experiment \
+  output/research/world_experiment.tar.gz
+```
+
+Dataset and model disclosure cards are under `docs/data/` and `docs/models/`.
 
 ## Release boundary
 
@@ -183,8 +224,10 @@ have no granted reuse rights.
 
 New legacy-training checkpoints count completed optimizer updates and retain RNG,
 optimizer, scaler, and best-score state. Resume with the saved run configuration and
-an increased `--steps` budget. Older unversioned checkpoints remain evaluable, but
-exact continuation is unsupported; use `--initial-state` for a fresh development run.
+an increased `--steps` budget. Older checkpoints must be evaluated with their recorded
+historical source revision; 0.2 refuses to reinterpret them under corrected mechanism
+semantics. Compatible tensors may still be imported with `--initial-state` for a fresh
+development run, but that is a new model rather than historical reproduction.
 Zero-weight/disabled mechanisms have no uncertainty offsets, evaluation weights
 per-example metrics by batch size, constant features have zero effective rank, and
 the zero synthetic transform is now the identity. These corrections change future

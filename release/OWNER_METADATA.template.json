@@ -1,0 +1,16 @@
+{
+  "authors": [
+    {
+      "name": "REQUIRED",
+      "affiliation": "REQUIRED",
+      "orcid": "OPTIONAL"
+    }
+  ],
+  "copyright_holder": "REQUIRED",
+  "software_license_spdx": "REQUIRED",
+  "funding": "REQUIRED: array, possibly empty after confirmation",
+  "conflicts_of_interest": "REQUIRED: explicit statement",
+  "author_contributions": "REQUIRED: CRediT roles or equivalent",
+  "approved_by": "REQUIRED",
+  "approved_at_utc": "REQUIRED"
+}

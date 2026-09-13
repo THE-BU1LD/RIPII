@@ -43,7 +43,9 @@ def _all_finite(value) -> bool:
     if isinstance(value, float):
         return math.isfinite(value)
     if isinstance(value, dict):
-        return all(isinstance(key, str) and _all_finite(item) for key, item in value.items())
+        return all(
+            isinstance(key, str) and _all_finite(item) for key, item in value.items()
+        )
     if isinstance(value, list):
         return all(_all_finite(item) for item in value)
     return value is None or isinstance(value, (str, int, bool))
@@ -68,6 +70,7 @@ def verify_analysis(path: Path) -> dict[str, str | int | bool]:
             or verification.get("status") != "PASS"
             or verification.get("unexpected_files") != 0
             or not isinstance(verification.get("artifacts_verified"), int)
+            or isinstance(verification.get("artifacts_verified"), bool)
             or verification["artifacts_verified"] < 1
         ):
             raise ValueError(f"invalid {key}")
@@ -229,12 +232,8 @@ def analyze(run_dir: Path, *, near_margin: float = 0.05) -> dict:
             "ripii/world/failure_analysis.py": _sha256(
                 root / "ripii/world/failure_analysis.py"
             ),
-            "ripii/world/experiment.py": _sha256(
-                root / "ripii/world/experiment.py"
-            ),
-            "ripii/utils/statistics.py": _sha256(
-                root / "ripii/utils/statistics.py"
-            ),
+            "ripii/world/experiment.py": _sha256(root / "ripii/world/experiment.py"),
+            "ripii/utils/statistics.py": _sha256(root / "ripii/utils/statistics.py"),
         },
         "checkpoint_model_source": {
             "current_sha256": _sha256(current_models),

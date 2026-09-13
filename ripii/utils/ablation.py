@@ -101,6 +101,24 @@ def apply_mode(cfg: Config, mode: str) -> Config:
             fine_codebook_size=1,
             loss_weights=replace(cfg.loss_weights, vq=0.0),
         )
+    if mode == "no_vq_balance":
+        return replace(cfg, use_vq_balance=False)
+    if mode.startswith("projectors_"):
+        count = int(mode.removeprefix("projectors_"))
+        if count not in {1, 2, 4}:
+            raise ValueError(f"unsupported projector sweep: {count}")
+        return replace(cfg, num_projectors=count)
+    if mode.startswith("levels_"):
+        levels = int(mode.removeprefix("levels_"))
+        if levels not in {0, 1, 2, 3}:
+            raise ValueError(f"unsupported hierarchy sweep: {levels}")
+        return replace(cfg, num_levels=levels)
+    if mode.startswith("graph_topk_"):
+        value = mode.removeprefix("graph_topk_")
+        topk = cfg.num_nodes - 1 if value == "full" else int(value)
+        if not 0 < topk < cfg.num_nodes:
+            raise ValueError(f"unsupported graph top-k sweep: {value}")
+        return replace(cfg, graph_topk=topk)
     if mode == "no_action":
         return replace(
             cfg,

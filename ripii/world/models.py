@@ -7,7 +7,14 @@ from torch import nn
 
 from ..models.quantizer import HierarchicalVectorQuantizer
 
-VARIANTS = ("mlp", "graph", "transformer", "global_pool", "multiscale")
+VARIANTS = (
+    "mlp",
+    "graph",
+    "transformer",
+    "global_pool",
+    "multiscale",
+    "equivariant",
+)
 
 
 def mlp(input_dim: int, hidden: int, output: int) -> nn.Sequential:
@@ -46,23 +53,86 @@ class Interaction(nn.Module):
 
     def forward(self, h, position, velocity, mask, local: bool = True):
         n = h.shape[1]
-        left, right = (
-            h.unsqueeze(2).expand(-1, -1, n, -1),
-            h.unsqueeze(1).expand(-1, n, -1, -1),
-        )
-        relative = position.unsqueeze(2) - position.unsqueeze(1)
-        dv = velocity.unsqueeze(2) - velocity.unsqueeze(1)
-        distance = relative.norm(dim=-1, keepdim=True)
         edges = mask.unsqueeze(2) & mask.unsqueeze(1)
         edges = edges & ~torch.eye(n, device=h.device, dtype=torch.bool)
         if local:
-            edges = edges & (distance.squeeze(-1) < 0.6)
-        messages = self.message(torch.cat([left, right, relative, dv, distance], -1))
+            edges = edges & (torch.cdist(position, position) < 0.6)
+        batch, receiver, sender = edges.nonzero(as_tuple=True)
+        aggregate = torch.zeros_like(h)
+        if batch.numel():
+            relative = position[batch, receiver] - position[batch, sender]
+            dv = velocity[batch, receiver] - velocity[batch, sender]
+            distance = relative.norm(dim=-1, keepdim=True)
+            messages = self.message(
+                torch.cat(
+                    [
+                        h[batch, receiver],
+                        h[batch, sender],
+                        relative,
+                        dv,
+                        distance,
+                    ],
+                    -1,
+                )
+            )
+            aggregate.index_put_((batch, receiver), messages, accumulate=True)
         # Sum preserves interaction strength when scene size changes.
-        aggregate = (messages * edges.unsqueeze(-1)).sum(2)
         return self.norm(
             h + self.update(torch.cat([h, aggregate], -1))
         ) * mask.unsqueeze(-1)
+
+
+class EquivariantDynamics(nn.Module):
+    """E(2)-equivariant object update built only from scalar invariants and vectors."""
+
+    def __init__(self, hidden: int):
+        super().__init__()
+        self.node = mlp(5, hidden, hidden)
+        self.pair = mlp(2 * hidden + 3, hidden, hidden + 2)
+        self.update = mlp(2 * hidden, hidden, hidden)
+        self.action_gate = nn.Sequential(nn.Linear(hidden, 1), nn.Sigmoid())
+        self.vector_gate = nn.Sequential(nn.Linear(hidden, 1), nn.Sigmoid())
+
+    def forward(self, state, action, mask, dt):
+        live = mask.unsqueeze(-1)
+        position, velocity = state[..., :2], state[..., 2:4]
+        speed2 = velocity.square().sum(-1, keepdim=True)
+        action2 = action.square().sum(-1, keepdim=True)
+        velocity_action = (velocity * action).sum(-1, keepdim=True)
+        scalars = torch.cat([speed2, action2, velocity_action, state[..., 4:]], -1)
+        h = self.node(scalars) * live
+        n = state.shape[1]
+        left = h.unsqueeze(2).expand(-1, -1, n, -1)
+        right = h.unsqueeze(1).expand(-1, n, -1, -1)
+        relative = position.unsqueeze(2) - position.unsqueeze(1)
+        relative_velocity = velocity.unsqueeze(2) - velocity.unsqueeze(1)
+        invariants = torch.cat(
+            [
+                relative.square().sum(-1, keepdim=True),
+                relative_velocity.square().sum(-1, keepdim=True),
+                (relative * relative_velocity).sum(-1, keepdim=True),
+            ],
+            -1,
+        )
+        pair = self.pair(torch.cat([left, right, invariants], -1))
+        edges = mask.unsqueeze(2) & mask.unsqueeze(1)
+        edges = edges & ~torch.eye(n, dtype=torch.bool, device=state.device)
+        scalar_messages, coefficients = pair[..., :-2], pair[..., -2:].tanh()
+        aggregate = (scalar_messages * edges.unsqueeze(-1)).sum(2)
+        h = self.update(torch.cat([h, aggregate], -1)) * live
+        pair_vector = (
+            coefficients[..., :1] * relative
+            + coefficients[..., 1:] * relative_velocity
+        )
+        pair_vector = (pair_vector * edges.unsqueeze(-1)).sum(2)
+        vector = pair_vector * self.vector_gate(h) + (
+            action / state[..., 5:6].clamp_min(0.1)
+        ) * self.action_gate(h)
+        # Radial normalization is equivariant; component-wise clipping would not be.
+        delta_velocity = 0.5 * vector / (1.0 + vector.norm(dim=-1, keepdim=True))
+        next_velocity = velocity + delta_velocity * live
+        next_position = position + dt * next_velocity * live
+        return torch.cat([next_position, next_velocity, state[..., 4:]], -1) * live
 
 
 class WorldModel(nn.Module):
@@ -74,7 +144,7 @@ class WorldModel(nn.Module):
 
     def __init__(
         self,
-        variant="multiscale",
+        variant="graph",
         hidden=64,
         max_objects=8,
         dt=0.05,
@@ -84,30 +154,42 @@ class WorldModel(nn.Module):
         super().__init__()
         if variant not in VARIANTS or bottleneck not in {"continuous", "fsq", "vq"}:
             raise ValueError("unknown model variant or bottleneck")
+        if variant == "equivariant" and bottleneck != "continuous":
+            raise ValueError(
+                "the equivariant baseline supports only a continuous scalar path"
+            )
         if (
             not isinstance(hidden, int)
+            or isinstance(hidden, bool)
             or not isinstance(max_objects, int)
+            or isinstance(max_objects, bool)
             or not isinstance(groups, int)
+            or isinstance(groups, bool)
             or hidden < 8
             or hidden % 4
             or max_objects < 5
             or not 2 <= groups <= max_objects
+            or not isinstance(dt, (int, float))
+            or isinstance(dt, bool)
             or not math.isfinite(dt)
             or dt <= 0
         ):
             raise ValueError(
                 "invalid width, object capacity, group count, or time step"
             )
-        self.spec = dict(
-            variant=variant,
-            hidden=hidden,
-            max_objects=max_objects,
-            dt=dt,
-            bottleneck=bottleneck,
-            groups=groups,
-        )
+        self.spec = {
+            "variant": variant,
+            "hidden": hidden,
+            "max_objects": max_objects,
+            "dt": dt,
+            "bottleneck": bottleneck,
+            "groups": groups,
+        }
         self.variant, self.dt, self.max_objects = variant, dt, max_objects
-        self.encoder = mlp(8, hidden, hidden)
+        if variant == "equivariant":
+            self.equivariant = EquivariantDynamics(hidden)
+        else:
+            self.encoder = mlp(8, hidden, hidden)
         if variant == "mlp":
             self.flat = mlp(max_objects * 9, hidden, max_objects * hidden)
         elif variant == "transformer":
@@ -129,9 +211,10 @@ class WorldModel(nn.Module):
             self.quantizer = FSQ(hidden)
         elif bottleneck == "vq":
             self.quantizer = HierarchicalVectorQuantizer(16, 16, hidden)
-        self.head = mlp(hidden, hidden, 4)
-        nn.init.zeros_(self.head[-1].weight)
-        nn.init.zeros_(self.head[-1].bias)
+        if variant != "equivariant":
+            self.head = mlp(hidden, hidden, 4)
+            nn.init.zeros_(self.head[-1].weight)
+            nn.init.zeros_(self.head[-1].bias)
         self.aux_loss = torch.tensor(0.0)
         self.last_assignments = None
         self.last_quantizer_stats: dict[str, torch.Tensor] = {}
@@ -156,6 +239,12 @@ class WorldModel(nn.Module):
         live = mask.unsqueeze(-1)
         self.last_assignments = None
         self.last_quantizer_stats = {}
+        if self.variant == "equivariant":
+            self.aux_loss = state.new_zeros(())
+            result = self.equivariant(state, action, mask, self.dt)
+            if not torch.isfinite(result).all():
+                raise FloatingPointError("non-finite world-model output")
+            return result
         features = torch.cat([state, action], -1) * live
         h = self.encoder(features) * live
         if self.variant == "mlp":
@@ -193,7 +282,9 @@ class WorldModel(nn.Module):
             quantized, stats = self.quantizer(h[mask])
             h = h.clone()
             h[mask] = quantized
-            self.aux_loss = stats["vq_commit"] + stats["vq_code"]
+            self.aux_loss = (
+                stats["vq_commit"] + stats["vq_code"] + stats["vq_balance"]
+            )
             self.last_quantizer_stats = {
                 key: value.detach() for key, value in stats.items()
             }

@@ -66,6 +66,7 @@ class Config:
     use_projective: bool = True
     use_graph: bool = True
     use_quantizer: bool = True
+    use_vq_balance: bool = True
     use_action: bool = True
     use_spectral_loss: bool = True
     use_equivariance_loss: bool = True
@@ -74,7 +75,7 @@ class Config:
     loss_weights: LossWeights = field(default_factory=LossWeights)
 
     @classmethod
-    def from_mapping(cls, mapping: Mapping[str, Any]) -> "Config":
+    def from_mapping(cls, mapping: Mapping[str, Any]) -> Config:
         if not isinstance(mapping, Mapping):
             raise ValueError("configuration must be a mapping")
         mapping = dict(mapping)
@@ -113,7 +114,7 @@ def load_config(
 ) -> Config:
     data: dict[str, Any] = {}
     if path:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             loaded = yaml.safe_load(f) or {}
         if not isinstance(loaded, Mapping):
             raise ValueError("configuration document must contain a mapping")
@@ -129,6 +130,8 @@ def load_config(
 def validate_config(cfg: Config) -> None:
     if cfg.model_variant not in {"ripii", "plain_ae"}:
         raise ValueError("model_variant must be ripii or plain_ae")
+    if not isinstance(cfg.use_vq_balance, bool):
+        raise ValueError("use_vq_balance must be boolean")
     if cfg.profile not in {"research", "plumbing_smoke", "mechanism_smoke"}:
         raise ValueError("profile must be research, plumbing_smoke, or mechanism_smoke")
 

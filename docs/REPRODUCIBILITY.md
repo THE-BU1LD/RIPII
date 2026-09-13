@@ -10,6 +10,20 @@ summaries, reports, manifests, and hashes but cannot re-evaluate omitted checkpo
 Exact resume is verified on CPU. Hardware timing is descriptive and not portable.
 External dataset reproduction remains `EXTERNAL_EXECUTION_REQUIRED`.
 
+Create a deterministic, complete byte archive of any retained run with:
+
+```bash
+python scripts/archive_research_run.py RUN_DIRECTORY output/research/run.tar.gz
+```
+
+The archive contains its own per-file SHA-256 manifest and receives a sidecar digest.
+This proves byte completeness of the selected directory, not scientific validity.
+
+Long post-correction runs use repeated warmed calibration, a conservative runtime upper
+bound, a real 600-step sentinel, free-space checks, per-seed retries/logs, exact cell
+manifests, quarantine, and resume. `scripts/post_correction_status.sh` reports verified
+cells, last failure, PID liveness, and free space.
+
 New world runs also retain validated dataset specifications, content SHA-256 values,
 an immutable protocol format, and a manifested run-state history. Use
 `python scripts/profile_world.py CHECKPOINT --output PROFILE.json` for repeated timing;

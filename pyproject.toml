@@ -4,10 +4,20 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ripii"
-version = "0.1.0"
-description = "Renormalized Invariant Projective Inductive Intelligence"
+version = "0.2.0"
+description = "Experimental object-state dynamics and structured-latent research toolkit"
 readme = "README.md"
 requires-python = ">=3.10"
+keywords = ["dynamics", "graph-neural-networks", "research", "world-models"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
 dependencies = [
   "torch>=2.1,<3",
   "numpy>=1.24,<3",
@@ -17,20 +27,52 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8,<10", "ruff>=0.9,<1"]
+data = ["h5py>=3.11,<4"]
+dev = [
+  "mypy>=1.17,<2",
+  "pytest>=8,<10",
+  "pytest-cov>=6,<8",
+  "ruff>=0.9,<1",
+]
 
 [project.urls]
 Repository = "https://github.com/THE-BU1LD/RIPII"
 Issues = "https://github.com/THE-BU1LD/RIPII/issues"
 
 [project.scripts]
+ripii = "ripii.world.cli:main"
 ripii-world = "ripii.world.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["ripii*"]
 
 [tool.pytest.ini_options]
-addopts = "-q"
+addopts = "-q --basetemp=.test-tmp/pytest"
+
+[tool.coverage.run]
+branch = true
+source = ["ripii"]
+
+[tool.coverage.report]
+exclude_also = [
+  "if TYPE_CHECKING:",
+  "if __name__ == .__main__.:",
+]
+fail_under = 75
+show_missing = true
+
+[tool.mypy]
+python_version = "3.10"
+check_untyped_defs = true
+disallow_any_generics = false
+no_implicit_optional = true
+show_error_codes = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["matplotlib.*", "numpy.*", "torch.*", "tqdm.*", "yaml.*"]
+ignore_missing_imports = true
 
 [tool.ruff]
 extend-exclude = ["build", "dist", "runs"]
@@ -39,7 +81,22 @@ extend-exclude = ["build", "dist", "runs"]
 # Enforce import hygiene plus correctness-focused pyflakes/pycodestyle rules.
 # Broader style policy should be expanded deliberately rather than inherited
 # from whichever Ruff version happens to be installed.
-select = ["E4", "E7", "E9", "F", "I"]
+select = [
+  "B",
+  "C4",
+  "DTZ",
+  "E4",
+  "E7",
+  "E9",
+  "F",
+  "I",
+  "ISC",
+  "PIE",
+  "RET",
+  "RSE",
+  "SIM",
+  "UP",
+]
 
 [tool.ruff.lint.per-file-ignores]
 "scripts/*.py" = ["E402"]

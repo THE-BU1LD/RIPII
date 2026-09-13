@@ -12,26 +12,30 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
           python-version: "3.11"
-          cache: pip
-      - name: Install
-        run: python -m pip install --upgrade pip && python -m pip install -e '.[dev]'
+          enable-cache: true
+      - name: Install exact lock
+        run: uv sync --locked --extra dev
       - name: Lint
-        run: ruff check .
+        run: uv run --no-sync ruff check .
       - name: Compile
-        run: python -m compileall -q ripii scripts
-      - name: Test
+        run: uv run --no-sync python -m compileall -q ripii scripts
+      - name: Type-check package
+        run: uv run --no-sync mypy ripii
+      - name: CPU performance regression contract
+        run: uv run --no-sync python scripts/check_ci_performance.py
+      - name: Test with branch coverage gate
         env:
           PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
-        run: pytest
+        run: uv run --no-sync pytest -p pytest_cov --cov=ripii --cov-report=term-missing
       - name: Build wheel
-        run: python -m pip wheel . --no-deps --no-build-isolation --wheel-dir dist
+        run: uv build --wheel --out-dir dist
       - name: Verify all portable research artifacts
         env:
-          PYTHON: python
+          PYTHON: .venv/bin/python
         run: ./scripts/verify_artifact.sh

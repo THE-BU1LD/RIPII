@@ -46,7 +46,7 @@ descriptive synthetic results, not inferential evidence.
 - Novelty relative to current representation-learning, graph, quantization, or
   multiscale-modeling literature.
 - Improvement over an adequately powered, convergence/compute-matched baseline.
-- Generalization beyond the bundled synthetic generator.
+- Generalization to real observations, unseen simulator families, or a target population.
 - Benefit from any individual RIPII mechanism.
 - Statistical significance, scaling behavior, or independent reproduction.
 
@@ -62,6 +62,14 @@ component claims. The conservative no-advance decision remains recorded in
 `research/results/pilot_v1/analysis.md`. The defect is fixed prospectively; the
 manifested v1 files were not rewritten. The pilot also showed near-collapsed base
 codebooks (mean coarse/fine perplexity 1.076/1.312 out of eight entries).
+
+All prospective training runs record
+`objective_semantics_version=adaptive-loss-balancer-v2-zero-weight-exact` in
+`run_metadata.json`, and benchmark rows propagate that value. An artifact without
+this field is pre-versioned and must be treated as incompatible with post-fix total
+loss or gradient comparisons. The permanent property test verifies that setting a
+loss coefficient to zero is exactly equivalent, in both scalar value and gradients,
+to omitting that loss.
 
 Pilot v2 ran after the fix and reproduced the core failure on new seeds. Base mean
 effective-code fractions were 0.148 coarse and 0.182 fine, both below the frozen 0.25
@@ -82,6 +90,21 @@ Before describing RIPII as a research release, add an owner-approved license and
 authorship metadata, freeze and run an adequately powered convergence/compute-matched
 protocol, evaluate on external data, and obtain independent review.
 Until then, a public repository must be labeled **experimental prototype**.
+
+## External NRI development study (2026-09-09)
+
+The pinned MIT-licensed NRI Springs and Charged simulators provide a second simulator
+family. Five neural controls were trained for three paired seeds on each domain. The
+predeclared development gate returned **no_advance**: multiscale achieved the required
+5% IID position-RMSE improvement over global pooling in only one of six domain-seed
+cells and was not the best neural model on either domain. Mean IID position RMSE was
+0.00956 for multiscale versus 0.00985 for global pool on Springs, where Transformer
+was best at 0.00941. On Charged it was 0.10335 versus 0.11018, while MLP was best at
+0.09962 and constant velocity was better still at 0.09768. Cross-law transfer was not
+competitive. The full local run verifies 185 artifacts; the portable capsule preserves
+summaries and hashes but not the exact historical runner source matching its recorded
+hash. This is external-simulator development evidence, not confirmation or real-world
+validation.
 
 ## Object-state world-model implementation (2026-09-08)
 

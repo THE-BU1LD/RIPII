@@ -17,6 +17,8 @@ from ripii.world.experiment import (
     benchmark,
     capture,
     load_model,
+    physical_rollout_metrics,
+    symmetry_diagnostics,
     train,
     verify,
     verify_capsule,
@@ -77,6 +79,37 @@ def test_walls_actions_and_masked_objects():
     assert torch.equal(after[0, 1], torch.zeros(6))
 
 
+def test_physical_rollout_metrics_are_zero_for_exact_prediction():
+    data = make_dataset("test", 3, 3, 41)
+    metrics = physical_rollout_metrics(
+        data["states"], data["states"], data["actions"], data["mask"]
+    )
+    assert metrics["kinetic_energy_rmse"] == 0
+    assert metrics["contact_penetration_rmse"] == 0
+    assert metrics["passive_step_momentum_rmse"] == 0
+    assert 0 <= metrics["passive_step_fraction"] <= 1
+
+
+def test_symmetry_diagnostics_measure_zero_head_kinematic_prior():
+    data = make_dataset("test", 3, 2, 43)
+    model = WorldModel("graph", hidden=16).eval()
+    metrics = symmetry_diagnostics(
+        model, data["states"][:, 0], data["actions"][:, 0], data["mask"]
+    )
+    assert metrics["translation_equivariance_rmse"] < 1e-7
+    assert metrics["quarter_turn_equivariance_rmse"] < 1e-7
+
+
+def test_equivariant_baseline_is_translation_and_rotation_equivariant():
+    data = make_dataset("test", 4, 2, 47)
+    model = WorldModel("equivariant", hidden=16).eval()
+    metrics = symmetry_diagnostics(
+        model, data["states"][:, 0], data["actions"][:, 0], data["mask"]
+    )
+    assert metrics["translation_equivariance_rmse"] < 2e-6
+    assert metrics["quarter_turn_equivariance_rmse"] < 2e-6
+
+
 def test_world_paths_fail_closed_on_invalid_numerics():
     with pytest.raises(ValueError):
         Physics(dt=float("nan"))
@@ -91,6 +124,46 @@ def test_world_paths_fail_closed_on_invalid_numerics():
         model(bad_state, action, mask[None])
     with pytest.raises(ValueError):
         WorldModel("multiscale", hidden=16, groups=9)
+
+
+@pytest.mark.parametrize(
+    "experiment",
+    [
+        Experiment(steps=True),
+        Experiment(data_seed=False),
+        Experiment(lr=True),
+        Experiment(quantizer_weight=False),
+        Experiment(global_coupling=True),
+        Experiment(state_noise_std=True),
+        Experiment(rollout_curriculum_steps=True),
+    ],
+)
+def test_world_experiment_rejects_boolean_numerics(experiment):
+    with pytest.raises(ValueError):
+        experiment.validate()
+
+
+@pytest.mark.parametrize(
+    "constructor",
+    [
+        lambda: Physics(dt=True),
+        lambda: Physics(substeps=True),
+        lambda: WorldModel(hidden=True),
+        lambda: WorldModel(max_objects=True),
+        lambda: WorldModel(groups=True),
+        lambda: WorldModel(dt=True),
+        lambda: sample_scene(torch.Generator(), True),
+        lambda: sample_scene(torch.Generator(), 2, max_objects=True),
+        lambda: sample_scene(torch.Generator(), 2, speed=True),
+        lambda: make_dataset("train", True, 1, 1),
+        lambda: make_dataset("train", 1, True, 1),
+        lambda: make_dataset("train", 1, 1, True),
+        lambda: make_dataset("train", 1, 1, 1, max_objects=True),
+    ],
+)
+def test_world_entry_points_reject_boolean_numerics(constructor):
+    with pytest.raises(ValueError):
+        constructor()
 
 
 def test_analytic_baselines_have_distinct_control_contracts():
@@ -110,7 +183,12 @@ def test_analytic_baselines_have_distinct_control_contracts():
 def test_default_world_models_satisfy_capacity_gate():
     cfg = Experiment()
     for bottleneck in ("continuous", "fsq", "vq"):
-        matches = widths(cfg, list(VARIANTS), bottleneck)
+        variants = [
+            variant
+            for variant in VARIANTS
+            if bottleneck == "continuous" or variant != "equivariant"
+        ]
+        matches = widths(cfg, variants, bottleneck)
         assert all(
             details["relative_error"] <= CAPACITY_MATCH_TOLERANCE
             for details in matches.values()
@@ -177,6 +255,10 @@ def test_split_reproducibility_and_actual_heldout_properties():
 @pytest.mark.parametrize("variant", list(VARIANTS))
 @pytest.mark.parametrize("bottleneck", ["continuous", "fsq", "vq"])
 def test_all_models_learn_and_preserve_properties(variant, bottleneck):
+    if variant == "equivariant" and bottleneck != "continuous":
+        with pytest.raises(ValueError, match="continuous"):
+            WorldModel(variant, hidden=16, bottleneck=bottleneck)
+        return
     torch.set_num_threads(1)
     data = make_dataset("train", 4, 2, 9)
     state, action, mask = data["states"][:, 0], data["actions"][:, 0], data["mask"]
@@ -208,7 +290,7 @@ def test_all_models_learn_and_preserve_properties(variant, bottleneck):
 
 
 @pytest.mark.parametrize(
-    "variant", ["graph", "transformer", "global_pool", "multiscale"]
+    "variant", ["graph", "transformer", "global_pool", "multiscale", "equivariant"]
 )
 def test_learned_interactions_are_permutation_equivariant(variant):
     torch.set_num_threads(1)
@@ -216,7 +298,8 @@ def test_learned_interactions_are_permutation_equivariant(variant):
     state, action, mask = data["states"][:, 0], data["actions"][:, 0], data["mask"]
     model = WorldModel(variant, hidden=16).eval()
     # Nonzero head ensures the test exercises messages rather than only the prior.
-    torch.nn.init.normal_(model.head[-1].weight, std=0.1)
+    if hasattr(model, "head"):
+        torch.nn.init.normal_(model.head[-1].weight, std=0.1)
     order = torch.tensor([4, 2, 0, 7, 1, 3, 6, 5])
     with torch.no_grad():
         expected = model(state, action, mask)[:, order]
@@ -235,6 +318,8 @@ def test_training_resume_is_exact(tmp_path: Path):
         test_horizon=4,
         batch_size=4,
         rollout_steps=2,
+        rollout_curriculum_steps=8,
+        state_noise_std=0.01,
         validate_every=2,
     )
     train(cfg, tmp_path / "full", seed=3)
@@ -287,9 +372,10 @@ def test_benchmark_verification_and_demo_interventions(
         "composition",
         "fast",
     }
-    assert result["dataset_registry_sha256"] == hashlib.sha256(
-        (output / "datasets.json").read_bytes()
-    ).hexdigest()
+    assert (
+        result["dataset_registry_sha256"]
+        == hashlib.sha256((output / "datasets.json").read_bytes()).hexdigest()
+    )
     status = json.loads((output / "status.json").read_text(encoding="utf-8"))
     assert [event["state"] for event in status["events"]] == [
         "planned",
@@ -313,6 +399,10 @@ def test_benchmark_verification_and_demo_interventions(
     assert "per_scene_position_rmse_p95" in multiscale_metrics
     assert "max_abs_property_drift" in multiscale_metrics
     assert "scene_momentum_rmse" in multiscale_metrics
+    assert "kinetic_energy_rmse" in multiscale_metrics
+    assert "contact_penetration_rmse" in multiscale_metrics
+    assert "translation_equivariance_rmse" in multiscale_metrics
+    assert "quarter_turn_equivariance_rmse" in multiscale_metrics
     assert 0 <= multiscale_metrics["outside_arena_scene_fraction"] <= 1
     from ripii.world.demo import main
 
@@ -397,11 +487,29 @@ def test_manifest_rejects_nonstandard_or_overflowed_json(tmp_path: Path) -> None
                 }
             ],
         }
-        (directory / "manifest.json").write_text(
-            json.dumps(manifest), encoding="utf-8"
-        )
+        (directory / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
         with pytest.raises(ValueError, match="verification failed"):
             verify(directory)
+
+
+def test_manifest_rejects_boolean_byte_counts(tmp_path: Path) -> None:
+    directory = tmp_path / "boolean-bytes"
+    directory.mkdir()
+    artifact = directory / "x"
+    artifact.write_bytes(b"x")
+    manifest = {
+        "format": "ripii-world-manifest-v1",
+        "artifacts": [
+            {
+                "path": "x",
+                "sha256": hashlib.sha256(b"x").hexdigest(),
+                "bytes": True,
+            }
+        ],
+    }
+    (directory / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(ValueError, match="verification failed"):
+        verify(directory)
 
 
 def test_benchmark_records_failed_state_after_execution_starts(

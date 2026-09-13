@@ -42,6 +42,7 @@ class RIPIIModel(nn.Module):
         use_projective: bool = True,
         use_graph: bool = True,
         use_quantizer: bool = True,
+        use_vq_balance: bool = True,
         use_action: bool = True,
         use_spectral_loss: bool = True,
         use_equivariance_loss: bool = True,
@@ -56,6 +57,7 @@ class RIPIIModel(nn.Module):
         self.use_projective = bool(use_projective)
         self.use_graph = bool(use_graph)
         self.use_quantizer = bool(use_quantizer)
+        self.use_vq_balance = bool(use_vq_balance)
         self.use_action = bool(use_action)
         self.use_spectral_loss = bool(use_spectral_loss)
         self.use_equivariance_loss = bool(use_equivariance_loss)
@@ -237,6 +239,7 @@ class RIPIIModel(nn.Module):
                 "vq_coarse_perplexity": torch.ones((), device=x.device, dtype=x.dtype),
                 "vq_fine_perplexity": torch.ones((), device=x.device, dtype=x.dtype),
                 "vq_usage": torch.ones((), device=x.device, dtype=x.dtype),
+                "vq_balance": self._zero(x),
                 "vq_residual_energy": self._zero(x),
             }
 
@@ -343,10 +346,11 @@ class RIPIIModel(nn.Module):
             )
 
             scale = scale + sum(
-                mse(a, b.detach()) for a, b in zip(out["stages"], out["view_stages"])
+                mse(a, b.detach())
+                for a, b in zip(out["stages"], out["view_stages"], strict=False)
             ) / max(1, len(out["stages"]))
 
-        for a, b in zip(out["stages"][:-1], out["stages"][1:]):
+        for a, b in zip(out["stages"][:-1], out["stages"][1:], strict=False):
             scale = scale + mse(a, b)
 
         geom = self._zero(x)
@@ -354,15 +358,14 @@ class RIPIIModel(nn.Module):
 
         for i in range(self.num_levels):
             geom = geom + self._stack_stat(out, f"renorm_{i}_orthogonality", x)
-            geom = geom + self._stack_stat(out, f"renorm_{i}_idempotence", x)
             align = align + self._stack_stat(out, f"renorm_{i}_alignment", x)
 
         proj = self._zero(x)
         for i in range(self.num_levels):
-            proj = proj + self._stack_stat(out, f"renorm_{i}_projection_energy", x)
-            proj = proj + 0.5 * self._stack_stat(
-                out, f"renorm_{i}_projection_residual", x
-            )
+            # Minimize the fraction of signal left outside the learned
+            # subspace.  Adding projection energy here would reverse the
+            # intended direction because energy + residual is approximately 1.
+            proj = proj + self._stack_stat(out, f"renorm_{i}_projection_residual", x)
 
         node_flat = out["nodes"].reshape(x.shape[0], -1)
         node_entropy_floor = torch.log(
@@ -372,9 +375,11 @@ class RIPIIModel(nn.Module):
         node = node + variance_penalty(node_flat)
         node = node + covariance_penalty(node_flat)
         node = node + torch.relu(node_entropy_floor - out["node_entropy"])
-        node = node + out["edge_sparsity"]
+        node = node + out["edge_concentration_loss"]
 
-        vq = out["vq_commit"] + out["vq_code"] + torch.relu(1.0 - out["vq_usage"])
+        vq = out["vq_commit"] + out["vq_code"]
+        if self.use_vq_balance:
+            vq = vq + out["vq_balance"]
 
         dispersion = out["structural"].std(dim=0, unbiased=False).mean()
         moment = variance_penalty(out["structural"])

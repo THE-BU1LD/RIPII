@@ -30,6 +30,9 @@ class ProfileConfig:
             raise ValueError("profiling requires >=1 warmup and >=5 measured repeats")
 
 
+_DEFAULT_PROFILE_CONFIG = ProfileConfig()
+
+
 def _synchronize(device: torch.device) -> None:
     if device.type == "cuda":
         torch.cuda.synchronize(device)
@@ -54,7 +57,7 @@ def _recognized_flops(model, state, actions, mask) -> int:
 def profile_rollout(
     model,
     data: dict[str, torch.Tensor],
-    config: ProfileConfig = ProfileConfig(),
+    config: ProfileConfig = _DEFAULT_PROFILE_CONFIG,
 ) -> dict:
     config.validate()
     required = {"states", "actions", "mask"}
@@ -114,7 +117,9 @@ def profile_rollout(
         ),
         "peak_accelerator_memory_bytes": peak_memory,
         "trainable_parameters": sum(
-            parameter.numel() for parameter in model.parameters() if parameter.requires_grad
+            parameter.numel()
+            for parameter in model.parameters()
+            if parameter.requires_grad
         ),
         "environment": {
             "python": platform.python_version(),

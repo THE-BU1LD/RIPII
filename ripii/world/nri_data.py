@@ -155,6 +155,22 @@ def load_nri_dataset(
         "preprocessing": manifest["preprocessing"],
         "split_policy": manifest["split_policy"],
         "edge_labels_used": False,
+        "field_provenance": {
+            "position": "observed_from_nri_loc_then_divided_by_box_size",
+            "velocity": "observed_from_nri_vel_then_divided_by_box_size",
+            "radius": "constructed_constant_0.04_not_observed",
+            "mass": "constructed_constant_1.0_not_observed",
+            "action": "constructed_zero_not_observed",
+            "mask": "constructed_first_five_slots_live",
+            "edge_labels": "retained_in_source_archive_but_not_model_input",
+        },
+        "metric_applicability": {
+            "position": True,
+            "velocity": True,
+            "property_drift": False,
+            "action_response": False,
+            "relation_recovery": False,
+        },
         "claim_boundary": (
             "external simulator development data; not fixed real-world observations "
             "and not confirmatory external validation"

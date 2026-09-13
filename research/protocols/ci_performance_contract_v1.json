@@ -1,0 +1,13 @@
+{
+  "format": "ripii-ci-performance-contract-v1",
+  "variant": "graph",
+  "hidden": 16,
+  "max_objects": 8,
+  "batch_scenes": 2,
+  "warmup": 2,
+  "repeats": 10,
+  "torch_threads": 1,
+  "max_trainable_parameters": 5000,
+  "max_mean_forward_seconds": 0.5,
+  "boundary": "A generous single-forward CPU regression alarm, not a scientific efficiency benchmark or portable latency claim."
+}

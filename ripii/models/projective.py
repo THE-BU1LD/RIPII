@@ -11,6 +11,14 @@ def _orthonormal_basis(raw: torch.Tensor) -> torch.Tensor:
     return q[:, : raw.shape[1]].contiguous()
 
 
+def _raw_basis_orthogonality(raw: torch.Tensor) -> torch.Tensor:
+    """Penalize collinearity before QR makes the deployed basis orthonormal."""
+    normalized = raw / raw.norm(dim=0, keepdim=True).clamp_min(1e-6)
+    gram = normalized.T @ normalized
+    identity = torch.eye(gram.shape[0], device=gram.device, dtype=gram.dtype)
+    return (gram - identity).square().mean()
+
+
 class SubspaceProjector(nn.Module):
     def __init__(self, dim: int, rank: int) -> None:
         super().__init__()
@@ -47,13 +55,10 @@ class SubspaceProjector(nn.Module):
         update = proj + 0.25 * residual + 0.1 * mix
         out = self.post(x + gate * update)
         proj2 = self.project(out, basis)
-        orth = (
-            torch.linalg.norm(
-                basis.T @ basis
-                - torch.eye(basis.shape[1], device=basis.device, dtype=basis.dtype)
-            )
-            ** 2
-        )
+        # QR guarantees that the deployed projector is orthogonal.  Regularize
+        # the *raw* parameterization instead, where the objective has useful
+        # gradients and prevents a poorly conditioned basis.
+        orth = _raw_basis_orthogonality(self.raw_basis)
         idempotence = torch.mean((proj2 - self.project(proj2, basis)) ** 2)
         projection_energy = torch.mean(proj.pow(2)) / torch.mean(x_n.pow(2)).clamp_min(
             1e-6
@@ -83,8 +88,17 @@ class ProjectiveRenormStack(nn.Module):
         self.num_levels = max(0, int(num_levels))
         self.num_projectors = max(1, int(num_projectors))
         rank = rank or max(4, dim // 3)
+        # A shared bank is selected independently at each hierarchy level.
+        # ``num_projectors`` therefore changes both capacity and behavior,
+        # rather than being a dead configuration value.
         self.projectors = nn.ModuleList(
-            [SubspaceProjector(dim, rank) for _ in range(self.num_levels)]
+            [
+                SubspaceProjector(dim, rank)
+                for _ in range(self.num_projectors if self.num_levels else 0)
+            ]
+        )
+        self.selectors = nn.ModuleList(
+            [nn.Linear(dim, self.num_projectors) for _ in range(self.num_levels)]
         )
         self.mixer = nn.ModuleList(
             [
@@ -113,8 +127,23 @@ class ProjectiveRenormStack(nn.Module):
         aligns = []
         geodesics = []
         current = stages[0]
-        for idx, projector in enumerate(self.projectors):
-            current, proj_stats, basis = projector(current)
+        for idx in range(self.num_levels):
+            selector_weights = torch.softmax(self.selectors[idx](current), dim=-1)
+            bank_results = [projector(current) for projector in self.projectors]
+            bank_outputs = torch.stack([item[0] for item in bank_results], dim=1)
+            current = torch.sum(selector_weights.unsqueeze(-1) * bank_outputs, dim=1)
+            mean_weights = selector_weights.mean(dim=0)
+            proj_stats = {
+                key: torch.sum(
+                    mean_weights * torch.stack([item[1][key] for item in bank_results])
+                )
+                for key in bank_results[0][1]
+            }
+            bases = [item[2] for item in bank_results]
+            mixed_raw_basis = torch.sum(
+                mean_weights.view(-1, 1, 1) * torch.stack(bases), dim=0
+            )
+            basis = _orthonormal_basis(mixed_raw_basis)
             current = self.norm(current + 0.1 * self.mixer[idx](current))
             stages.append(current)
             for key, value in proj_stats.items():
@@ -126,6 +155,11 @@ class ProjectiveRenormStack(nn.Module):
             else:
                 geodesics.append(principal_angle_mean(prev_basis, basis))
             stats[f"renorm_{idx}_geodesic"] = geodesics[-1]
+            stats[f"renorm_{idx}_projector_entropy"] = (
+                -(selector_weights * selector_weights.clamp_min(1e-9).log())
+                .sum(dim=-1)
+                .mean()
+            )
             prev_basis = basis
         stats["stack_depth"] = torch.stack(depths).mean()
         stats["stack_alignment"] = torch.stack(aligns).mean()

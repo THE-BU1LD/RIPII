@@ -46,8 +46,7 @@ def _finite_json(value) -> bool:
         return math.isfinite(value)
     if isinstance(value, dict):
         return all(
-            isinstance(key, str) and _finite_json(item)
-            for key, item in value.items()
+            isinstance(key, str) and _finite_json(item) for key, item in value.items()
         )
     if isinstance(value, list):
         return all(_finite_json(item) for item in value)
@@ -208,8 +207,7 @@ def verify_capsule(path: Path) -> dict[str, str | int | bool]:
                 content, f"retained content {relative}"
             )
     if (
-        retained["manifest.json"]["sha256"]
-        != payload.get("full_run_manifest_sha256")
+        retained["manifest.json"]["sha256"] != payload.get("full_run_manifest_sha256")
         or parsed["manifest.json"].get("format") != "ripii-coupling-study-v1"
         or parsed["summary.json"].get("protocol_sha256")
         != retained["protocol.json"]["sha256"]
@@ -281,7 +279,9 @@ def analyze(regimes: dict[str, dict]) -> dict:
             raise FloatingPointError(
                 "paired RMSE values must be finite and controls positive"
             )
-        relative = [1.0 - left / right for left, right in zip(candidate, baseline)]
+        relative = [
+            1.0 - left / right for left, right in zip(candidate, baseline, strict=False)
+        ]
         relative_by_regime[name] = relative
         comparisons[name] = {
             "multiscale_vs_global_pool_more_objects": paired_summary(
@@ -296,7 +296,7 @@ def analyze(regimes: dict[str, dict]) -> dict:
     interaction = [
         coupled - local
         for coupled, local in zip(
-            relative_by_regime["coupled"], relative_by_regime["local"]
+            relative_by_regime["coupled"], relative_by_regime["local"], strict=False
         )
     ]
     coupled = relative_by_regime["coupled"]

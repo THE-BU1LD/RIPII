@@ -25,6 +25,7 @@ class ModelConfig(Protocol):
     use_projective: bool
     use_graph: bool
     use_quantizer: bool
+    use_vq_balance: bool
     use_action: bool
     use_spectral_loss: bool
     use_equivariance_loss: bool
@@ -59,6 +60,7 @@ def build_model(cfg: ModelConfig) -> RIPIIModel | PlainAutoencoder:
         use_projective=cfg.use_projective,
         use_graph=cfg.use_graph,
         use_quantizer=cfg.use_quantizer,
+        use_vq_balance=cfg.use_vq_balance,
         use_action=cfg.use_action,
         use_spectral_loss=cfg.use_spectral_loss,
         use_equivariance_loss=cfg.use_equivariance_loss,

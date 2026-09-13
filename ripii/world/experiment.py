@@ -31,10 +31,13 @@ class Experiment:
     hidden: int = 64
     max_objects: int = 8
     lr: float = 0.001
+    dt: float = 0.05
     data_seed: int = 2026
     validate_every: int = 50
     quantizer_weight: float = 0.01
     global_coupling: float = 0.0
+    state_noise_std: float = 0.0
+    rollout_curriculum_steps: int = 0
 
     def validate(self):
         for key, value in asdict(self).items():
@@ -42,21 +45,44 @@ class Experiment:
                 "lr",
                 "quantizer_weight",
                 "global_coupling",
+                "state_noise_std",
+                "rollout_curriculum_steps",
+                "dt",
                 "data_seed",
-            } and (not isinstance(value, int) or value < 1):
+            } and (not isinstance(value, int) or isinstance(value, bool) or value < 1):
                 raise ValueError(f"{key} must be a positive integer")
-        if not isinstance(self.data_seed, int):
+        if not isinstance(self.data_seed, int) or isinstance(self.data_seed, bool):
             raise ValueError("data_seed must be an integer")
         if (
-            not math.isfinite(self.lr)
+            not isinstance(self.rollout_curriculum_steps, int)
+            or isinstance(self.rollout_curriculum_steps, bool)
+            or self.rollout_curriculum_steps < 0
+        ):
+            raise ValueError("rollout curriculum steps must be a nonnegative integer")
+        if (
+            not isinstance(self.lr, (int, float))
+            or isinstance(self.lr, bool)
+            or not isinstance(self.quantizer_weight, (int, float))
+            or isinstance(self.quantizer_weight, bool)
+            or not isinstance(self.global_coupling, (int, float))
+            or isinstance(self.global_coupling, bool)
+            or not isinstance(self.dt, (int, float))
+            or isinstance(self.dt, bool)
+            or not isinstance(self.state_noise_std, (int, float))
+            or isinstance(self.state_noise_std, bool)
+            or not math.isfinite(self.lr)
             or not 0 < self.lr < 1
             or not math.isfinite(self.quantizer_weight)
             or self.quantizer_weight < 0
             or not math.isfinite(self.global_coupling)
             or self.global_coupling < 0
+            or not math.isfinite(self.state_noise_std)
+            or self.state_noise_std < 0
+            or not math.isfinite(self.dt)
+            or self.dt <= 0
         ):
             raise ValueError(
-                "invalid learning rate, quantizer weight, or global coupling"
+                "invalid learning rate, dt, noise, quantizer weight, or global coupling"
             )
         if (
             self.rollout_steps > self.train_horizon
@@ -181,6 +207,112 @@ def windows(data, batch_size, horizon, generator):
     return states, actions, mask.gather(1, permutation)
 
 
+def physical_rollout_metrics(predicted, target, actions, mask) -> dict[str, float]:
+    """Metrics with explicit physical meaning under the shared state contract."""
+    if predicted.shape != target.shape or predicted.ndim != 4:
+        raise ValueError("predicted and target trajectories must align")
+    if actions.shape != (*target.shape[:2][:-1], target.shape[1] - 1, target.shape[2], 2):
+        raise ValueError("actions do not align with trajectories")
+    if mask.shape != (target.shape[0], target.shape[2]) or mask.dtype != torch.bool:
+        raise ValueError("invalid physical-metric mask")
+    live = mask[:, None, :, None]
+    pred = predicted[:, 1:]
+    truth = target[:, 1:]
+    pred_ke = (
+        0.5 * pred[..., 5] * pred[..., 2:4].square().sum(-1) * mask[:, None]
+    ).sum(-1)
+    truth_ke = (
+        0.5 * truth[..., 5] * truth[..., 2:4].square().sum(-1) * mask[:, None]
+    ).sum(-1)
+    energy_error = pred_ke - truth_ke
+
+    def penetration(states):
+        position = states[..., :2]
+        radius = states[..., 4]
+        relative = position.unsqueeze(-2) - position.unsqueeze(-3)
+        distance = relative.norm(dim=-1)
+        overlap = (radius.unsqueeze(-1) + radius.unsqueeze(-2) - distance).clamp_min(0)
+        pairs = mask.unsqueeze(-1) & mask.unsqueeze(-2)
+        upper = torch.triu(
+            torch.ones(mask.shape[1], mask.shape[1], dtype=torch.bool, device=mask.device),
+            diagonal=1,
+        )
+        valid = pairs[:, None] & upper
+        return overlap, valid
+
+    pred_overlap, valid_pairs = penetration(pred)
+    truth_overlap, _ = penetration(truth)
+    overlap_error = (pred_overlap - truth_overlap).masked_select(valid_pairs)
+    predicted_penetration = pred_overlap.masked_select(valid_pairs)
+    radius = pred[..., 4:5]
+    wall_penetration = (pred[..., :2].abs() + radius - 1.0).clamp_min(0)
+    wall_values = wall_penetration.masked_select(live.expand_as(wall_penetration))
+
+    pred_momentum = (pred[..., 2:4] * pred[..., 5:6] * live).sum(2)
+    truth_momentum = (truth[..., 2:4] * truth[..., 5:6] * live).sum(2)
+    action_free = (actions.abs() * live).sum((2, 3)) == 0
+    momentum_error = (pred_momentum - truth_momentum).square().sum(-1)
+    passive = momentum_error.masked_select(action_free)
+    return {
+        "kinetic_energy_rmse": float(energy_error.square().mean().sqrt()),
+        "kinetic_energy_relative_rmse": float(
+            energy_error.square().mean().sqrt()
+            / truth_ke.square().mean().sqrt().clamp_min(1e-12)
+        ),
+        "contact_penetration_rmse": float(
+            overlap_error.square().mean().sqrt() if overlap_error.numel() else 0.0
+        ),
+        "max_predicted_contact_penetration": float(
+            predicted_penetration.max() if predicted_penetration.numel() else 0.0
+        ),
+        "mean_predicted_wall_penetration": float(
+            wall_values.mean() if wall_values.numel() else 0.0
+        ),
+        "max_predicted_wall_penetration": float(
+            wall_values.max() if wall_values.numel() else 0.0
+        ),
+        "passive_step_momentum_rmse": float(
+            passive.mean().sqrt() if passive.numel() else 0.0
+        ),
+        "passive_step_fraction": float(action_free.float().mean()),
+    }
+
+
+@torch.no_grad()
+def symmetry_diagnostics(model, state, action, mask) -> dict[str, float]:
+    """Measure, rather than assume, translation and quarter-turn equivariance."""
+    base = model(state, action, mask)
+    live = mask.unsqueeze(-1)
+    shift = state.new_tensor([0.137, -0.091])
+    shifted = state.clone()
+    shifted[..., :2] = shifted[..., :2] + shift * live
+    translated = model(shifted, action, mask)
+    translated[..., :2] = translated[..., :2] - shift * live
+    translation_error = (translated[..., :4] - base[..., :4]).masked_select(
+        live.expand_as(base[..., :4])
+    )
+    rotation = state.new_tensor([[0.0, -1.0], [1.0, 0.0]])
+    inverse = rotation.transpose(0, 1)
+    rotated_state = state.clone()
+    rotated_state[..., :2] = state[..., :2] @ rotation.T
+    rotated_state[..., 2:4] = state[..., 2:4] @ rotation.T
+    rotated_action = action @ rotation.T
+    rotated = model(rotated_state, rotated_action, mask)
+    rotated[..., :2] = rotated[..., :2] @ inverse.T
+    rotated[..., 2:4] = rotated[..., 2:4] @ inverse.T
+    rotation_error = (rotated[..., :4] - base[..., :4]).masked_select(
+        live.expand_as(base[..., :4])
+    )
+    return {
+        "translation_equivariance_rmse": float(
+            translation_error.square().mean().sqrt()
+        ),
+        "quarter_turn_equivariance_rmse": float(
+            rotation_error.square().mean().sqrt()
+        ),
+    }
+
+
 @torch.no_grad()
 def evaluate(model, data, horizons=(1, 4, 16, 32)):
     model.eval()
@@ -213,6 +345,19 @@ def evaluate(model, data, horizons=(1, 4, 16, 32)):
         "rollout_seconds": elapsed,
         "milliseconds_per_scene_step": 1000 * elapsed / (len(mask) * error.shape[1]),
     }
+    result.update(
+        physical_rollout_metrics(
+            predicted, data["states"], data["actions"], data["mask"]
+        )
+    )
+    result.update(
+        symmetry_diagnostics(
+            model,
+            data["states"][:, 0],
+            data["actions"][:, 0],
+            data["mask"],
+        )
+    )
     for horizon in sorted(set(horizons) | {error.shape[1]}):
         if horizon <= error.shape[1]:
             result[f"position_rmse_h{horizon}"] = float(
@@ -275,7 +420,9 @@ def evaluate(model, data, horizons=(1, 4, 16, 32)):
     if len(assignment_history) >= 2:
         changes = [
             (current[mask] - previous[mask]).abs().mean()
-            for previous, current in zip(assignment_history, assignment_history[1:])
+            for previous, current in zip(
+                assignment_history, assignment_history[1:], strict=False
+            )
         ]
         result["assignment_temporal_change"] = float(torch.stack(changes).mean())
     if not all(math.isfinite(value) for value in result.values()):
@@ -286,7 +433,7 @@ def evaluate(model, data, horizons=(1, 4, 16, 32)):
 def train(
     cfg: Experiment,
     output: Path,
-    variant="multiscale",
+    variant="graph",
     seed=3,
     bottleneck="continuous",
     hidden=None,
@@ -298,7 +445,7 @@ def train(
         raise ValueError(f"refusing nonempty output directory: {output}")
     output.mkdir(parents=True, exist_ok=True)
     if prepared_datasets is None:
-        physics = Physics(global_coupling=cfg.global_coupling)
+        physics = Physics(dt=cfg.dt, global_coupling=cfg.global_coupling)
         train_data, train_dataset_record = load_dataset(
             DatasetSpec(
                 "train",
@@ -347,6 +494,8 @@ def train(
             or validation["actions"].shape[1] < cfg.rollout_steps
             or train_dataset_record.get("split") != "train"
             or validation_dataset_record.get("split") != "validation"
+            or train_dataset_record.get("observation_dt", cfg.dt) != cfg.dt
+            or validation_dataset_record.get("observation_dt", cfg.dt) != cfg.dt
         ):
             raise ValueError("prepared datasets do not match the experiment contract")
     dataset_records = {
@@ -355,7 +504,11 @@ def train(
     }
     torch.manual_seed(seed)
     model = WorldModel(
-        variant, hidden or cfg.hidden, cfg.max_objects, bottleneck=bottleneck
+        variant,
+        hidden or cfg.hidden,
+        cfg.max_objects,
+        dt=cfg.dt,
+        bottleneck=bottleneck,
     )
     optimizer = torch.optim.AdamW(model.parameters(), lr=cfg.lr, weight_decay=1e-4)
     sampler = torch.Generator().manual_seed(seed + 700_001)
@@ -374,7 +527,11 @@ def train(
         ):
             raise ValueError("checkpoint lacks valid exact-resume state")
         expected_spec = WorldModel(
-            variant, hidden or cfg.hidden, cfg.max_objects, bottleneck=bottleneck
+            variant,
+            hidden or cfg.hidden,
+            cfg.max_objects,
+            dt=cfg.dt,
+            bottleneck=bottleneck,
         ).spec
         if saved["model_spec"] != expected_spec or saved["seed"] != seed:
             raise ValueError("resume model specification or seed differs")
@@ -412,11 +569,24 @@ def train(
     train_start = time.perf_counter()
     for step in range(first_step, cfg.steps):
         model.train()
+        rollout_steps = cfg.rollout_steps
+        if cfg.rollout_curriculum_steps:
+            fraction = min(1.0, (step + 1) / cfg.rollout_curriculum_steps)
+            rollout_steps = 1 + math.floor((cfg.rollout_steps - 1) * fraction)
         states, actions, mask = windows(
-            train_data, cfg.batch_size, cfg.rollout_steps, sampler
+            train_data, cfg.batch_size, rollout_steps, sampler
         )
         current, objectives, quantizer_losses = states[:, 0], [], []
-        for t in range(cfg.rollout_steps):
+        if cfg.state_noise_std:
+            noise = torch.randn(
+                current.shape,
+                dtype=current.dtype,
+                device=current.device,
+                generator=sampler,
+            )
+            dynamic = current[..., :4] + cfg.state_noise_std * noise[..., :4]
+            current = torch.cat([dynamic, current[..., 4:]], -1) * mask[..., None]
+        for t in range(rollout_steps):
             current = model(current, actions[:, t], mask)
             objectives.append(loss_on_states(current, states[:, t + 1], mask))
             quantizer_losses.append(model.aux_loss)
@@ -439,6 +609,7 @@ def train(
             record = {
                 "step": completed,
                 "train_loss": float(objective.detach()),
+                "training_rollout_steps": rollout_steps,
                 "validation_score": score,
                 "validation": metrics,
             }
@@ -518,17 +689,27 @@ def widths(cfg, variants, bottleneck):
     target = sum(
         p.numel()
         for p in WorldModel(
-            "multiscale", cfg.hidden, cfg.max_objects, bottleneck=bottleneck
+            "multiscale",
+            cfg.hidden,
+            cfg.max_objects,
+            dt=cfg.dt,
+            bottleneck=bottleneck,
         ).parameters()
     )
     result = {}
     for variant in variants:
+        if variant == "equivariant" and bottleneck != "continuous":
+            continue
         candidates = []
         for hidden in range(8, cfg.hidden * 4 + 1, 4):
             count = sum(
                 p.numel()
                 for p in WorldModel(
-                    variant, hidden, cfg.max_objects, bottleneck=bottleneck
+                    variant,
+                    hidden,
+                    cfg.max_objects,
+                    dt=cfg.dt,
+                    bottleneck=bottleneck,
                 ).parameters()
             )
             candidates.append((abs(count - target), hidden, count))
@@ -567,6 +748,10 @@ def _benchmark_impl(
         or any(
             bottleneck not in {"continuous", "fsq", "vq"} for bottleneck in bottlenecks
         )
+        or (
+            "equivariant" in variants
+            and any(bottleneck != "continuous" for bottleneck in bottlenecks)
+        )
     ):
         raise ValueError(
             "seeds, variants, and bottlenecks must be valid, nonempty, and unique"
@@ -594,7 +779,7 @@ def _benchmark_impl(
         str(path.relative_to(source_root)): hashlib.sha256(payload).hexdigest()
         for path, payload in source_payloads.items()
     }
-    physics = Physics(global_coupling=cfg.global_coupling)
+    physics = Physics(dt=cfg.dt, global_coupling=cfg.global_coupling)
     dataset_specs = {
         "train": DatasetSpec(
             "train",
@@ -779,9 +964,13 @@ def _benchmark_impl(
             None,
         )
         if a and b:
-            ood = ["more_objects", "composition", "fast"]
-            a_ood = sum(a["metrics"][s]["position_rmse"] for s in ood) / len(ood)
-            b_ood = sum(b["metrics"][s]["position_rmse"] for s in ood) / len(ood)
+            ood_splits = ("more_objects", "composition", "fast")
+            a_ood = sum(
+                a["metrics"][split]["position_rmse"] for split in ood_splits
+            ) / len(ood_splits)
+            b_ood = sum(
+                b["metrics"][split]["position_rmse"] for split in ood_splits
+            ) / len(ood_splits)
             improvement = 1 - a_ood / max(b_ood, 1e-12)
             id_regression = (
                 a["metrics"]["test"]["position_rmse"]
@@ -824,13 +1013,15 @@ def _benchmark_impl(
             )
             if candidate is None or baseline is None:
                 continue
-            ood = ("more_objects", "composition", "fast")
+            control_ood_splits = ("more_objects", "composition", "fast")
             candidate_ood = sum(
-                candidate["metrics"][split]["position_rmse"] for split in ood
-            ) / len(ood)
+                candidate["metrics"][split]["position_rmse"]
+                for split in control_ood_splits
+            ) / len(control_ood_splits)
             baseline_ood = sum(
-                baseline["metrics"][split]["position_rmse"] for split in ood
-            ) / len(ood)
+                baseline["metrics"][split]["position_rmse"]
+                for split in control_ood_splits
+            ) / len(control_ood_splits)
             ood_improvement = 1 - candidate_ood / max(baseline_ood, 1e-12)
             id_improvement = 1 - candidate["metrics"]["test"]["position_rmse"] / max(
                 baseline["metrics"]["test"]["position_rmse"], 1e-12
@@ -905,9 +1096,9 @@ def _benchmark_impl(
         "| Model | In distribution | More objects | Held-out properties | Faster motion |",
         "|---|---:|---:|---:|---:|",
     ]
-    for name, values in grouped.items():
+    for name, model_aggregates in grouped.items():
         cells = [
-            f"{values[s]['position_rmse_mean']:.4f} ± {values[s]['position_rmse_sample_std']:.4f}"
+            f"{model_aggregates[s]['position_rmse_mean']:.4f} ± {model_aggregates[s]['position_rmse_sample_std']:.4f}"
             for s in datasets
         ]
         lines.append("| " + " | ".join([name] + cells) + " |")
@@ -920,8 +1111,10 @@ def _benchmark_impl(
             "|---|---:|---:|---:|---:|",
         ]
     )
-    for name, values in analytic_baselines.items():
-        cells = [f"{values[split]['position_rmse']:.4f}" for split in datasets]
+    for name, baseline_metrics in analytic_baselines.items():
+        cells = [
+            f"{baseline_metrics[split]['position_rmse']:.4f}" for split in datasets
+        ]
         lines.append("| " + " | ".join([name] + cells) + " |")
     lines.extend(
         [
@@ -999,6 +1192,7 @@ def verify(directory: Path):
             or not isinstance(entry.get("path"), str)
             or not isinstance(entry.get("sha256"), str)
             or not isinstance(entry.get("bytes"), int)
+            or isinstance(entry.get("bytes"), bool)
             or entry["bytes"] < 0
         ):
             failures.append("<invalid manifest entry>")
@@ -1007,13 +1201,15 @@ def verify(directory: Path):
         raw = root / relative
         path = raw.resolve()
         if (
-            relative in seen
-            or root not in path.parents
-            or raw.is_symlink()
-            or not path.is_file()
+            (
+                relative in seen
+                or root not in path.parents
+                or raw.is_symlink()
+                or not path.is_file()
+            )
+            or path.stat().st_size != entry["bytes"]
+            or sha256(path) != entry["sha256"]
         ):
-            failures.append(relative)
-        elif path.stat().st_size != entry["bytes"] or sha256(path) != entry["sha256"]:
             failures.append(relative)
         elif path.suffix == ".json":
             try:
@@ -1127,6 +1323,7 @@ def verify_capsule(path: Path):
             not isinstance(entry, dict)
             or not isinstance(entry.get("sha256"), str)
             or not isinstance(entry.get("bytes"), int)
+            or isinstance(entry.get("bytes"), bool)
             or content_key not in entry
         ):
             raise ValueError(f"invalid retained capsule entry: {name}")

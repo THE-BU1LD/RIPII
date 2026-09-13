@@ -1,0 +1,43 @@
+name: device-smoke
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  mps:
+    runs-on: macos-14
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          python-version: "3.11"
+          enable-cache: true
+      - name: Install exact lock
+        run: uv sync --locked
+      - name: Require MPS forward/backward repeatability
+        run: uv run --no-sync python scripts/check_device_smoke.py --device mps
+
+  cuda:
+    if: ${{ vars.RIPII_CUDA_RUNNER == 'enabled' }}
+    runs-on: [self-hosted, linux, x64, gpu]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          python-version: "3.11"
+          enable-cache: true
+      - name: Install exact lock
+        run: uv sync --locked
+      - name: Require CUDA forward/backward repeatability
+        run: uv run --no-sync python scripts/check_device_smoke.py --device cuda

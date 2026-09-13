@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 def load_history(path: Path):
     rows = []
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         for line in f:
             rows.append(json.loads(line))
     return rows
