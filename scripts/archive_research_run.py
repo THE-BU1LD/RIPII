@@ -8,15 +8,33 @@ import gzip
 import hashlib
 import io
 import json
+import os
 import tarfile
 from pathlib import Path
 
 
-def sha256_bytes(value: bytes) -> str:
-    return hashlib.sha256(value).hexdigest()
+def sha256_file(path: Path, *, chunk_size: int = 1024 * 1024) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        while chunk := handle.read(chunk_size):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
-def collect(root: Path) -> list[tuple[Path, str, bytes]]:
+class HashingReader:
+    """Update a digest with the exact bytes consumed by ``tarfile``."""
+
+    def __init__(self, handle) -> None:
+        self.handle = handle
+        self.digest = hashlib.sha256()
+
+    def read(self, size: int = -1) -> bytes:
+        value = self.handle.read(size)
+        self.digest.update(value)
+        return value
+
+
+def collect(root: Path) -> list[tuple[Path, str]]:
     if root.is_symlink() or not root.is_dir():
         raise ValueError("run must be a regular directory")
     rows = []
@@ -25,7 +43,7 @@ def collect(root: Path) -> list[tuple[Path, str, bytes]]:
             raise ValueError(f"archives reject symlinks: {path}")
         if path.is_file():
             relative = path.relative_to(root).as_posix()
-            rows.append((path, relative, path.read_bytes()))
+            rows.append((path, relative))
     if not rows:
         raise ValueError("run directory is empty")
     return rows
@@ -38,45 +56,61 @@ def create_archive(root: Path, output: Path) -> dict:
     if root == output.parent or root in output.parents:
         raise ValueError("archive output must be outside the archived run")
     files = collect(root)
-    release_manifest = {
-        "format": "ripii-complete-research-archive-v1",
-        "root_name": root.name,
-        "claim_boundary": (
-            "complete byte archive of the selected directory; scientific validity "
-            "still depends on protocol and manifest verification"
-        ),
-        "artifacts": [
-            {
-                "relative_path": relative,
-                "sha256": sha256_bytes(content),
-                "size": len(content),
-            }
-            for _, relative, content in files
-        ],
-    }
-    manifest_bytes = (
-        json.dumps(release_manifest, indent=2, sort_keys=True, allow_nan=False) + "\n"
-    ).encode()
     output.parent.mkdir(parents=True, exist_ok=True)
+    artifacts = []
     with (
         output.open("wb") as raw,
         gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0) as compressed,
         tarfile.open(fileobj=compressed, mode="w") as archive,
     ):
-        members = [(relative, content) for _, relative, content in files]
-        members.append(("RELEASE_MANIFEST.json", manifest_bytes))
-        for relative, content in members:
-            info = tarfile.TarInfo(relative)
-            info.size = len(content)
-            info.mtime = 0
-            info.mode = 0o644
-            info.uid = info.gid = 0
-            info.uname = info.gname = ""
-            archive.addfile(info, io.BytesIO(content))
+        for path, relative in files:
+            with path.open("rb") as handle:
+                before = os.fstat(handle.fileno())
+                reader = HashingReader(handle)
+                info = tarfile.TarInfo(relative)
+                info.size = before.st_size
+                info.mtime = 0
+                info.mode = 0o644
+                info.uid = info.gid = 0
+                info.uname = info.gname = ""
+                archive.addfile(info, reader)
+                after = os.fstat(handle.fileno())
+            if (
+                after.st_size != before.st_size
+                or after.st_mtime_ns != before.st_mtime_ns
+            ):
+                raise RuntimeError(f"source changed while archiving: {path}")
+            artifacts.append(
+                {
+                    "relative_path": relative,
+                    "sha256": reader.digest.hexdigest(),
+                    "size": before.st_size,
+                }
+            )
+        release_manifest = {
+            "format": "ripii-complete-research-archive-v1",
+            "root_name": root.name,
+            "claim_boundary": (
+                "complete byte archive of the selected directory; scientific validity "
+                "still depends on protocol and manifest verification"
+            ),
+            "artifacts": artifacts,
+        }
+        manifest_bytes = (
+            json.dumps(release_manifest, indent=2, sort_keys=True, allow_nan=False)
+            + "\n"
+        ).encode()
+        info = tarfile.TarInfo("RELEASE_MANIFEST.json")
+        info.size = len(manifest_bytes)
+        info.mtime = 0
+        info.mode = 0o644
+        info.uid = info.gid = 0
+        info.uname = info.gname = ""
+        archive.addfile(info, io.BytesIO(manifest_bytes))
     result = {
         "format": "ripii-archive-sidecar-v1",
         "archive": output.name,
-        "sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
+        "sha256": sha256_file(output),
         "size": output.stat().st_size,
         "files": len(files),
     }

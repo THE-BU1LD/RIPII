@@ -6,14 +6,14 @@ development result to confirmatory evidence.
 
 ## Overall status
 
-- Weighted whole-audit completion: **approximately 69%**.
-- Engineering/code-addressable work: **approximately 92%**.
-- Publication-grade scientific validation: **approximately 35%**.
+- Weighted whole-audit completion: **approximately 73%**.
+- Engineering/code-addressable work: **approximately 94%**.
+- Publication-grade scientific validation: **approximately 42%**.
 - Current scientific decision: **no advance / not conference-ready**.
 
-The gap is dominated by a 180-cell objective study, powered external experiments,
-third-party baseline integration, real data, independent reproduction, and human legal/
-authorship decisions. Those cannot be truthfully replaced by code scaffolds.
+The remaining gap is dominated by powered external experiments, third-party baseline
+integration, real data, independent reproduction, and human legal/authorship decisions.
+Those cannot be truthfully replaced by code scaffolds.
 
 ## Completed or materially implemented
 
@@ -88,27 +88,36 @@ authorship decisions. Those cannot be truthfully replaced by code scaffolds.
     loading and was terminated;
     no official score is claimed. GNS/MeshGraphNets and BSMS source revisions are pinned
     in `research/baselines/official_sources_v1.json`.
-21. **Measured parallel overnight launch:** the frozen 180-cell matrix now executes the
+21. **Completed repaired-objective matrix:** the frozen 180-cell matrix executed the
     five independent seeds concurrently within each mode. Repeated five-seed batch
     calibration at 60/180/300 steps measured host contention directly and produced a
     conservative 8.57-hour estimate including a 25% safety factor. The 24-hour gate
     passed, a real 600-step sentinel cell completed and verified, and the resumable study
-    is active in `runs/post_correction_v02_parallel_20260913/`. A closed foreground
+    completed 180/180 verified cells in `runs/post_correction_v02_parallel_20260913/`.
+    A closed foreground
     output pipe caused one preserved `BrokenPipeError` after 20 verified cells; no cell
     evidence was lost. The unchanged frozen run was resumed in the persistent tmux
-    session `ripii-post-correction-20260913`, with five seed workers. This is execution
-    in progress, not a result.
+    session `ripii-post-correction-20260913`, with five seed workers. The predefined
+    decision was `no_advance`: base mean MSE was 0.08410, versus 0.04687 for
+    reconstruction+KL and 0.05573 for the plain autoencoder, with both controls winning
+    all five paired seeds. This is negative synthetic development evidence.
 22. **Release fail-closed gate:** `scripts/check_release_readiness.py` verifies the PDF,
     SBOM, license, citation metadata, and owner approvals. It currently blocks exactly on
     `LICENSE`, `CITATION.cff`, and `release/OWNER_METADATA.json`; those values are not
     fabricated by automation.
+23. **Completed-run archive:** the 180-cell study is preserved at
+    `output/research/post_correction_v02_parallel_20260913.tar.gz` with a 2,183-file
+    internal release manifest and SHA-256
+    `1b3cb759e23221053d9d5843e849483fc966c49b412f62cd71f403ac931c6e68`.
+    Archive creation now streams source files and digest computation instead of loading
+    multi-gigabyte artifacts into memory; focused tests cover that path.
 
 ## Partially addressed; more execution is required
 
-1. **Full legacy-method viability:** the runner and diagnostics are fixed and one
-   full-length cell passed and the remaining 179 frozen cells were launched under the
-   measured five-worker schedule. Do not infer viability until the complete exact
-   manifest and predefined decision are present.
+1. **Full legacy-method viability:** the runner and diagnostics are fixed, all 180 frozen
+   cells completed, and the exact manifest produced the predefined `no_advance`
+   decision. Publication readiness remains blocked by external confirmation, stronger
+   baselines, and the other requirements below.
 2. **Strong baselines:** the E(2)-equivariant control is implemented. Official GNS,
    constraint-based GNS, MeshGraphNet/BSMS, and Lagrangian/energy baselines still need
    license review, adapters, fair tuning, and execution.

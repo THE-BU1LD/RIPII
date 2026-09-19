@@ -13,7 +13,12 @@ import torch
 
 from ..utils.statistics import descriptive_summary, paired_sign_flip_test
 from .data import DatasetSpec, load_dataset
-from .models import VARIANTS, WorldModel
+from .models import (
+    CONTINUOUS_DYNAMICS_VARIANTS,
+    MODEL_VARIANTS,
+    VARIANTS,
+    WorldModel,
+)
 from .physics import Physics
 from .protocol import ExperimentProtocol
 from .run_status import RunTracker, verify_complete_status
@@ -698,7 +703,7 @@ def widths(cfg, variants, bottleneck):
     )
     result = {}
     for variant in variants:
-        if variant == "equivariant" and bottleneck != "continuous":
+        if variant in CONTINUOUS_DYNAMICS_VARIANTS and bottleneck != "continuous":
             continue
         candidates = []
         for hidden in range(8, cfg.hidden * 4 + 1, 4):
@@ -733,6 +738,15 @@ def _benchmark_impl(
     bottlenecks=("continuous",),
 ):
     cfg.validate()
+    candidate_variant = (
+        "ripii_mr"
+        if "ripii_mr" in variants
+        else "ripii_mr_v2"
+        if "ripii_mr_v2" in variants
+        else "multiscale"
+    )
+    is_ripii_mr_candidate = candidate_variant in {"ripii_mr", "ripii_mr_v2"}
+    primary_control = "equivariant" if is_ripii_mr_candidate else "graph"
     if (
         not seeds
         or len(set(seeds)) != len(seeds)
@@ -742,14 +756,14 @@ def _benchmark_impl(
         )
         or not variants
         or len(set(variants)) != len(variants)
-        or any(variant not in VARIANTS for variant in variants)
+        or any(variant not in MODEL_VARIANTS for variant in variants)
         or not bottlenecks
         or len(set(bottlenecks)) != len(bottlenecks)
         or any(
             bottleneck not in {"continuous", "fsq", "vq"} for bottleneck in bottlenecks
         )
         or (
-            "equivariant" in variants
+            CONTINUOUS_DYNAMICS_VARIANTS.intersection(variants)
             and any(bottleneck != "continuous" for bottleneck in bottlenecks)
         )
     ):
@@ -831,13 +845,25 @@ def _benchmark_impl(
             "constant_velocity": "advances velocity with no forces or contacts",
             "force_kinematic": "uses force/mass with no contacts, walls, or drag",
         },
-        "advancement_rule": "continuous multiscale beats continuous graph OOD mean position RMSE by >=5% on every seed, ID regression <=5% on every seed",
+        "advancement_rule": (
+            f"continuous {candidate_variant} beats every included continuous learned "
+            "control OOD mean position RMSE by >=5% on every paired seed, with ID "
+            "regression <=5% on every paired comparison"
+            if is_ripii_mr_candidate
+            else "continuous multiscale beats continuous graph OOD mean position RMSE "
+            "by >=5% on every seed, ID regression <=5% on every seed"
+        ),
         "limits": [
             "known object states, no learned visual perception",
             "soft-contact 2D simulator",
             "fixed training budget is equal updates, not equal wall-clock or FLOPs",
             "parameter matching uses nearest width; actual errors are reported",
-            "no claim of physical rotation equivariance or compute-adaptive execution",
+            (
+                "RIPII-MR has construction-tested E(2), internal momentum/torque, and "
+                "adaptive-routing properties; empirical utility is not assumed"
+                if is_ripii_mr_candidate
+                else "no claim of physical rotation equivariance or compute-adaptive execution"
+            ),
         ],
         "environment": {
             "python": platform.python_version(),
@@ -941,29 +967,36 @@ def _benchmark_impl(
                     "position_rmse_sample_std": std,
                 }
             grouped[f"{variant}_{bottleneck}"] = aggregate
+    comparison_controls = (
+        [variant for variant in variants if variant != candidate_variant]
+        if is_ripii_mr_candidate
+        else [primary_control]
+    )
     comparisons = []
     for seed in seeds:
         a = next(
             (
                 r
                 for r in rows
-                if r["variant"] == "multiscale"
+                if r["variant"] == candidate_variant
                 and r["bottleneck"] == "continuous"
                 and r["seed"] == seed
             ),
             None,
         )
-        b = next(
-            (
-                r
-                for r in rows
-                if r["variant"] == "graph"
-                and r["bottleneck"] == "continuous"
-                and r["seed"] == seed
-            ),
-            None,
-        )
-        if a and b:
+        for control_variant in comparison_controls:
+            b = next(
+                (
+                    r
+                    for r in rows
+                    if r["variant"] == control_variant
+                    and r["bottleneck"] == "continuous"
+                    and r["seed"] == seed
+                ),
+                None,
+            )
+            if a is None or b is None:
+                continue
             ood_splits = ("more_objects", "composition", "fast")
             a_ood = sum(
                 a["metrics"][split]["position_rmse"] for split in ood_splits
@@ -980,6 +1013,8 @@ def _benchmark_impl(
             comparisons.append(
                 {
                     "seed": seed,
+                    "candidate": candidate_variant,
+                    "control": control_variant,
                     "ood_relative_improvement": improvement,
                     "id_relative_regression": id_regression,
                     "passes": improvement >= 0.05 and id_regression <= 0.05,
@@ -987,7 +1022,7 @@ def _benchmark_impl(
             )
     paired_controls = {}
     for baseline_variant in variants:
-        if baseline_variant == "multiscale":
+        if baseline_variant == candidate_variant:
             continue
         pairs = []
         for seed in seeds:
@@ -995,7 +1030,7 @@ def _benchmark_impl(
                 (
                     row
                     for row in rows
-                    if row["variant"] == "multiscale"
+                    if row["variant"] == candidate_variant
                     and row["bottleneck"] == "continuous"
                     and row["seed"] == seed
                 ),
@@ -1069,7 +1104,8 @@ def _benchmark_impl(
             }
     status = (
         "advance"
-        if len(comparisons) >= 3 and all(r["passes"] for r in comparisons)
+        if len({row["seed"] for row in comparisons}) >= 3
+        and all(r["passes"] for r in comparisons)
         else "no_advance"
     )
     report = {

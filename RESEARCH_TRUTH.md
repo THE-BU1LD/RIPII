@@ -44,3 +44,39 @@ at this budget, but it is not a convergence or external-data claim.
 Machine-local profiling also shows that similar parameter counts do not imply equal
 recognized operations and that latency ordering changes with host load. No efficiency
 or compute-matched conclusion is authorized.
+
+## Repaired 0.2 objective matrix
+
+The prospectively frozen repaired-objective study completed all 180 cells and returned
+the predefined `no_advance` decision. Across five paired seeds, repaired RIPII 0.2 had
+mean reconstruction MSE 0.08410, versus 0.04687 for reconstruction+KL and 0.05573 for
+the capacity-matched plain autoencoder; both controls beat the base model on every seed.
+The lowest observed secondary mean was 0.04329 for reconstruction+KL plus equivariance,
+but that 36-condition matrix result is exploratory and is not a post-hoc positive claim.
+
+This is strong negative synthetic development evidence, not confirmatory evidence. Five
+pairs give a minimum two-sided exact sign-flip p-value of 0.0625, and the multiplicity-
+adjusted comparisons are not significant. The result therefore rejects advancement of
+this repaired configuration without establishing a population-wide superiority claim
+for any control.
+
+## RIPII-MR development matrix
+
+The separately frozen RIPII-MR matrix completed all 75 learned-model runs and returned
+`no_advance`. Across the 15 paired data/model-seed cells per control, its mean OOD
+relative improvements were -0.1596 against the equivariant control, -0.7824 against the
+graph control, -1.1909 against global pool and -1.2134 against legacy multiscale. Every
+one of the 60 candidate/control comparisons failed the rule requiring at least 5% OOD
+improvement without more than 5% IID regression.
+
+This is a negative synthetic development result. The three generator seeds are the
+independent units; the five model seeds nested within each generator seed do not create
+15 independent datasets, and the sign-flip calculations in the retained summary are
+descriptive rather than powered confirmation. The result does not support accuracy,
+novelty, external-validity, significance, efficiency or publication claims. Under the
+predeclared failure criterion, this architecture version does not advance.
+
+The current router suppresses the coarse contribution only after restriction, coarse
+edge construction and coarse message passing have run. It is contribution gating, not
+verified conditional computation, and the completed matrix does not establish an
+accuracy-compute benefit.

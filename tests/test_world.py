@@ -186,7 +186,8 @@ def test_default_world_models_satisfy_capacity_gate():
         variants = [
             variant
             for variant in VARIANTS
-            if bottleneck == "continuous" or variant != "equivariant"
+            if bottleneck == "continuous"
+            or variant not in {"equivariant", "ripii_mr"}
         ]
         matches = widths(cfg, variants, bottleneck)
         assert all(
@@ -255,7 +256,7 @@ def test_split_reproducibility_and_actual_heldout_properties():
 @pytest.mark.parametrize("variant", list(VARIANTS))
 @pytest.mark.parametrize("bottleneck", ["continuous", "fsq", "vq"])
 def test_all_models_learn_and_preserve_properties(variant, bottleneck):
-    if variant == "equivariant" and bottleneck != "continuous":
+    if variant in {"equivariant", "ripii_mr"} and bottleneck != "continuous":
         with pytest.raises(ValueError, match="continuous"):
             WorldModel(variant, hidden=16, bottleneck=bottleneck)
         return
@@ -290,7 +291,15 @@ def test_all_models_learn_and_preserve_properties(variant, bottleneck):
 
 
 @pytest.mark.parametrize(
-    "variant", ["graph", "transformer", "global_pool", "multiscale", "equivariant"]
+    "variant",
+    [
+        "graph",
+        "transformer",
+        "global_pool",
+        "multiscale",
+        "equivariant",
+        "ripii_mr",
+    ],
 )
 def test_learned_interactions_are_permutation_equivariant(variant):
     torch.set_num_threads(1)

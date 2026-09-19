@@ -6,6 +6,10 @@ import torch
 from torch import nn
 
 from ..models.quantizer import HierarchicalVectorQuantizer
+from .multiresolution import (
+    ConditionalMultiresolutionDynamicsV2,
+    ConservativeMultiresolutionDynamics,
+)
 
 VARIANTS = (
     "mlp",
@@ -14,7 +18,15 @@ VARIANTS = (
     "global_pool",
     "multiscale",
     "equivariant",
+    "ripii_mr",
 )
+
+# Experimental variants are explicitly selectable but excluded from the
+# historical default benchmark grid above.  This prevents a new mechanism from
+# silently changing frozen v1 comparisons.
+EXPERIMENTAL_VARIANTS = ("ripii_mr_v2",)
+MODEL_VARIANTS = VARIANTS + EXPERIMENTAL_VARIANTS
+CONTINUOUS_DYNAMICS_VARIANTS = {"equivariant", "ripii_mr", "ripii_mr_v2"}
 
 
 def mlp(input_dim: int, hidden: int, output: int) -> nn.Sequential:
@@ -152,11 +164,14 @@ class WorldModel(nn.Module):
         groups=4,
     ):
         super().__init__()
-        if variant not in VARIANTS or bottleneck not in {"continuous", "fsq", "vq"}:
+        if (
+            variant not in MODEL_VARIANTS
+            or bottleneck not in {"continuous", "fsq", "vq"}
+        ):
             raise ValueError("unknown model variant or bottleneck")
-        if variant == "equivariant" and bottleneck != "continuous":
+        if variant in CONTINUOUS_DYNAMICS_VARIANTS and bottleneck != "continuous":
             raise ValueError(
-                "the equivariant baseline supports only a continuous scalar path"
+                "equivariant dynamics variants support only a continuous scalar path"
             )
         if (
             not isinstance(hidden, int)
@@ -188,30 +203,41 @@ class WorldModel(nn.Module):
         self.variant, self.dt, self.max_objects = variant, dt, max_objects
         if variant == "equivariant":
             self.equivariant = EquivariantDynamics(hidden)
+        elif variant == "ripii_mr":
+            self.multiresolution = ConservativeMultiresolutionDynamics(hidden, groups)
+        elif variant == "ripii_mr_v2":
+            self.multiresolution = ConditionalMultiresolutionDynamicsV2(hidden, groups)
         else:
             self.encoder = mlp(8, hidden, hidden)
-        if variant == "mlp":
-            self.flat = mlp(max_objects * 9, hidden, max_objects * hidden)
-        elif variant == "transformer":
-            layer = nn.TransformerEncoderLayer(
-                hidden, 4, hidden * 2, dropout=0.0, activation="gelu", batch_first=True
-            )
-            self.attention = nn.TransformerEncoder(layer, 2, enable_nested_tensor=False)
-        else:
-            self.local = Interaction(hidden)
-            self.refine = Interaction(hidden)
-            if variant == "multiscale":
-                self.assignment = nn.Linear(hidden, groups)
-                self.coarse = Interaction(hidden)
-                self.fusion = mlp(hidden * 2, hidden, hidden)
-            elif variant == "global_pool":
-                self.fusion = mlp(hidden * 2, hidden, hidden)
+            if variant == "mlp":
+                self.flat = mlp(max_objects * 9, hidden, max_objects * hidden)
+            elif variant == "transformer":
+                layer = nn.TransformerEncoderLayer(
+                    hidden,
+                    4,
+                    hidden * 2,
+                    dropout=0.0,
+                    activation="gelu",
+                    batch_first=True,
+                )
+                self.attention = nn.TransformerEncoder(
+                    layer, 2, enable_nested_tensor=False
+                )
+            else:
+                self.local = Interaction(hidden)
+                self.refine = Interaction(hidden)
+                if variant == "multiscale":
+                    self.assignment = nn.Linear(hidden, groups)
+                    self.coarse = Interaction(hidden)
+                    self.fusion = mlp(hidden * 2, hidden, hidden)
+                elif variant == "global_pool":
+                    self.fusion = mlp(hidden * 2, hidden, hidden)
         self.bottleneck = bottleneck
         if bottleneck == "fsq":
             self.quantizer = FSQ(hidden)
         elif bottleneck == "vq":
             self.quantizer = HierarchicalVectorQuantizer(16, 16, hidden)
-        if variant != "equivariant":
+        if variant not in CONTINUOUS_DYNAMICS_VARIANTS:
             self.head = mlp(hidden, hidden, 4)
             nn.init.zeros_(self.head[-1].weight)
             nn.init.zeros_(self.head[-1].bias)
@@ -242,6 +268,13 @@ class WorldModel(nn.Module):
         if self.variant == "equivariant":
             self.aux_loss = state.new_zeros(())
             result = self.equivariant(state, action, mask, self.dt)
+            if not torch.isfinite(result).all():
+                raise FloatingPointError("non-finite world-model output")
+            return result
+        if self.variant in {"ripii_mr", "ripii_mr_v2"}:
+            self.aux_loss = state.new_zeros(())
+            result = self.multiresolution(state, action, mask, self.dt)
+            self.last_assignments = self.multiresolution.last_assignments
             if not torch.isfinite(result).all():
                 raise FloatingPointError("non-finite world-model output")
             return result
@@ -300,8 +333,17 @@ class WorldModel(nn.Module):
     def diagnostics(self, mask: torch.Tensor) -> dict[str, float]:
         """Return bounded mechanism diagnostics for the most recent forward pass."""
         result: dict[str, float] = {}
+        if self.variant in {"ripii_mr", "ripii_mr_v2"}:
+            result.update(self.multiresolution.last_diagnostics)
         if self.last_assignments is not None:
-            active = self.last_assignments[mask]
+            assignment_mask = mask
+            if self.variant == "ripii_mr_v2":
+                routed = self.multiresolution.last_routed_scenes
+                if routed is not None:
+                    assignment_mask = assignment_mask & routed.unsqueeze(-1)
+            active = self.last_assignments[assignment_mask]
+            if not active.numel():
+                return result
             eps = torch.finfo(active.dtype).eps
             per_object_entropy = -(active * active.clamp_min(eps).log()).sum(-1)
             occupancy = active.mean(0)

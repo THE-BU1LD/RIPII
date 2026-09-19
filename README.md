@@ -13,10 +13,49 @@ removal, while its codebooks remained near collapse. See
 The authoritative audit is
 [`audit/END_TO_END_AUDIT_2026-09-13.md`](audit/END_TO_END_AUDIT_2026-09-13.md),
 with status and historical reports indexed by [`audit/README.md`](audit/README.md).
+The paper-readiness gate and current scored decision are
+[`PAPER_STANDARD.md`](PAPER_STANDARD.md) and
+[`FINAL_RESEARCH_AUDIT.md`](FINAL_RESEARCH_AUDIT.md). Only the latter may assign a
+P0–P6 readiness state; its current decision is P2, not submission-ready.
 The current verdict is
 **EVIDENCE_PARTIAL**: implementation quality is substantially verified, while the
 evidence is synthetic or external-simulator development work and the proposed
 mechanisms have negative results.
+
+## RIPII-MR rebuild
+
+The prospectively specified rebuild is implemented as the separate `ripii_mr` world-model
+variant. It replaces unconstrained soft pooling and the legacy multi-loss/VQ path with
+mass-aware geometric restriction, central antisymmetric impulses, torque-free
+prolongation, deterministic adaptive coarse routing, and a semi-implicit physical
+update. Construction tests cover partition of unity, mass accounting, permutation and
+E(2) behavior, internal momentum/torque preservation, external-force semantics and
+gradient reachability. These are implementation properties, not evidence of predictive
+advantage. The current route gates the coarse contribution after the coarse path has
+already been computed, so it does not establish conditional-compute or efficiency
+benefits.
+
+The frozen 75-run synthetic development matrix completed and returned `no_advance`.
+RIPII-MR was worse in mean OOD relative improvement against every control: -0.1596
+versus equivariant, -0.7824 versus graph, -1.1909 versus global pool and -1.2134 versus
+legacy multiscale. None of the 60 paired candidate/control cells passed the frozen
+advancement rule. This is a negative development result, not external or confirmatory
+evidence, and it terminates advancement of this architecture version under the
+predeclared rule.
+
+Verify the retained matrix without overwriting it, then rebuild the manuscript:
+
+```bash
+.venv/bin/python scripts/run_ripii_mr_matrix.py \
+  --output runs/ripii_mr_development_v1 --verify-only
+./scripts/build_ripii_mr_paper.sh
+```
+
+See [`research/protocols/ripii_mr_development_v1.md`](research/protocols/ripii_mr_development_v1.md),
+[`research/RIPII_POSITIVE_RESEARCH_PROGRAM.md`](research/RIPII_POSITIVE_RESEARCH_PROGRAM.md),
+[`runs/ripii_mr_development_v1/report.md`](runs/ripii_mr_development_v1/report.md), and
+[`paper/RIPII_MR_MANUSCRIPT.md`](paper/RIPII_MR_MANUSCRIPT.md). No positive, novelty,
+conditional-compute, efficiency or publication claim is authorized.
 The actionable post-audit backlog—including explicit pseudocode, scaffold, bad-
 implementation, improvement, addition, and abstraction classifications—is
 [`audit/ULTIMATE_CHECKLIST.md`](audit/ULTIMATE_CHECKLIST.md).

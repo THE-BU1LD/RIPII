@@ -48,6 +48,7 @@ include = ["ripii*"]
 
 [tool.pytest.ini_options]
 addopts = "-q --basetemp=.test-tmp/pytest"
+testpaths = ["tests"]
 
 [tool.coverage.run]
 branch = true

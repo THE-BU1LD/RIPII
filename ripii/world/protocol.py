@@ -110,6 +110,8 @@ def _validate_world(payload: dict) -> None:
                 "global_pool",
                 "multiscale",
                 "equivariant",
+                "ripii_mr",
+                "ripii_mr_v2",
             }
             for item in variants
         )
@@ -123,10 +125,12 @@ def _validate_world(payload: dict) -> None:
         or any(item not in {"continuous", "fsq", "vq"} for item in bottlenecks)
     ):
         raise ValueError("world protocol has invalid bottlenecks")
-    if "equivariant" in variants and any(
+    if {"equivariant", "ripii_mr", "ripii_mr_v2"}.intersection(variants) and any(
         item != "continuous" for item in bottlenecks
     ):
-        raise ValueError("equivariant protocols require a continuous bottleneck")
+        raise ValueError(
+            "equivariant dynamics protocols require a continuous bottleneck"
+        )
     _validate_experiment(payload.get("experiment"))
     _validate_source_hashes(payload.get("source_sha256"))
     datasets = payload.get("datasets")
