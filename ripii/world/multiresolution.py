@@ -69,8 +69,11 @@ class CentralImpulse(nn.Module):
     def __init__(self, hidden: int):
         super().__init__()
         self.net = _mlp(2 * hidden + 3, hidden, 1)
-        nn.init.zeros_(self.net[-1].weight)
-        nn.init.zeros_(self.net[-1].bias)
+        output_layer = self.net[-1]
+        if not isinstance(output_layer, nn.Linear):
+            raise TypeError("central impulse output layer must be linear")
+        nn.init.zeros_(output_layer.weight)
+        nn.init.zeros_(output_layer.bias)
 
     def forward(
         self,
@@ -258,7 +261,10 @@ class ConservativeMultiresolutionDynamics(nn.Module):
         self.coarsener = GeometryCoarsener(groups, memberships)
         self.coarse_impulse = CentralImpulse(hidden)
         self.router = _mlp(hidden + 1, hidden, 1)
-        nn.init.constant_(self.router[-1].bias, math.log(3.0))
+        router_output = self.router[-1]
+        if not isinstance(router_output, nn.Linear):
+            raise TypeError("router output layer must be linear")
+        nn.init.constant_(router_output.bias, math.log(3.0))
         self.last_assignments: torch.Tensor | None = None
         self.last_diagnostics: dict[str, float] = {}
 
