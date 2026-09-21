@@ -2,6 +2,14 @@ name: device-smoke
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/device-smoke.yml"
+      - "scripts/check_device_smoke.py"
+      - "ripii/world/**"
+      - "ripii/models/**"
+      - "pyproject.toml"
+      - "uv.lock"
   schedule:
     - cron: "17 3 * * 1"
 
