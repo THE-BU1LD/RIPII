@@ -348,7 +348,10 @@ class WorldModel(nn.Module):
         if self.last_assignments is not None:
             assignment_mask = mask
             if self.variant == "ripii_mr_v2":
-                routed = self.multiresolution.last_routed_scenes
+                multiresolution = self.multiresolution
+                if not isinstance(multiresolution, ConditionalMultiresolutionDynamicsV2):
+                    raise RuntimeError("ripii_mr_v2 is missing its conditional dynamics")
+                routed = multiresolution.last_routed_scenes
                 if routed is not None:
                     assignment_mask = assignment_mask & routed.unsqueeze(-1)
             active = self.last_assignments[assignment_mask]
