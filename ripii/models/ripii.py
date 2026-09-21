@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 import torch
 from torch import nn
 
@@ -124,11 +126,13 @@ class RIPIIModel(nn.Module):
         self.num_levels = max(0, num_levels if use_projective else 0)
 
         self.depth_target = float(depth_target)
+        self._depth_target: torch.Tensor
         self.register_buffer(
             "_depth_target",
             torch.tensor(float(depth_target), dtype=torch.float32),
             persistent=False,
         )
+        self._num_nodes_tensor: torch.Tensor
         self.register_buffer(
             "_num_nodes_tensor",
             torch.tensor(float(max(1, self.num_nodes)), dtype=torch.float32),
@@ -210,7 +214,7 @@ class RIPIIModel(nn.Module):
         self,
         x: torch.Tensor,
         transform: torch.Tensor | None = None,
-    ) -> dict[str, torch.Tensor]:
+    ) -> dict[str, Any]:
         stages, stack_stats, mu, logvar, z = self.encode_hierarchy(x)
         nodes = self.split_nodes(z)
         pooled, graph_stats = self.graph(nodes)
@@ -290,7 +294,7 @@ class RIPIIModel(nn.Module):
         x: torch.Tensor,
         x_view: torch.Tensor | None = None,
         transform: torch.Tensor | None = None,
-    ) -> dict[str, torch.Tensor]:
+    ) -> dict[str, Any]:
         out = self._forward_core(x, transform=transform)
 
         if x_view is not None:
@@ -307,7 +311,7 @@ class RIPIIModel(nn.Module):
 
     def _base_losses(
         self,
-        out: dict[str, torch.Tensor],
+        out: dict[str, Any],
         batch: dict[str, torch.Tensor],
     ) -> dict[str, torch.Tensor]:
         x = batch["x"]
