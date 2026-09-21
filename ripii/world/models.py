@@ -44,16 +44,16 @@ class FSQ(nn.Module):
             raise ValueError("FSQ requires positive widths and an odd level count >= 3")
         self.encode = nn.Linear(hidden, dimensions)
         self.decode = nn.Linear(dimensions, hidden)
-        self.half = (levels - 1) / 2
+        self.half_levels = (levels - 1) / 2
         self.levels = levels
         self.last_codes: torch.Tensor | None = None
 
     def forward(self, h):
-        bounded = torch.tanh(self.encode(h)) * self.half
+        bounded = torch.tanh(self.encode(h)) * self.half_levels
         rounded = bounded.round()
         self.last_codes = rounded.detach()
         discrete = bounded + (rounded - bounded).detach()
-        return self.decode(discrete / self.half)
+        return self.decode(discrete / self.half_levels)
 
 
 class Interaction(nn.Module):
@@ -233,14 +233,18 @@ class WorldModel(nn.Module):
                 elif variant == "global_pool":
                     self.fusion = mlp(hidden * 2, hidden, hidden)
         self.bottleneck = bottleneck
+        self.quantizer: FSQ | HierarchicalVectorQuantizer | None = None
         if bottleneck == "fsq":
             self.quantizer = FSQ(hidden)
         elif bottleneck == "vq":
             self.quantizer = HierarchicalVectorQuantizer(16, 16, hidden)
         if variant not in CONTINUOUS_DYNAMICS_VARIANTS:
             self.head = mlp(hidden, hidden, 4)
-            nn.init.zeros_(self.head[-1].weight)
-            nn.init.zeros_(self.head[-1].bias)
+            head_output = self.head[-1]
+            if not isinstance(head_output, nn.Linear):
+                raise TypeError("world model output layer must be linear")
+            nn.init.zeros_(head_output.weight)
+            nn.init.zeros_(head_output.bias)
         self.aux_loss = torch.tensor(0.0)
         self.last_assignments = None
         self.last_quantizer_stats: dict[str, torch.Tensor] = {}
@@ -309,10 +313,16 @@ class WorldModel(nn.Module):
             h = self.refine(h, state[..., :2], state[..., 2:4], mask)
         self.aux_loss = h.new_zeros(())
         if self.bottleneck == "fsq":
-            h = self.quantizer(h) * live
+            quantizer = self.quantizer
+            if not isinstance(quantizer, FSQ):
+                raise RuntimeError("FSQ bottleneck is missing its quantizer")
+            h = quantizer(h) * live
         elif self.bottleneck == "vq":
+            quantizer = self.quantizer
+            if not isinstance(quantizer, HierarchicalVectorQuantizer):
+                raise RuntimeError("VQ bottleneck is missing its quantizer")
             # Padded slots must never contribute to codebook training or usage.
-            quantized, stats = self.quantizer(h[mask])
+            quantized, stats = quantizer(h[mask])
             h = h.clone()
             h[mask] = quantized
             self.aux_loss = (
@@ -360,13 +370,18 @@ class WorldModel(nn.Module):
                     "assignment_max_occupancy": float(occupancy.max()),
                 }
             )
-        if self.bottleneck == "fsq" and self.quantizer.last_codes is not None:
-            active_codes = self.quantizer.last_codes[mask].to(torch.int64)
+        if self.bottleneck == "fsq":
+            quantizer = self.quantizer
+            if not isinstance(quantizer, FSQ):
+                raise RuntimeError("FSQ bottleneck is missing its quantizer")
+            if quantizer.last_codes is None:
+                return result
+            active_codes = quantizer.last_codes[mask].to(torch.int64)
             utilization, effective = [], []
             for dimension in range(active_codes.shape[-1]):
-                indices = active_codes[:, dimension] + int(self.quantizer.half)
+                indices = active_codes[:, dimension] + int(quantizer.half_levels)
                 counts = torch.bincount(
-                    indices, minlength=self.quantizer.levels
+                    indices, minlength=quantizer.levels
                 ).float()
                 probabilities = counts / counts.sum().clamp_min(1)
                 nonzero = probabilities > 0
