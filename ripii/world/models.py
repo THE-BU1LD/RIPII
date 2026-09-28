@@ -314,12 +314,12 @@ class WorldModel(nn.Module):
             h = self.refine(h, state[..., :2], state[..., 2:4], mask)
         self.aux_loss = h.new_zeros(())
         if self.bottleneck == "fsq":
-            quantizer = cast(FSQ, self.quantizer)
-            h = quantizer(h) * live
+            fsq_quantizer = cast(FSQ, self.quantizer)
+            h = fsq_quantizer(h) * live
         elif self.bottleneck == "vq":
             # Padded slots must never contribute to codebook training or usage.
-            quantizer = cast(HierarchicalVectorQuantizer, self.quantizer)
-            quantized, stats = quantizer(h[mask])
+            vq_quantizer = cast(HierarchicalVectorQuantizer, self.quantizer)
+            quantized, stats = vq_quantizer(h[mask])
             h = h.clone()
             h[mask] = quantized
             self.aux_loss = (
@@ -370,13 +370,16 @@ class WorldModel(nn.Module):
                     "assignment_max_occupancy": float(occupancy.max()),
                 }
             )
-        if self.bottleneck == "fsq" and self.quantizer.last_codes is not None:
-            active_codes = self.quantizer.last_codes[mask].to(torch.int64)
+        if self.bottleneck == "fsq":
+            fsq_quantizer = cast(FSQ, self.quantizer)
+            if fsq_quantizer.last_codes is None:
+                return result
+            active_codes = fsq_quantizer.last_codes[mask].to(torch.int64)
             utilization, effective = [], []
             for dimension in range(active_codes.shape[-1]):
-                indices = active_codes[:, dimension] + int(self.quantizer.half)
+                indices = active_codes[:, dimension] + int(fsq_quantizer.half_range)
                 counts = torch.bincount(
-                    indices, minlength=self.quantizer.levels
+                    indices, minlength=fsq_quantizer.levels
                 ).float()
                 probabilities = counts / counts.sum().clamp_min(1)
                 nonzero = probabilities > 0
