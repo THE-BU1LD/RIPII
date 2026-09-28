@@ -14,17 +14,17 @@
 
 ## Scientific review
 
-- [ ] Abstract numbers checked against PAPER_EVIDENCE_MAP.md.
-- [ ] Pilot-v2 table checked against research/results/pilot_v2/summary.json.
-- [ ] World-v3 means checked against the retained capsule.
-- [ ] Paired intervals/p-values checked against world_v3_convergence_statistics.json.
-- [ ] Conditional-coupling wording checked against the prospective protocol.
-- [ ] NRI section remains labeled external-simulator development evidence.
-- [ ] Objective-study language does not imply asymptotic optimization claims.
-- [ ] Gradient diagnostic described as diagnostic, not causal.
-- [ ] Repaired 0.2 and RIPII-MR do not rewrite historical studies.
-- [ ] External confirmation remains explicitly unexecuted.
-- [ ] No SOTA, universal hierarchy-failure, or algorithmic-novelty language.
+- [x] Abstract numbers checked against PAPER_EVIDENCE_MAP.md.
+- [x] Pilot-v2 table checked against research/results/pilot_v2/summary.json.
+- [x] World-v3 means checked against the retained capsule.
+- [x] Paired intervals/p-values checked against world_v3_convergence_statistics.json.
+- [x] Conditional-coupling wording checked against the prospective protocol.
+- [x] NRI section remains labeled external-simulator development evidence.
+- [x] Objective-study language does not imply asymptotic optimization claims.
+- [x] Gradient diagnostic described as diagnostic, not causal.
+- [x] Repaired 0.2 and RIPII-MR do not rewrite historical studies.
+- [x] External confirmation remains explicitly unexecuted.
+- [x] No SOTA, universal hierarchy-failure, or algorithmic-novelty language.
 
 ## Human release gates
 
