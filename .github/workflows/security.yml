@@ -22,10 +22,15 @@ jobs:
         with:
           python-version: "3.11"
           cache: pip
-      - name: Install package and auditor
-        run: python -m pip install --upgrade pip && python -m pip install . pip-audit
-      - name: Audit installed dependencies
-        run: python -m pip_audit --strict
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          enable-cache: true
+      - name: Export locked production dependencies
+        run: uv export --locked --no-dev --no-emit-project --format requirements.txt --output-file /tmp/ripii-requirements.txt
+      - name: Install auditor
+        run: python -m pip install --upgrade pip && python -m pip install pip-audit
+      - name: Audit locked third-party dependencies
+        run: python -m pip_audit --strict --no-deps -r /tmp/ripii-requirements.txt
 
   codeql:
     runs-on: ubuntu-latest
