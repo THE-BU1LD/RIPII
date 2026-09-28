@@ -40,7 +40,7 @@ class WorldDemo:
         self.playing, self.frame, self.dragging = False, 0, None
         self.palette = "Original"
         self.fig = plt.figure(figsize=(13, 8), facecolor="#101820")
-        self.axes = [self.fig.add_axes([x, 0.28, 0.40, 0.58]) for x in (0.06, 0.54)]
+        self.axes = [self.fig.add_axes((x, 0.28, 0.40, 0.58)) for x in (0.06, 0.54)]
         self.fig.text(
             0.06,
             0.95,
@@ -71,7 +71,7 @@ class WorldDemo:
             (0.34, "Rewind", self.rewind),
         ):
             button = Button(
-                self.fig.add_axes([x, 0.17, 0.12, 0.045]),
+                self.fig.add_axes((x, 0.17, 0.12, 0.045)),
                 label,
                 color="#c6e98b",
                 hovercolor="#e0ffb0",
@@ -79,7 +79,7 @@ class WorldDemo:
             button.on_clicked(callback)
             self.buttons.append(button)
         self.object_slider = Slider(
-            self.fig.add_axes([0.64, 0.19, 0.26, 0.025]),
+            self.fig.add_axes((0.64, 0.19, 0.26, 0.025)),
             "Objects",
             2,
             min(12, self.model.max_objects),
@@ -89,7 +89,7 @@ class WorldDemo:
         )
         self.object_slider.on_changed(self.change_objects)
         self.force_x = Slider(
-            self.fig.add_axes([0.12, 0.115, 0.30, 0.025]),
+            self.fig.add_axes((0.12, 0.115, 0.30, 0.025)),
             "Force x",
             -1.0,
             1.0,
@@ -97,7 +97,7 @@ class WorldDemo:
             color="#c6e98b",
         )
         self.force_y = Slider(
-            self.fig.add_axes([0.12, 0.065, 0.30, 0.025]),
+            self.fig.add_axes((0.12, 0.065, 0.30, 0.025)),
             "Force y",
             -1.0,
             1.0,
@@ -107,7 +107,7 @@ class WorldDemo:
         self.force_x.on_changed(self.change_force)
         self.force_y.on_changed(self.change_force)
         self.palette_control = RadioButtons(
-            self.fig.add_axes([0.60, 0.05, 0.15, 0.10], facecolor="#dce5dd"),
+            self.fig.add_axes((0.60, 0.05, 0.15, 0.10), facecolor="#dce5dd"),
             ("Original", "Recolored"),
         )
         self.palette_control.on_clicked(self.change_palette)
@@ -242,7 +242,7 @@ class WorldDemo:
                 ax.plot(trail[:, 0], trail[:, 1], color=color, alpha=0.6, lw=1.5)
                 ax.add_patch(
                     Circle(
-                        state[:2],
+                        (float(state[0]), float(state[1])),
                         float(state[4]),
                         facecolor=color,
                         edgecolor="white" if i == self.selected else "none",

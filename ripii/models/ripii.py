@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any, cast
+
 import torch
 from torch import nn
 
@@ -210,7 +212,7 @@ class RIPIIModel(nn.Module):
         self,
         x: torch.Tensor,
         transform: torch.Tensor | None = None,
-    ) -> dict[str, torch.Tensor]:
+    ) -> dict[str, Any]:
         stages, stack_stats, mu, logvar, z = self.encode_hierarchy(x)
         nodes = self.split_nodes(z)
         pooled, graph_stats = self.graph(nodes)
@@ -290,7 +292,7 @@ class RIPIIModel(nn.Module):
         x: torch.Tensor,
         x_view: torch.Tensor | None = None,
         transform: torch.Tensor | None = None,
-    ) -> dict[str, torch.Tensor]:
+    ) -> dict[str, Any]:
         out = self._forward_core(x, transform=transform)
 
         if x_view is not None:
@@ -307,7 +309,7 @@ class RIPIIModel(nn.Module):
 
     def _base_losses(
         self,
-        out: dict[str, torch.Tensor],
+        out: dict[str, Any],
         batch: dict[str, torch.Tensor],
     ) -> dict[str, torch.Tensor]:
         x = batch["x"]
@@ -368,8 +370,9 @@ class RIPIIModel(nn.Module):
             proj = proj + self._stack_stat(out, f"renorm_{i}_projection_residual", x)
 
         node_flat = out["nodes"].reshape(x.shape[0], -1)
+        num_nodes_tensor = cast(torch.Tensor, self._num_nodes_tensor)
         node_entropy_floor = torch.log(
-            self._num_nodes_tensor.to(device=x.device, dtype=x.dtype)
+            num_nodes_tensor.to(device=x.device, dtype=x.dtype)
         )
         node = out["node_separation"]
         node = node + variance_penalty(node_flat)
