@@ -412,6 +412,43 @@ The evidence is not broad enough to conclude that hierarchy is generally harmful
 
 That is the practical value of the negative result: it narrows the hypothesis space.
 
+
+\section*{AI Use Statement}
+
+Generative AI tools were used during the broader RIPII workflow for software inspection, test and CI review, evidence-ledger reconciliation, literature and claim-boundary checking, and drafting/editing portions of this manuscript and its supporting documentation. AI-assisted text and code changes were checked against the repository source, retained experimental artifacts, frozen/prospective protocols, and primary references before inclusion. Generative AI was not used to fabricate missing results, alter frozen thresholds after outcomes were observed, or relabel failed advancement gates as positive findings. The human authors remain responsible for the final manuscript, claims, code, and release decisions.
+
+\appendix
+
+\section{Study Ledger}
+
+Table~\ref{tab:ledger} summarizes how each evidence family is used in the paper. Later studies are not treated as retroactive replacements for earlier ones.
+
+\begin{table}[h]
+\centering
+\small
+\caption{RIPII study ledger and claim role.}
+\label{tab:ledger}
+\begin{tabularx}{\textwidth}{p{0.21\textwidth}p{0.12\textwidth}p{0.17\textwidth}X}
+\toprule
+Study & Seeds / runs & Decision & Evidence role and main boundary\\
+\midrule
+Corrected structured pilot v2 & 3 seeds & H1 rejected & Frozen local synthetic pilot; tests structured stack and quantizer controls.\\
+World-v3 convergence & 5 seeds & \texttt{no\_advance} & Strongest bundled-simulator development study; paired graph/global/multiscale controls.\\
+World-v3 failure localization & same retained checkpoints & diagnostic only & Post-result exploratory localization; cannot change the primary verdict.\\
+Conditional long-range coupling & 3 seeds & \texttt{no\_advance} & Prospectively written development intervention; primary control is global pooling.\\
+Longer coupled follow-up & 3 fresh seeds & descriptive negative & Additional 300-update development evidence; not a replacement decision rule.\\
+NRI Springs/Charged extension & 3 seeds/domain & \texttt{no\_advance} & External simulator code with generated trajectories; not real-world or confirmatory evidence.\\
+Objective simplification & 39 runs & \texttt{no\_auxiliary\_advance} & Three-seed, 30-update frozen local development study; no asymptotic claim.\\
+Repaired RIPII 0.2 & 5 seeds & advancement failed & Engineering-corrected development evidence; does not rewrite historical results.\\
+RIPII-MR & 75 learned-model runs & \texttt{no\_advance} & Later synthetic successor; 0/60 paired comparisons pass the frozen gate.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Interpretation Rule}
+
+The paper follows a strict ordering of evidence. A frozen or prospectively written decision rule is interpreted first. Post-result failure analysis may explain a failure but cannot reverse it. A later repaired implementation receives a new evidence label and cannot be substituted backward into historical experiments. Exploratory observations can motivate a future hypothesis only after a new protocol is frozen on a fresh evidence boundary.
+
 \bibliographystyle{plainnat}
 \bibliography{references}
 
