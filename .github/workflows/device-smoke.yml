@@ -2,6 +2,14 @@ name: device-smoke
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/device-smoke.yml"
+      - "scripts/check_device_smoke.py"
+      - "ripii/world/**"
+      - "ripii/models/**"
+      - "pyproject.toml"
+      - "uv.lock"
   schedule:
     - cron: "17 3 * * 1"
 
@@ -9,7 +17,7 @@ permissions:
   contents: read
 
 jobs:
-  mps:
+  hosted-mps-capability:
     runs-on: macos-14
     timeout-minutes: 20
     steps:
@@ -22,7 +30,63 @@ jobs:
           enable-cache: true
       - name: Install exact lock
         run: uv sync --locked
-      - name: Require MPS forward/backward repeatability
+      - name: Classify hosted MPS capability
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          uv run --no-sync python scripts/check_device_smoke.py --device mps > mps-hosted.log 2>&1
+          status=$?
+          set -e
+          cat mps-hosted.log
+          if [ "$status" -eq 0 ]; then
+            echo "HOSTED_MPS_STATUS=EXECUTED_PASS" >> "$GITHUB_ENV"
+            exit 0
+          fi
+          if grep -q "MPS backend out of memory" mps-hosted.log \
+             && grep -Eq "Tried to allocate (256|512) bytes" mps-hosted.log; then
+            echo "HOSTED_MPS_STATUS=INFRASTRUCTURE_BLOCKED_PARAVIRTUAL" >> "$GITHUB_ENV"
+            echo "::notice::Hosted Apple-Silicon MPS allocation is infrastructure-blocked; this is not MPS certification."
+            exit 0
+          fi
+          exit "$status"
+      - name: Record hosted MPS classification
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "hosted_mps_status=${HOSTED_MPS_STATUS:-UNCLASSIFIED}"
+            echo "runner=${RUNNER_NAME}"
+            echo "os=${RUNNER_OS}"
+            echo "arch=${RUNNER_ARCH}"
+            echo "source_sha=${GITHUB_SHA}"
+          } > mps-hosted-classification.txt
+      - name: Upload hosted MPS evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: mps-hosted-capability-${{ github.run_id }}
+          path: |
+            mps-hosted.log
+            mps-hosted-classification.txt
+          if-no-files-found: error
+          retention-days: 30
+
+  mps-certification:
+    if: ${{ vars.RIPII_REAL_MPS_RUNNER == 'enabled' }}
+    runs-on: [self-hosted, macOS, ARM64, ripii-mps]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          python-version: "3.11"
+          enable-cache: true
+      - name: Install exact lock
+        run: uv sync --locked
+      - name: Require real-hardware MPS forward/backward repeatability
         run: uv run --no-sync python scripts/check_device_smoke.py --device mps
 
   cuda:
