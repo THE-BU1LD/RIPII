@@ -54,8 +54,13 @@ The capsule report is the source for manuscript mean ± sample-SD values:
 - multiscale: **0.0983 ± 0.0097**, **0.1216 ± 0.0033**, **0.1301 ± 0.0074**, **0.2130 ± 0.0275**
 - graph-control mean OOD relative improvement for multiscale: **-0.1304836773**
 - paired advancement passes: **0/5**
+- frozen parameter counts: graph **101,896**, global pool **101,160**, multiscale **97,672**; each control is within the protocol's 5% parameter-count tolerance.
+- retained analytic-baseline mean position RMSE (IID / more objects / composition / fast):
+  - persistence: **0.3366 / 0.3051 / 0.3467 / 0.4884**
+  - constant velocity: **0.2276 / 0.2415 / 0.2128 / 0.5536**
+  - force-kinematic: **0.2276 / 0.2419 / 0.2116 / 0.5518**
 
-The paired-statistics artifact is the source for the manuscript differences and finite-seed intervals.
+The paired-statistics artifact is the source for the manuscript differences and finite-seed intervals. The parameter counts and analytic baselines come from the retained world-v3 capsule protocol/report.
 
 ### Long-range coupling
 
