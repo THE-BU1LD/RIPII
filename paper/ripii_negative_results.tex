@@ -8,7 +8,6 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{array}
-\usepackage{enumitem}
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage[round,authoryear]{natbib}
@@ -49,7 +48,7 @@ The central methodological choice is falsification-first evaluation. Each result
 
 The result is a sequence of negative findings that point in the same direction while remaining carefully bounded. Our contributions are:
 
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
     \item We evaluate a structured hierarchical latent model under a corrected frozen pilot and show that removing the quantizer or the structured mechanisms improves reconstruction, while the retained codebooks are near collapse.
     \item We evaluate continuous learned multiscale grouping against matched graph and global-context controls in a five-seed object-dynamics study. The multiscale model fails its predeclared advancement gate on every seed, even though the grouping mechanism remains numerically active.
     \item We test a direct mechanism-based rescue hypothesis: perhaps hierarchy is useful only when nonlocal interactions matter. A symmetric all-pairs coupling intervention increases the value of global information but does not establish hierarchy-specific value over ordinary global pooling.
@@ -162,7 +161,7 @@ The legacy model contains many auxiliary terms. A separate paired study tests ea
 
 The experiments follow four rules.
 
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
     \item \textbf{Freeze before interpretation.} Decision thresholds, seeds, splits, and primary controls are written before the corresponding outcome is interpreted.
     \item \textbf{Preserve adverse evidence.} Failed gates remain failed. Later studies may test new hypotheses, but do not replace earlier verdicts.
     \item \textbf{Validation-only selection.} In the world-model studies, checkpoints are selected by validation position RMSE plus $0.25$ velocity RMSE; test and OOD sets do not select checkpoints.
@@ -334,7 +333,7 @@ The gradient diagnostic supplies a plausible optimization explanation without cl
 
 Engineering corrections can matter, so we keep repaired implementations separate from historical evidence. The current evidence ledger records two relevant follow-ups:
 
-\begin{itemize}[leftmargin=*]
+\begin{itemize}
     \item In the repaired \RIPII\ 0.2 five-seed development study, full-model mean reconstruction MSE is $0.08410$, compared with $0.04687$ for reconstruction+KL and $0.05573$ for a plain autoencoder. Both simpler controls beat the repaired full model on every paired seed.
     \item The later \RIPII-MR synthetic development study returns \texttt{no\_advance}, with $75$ learned-model runs and $0/60$ paired comparisons passing the frozen advancement rule. Its mean OOD improvement is negative against every learned control.
 \end{itemize}
@@ -373,7 +372,7 @@ The current external-confirmation protocol therefore remains deliberately unexec
 
 The evidence has important boundaries.
 
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
     \item \textbf{Mostly synthetic data.} The primary outcome-bearing studies use synthetic generators. The NRI extension uses external simulator code but still locally generated trajectories rather than fixed real-world observations.
     \item \textbf{Small seed counts.} World-v3 uses five seeds; several secondary studies use three. Exact sign-flip tests therefore have low resolution, and bootstrap intervals should not be interpreted as population confidence intervals.
     \item \textbf{Incomplete compute matching.} Parameters and update counts are often approximately matched, but FLOPs and wall-clock compute are not universally matched across variants. Machine-local profiling is explicitly nonportable.
@@ -387,7 +386,7 @@ The evidence has important boundaries.
 
 The repository separates exact numerical artifacts from manuscript prose. The key retained evidence families are:
 
-\begin{itemize}[leftmargin=*]
+\begin{itemize}
     \item corrected pilot-v2 summary and per-seed run artifacts;
     \item self-checksummed world-v3 capsule and paired statistics;
     \item post-result world-v3 failure-localization artifact;
