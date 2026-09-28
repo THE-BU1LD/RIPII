@@ -8,9 +8,9 @@
 - [x] Primary numerical claims mapped to committed evidence surfaces.
 - [x] Negative and no-advance verdicts preserved.
 - [x] Historical and repaired-source evidence kept separate.
-- [x] Exact-head PDF build passes.
+- [ ] Current manuscript source PDF build passes.
 - [ ] Rendered PDF artifact visually inspected.
-- [x] No unresolved LaTeX warnings that change meaning or hide content.
+- [ ] No unresolved LaTeX warnings that change meaning or hide content.
 
 ## Scientific review
 
