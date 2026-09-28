@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 import torch
 from torch import nn
@@ -370,8 +370,9 @@ class RIPIIModel(nn.Module):
             proj = proj + self._stack_stat(out, f"renorm_{i}_projection_residual", x)
 
         node_flat = out["nodes"].reshape(x.shape[0], -1)
+        num_nodes_tensor = cast(torch.Tensor, self._num_nodes_tensor)
         node_entropy_floor = torch.log(
-            self._num_nodes_tensor.to(device=x.device, dtype=x.dtype)
+            num_nodes_tensor.to(device=x.device, dtype=x.dtype)
         )
         node = out["node_separation"]
         node = node + variance_penalty(node_flat)
