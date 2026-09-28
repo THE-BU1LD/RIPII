@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 import torch
 from torch import nn
 
@@ -210,7 +212,7 @@ class RIPIIModel(nn.Module):
         self,
         x: torch.Tensor,
         transform: torch.Tensor | None = None,
-    ) -> dict[str, torch.Tensor]:
+    ) -> dict[str, Any]:
         stages, stack_stats, mu, logvar, z = self.encode_hierarchy(x)
         nodes = self.split_nodes(z)
         pooled, graph_stats = self.graph(nodes)
@@ -290,7 +292,7 @@ class RIPIIModel(nn.Module):
         x: torch.Tensor,
         x_view: torch.Tensor | None = None,
         transform: torch.Tensor | None = None,
-    ) -> dict[str, torch.Tensor]:
+    ) -> dict[str, Any]:
         out = self._forward_core(x, transform=transform)
 
         if x_view is not None:
@@ -307,7 +309,7 @@ class RIPIIModel(nn.Module):
 
     def _base_losses(
         self,
-        out: dict[str, torch.Tensor],
+        out: dict[str, Any],
         batch: dict[str, torch.Tensor],
     ) -> dict[str, torch.Tensor]:
         x = batch["x"]
