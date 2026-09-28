@@ -34,6 +34,16 @@ jobs:
         working-directory: paper
         run: latexmk -pdf -interaction=nonstopmode -halt-on-error ripii_negative_results.tex
 
+      - name: Require clean final LaTeX log
+        working-directory: paper
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -E 'Overfull \\hbox|There were undefined (citations|references)|Citation .* undefined|Reference .* undefined' ripii_negative_results.log; then
+            echo "::error::Final LaTeX log contains a citation/reference or overflow defect"
+            exit 1
+          fi
+
       - name: Require non-empty PDF
         run: test -s paper/ripii_negative_results.pdf
 
