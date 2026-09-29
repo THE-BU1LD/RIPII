@@ -1,0 +1,457 @@
+\documentclass[10pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[round,authoryear]{natbib}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+\newcommand{\RIPII}{\textsc{RIPII}}
+\newcommand{\ood}{\mathrm{OOD}}
+\newcommand{\iid}{\mathrm{IID}}
+\newcommand{\mse}{\mathrm{MSE}}
+\newcommand{\rmse}{\mathrm{RMSE}}
+
+\title{\RIPII: Falsification-First Evaluation of Learned Hierarchy for Physical Dynamics}
+\author{Anonymous Author(s)}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Hierarchical inductive biases are often introduced into learned physical-dynamics systems with the expectation that discrete bottlenecks, coarse-to-fine aggregation, or multi-scale processing will improve abstraction and out-of-distribution prediction. We study that expectation through \RIPII, a sequence of prospectively gated experiments in which increasingly specific hierarchy hypotheses are allowed to fail without post-outcome rescue tuning. Across a corrected three-seed structured-representation pilot, the full hierarchical model has mean reconstruction error $0.2979$, compared with $0.2364$ for quantizer bypass and $0.2362$ after removing the structured mechanisms; its mean effective code fractions are only $0.148$ and $0.182$. In a stronger five-seed object-dynamics study, a flat graph model obtains mean position RMSE $0.0904$ in distribution and $0.1164/0.1203/0.1755$ on three retained shifts, while learned multiscale grouping obtains $0.0983$ and $0.1216/0.1301/0.2130$. The multiscale model fails the predeclared paired advancement gate on all five seeds despite active group assignments. A targeted symmetric long-range coupling intervention does not rescue hierarchy-specific value relative to ordinary global pooling, and a later fresh-seed follow-up places global pooling first in the mean on all four reported regimes. An external-simulator development study on NRI Springs and Charged also returns \texttt{no\_advance}. Finally, a 39-run objective study shows that none of twelve auxiliary additions improves reconstruction over the reconstruction+KL reference on any paired seed; the full objective is substantially worse, and gradient diagnostics reveal severe scale imbalance and widespread directional conflict among terms. These results do not establish that hierarchy is generally harmful. They instead provide a bounded negative-result case study: in the tested regimes, architectural activity and representational complexity repeatedly fail to translate into predictive utility. The evidence supports simplification and external confirmation rather than further outcome-driven hierarchy repair.
+\end{abstract}
+
+\section{Introduction}
+
+Hierarchy is an appealing prior for learned physical systems. Physical processes span scales; interacting objects form local and global structures; and long-horizon prediction appears to invite representations that compress, pool, or discretize state before reasoning over it. This intuition motivates object-centric graph networks, learned pooling, multiscale simulators, discrete latents, and coarse-to-fine world models \citep{battaglia2016interaction,sanchez2018graph,sanchez2020simulate,fortunato2022multiscale,cao2023bistride,vandenoord2017vq,mentzer2023fsq}.
+
+But a mechanism being plausible is not evidence that it helps. A learned grouping can remain active while adding error. A codebook can be trainable while becoming nearly unused. A multi-term objective can contain reasonable ingredients whose gradients disagree. And a hierarchy can appear useful merely because it imports global information that a simpler control lacks.
+
+This paper studies those failure modes in \RIPII. The project began with a comparatively elaborate structured latent model containing projective transforms, graph interactions, hierarchical vector quantization, transformation conditioning, and a large auxiliary objective. A later object-state world-model path isolated a simpler question: does learned multiscale grouping improve long-horizon and out-of-distribution prediction over local graph and global-context controls? Subsequent interventions asked whether long-range interactions, external simulator code, objective simplification, and engineering repairs would materially change the conclusion.
+
+The central methodological choice is falsification-first evaluation. Each result is interpreted under its own frozen or prospectively written gate. When a gate fails, we retain the adverse result rather than modify thresholds, seeds, controls, or the meaning of the hypothesis after observing outcomes. Later experiments may test new questions, but they do not retroactively rescue earlier claims.
+
+The result is a sequence of negative findings that point in the same direction while remaining carefully bounded. Our contributions are:
+
+\begin{enumerate}
+    \item We evaluate a structured hierarchical latent model under a corrected frozen pilot and show that removing the quantizer or the structured mechanisms improves reconstruction, while the retained codebooks are near collapse.
+    \item We evaluate continuous learned multiscale grouping against matched graph and global-context controls in a five-seed object-dynamics study. The multiscale model fails its predeclared advancement gate on every seed, even though the grouping mechanism remains numerically active.
+    \item We test a direct mechanism-based rescue hypothesis: perhaps hierarchy is useful only when nonlocal interactions matter. A symmetric all-pairs coupling intervention increases the value of global information but does not establish hierarchy-specific value over ordinary global pooling.
+    \item We extend the evaluation to commit-pinned NRI Springs and Charged simulator code. The extension remains development evidence and again fails the hierarchy advancement rule.
+    \item We isolate objective complexity in a 39-run paired study. Every auxiliary addition worsens reconstruction relative to the simple reconstruction+KL reference on every retained seed; gradient diagnostics show large scale imbalance and extensive negative pairwise cosine directions.
+    \item We preserve an explicit evidence boundary. These studies are mainly synthetic and developmental, with small seed counts and incomplete compute matching. We therefore make no claim that hierarchy is universally harmful, that a flat graph is universally optimal, or that \RIPII establishes algorithmic novelty.
+\end{enumerate}
+
+The useful conclusion is not that hierarchy does not work. It is narrower: for the tested \RIPII mechanisms, activity and complexity repeatedly fail to provide enough predictive value to justify advancement. That is a concrete reason to simplify the system and move the next evaluation onto externally fixed physical-dynamics data rather than continue tuning the same synthetic hierarchy.
+
+\section{Related Work and Claim Boundary}
+
+\paragraph{Learned physical dynamics.}
+Interaction Networks and later graph-network simulators established relational message passing as a powerful inductive bias for physical systems \citep{battaglia2016interaction,sanchez2018graph,sanchez2020simulate}. Neural Relational Inference studies latent interaction structure from trajectories \citep{kipf2018nri}. Equivariant graph models further constrain learned interactions by symmetry \citep{satorras2021egnn}. These works motivate strong non-hierarchical controls for \RIPII: a local graph, global aggregation, and externally implemented interacting-particle simulators.
+
+\paragraph{Multiscale processing.}
+Learned and engineered multiscale graph systems address long-range communication and resolution in simulation \citep{fortunato2022multiscale,cao2023bistride}. Constraint-based formulations provide another route to physical inductive bias \citep{rubanova2022constraint}. \RIPII's learned soft grouping overlaps this broad design space; we do not claim that the grouping mechanism itself is new.
+
+\paragraph{Discrete representations.}
+Vector-quantized representation learning substantially predates \RIPII \citep{vandenoord2017vq}; finite scalar quantization provides a simpler alternative to learned codebooks \citep{mentzer2023fsq}. Connections between coarse-graining ideas and representation learning also predate this work \citep{mehta2014rg}. Accordingly, our contribution is not a new discrete latent method. The discrete-latent study is used here as a falsification case.
+
+\paragraph{Negative results and reproducibility.}
+The paper is organized around retained adverse evidence and source-bound artifacts rather than a positive model claim. This is consistent with reproducibility practices that distinguish executable code, exact configurations, and retained evidence from scientific generalization \citep{pineau2021reproducibility}. We treat seed-level bootstrap summaries and exact sign-flip tests as descriptive evidence for the executed seeds, not population-level guarantees.
+
+\paragraph{Claim boundary.}
+The repository's own novelty audit finds no defensible new-mathematics or new-algorithm claim. We therefore avoid language such as state of the art, novel hierarchy, or significant improvement. The paper concerns the behavior of the tested \RIPII implementations under the documented studies.
+
+\section{Models and Hypotheses}
+
+\subsection{Structured latent model}
+
+For input $x\in\mathbb{R}^{D}$, the legacy encoder produces a stochastic latent
+\begin{equation}
+(\mu,\log \sigma^2)=E_\theta(x), \qquad
+z_0=\mu+\sigma\odot\epsilon,\quad \epsilon\sim\mathcal{N}(0,I),
+\end{equation}
+with $z_0=\mu$ at evaluation time. A sequence of learned low-rank projective stages transforms the latent:
+\begin{equation}
+z_{\ell+1} =
+\operatorname{LN}\left(
+z_\ell + g_\ell(z_\ell)
+\left[
+P_\ell(z_\ell)+0.25R_\ell(z_\ell)+0.1M_\ell(z_\ell)
+\right]
+\right),
+\end{equation}
+where $P_\ell(z)=zB_\ell B_\ell^\top$. The resulting state is split into nodes, processed by learned graph interactions and attentive pooling, conditioned on a transformation descriptor, and passed through hierarchical residual vector quantization. A decoder reconstructs from the quantized and pooled representations.
+
+The corrected pilot tests the bounded hypothesis that this structured stack provides reconstruction and held-out-probe value beyond simpler removals. The primary negative controls are quantizer bypass and removal of the projective/graph/quantizer/action mechanisms.
+
+\subsection{Object-state world model}
+
+At time $t$, object $i$ has state
+\begin{equation}
+s_{t,i}=(p_x,p_y,v_x,v_y,r,m)
+\end{equation}
+and applied force $a_{t,i}\in\mathbb{R}^{2}$. All learned world-model variants encode each object and predict a bounded correction:
+\begin{equation}
+h_i=E([s_i,a_i]),\qquad
+\delta_i=\tanh H(h_i').
+\end{equation}
+The shared transition uses
+\begin{align}
+v_i' &= v_i + 0.5\,\delta_{i,v},\\
+p_i' &= p_i + \Delta t\,v_i' + 0.05\,\delta_{i,p},
+\end{align}
+while radius and mass are copied.
+
+The local graph aggregates learned messages only among neighbors within the fixed interaction radius. The global-pool control appends the masked scene mean. The multiscale variant assigns each object softly to one of $K$ learned groups:
+\begin{equation}
+A_{ik} = \operatorname{softmax}_k(W_a h_i),\qquad
+\bar h_k =
+\frac{\sum_i A_{ik}h_i}{\sum_i A_{ik}},
+\end{equation}
+performs all-to-all interaction among group states, unpools the result, and then refines locally.
+
+For a rollout of length $T$, training uses a weighted state loss
+\begin{equation}
+L_t =
+\frac{
+\sum_{b,i,j}m_{bi}w_j(\hat s_{t,bij}-s_{t,bij})^2
+}{
+\sum_{b,i}m_{bi}\sum_j w_j
+},
+\qquad
+L=L_1+\frac{1}{2T}\sum_{t=1}^{T}L_t+\lambda_q L_q,
+\end{equation}
+with coordinate weights $w=(4,4,1,1)$.
+
+The world-model advancement hypothesis is deliberately strict: learned multiscale grouping should reduce the mean of the three OOD position-RMSE metrics by at least $5\%$ versus the graph on every paired seed, while worsening IID position RMSE by no more than $5\%$ on every seed.
+
+\subsection{Conditional hierarchy hypothesis}
+
+A possible explanation for a multiscale failure is that the synthetic simulator is too local. We therefore test a prospective intervention with a symmetric all-pairs harmonic force
+\begin{equation}
+F_i^{\mathrm{global}}
+= -\frac{\kappa}{N}\sum_{j\neq i}(p_i-p_j).
+\end{equation}
+This creates controlled nonlocal dependence while preserving pairwise momentum symmetry in the absence of walls, drag, and external forces. The decisive control becomes global pooling: if the gain comes merely from access to global information, learned hierarchy should not receive credit.
+
+The prospective gate requires multiscale to beat global pooling by at least five percentage points on the coupled condition on every seed and to gain at least five percentage points relative to its local-regime advantage.
+
+\subsection{Objective-simplification hypothesis}
+
+The legacy model contains many auxiliary terms. A separate paired study tests each addition against a reconstruction+KL reference at a fixed short budget. For each auxiliary term, advancement requires at least a $5\%$ reconstruction improvement on every paired seed. This study separates many reasonable losses from evidence that the combined objective improves the quantity of interest.
+
+\section{Experimental Design}
+
+\subsection{Evidence governance}
+
+The experiments follow four rules.
+
+\begin{enumerate}
+    \item \textbf{Freeze before interpretation.} Decision thresholds, seeds, splits, and primary controls are written before the corresponding outcome is interpreted.
+    \item \textbf{Preserve adverse evidence.} Failed gates remain failed. Later studies may test new hypotheses, but do not replace earlier verdicts.
+    \item \textbf{Validation-only selection.} In the world-model studies, checkpoints are selected by validation position RMSE plus $0.25$ velocity RMSE; test and OOD sets do not select checkpoints.
+    \item \textbf{Artifact binding.} Numerical claims in this paper are traceable to committed JSON/CSV/capsule artifacts. Rounded manuscript values are not the source of record.
+\end{enumerate}
+
+\subsection{Corrected structured pilot}
+
+The corrected pilot uses three fresh seeds and a $70/15/15$ train/validation/held-out split. It retains exact initialization receipts and evaluates the full structured model, quantizer bypass, and structured-mechanism removal. The pilot is local synthetic evidence with a short training budget; it is not an external benchmark.
+
+\subsection{World-v3 convergence study}
+
+The strongest bundled-simulator study uses five paired initialization/minibatch seeds
+\[
+\{23,29,31,37,43\},
+\]
+a fresh dataset seed, a $1000$-update ceiling, and validation-selected checkpoints. We report position RMSE in distribution and under three pre-existing shifts: more objects, held-out composition/properties, and faster motion.
+
+The learned variants are approximately parameter matched under the frozen tolerance: graph has 101,896 parameters, global pooling 101,160, and multiscale 97,672, all within 5\% of the multiscale count. This controls parameter count but not FLOPs or wall-clock compute.
+
+The retained paired analysis defines the difference as multiscale minus graph, so positive values indicate higher error for multiscale. With only five seeds, exact two-sided sign-flip tests have low resolution. We report them together with bootstrap intervals describing the executed seed set, without population-level significance claims.
+
+\subsection{Long-range intervention}
+
+The prospective conditional-hierarchy study uses paired seeds $53,59,61$, local and coupled conditions, and a $100$-update budget. A separate longer fresh-seed follow-up uses seeds $103,107,109$ and $300$ updates. The short prospective study decides the predefined conditional-hierarchy gate; the longer follow-up is additional development evidence rather than a replacement decision rule.
+
+\subsection{External-simulator development study}
+
+To reduce dependence on the bundled generator, we evaluate commit-pinned NRI Springs and Charged simulators. The retained registry fixes simulator source, generated dataset hashes, disjoint RNG domains for train/validation/test, preprocessing, and an explicit claim boundary. The study uses three seeds per domain and remains external-\emph{simulator} development evidence, not fixed real-world data or confirmatory external validation.
+
+\subsection{Objective study}
+
+The objective study contains $39$ completed runs: thirteen objective modes across three paired seeds. The reference uses reconstruction+KL. The remaining twelve modes add one auxiliary term at a time or use the full legacy objective. A diagnostic pass computes the weighted gradient norm of each term and pairwise gradient cosines on one deterministic batch per trained seed.
+
+\section{Results}
+
+\subsection{The structured hierarchy loses to simpler removals}
+
+Table~\ref{tab:pilot} summarizes the corrected pilot. Both simpler controls improve mean reconstruction. Removing all structured mechanisms also improves the mean held-out probe accuracy.
+
+\begin{table}[t]
+\centering
+\caption{Corrected structured pilot, three seeds. Lower reconstruction MSE is better; higher probe accuracy is better. Code fractions apply only to the quantized full model.}
+\label{tab:pilot}
+\begin{tabular}{lrrrr}
+\toprule
+Model & Recon. MSE & Probe acc. & Coarse eff. & Fine eff.\\
+\midrule
+Full \RIPII & 0.2979 & 0.4912 & 0.1478 & 0.1815\\
+No VQ & 0.2364 & 0.5088 & -- & --\\
+No structured stack & \textbf{0.2362} & \textbf{0.5789} & -- & --\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The mean reconstruction disadvantage of the full model versus quantizer bypass is $0.06155$. The full model is worse than structured-mechanism removal by approximately $0.06169$ reconstruction MSE. Its effective code fractions are low, with two of the three retained seeds effectively using close to a single code in the reported codebooks. This does not establish a universal failure of vector quantization; it shows that the tested discrete hierarchy is not justified by this pilot.
+
+\subsection{Multiscale grouping fails the five-seed world-model gate}
+
+Table~\ref{tab:worldv3} reports the retained world-v3 means. The flat graph has the lowest mean error in every reported learned-model regime.
+
+\begin{table}[t]
+\centering
+\caption{World-v3 position RMSE, mean $\pm$ sample standard deviation across five initialization/minibatch seeds. Lower is better.}
+\label{tab:worldv3}
+\begin{tabular}{lrrrr}
+\toprule
+Model & IID & More obj. & Composition & Fast\\
+\midrule
+Graph & \textbf{0.0904$\pm$0.0075} & \textbf{0.1164$\pm$0.0057} & \textbf{0.1203$\pm$0.0058} & \textbf{0.1755$\pm$0.0254}\\
+Global pool & 0.0920$\pm$0.0070 & 0.1235$\pm$0.0056 & 0.1325$\pm$0.0054 & 0.2167$\pm$0.0262\\
+Multiscale & 0.0983$\pm$0.0097 & 0.1216$\pm$0.0033 & 0.1301$\pm$0.0074 & 0.2130$\pm$0.0275\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Against the graph control, the mean multiscale OOD relative improvement is $-13.05\%$, and multiscale records zero OOD seed wins under the predeclared gate. The per-seed advancement checks are false for all five seeds.
+
+The negative hierarchy result occurs in a regime where learned prediction is clearly nontrivial rather than uniformly failing. On the same retained splits, a constant-velocity analytic baseline has mean position RMSE $0.2276/0.2415/0.2128/0.5536$ across IID, more-objects, composition, and fast-motion evaluation, while persistence is $0.3366/0.3051/0.3467/0.4884$. The learned graph is substantially below these baseline errors on every reported split. Thus the primary failure is comparative: added learned hierarchy does not improve an already functional relational predictor under this benchmark.
+
+The paired error differences in Table~\ref{tab:paired} sharpen the descriptive picture. Multiscale is worse in mean IID error, held-out-composition error, and fast-motion error, with the latter showing the largest average degradation. Exact sign-flip tests remain coarse at $n=5$ and are not used to make a population-significance claim.
+
+\begin{table}[t]
+\centering
+\caption{Paired multiscale-minus-graph position-RMSE differences in world-v3. Positive means multiscale is worse. Bootstrap intervals summarize the executed seeds only.}
+\label{tab:paired}
+\begin{tabular}{lrrr}
+\toprule
+Regime & Mean diff. & 95\% bootstrap interval & Exact sign-flip $p$\\
+\midrule
+IID & 0.00788 & [0.00139, 0.01433] & 0.1875\\
+More objects & 0.00523 & [-0.00216, 0.01139] & 0.1875\\
+Composition & 0.00982 & [0.00504, 0.01472] & 0.0625\\
+Fast motion & 0.03748 & [0.02130, 0.05717] & 0.0625\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Importantly, the learned grouping does not simply switch off. The retained diagnostics report $2.77$ effective groups out of four. Thus the failure cannot be reduced to trivial mechanism inactivity. This motivates a distinction that recurs throughout the project:
+
+\begin{quote}
+\emph{mechanism activity is not the same as predictive utility.}
+\end{quote}
+
+\subsection{Failure is not confined to one interaction regime}
+
+Post-result failure localization partitions transitions into contact, near-contact, wall, forced, and free-flight subsets. The multiscale deficit is observed across multiple regimes rather than appearing only during collisions. This analysis is exploratory because it was performed after the primary world-v3 result. Its role is therefore diagnostic: it argues against the narrow explanation that a single contact-specific bug alone carries the negative result.
+
+\subsection{Long-range coupling does not rescue hierarchy-specific value}
+
+The conditional-hierarchy intervention directly challenges the local-information explanation. In the prospective three-seed study, the multiscale-minus-global-pool mean difference on the more-objects split is $-0.00199$ in the local condition and $-0.00204$ in the coupled condition. These correspond to roughly $1.00\%$ and $1.09\%$ relative improvements for multiscale, respectively. The coupled seed directions are mixed and the exact two-sided sign-flip value is $0.75$.
+
+The predeclared hypothesis requires a substantially larger and consistent coupled advantage, so the decision is \texttt{no\_advance}. Nonlocality makes global information useful, but does not establish that learned grouping is the reason.
+
+A separate $300$-update fresh-seed follow-up strengthens that boundary. Table~\ref{tab:coupled} shows that global pooling has the best mean error in distribution and under all three reported shifts, while multiscale is close but not consistently better.
+
+\begin{table}[t]
+\centering
+\caption{Longer fresh-seed coupled follow-up, mean position RMSE across three seeds. Lower is better.}
+\label{tab:coupled}
+\begin{tabular}{lrrrr}
+\toprule
+Model & IID & More obj. & Composition & Fast\\
+\midrule
+Graph & 0.1728 & 0.1767 & 0.1722 & 0.3406\\
+Global pool & \textbf{0.1575} & \textbf{0.1560} & \textbf{0.1674} & \textbf{0.3321}\\
+Multiscale & 0.1577 & 0.1574 & 0.1701 & 0.3391\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This is a useful boundary condition. When the simulator requires global information, a simple global context mechanism improves over the local graph. The evidence does not show that a learned hierarchy is necessary to obtain that benefit.
+
+\subsection{External simulator code yields another no-advance result}
+
+The NRI development extension uses commit-pinned Springs and Charged simulators with hashed generated train/validation/test datasets. Across the six domain-seed primary comparisons, the retained relative improvements for multiscale are
+\[
+3.94\%,\ 2.58\%,\ 2.25\%,\ -0.09\%,\ -0.20\%,\ 16.40\%.
+\]
+Only one of six cells exceeds the $5\%$ advancement threshold, and the retained study verdict is \texttt{no\_advance}. The broader repository audit records that multiscale is not the best model on either domain.
+
+This extension reduces dependence on the bundled simulator implementation, but it does not convert the paper into an external confirmation study: the data are locally generated from external simulator code, there are three seeds per domain, compute is unmatched, and the protocol is development-level.
+
+\subsection{Objective complexity also fails prospectively}
+
+The objective study asks whether the legacy model's many auxiliary terms add measurable reconstruction value. Table~\ref{tab:objective} reports the reference, several representative additions, and the full legacy objective.
+
+\begin{table}[t]
+\centering
+\caption{Mean held-out reconstruction MSE in the three-seed, 30-update objective study. Lower is better. All twelve auxiliary comparisons are worse than the reconstruction+KL reference on every paired seed.}
+\label{tab:objective}
+\begin{tabular}{lr}
+\toprule
+Objective mode & Mean reconstruction MSE\\
+\midrule
+Reconstruction + KL & \textbf{0.1707}\\
++ geometry & 0.1720\\
++ identity & 0.1730\\
++ VQ & 0.1777\\
++ equivariance & 0.1851\\
++ spectral & 0.2023\\
++ invariance & 0.2766\\
+Full legacy objective & 0.2714\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The full objective is worse than the simple reference by $26.4\%$, $60.0\%$, and $89.5\%$ on the three paired seeds recorded in the frozen audit. No auxiliary addition satisfies the $5\%$-improvement-on-every-seed gate.
+
+The gradient diagnostic supplies a plausible optimization explanation without claiming causality. The reconstruction term has mean weighted gradient norm $1.32$, whereas the invariance term reaches $6.04$. Across the $78$ pairwise objective-term combinations, $63$ have a negative gradient cosine on at least one seed. In particular, reconstruction versus invariance is negative on all three diagnostic seeds. These measurements show that the objective is not a benign sum of similarly scaled, consistently aligned terms.
+
+\subsection{Later repairs do not reverse the scientific direction}
+
+Engineering corrections can matter, so we keep repaired implementations separate from historical evidence. The current evidence ledger records two relevant follow-ups:
+
+\begin{itemize}
+    \item In the repaired \RIPII\ 0.2 five-seed development study, full-model mean reconstruction MSE is $0.08410$, compared with $0.04687$ for reconstruction+KL and $0.05573$ for a plain autoencoder. Both simpler controls beat the repaired full model on every paired seed.
+    \item The later \RIPII-MR synthetic development study returns \texttt{no\_advance}, with $75$ learned-model runs and $0/60$ paired comparisons passing the frozen advancement rule. Its mean OOD improvement is negative against every learned control.
+\end{itemize}
+
+These follow-ups are not used to rewrite the earlier studies as if they had run under the repaired code. Instead, they show that correcting implementation defects did not produce evidence strong enough to reverse the broader simplification direction.
+
+\section{Discussion}
+
+\subsection{What the negative results actually say}
+
+The strongest conclusion is architectural and procedural, not universal.
+
+First, the structured latent pilot fails in a way consistent with an unnecessary discrete bottleneck: bypassing quantization improves reconstruction, and the retained effective-code usage is low. This does not prove that vector quantization is inappropriate for physical systems; it rejects this implementation and pilot-scale use of it.
+
+Second, the world-model hierarchy fails for a different reason. Its groups are active, yet graph and global-context controls perform as well or better. This rules out the explanation that the mechanism merely failed to receive gradient signal. The likely lesson is not that groups are bad, but that the grouping must add information or computation that simpler relational priors do not already capture.
+
+Third, the targeted nonlocal intervention separates hierarchy from global information. The local graph becomes less competitive when all-pairs interactions matter, but a direct global summary is enough to gain the mean advantage. This suggests that the original multiscale mechanism was not solving a uniquely hierarchical problem.
+
+Finally, the objective study shows that complexity appears in optimization as well as architecture. Adding individually plausible losses can degrade the primary task on every paired seed. The observed gradient-scale imbalance and directional conflict are compatible with that failure, though the diagnostic does not identify a single causal term.
+
+\subsection{Why failed gates are informative}
+
+A negative result is most useful when it removes degrees of freedom from the next experiment.
+
+The corrected pilot removes the current quantized stack from the set of justified default models. World-v3 removes learned soft grouping as a justified replacement for the flat graph on the bundled simulator. The coupling study removes the claim that hierarchy only helps when interactions are global as a sufficient rescue explanation. The objective study removes the claim that the model merely needs more auxiliary structure as the natural next move.
+
+These constraints make the next step clearer: evaluate a simplified reference on externally fixed data under compute-matched conditions before designing another hierarchy.
+
+\subsection{Why we do not promote a post-hoc successor}
+
+The repository contains plausible successor ideas, including geometry-aware grouping and conservation-aware residuals. They may be worthwhile. But their plausibility is not evidence, and implementing them immediately after a negative result risks turning the project into an unconstrained architecture search.
+
+The current external-confirmation protocol therefore remains deliberately unexecuted. Before any confirmatory test access, it requires at least two public physical-dynamics datasets, frozen versions/hashes/licenses and preprocessing, validation-only tuning, at least ten seeds, explicit hardware and compute-matching rules, and an externally timestamped protocol digest.
+
+\section{Limitations}
+
+The evidence has important boundaries.
+
+\begin{enumerate}
+    \item \textbf{Mostly synthetic data.} The primary outcome-bearing studies use synthetic generators. The NRI extension uses external simulator code but still locally generated trajectories rather than fixed real-world observations.
+    \item \textbf{Small seed counts.} World-v3 uses five seeds; several secondary studies use three. Exact sign-flip tests therefore have low resolution, and bootstrap intervals should not be interpreted as population confidence intervals.
+    \item \textbf{Incomplete compute matching.} Parameters and update counts are often approximately matched, but FLOPs and wall-clock compute are not universally matched across variants. Machine-local profiling is explicitly nonportable.
+    \item \textbf{Short objective study.} The 39-run objective experiment uses a fixed 30-update budget. It is strong evidence about that budget, not asymptotic optimization behavior.
+    \item \textbf{No general hierarchy theorem.} The experiments do not show that hierarchical representation learning or multiscale simulation is generally harmful. They test specific \RIPII mechanisms and controls.
+    \item \textbf{No novelty claim.} The component methods overlap established graph simulation, multiscale processing, and quantization literature. The paper is a negative-result and methodology case study, not an algorithmic novelty claim.
+    \item \textbf{Independent reproduction remains incomplete.} The repository retains checksums, manifests, exact commands, and verification tools, but a fully independent multi-site reproduction is still a future release gate.
+\end{enumerate}
+
+\section{Reproducibility and Evidence Lineage}
+
+The repository separates exact numerical artifacts from manuscript prose. The key retained evidence families are:
+
+\begin{itemize}
+    \item corrected pilot-v2 summary and per-seed run artifacts;
+    \item self-checksummed world-v3 capsule and paired statistics;
+    \item post-result world-v3 failure-localization artifact;
+    \item prospective conditional-coupling capsule and fresh-seed longer follow-up capsule;
+    \item commit-pinned NRI external-simulator dataset registry and result capsule;
+    \item objective-study summary and gradient-diagnostic artifact;
+    \item the current evidence ledger and audit documents, which distinguish historical from repaired-source results.
+\end{itemize}
+
+The exact paths and current Git blob identifiers used to prepare this manuscript are listed in \path{paper/PAPER_EVIDENCE_MAP.md}. Historical artifacts are not rewritten after engineering changes. SHA-256 values are used as corruption-detection and provenance bindings; they are not presented as cryptographic author signatures.
+
+No software or data license is inferred in this paper. Authorship, affiliations, contributions, funding, conflicts of interest, and final release licensing require explicit human decisions before submission or public archival.
+
+\section{Conclusion}
+
+Across several independently motivated \RIPII studies, added hierarchical structure repeatedly fails to justify itself.
+
+The corrected structured pilot favors removing the quantizer and the larger structured mechanism stack. The strongest five-seed world-model study favors a flat graph over learned multiscale grouping across the retained mean IID/OOD comparisons and rejects the multiscale advancement rule on every paired seed. A symmetric long-range intervention shows that global information can matter without showing that hierarchy is necessary. External simulator code does not reverse the direction. A 39-run objective study finds no auxiliary addition that improves reconstruction under its frozen gate and exposes substantial gradient-scale imbalance and conflict. Later repaired implementations remain negative at the development level.
+
+The evidence is not broad enough to conclude that hierarchy is generally harmful. It is strong enough to change the default research action for this project. The appropriate next step is not another post-outcome hierarchy repair. It is a simpler reference model evaluated on externally fixed physical-dynamics data under a newly frozen, compute-aware protocol.
+
+That is the practical value of the negative result: it narrows the hypothesis space.
+
+
+\section*{AI Use Statement}
+
+Generative AI tools were used during the broader RIPII workflow for software inspection, test and CI review, evidence-ledger reconciliation, literature and claim-boundary checking, and drafting/editing portions of this manuscript and its supporting documentation. AI-assisted text and code changes were checked against the repository source, retained experimental artifacts, frozen/prospective protocols, and primary references before inclusion. Generative AI was not used to fabricate missing results, alter frozen thresholds after outcomes were observed, or relabel failed advancement gates as positive findings. The human authors remain responsible for the final manuscript, claims, code, and release decisions.
+
+\appendix
+
+\section{Study Ledger}
+
+Table~\ref{tab:ledger} summarizes how each evidence family is used in the paper. Later studies are not treated as retroactive replacements for earlier ones.
+
+\begin{table}[h]
+\centering
+\small
+\caption{RIPII study ledger and claim role.}
+\label{tab:ledger}
+\begin{tabularx}{\textwidth}{p{0.21\textwidth}p{0.12\textwidth}p{0.17\textwidth}X}
+\toprule
+Study & Seeds / runs & Decision & Evidence role and main boundary\\
+\midrule
+Corrected structured pilot v2 & 3 seeds & H1 rejected & Frozen local synthetic pilot; tests structured stack and quantizer controls.\\
+World-v3 convergence & 5 seeds & \texttt{no\_advance} & Strongest bundled-simulator development study; paired graph/global/multiscale controls.\\
+World-v3 failure localization & same retained checkpoints & diagnostic only & Post-result exploratory localization; cannot change the primary verdict.\\
+Conditional long-range coupling & 3 seeds & \texttt{no\_advance} & Prospectively written development intervention; primary control is global pooling.\\
+Longer coupled follow-up & 3 fresh seeds & descriptive negative & Additional 300-update development evidence; not a replacement decision rule.\\
+NRI Springs/Charged extension & 3 seeds/domain & \texttt{no\_advance} & External simulator code with generated trajectories; not real-world or confirmatory evidence.\\
+Objective simplification & 39 runs & no advance & Three-seed, 30-update frozen local development study; no asymptotic claim.\\
+Repaired RIPII 0.2 & 5 seeds & advancement failed & Engineering-corrected development evidence; does not rewrite historical results.\\
+RIPII-MR & 75 learned-model runs & \texttt{no\_advance} & Later synthetic successor; 0/60 paired comparisons pass the frozen gate.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Interpretation Rule}
+
+The paper follows a strict ordering of evidence. A frozen or prospectively written decision rule is interpreted first. Post-result failure analysis may explain a failure but cannot reverse it. A later repaired implementation receives a new evidence label and cannot be substituted backward into historical experiments. Exploratory observations can motivate a future hypothesis only after a new protocol is frozen on a fresh evidence boundary.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

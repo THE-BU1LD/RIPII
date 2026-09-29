@@ -1,3 +1,5 @@
+> **Current paper source:** `paper/ripii_negative_results.tex` is now the full manuscript. This Markdown file is retained as an earlier evidence-limited draft/provenance surface and should not be treated as the current submission text.
+
 # Learned hierarchy does not improve a controlled synthetic object-dynamics benchmark
 
 ## Abstract

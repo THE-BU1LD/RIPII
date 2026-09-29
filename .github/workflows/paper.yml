@@ -1,0 +1,56 @@
+name: paper-build
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "paper/**"
+      - ".github/workflows/paper.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build-paper:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Install LaTeX toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            latexmk \
+            texlive-latex-base \
+            texlive-latex-recommended \
+            texlive-fonts-recommended \
+            lmodern
+
+      - name: Build manuscript
+        working-directory: paper
+        run: latexmk -pdf -interaction=nonstopmode -halt-on-error ripii_negative_results.tex
+
+      - name: Require clean final LaTeX log
+        working-directory: paper
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -E 'Overfull \\hbox|There were undefined (citations|references)|Citation .* undefined|Reference .* undefined' ripii_negative_results.log; then
+            echo "::error::Final LaTeX log contains a citation/reference or overflow defect"
+            exit 1
+          fi
+
+      - name: Require non-empty PDF
+        run: test -s paper/ripii_negative_results.pdf
+
+      - name: Upload rendered manuscript
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: ripii-negative-results-paper-${{ github.sha }}
+          path: paper/ripii_negative_results.pdf
+          if-no-files-found: error
+          retention-days: 30
