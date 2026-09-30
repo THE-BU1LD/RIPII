@@ -60,7 +60,16 @@ def main() -> None:
         if not relative_parts or PurePosixPath(relative).is_absolute():
             failures.append(f"invalid artifact path: {relative}")
             continue
-        path = (artifact_root / relative).resolve()
+        unresolved_path = artifact_root.joinpath(*relative_parts)
+        # Inspect lexical components before resolving: resolve() erases symlink
+        # identity, including links to files or directories inside artifact_root.
+        if any(
+            artifact_root.joinpath(*relative_parts[:index]).is_symlink()
+            for index in range(1, len(relative_parts) + 1)
+        ):
+            failures.append(f"artifact path contains a symlink: {relative}")
+            continue
+        path = unresolved_path.resolve()
         if artifact_root not in path.parents:
             failures.append(f"artifact escapes manifest directory: {relative}")
             continue
