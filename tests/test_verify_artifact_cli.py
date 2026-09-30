@@ -94,3 +94,63 @@ def test_portable_summary_is_explicit_and_still_detects_tampering(
     invalid = subprocess.run(command, cwd=repo, text=True, capture_output=True)
     assert invalid.returncode == 1
     assert "SHA-256 mismatch: summary.md" in invalid.stdout
+
+
+def _verify_single_artifact(
+    repo: Path, artifact: Path, relative: str, root: Path
+) -> subprocess.CompletedProcess[str]:
+    manifest = root / "manifest.json"
+    manifest.write_text(
+        json.dumps(
+            {
+                "artifacts": [
+                    {
+                        "relative_path": relative,
+                        "sha256": _sha256(artifact),
+                        "size": artifact.stat().st_size,
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    return subprocess.run(
+        [sys.executable, "scripts/verify_artifact.py", "--manifest", str(manifest)],
+        cwd=repo,
+        text=True,
+        capture_output=True,
+    )
+
+
+def test_verify_artifact_rejects_internal_symlink(tmp_path: Path) -> None:
+    repo = Path(__file__).resolve().parents[1]
+    target = tmp_path / "actual.txt"
+    target.write_text("retained bytes", encoding="utf-8")
+    link = tmp_path / "claimed.txt"
+    link.symlink_to(target.name)
+    result = _verify_single_artifact(repo, target, link.name, tmp_path)
+    assert result.returncode == 1
+    assert "symlink" in result.stdout
+
+
+def test_verify_artifact_rejects_symlink_directory(tmp_path: Path) -> None:
+    repo = Path(__file__).resolve().parents[1]
+    target = tmp_path / "actual"
+    target.mkdir()
+    artifact = target / "result.txt"
+    artifact.write_text("retained bytes", encoding="utf-8")
+    (tmp_path / "alias").symlink_to(target.name, target_is_directory=True)
+    result = _verify_single_artifact(repo, artifact, "alias/result.txt", tmp_path)
+    assert result.returncode == 1
+    assert "symlink" in result.stdout
+
+
+def test_verify_artifact_accepts_regular_nested_artifact(tmp_path: Path) -> None:
+    repo = Path(__file__).resolve().parents[1]
+    target = tmp_path / "actual"
+    target.mkdir()
+    artifact = target / "result.txt"
+    artifact.write_text("retained bytes", encoding="utf-8")
+    result = _verify_single_artifact(repo, artifact, "actual/result.txt", tmp_path)
+    assert result.returncode == 0
+    assert json.loads(result.stdout)["artifacts_verified"] == 1
