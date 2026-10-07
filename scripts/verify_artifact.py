@@ -73,7 +73,9 @@ def main() -> None:
         if artifact_root not in path.parents:
             failures.append(f"artifact escapes manifest directory: {relative}")
             continue
-        if args.portable_summary and relative_parts[0] == "runs":
+        # A lexical runs/ prefix may traverse back to a non-run artifact.
+        # Exempt only resolved descendants of the actual runs directory.
+        if args.portable_summary and (artifact_root / "runs") in path.parents:
             skipped_run_artifacts += 1
             continue
         if path.is_symlink() or not path.is_file():

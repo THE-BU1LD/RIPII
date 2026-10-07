@@ -6,6 +6,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 
 def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -154,3 +156,62 @@ def test_verify_artifact_accepts_regular_nested_artifact(tmp_path: Path) -> None
     result = _verify_single_artifact(repo, artifact, "actual/result.txt", tmp_path)
     assert result.returncode == 0
     assert json.loads(result.stdout)["artifacts_verified"] == 1
+
+
+@pytest.mark.parametrize(
+    "relative",
+    ["runs/../supplement.txt", "runs/nested/../../supplement.txt", "runs"],
+)
+def test_portable_summary_does_not_skip_artifacts_outside_runs(
+    tmp_path: Path, relative: str
+) -> None:
+    repo = Path(__file__).resolve().parents[1]
+    artifacts = []
+    for name, content in (
+        ("summary.json", "{}\n"),
+        ("summary.csv", "fixture,value\nmarker,1\n"),
+        ("summary.md", "Filesystem fixture only\n"),
+    ):
+        path = tmp_path / name
+        path.write_text(content, encoding="utf-8")
+        artifacts.append(
+            {
+                "relative_path": name,
+                "sha256": _sha256(path),
+                "size": path.stat().st_size,
+            }
+        )
+    if relative == "runs":
+        artifact = tmp_path / "runs"
+    else:
+        (tmp_path / "runs" / "nested").mkdir(parents=True)
+        artifact = tmp_path / "supplement.txt"
+    artifact.write_bytes(b"tampered marker\n")
+    artifacts.append(
+        {
+            "relative_path": relative,
+            "sha256": hashlib.sha256(b"expected marker\n").hexdigest(),
+            "size": artifact.stat().st_size,
+        }
+    )
+    manifest = tmp_path / "manifest.json"
+    manifest.write_text(json.dumps({"artifacts": artifacts}), encoding="utf-8")
+    result = subprocess.run(
+        [
+            sys.executable,
+            "scripts/verify_artifact.py",
+            "--manifest",
+            str(manifest),
+            "--portable-summary",
+        ],
+        cwd=repo,
+        text=True,
+        capture_output=True,
+    )
+    report = json.loads(result.stdout)
+    assert result.returncode == 1
+    assert report["status"] == "FAIL"
+    assert report["run_artifacts_explicitly_skipped"] == 0
+    assert report["artifacts_verified"] == 3
+    assert f"SHA-256 mismatch: {relative}" in report["failures"]
+    assert artifact.read_bytes() == b"tampered marker\n"
