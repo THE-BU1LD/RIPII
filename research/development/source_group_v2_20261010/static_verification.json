@@ -1,0 +1,11 @@
+{
+  "checked_utc": "2026-10-10T10:15:05.015812+00:00",
+  "command_log_hashes_verified": true,
+  "every_historical_field_preserved": true,
+  "new_numerical_or_training_execution": false,
+  "new_python_sources_parse": true,
+  "parent_state_bytes_match_git_parent": true,
+  "passing_runtime_source_unchanged": true,
+  "post_gate_test_edits_import_order_only": true,
+  "schema": "bounded-static-closure-check-v1"
+}

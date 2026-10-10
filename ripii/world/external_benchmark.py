@@ -68,7 +68,9 @@ def benchmark_trajectory_dataset(
     ):
         raise ValueError("benchmark grid must contain valid unique values")
     loaded = {
-        split: load_trajectory_split(root, split)
+        split: load_trajectory_split(
+            root, split, expected_manifest_sha256=verification["manifest_sha256"]
+        )
         for split in verification["splits"]
     }
     train_pair, validation_pair, test_pair = (

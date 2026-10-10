@@ -1,0 +1,36 @@
+{
+  "schema": "bounded-engineering-command-v1",
+  "started_utc": "2026-10-10T10:03:57.159486+00:00",
+  "cwd": "/workspace/scratch/2a0c1e6ddd92/development-0945/RIPII",
+  "command": [
+    "python",
+    "scripts/demo_source_groups_v2.py",
+    "--output",
+    "research/development/source_group_v2_20261010/demo"
+  ],
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "environment": {
+    "PYTHONPATH": ".",
+    "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MPLBACKEND": "Agg",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "parent_commit": "4a4ef9dfaf201b05894976195bc28a59b4f7d30b",
+  "source_sha256": {
+    "ripii/world/external_data.py": "f8b25ea04d236dbd9a0a210ec43d04c5d7ce18dab95562be8888efdf7c096f1e",
+    "ripii/world/experiment.py": "ef309383588fab037892c953fd611a0a97a210e303ea6cc7918349d5cd440343",
+    "scripts/demo_source_groups_v2.py": "9300940c4e65ab1114438304696b5d06974c0187a6f7ceb4fd55d13073e569b8"
+  },
+  "timeout_seconds": 60,
+  "wall_seconds": 7.250020866995328,
+  "returncode": 1,
+  "peak_child_rss_kib": 311700,
+  "logs": {
+    "demo_command.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "demo_command.stderr.log": "86c6fe936dead3f9f1a376f9ffb6c77b9b60aad24e21f59ea641864efa171c7a"
+  }
+}

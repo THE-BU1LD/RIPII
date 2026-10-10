@@ -13,9 +13,7 @@
     "research/protocols/confirmatory_external_v1.md",
     "docs/EXTERNAL_CONTENT_VERIFICATION_20261010.md",
     "docs/EXTERNAL_CONTAINER_IDENTITY_20261010.md",
-    "docs/STABLE_VQ_DISTANCE_20261010.md",
-    "research/SOURCE_GROUPS_V2_20261010.md",
-    "research/development/source_group_v2_20261010/closure.json"
+    "docs/STABLE_VQ_DISTANCE_20261010.md"
   ],
   "research_question": "Do the declared RIPII representation or multiscale mechanisms improve their predefined objectives and generalization over credible matched controls?",
   "current_hypothesis": "Historical variants failed their frozen development advancement rules. No replacement positive hypothesis or external confirmatory claim is introduced.",
@@ -561,54 +559,5 @@
   "independent_source_reviews": {
     "b969221c9f072dd341cc592490818edb95d3ff71": "PASS: root reviewed numerical kernel, parameter/checkpoint/RNG compatibility, oracle tests and scientific boundaries; requested nonfinite and false-zero underflow rejection, reviewed their regressions, and found no further blocker.",
     "2e74062e82450acea2c35e6ca1561d78abe6c309": "PASS: independent root reviewed final NPMS, GaussianMemory, CMU, DRPT, RIPII and LAM source; requested seed/replay and byte-binding corrections are implemented and verified."
-  },
-  "engineering_sessions": [
-    {
-      "id": "source_group_v2_20261010",
-      "contract": "research/development/source_group_v2_20261010/contract.json",
-      "parent_state": "research/development/source_group_v2_20261010/parent_state.json",
-      "status": "CLOSED",
-      "started_utc": "2026-10-10T09:51:35.070969+00:00",
-      "prior_budgets_reopened": false,
-      "closed_utc": "2026-10-10T10:15:05.015812+00:00",
-      "closure": "research/development/source_group_v2_20261010/closure.json",
-      "closure_sha256": "b38b765f672582ad767f23daa3c4f00cacaf60f8c71bb0b94e76a3ba5872d1fe",
-      "documentation": "research/SOURCE_GROUPS_V2_20261010.md",
-      "engineering_result": "ADMISSION_VERIFIED_AND_FAILED_DEMO_RECOVERED",
-      "budget_use": {
-        "test_commands": 1,
-        "test_wall_seconds": 19.078629761002958,
-        "demo_commands": 1,
-        "demo_wall_seconds": 7.250020866995328,
-        "lint_commands": 1,
-        "lint_wall_seconds": 0.11330507700040471,
-        "repair_cycles": 1,
-        "new_regression_cases": 37,
-        "final_selected_passed": 57,
-        "independent_review_execution_commands": 0,
-        "protected_outcome_accesses": 0,
-        "paid_compute": 0,
-        "scientific_runs": 0,
-        "tiny_training_fixtures_including_inherited_tests": 3,
-        "total_optimizer_updates_in_these_fixtures": 3
-      },
-      "scientific_checkpoint_advanced": false,
-      "historical_disposition_preserved": true,
-      "protected_boundary_unchanged": true,
-      "new_session_required_before_further_execution": true,
-      "failed_demo_and_separate_recovery": {
-        "contract": "recovery_contract.json",
-        "record": "recovery_command.json",
-        "report": "recovery/report.json",
-        "status": "CLOSED_COMPLETED",
-        "commands": 1,
-        "wall_seconds": 3.4439586189982947,
-        "optimizer_updates": 0,
-        "retained_checkpoint_steps": 1,
-        "predecessor_artifacts_unchanged": true,
-        "additional_budget_closed": true
-      }
-    }
-  ],
-  "latest_engineering_session": "source_group_v2_20261010"
+  }
 }

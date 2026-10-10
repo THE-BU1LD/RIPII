@@ -13,8 +13,71 @@ import torch
 from .data import validate_tensor_dataset
 
 FORMAT = "ripii-trajectory-dataset-v1"
+GROUPED_FORMAT = "ripii-trajectory-dataset-v2"
 REQUIRED_SPLITS = ("train", "validation", "test")
 TRAJECTORY_FINGERPRINT = "ripii-trajectory-content-v1"
+SOURCE_GROUP_SCHEMA = "ripii-source-episode-v1"
+
+
+def _unique_json_object(pairs: list[tuple[str, object]]) -> dict:
+    value = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError(f"external dataset manifest has a duplicate JSON key: {key}")
+        value[key] = item
+    return value
+
+
+def _validate_source_groups(manifest: dict) -> None:
+    """Admit declared grouping without opening any trajectory archive.
+
+    Identities are exact caller declarations, not proof of physical independence.
+    A source/episode pair may have several windows, but only in one split.
+    """
+    groups = manifest.get("source_groups")
+    if not isinstance(groups, dict) or set(groups) != set(manifest["artifacts"]):
+        raise ValueError("source_groups must cover exactly all declared splits")
+    row_ids = set()
+    group_split = {}
+    for split, rows in groups.items():
+        if not isinstance(rows, list) or not rows:
+            raise ValueError(f"source_groups must contain nonempty row lists: {split}")
+        for row in rows:
+            if not isinstance(row, dict) or set(row) != {"trajectory_id", "source_id", "episode_id"}:
+                raise ValueError(f"invalid source_groups row schema: {split}")
+            row_id = row["trajectory_id"]
+            if isinstance(row_id, bool) or not isinstance(row_id, int) or not -(2**63) <= row_id < 2**63:
+                raise ValueError("source_groups trajectory_id must be a signed int64 integer")
+            if row_id in row_ids:
+                raise ValueError("source_groups contains a duplicate trajectory_id")
+            row_ids.add(row_id)
+            pair = (row["source_id"], row["episode_id"])
+            if any(not isinstance(part, str) or not 1 <= len(part) <= 256 or part.strip() != part or not part.isprintable() for part in pair):
+                raise ValueError("source_groups source_id and episode_id must be canonical printable strings of 1 to 256 characters")
+            if pair in group_split and group_split[pair] != split:
+                raise ValueError(f"declared source episode overlaps between {group_split[pair]} and {split}")
+            group_split[pair] = split
+
+
+def _source_group_record(manifest: dict, split: str, row_ids: list[int]) -> dict:
+    rows = {row["trajectory_id"]: row for row in manifest["source_groups"][split]}
+    if set(row_ids) != set(rows):
+        raise ValueError(f"source_groups trajectory IDs do not exactly match loaded rows: {split}")
+    records = []
+    for row_id in row_ids:
+        row = rows[row_id]
+        identity = {"schema": SOURCE_GROUP_SCHEMA, "source_id": row["source_id"], "episode_id": row["episode_id"]}
+        digest = hashlib.sha256(json.dumps(identity, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("ascii")).hexdigest()
+        records.append({**row, "group_sha256": digest})
+    unique = sorted({row["group_sha256"] for row in records})
+    return {
+        "schema": SOURCE_GROUP_SCHEMA,
+        "unit": "declared_source_episode",
+        "unique_groups": len(unique),
+        "cohort_sha256": hashlib.sha256("".join(unique).encode("ascii")).hexdigest(),
+        "records": records,
+        "limitation": "Caller-declared identity; does not authenticate provenance, aliases, or statistical independence.",
+    }
 
 
 def _manifest(root: Path) -> tuple[dict, str]:
@@ -23,7 +86,7 @@ def _manifest(root: Path) -> tuple[dict, str]:
         raise ValueError("external dataset manifest is missing or unsafe")
     try:
         raw = path.read_bytes()
-        value = json.loads(raw.decode("utf-8"))
+        value = json.loads(raw.decode("utf-8"), object_pairs_hook=_unique_json_object)
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise ValueError("external dataset manifest is invalid JSON") from exc
     required_strings = (
@@ -36,7 +99,7 @@ def _manifest(root: Path) -> tuple[dict, str]:
     )
     if (
         not isinstance(value, dict)
-        or value.get("format") != FORMAT
+        or value.get("format") not in (FORMAT, GROUPED_FORMAT)
         or any(
             not isinstance(value.get(key), str) or not value[key].strip()
             for key in required_strings
@@ -49,6 +112,8 @@ def _manifest(root: Path) -> tuple[dict, str]:
         or not set(REQUIRED_SPLITS) <= set(value["artifacts"])
     ):
         raise ValueError("external dataset manifest violates the required schema")
+    if value["format"] == GROUPED_FORMAT:
+        _validate_source_groups(value)
     return value, hashlib.sha256(raw).hexdigest()
 
 
@@ -94,10 +159,18 @@ def _artifact_bytes(root: Path, entry: dict, split: str) -> bytes:
 
 
 def load_trajectory_split(
-    root: str | Path, split: str
+    root: str | Path, split: str, *, expected_manifest_sha256: str | None = None
 ) -> tuple[dict[str, torch.Tensor], dict]:
+    if expected_manifest_sha256 is not None and (
+        not isinstance(expected_manifest_sha256, str)
+        or len(expected_manifest_sha256) != 64
+        or any(char not in "0123456789abcdef" for char in expected_manifest_sha256)
+    ):
+        raise ValueError("expected_manifest_sha256 must be a lowercase SHA-256 digest")
     root = Path(root).resolve()
     manifest, manifest_sha256 = _manifest(root)
+    if expected_manifest_sha256 is not None and manifest_sha256 != expected_manifest_sha256:
+        raise ValueError("external dataset manifest changed since verification")
     return _load_trajectory_split(root, split, manifest, manifest_sha256)
 
 
@@ -130,7 +203,7 @@ def _load_trajectory_split(
         raise ValueError("external trajectory state/action dimensions do not align")
     validate_tensor_dataset(scenes, observations - 1, max_objects, data)
     record = {
-        "format": FORMAT,
+        "format": manifest["format"],
         "dataset_id": manifest["dataset_id"],
         "version": manifest["version"],
         "license": manifest["license"],
@@ -146,6 +219,8 @@ def _load_trajectory_split(
         "source_sha256": entry["sha256"],
         "manifest_sha256": manifest_sha256,
     }
+    if manifest["format"] == GROUPED_FORMAT:
+        record["source_groups"] = _source_group_record(manifest, split, data["ids"].tolist())
     return data, record
 
 
@@ -210,9 +285,9 @@ def verify_trajectory_dataset(root: str | Path) -> dict:
                     f"trajectory contents overlap between {left} and {right}; "
                     "changing IDs does not create independent trajectories"
                 )
-    return {
+    result = {
         "status": "PASS",
-        "format": FORMAT,
+        "format": manifest["format"],
         "dataset_id": manifest["dataset_id"],
         "version": manifest["version"],
         "manifest_sha256": manifest_sha256,
@@ -227,3 +302,11 @@ def verify_trajectory_dataset(root: str | Path) -> dict:
             ),
         },
     }
+    if manifest["format"] == GROUPED_FORMAT:
+        result["source_group_overlap_check"] = {
+            "schema": SOURCE_GROUP_SCHEMA,
+            "status": "PASS",
+            "scope": "Exact caller-declared source/episode pairs occur in one split; every loaded row has one declaration.",
+            "limitation": "Distinct declared identities do not prove independent sources or exclude undeclared aliases.",
+        }
+    return result

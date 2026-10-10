@@ -112,10 +112,14 @@ def main():
         if args.command == "train":
             prepared = None
             if args.dataset_root is not None:
-                verify_trajectory_dataset(args.dataset_root)
-                train_pair = load_trajectory_split(args.dataset_root, "train")
+                verification = verify_trajectory_dataset(args.dataset_root)
+                train_pair = load_trajectory_split(
+                    args.dataset_root, "train",
+                    expected_manifest_sha256=verification["manifest_sha256"],
+                )
                 validation_pair = load_trajectory_split(
-                    args.dataset_root, "validation"
+                    args.dataset_root, "validation",
+                    expected_manifest_sha256=verification["manifest_sha256"],
                 )
                 if (
                     train_pair[1]["max_objects"] != validation_pair[1]["max_objects"]

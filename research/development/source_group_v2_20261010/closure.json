@@ -1,0 +1,120 @@
+{
+  "artifact_hash_exclusions": [
+    "closure.json itself",
+    "canonical state (the Git publication tree binds its final bytes)"
+  ],
+  "artifact_sha256": {
+    "candidate.json": "cbab70dc6184c9fb328481e36aabae7727bf6849bff8cff3a85df8b3ab9123e0",
+    "candidate.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "candidate.stdout.log": "32f6df50a163b5b4d00c02fe527083036b12f50a28f40d09fa7279c05737b234",
+    "candidate_tests.py.txt": "47b8efb63eb5a6eea902be59b3087b4d53737585fab721f6fbf5ae2459e39777",
+    "contract.json": "10db833afd8117ff04102539a105e5bbfb8a1263a8ffab33b4171fe511d80108",
+    "demo/dataset/manifest.json": "4b20ae76ef54b420e43643855c4bc2e4c8b22c437f653e492aac89cf0c07790c",
+    "demo/dataset/test.npz": "38914d0860aec9ec61052d024cae394e814ac38ee6f6519d509b866224ac06cd",
+    "demo/dataset/train.npz": "ae7bf07c446cc02c1029428eb66a6c28366056934bdfb585d18ec52cffb317ff",
+    "demo/dataset/train_source_episodes.npz": "60f4cfef517a028ccaad3eea2f7a7c3b3b848ab29ccdde129bd2494f22d5dc34",
+    "demo/dataset/validation.npz": "b086e3a90de35ef3740810b42083cffb31f1c6dd99ccfc2098b0bbb5b86a6e71",
+    "demo/report.json": "38506a0a0f5badbb219e4e41b446cc671d09d70ae247166e2eb7089610ce3e55",
+    "demo/run/best.pt": "7768ee5b47f44999b3e3db8e32aba5f1f0b5c787a109cc20e7990693bdf9edb6",
+    "demo/run/config.json": "44ecdd256bbb80d7e4f954cc354b5b732132332107b94c8e386552d239f527af",
+    "demo/run/final.pt": "c4eeadf9be41d054b29e9ac910d7da80c697c6b3d585ed7b6023c1a04a540ff6",
+    "demo/run/history.jsonl": "3ede3f9c93f27ed455d07ab6d7046cd9f77b18ee67b842686aa0f38b82bb8bf7",
+    "demo/run/latest.pt": "034c191a6a95eeb9efbd2d3379067c65dd2206ee3c78a7958bdbf3a25a6af2c9",
+    "demo/verification.json": "7809f2bc8c39b6b06f6b47e32655917743234c0b222fba02e4748f9a3409d202",
+    "demo_command.json": "71344d9d97597fd0f8c19487e06d08c1ebaeedd9d116f80c4f473b1fd8cfcff3",
+    "demo_command.stderr.log": "86c6fe936dead3f9f1a376f9ffb6c77b9b60aad24e21f59ea641864efa171c7a",
+    "demo_command.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "failed_demo_driver.py.txt": "9300940c4e65ab1114438304696b5d06974c0187a6f7ceb4fd55d13073e569b8",
+    "lint.json": "8068b8899fafe07badcb9d83b4e386547cb513381f0759bb7c8c5dfb0b8c477b",
+    "lint.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lint.stdout.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "parent_state.json": "6a45a480eed492f0c8ca825d06563986e92822f5cc02dca063b91f3b12229af9",
+    "recovery/evaluation_raw.npz": "a235ffdb4a77ef96b2dd8c6757529cdcc3f3a4b5cbeade9fa109c46d34afdac3",
+    "recovery/report.json": "905253af3e3e8aee9015786908fc4b929138592e301c024d6c01f5adc58615c5",
+    "recovery/verification.json": "7809f2bc8c39b6b06f6b47e32655917743234c0b222fba02e4748f9a3409d202",
+    "recovery_command.json": "e724d94265ef3dcd0e9e1d2e27118b4638f8708e61209617d4b7014e966532e5",
+    "recovery_command.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "recovery_command.stdout.log": "05c0efe833e2bd510e10f9edc961c7824fc9b16db1666d026710cd1e6fd9eb83",
+    "recovery_contract.json": "629bcc2b92c4034dc8478a7258d80f270ec1932ba021fad970ccec1e710ff195",
+    "static_verification.json": "2dd64a9fb2b64ea1d1c0fd42f4260218f487d3dfe05293de978a9788e85bd547"
+  },
+  "budget_use": {
+    "demo_commands": 1,
+    "demo_wall_seconds": 7.250020866995328,
+    "final_selected_passed": 57,
+    "independent_review_execution_commands": 0,
+    "lint_commands": 1,
+    "lint_wall_seconds": 0.11330507700040471,
+    "new_regression_cases": 37,
+    "paid_compute": 0,
+    "protected_outcome_accesses": 0,
+    "repair_cycles": 1,
+    "scientific_runs": 0,
+    "test_commands": 1,
+    "test_wall_seconds": 19.078629761002958,
+    "tiny_training_fixtures_including_inherited_tests": 3,
+    "total_optimizer_updates_in_these_fixtures": 3
+  },
+  "closed_utc": "2026-10-10T10:15:05.015812+00:00",
+  "documentation": "research/SOURCE_GROUPS_V2_20261010.md",
+  "engineering_result": "ADMISSION_VERIFIED_AND_FAILED_DEMO_RECOVERED",
+  "historical_disposition_preserved": true,
+  "implementation_and_test_sha256": {
+    "research/SOURCE_GROUPS_V2_20261010.md": "ad69a67c7e51c5240857422a473778924f9d18988cf1c024574c0f323869aa3a",
+    "ripii/world/cli.py": "63c4a0a6c9eeb307b1a51b482dd6e810537708ba55563fdca1d03dc31569d4a6",
+    "ripii/world/external_benchmark.py": "e6c634c90bb3c0b8be3d4b76ae1451da16b3c008f7541b97dbe898cd3be36d79",
+    "ripii/world/external_data.py": "f8b25ea04d236dbd9a0a210ec43d04c5d7ce18dab95562be8888efdf7c096f1e",
+    "scripts/demo_source_groups_v2.py": "d2cc633286df0358f34daeecf5976b78d8bbbed67e3b970820382395ded4ce69",
+    "tests/test_source_groups_v2.py": "6db8cb5e3c79015985f7b2a38f955a18921adb49a32062e2f82ef1856525c052"
+  },
+  "independent_review": {
+    "additional_execution": false,
+    "findings": [
+      "Complete declared source groups are admitted before archive opening; loaded row IDs bind metadata exactly.",
+      "Full copied-content checks and valid v1 tensor behavior remain intact.",
+      "Caller verification-to-reuse digest pinning prevents mixed manifest snapshots; declared identity does not attest physical independence."
+    ],
+    "reviewer": "independent source review by fim_apen",
+    "status": "PASS_SOURCE_REVIEW"
+  },
+  "initial_demo": {
+    "all_artifacts_retained": true,
+    "budget": "EXHAUSTED",
+    "fresh_training_driver_after_repair": "SOURCE_REVIEWED_NOT_RERUN",
+    "reason": "Demo driver treated checkpoint metadata dictionary as a Path.",
+    "retained_record": "demo_command.json",
+    "status": "FAILED_AFTER_ONE_TRAINING_UPDATE"
+  },
+  "parent_commit": "4a4ef9dfaf201b05894976195bc28a59b4f7d30b",
+  "prior_budgets_reopened": false,
+  "protected_boundary_unchanged": true,
+  "publication_policy": {
+    "commit_skip_ci": true,
+    "draft": true,
+    "merge": false,
+    "reason": "No inherited broad engineering or scientific campaigns added to this bounded local execution budget. Wider release gates remain pending."
+  },
+  "remaining_scientific_work": "Read the preserved canonical scientific status and frozen protocols; this engineering closure is not research completion.",
+  "retained_test_attempts": {
+    "candidate": {
+      "record": "candidate.json",
+      "returncode": 0,
+      "wall_seconds": 19.078629761002958
+    }
+  },
+  "schema": "bounded-engineering-closure-v1",
+  "scientific_checkpoint_advanced": false,
+  "separate_corrective_verification": {
+    "additional_budget_closed": true,
+    "commands": 1,
+    "contract": "recovery_contract.json",
+    "optimizer_updates": 0,
+    "predecessor_artifacts_unchanged": true,
+    "record": "recovery_command.json",
+    "report": "recovery/report.json",
+    "retained_checkpoint_steps": 1,
+    "status": "CLOSED_COMPLETED",
+    "wall_seconds": 3.4439586189982947
+  },
+  "status": "CLOSED"
+}
