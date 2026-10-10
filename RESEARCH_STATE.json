@@ -12,14 +12,15 @@
     "research/protocols/README.md",
     "research/protocols/confirmatory_external_v1.md",
     "docs/EXTERNAL_CONTENT_VERIFICATION_20261010.md",
+    "docs/EXTERNAL_CONTAINER_IDENTITY_20261010.md",
     "docs/STABLE_VQ_DISTANCE_20261010.md"
   ],
   "research_question": "Do the declared RIPII representation or multiscale mechanisms improve their predefined objectives and generalization over credible matched controls?",
   "current_hypothesis": "Historical variants failed their frozen development advancement rules. No replacement positive hypothesis or external confirmatory claim is introduced.",
-  "scientific_objective": "Provide an explicitly selected, numerically checked nearest-code kernel while preserving historical research outcomes and default model behavior.",
-  "intended_contribution": "Opt-in VQ numerical correctness; no new mechanism-efficacy or external-generalization claim.",
-  "project_scope": "Prospective numerical implementation and inherited external-data integrity work; completed studies and frozen protocols remain unchanged.",
-  "current_phase": "opt_in_vq_distance_reviewed_draft",
+  "scientific_objective": "Preserve the reviewed external-container integrity repair and explicitly selected stable VQ numerical implementation, without reopening historical studies.",
+  "intended_contribution": "Compatible prospective numerical and data-integrity engineering; no new scientific outcome claim.",
+  "project_scope": "Integration of PR22 external-container identity and PR24 opt-in VQ distances; reviewed source bytes, frozen protocols and historical outcomes preserved.",
+  "current_phase": "reviewed_engineering_integration_verified_draft",
   "scientific_disposition": "HISTORICAL_NEGATIVE_DEVELOPMENT_RETAINED",
   "project_completion": "NOT_RESEARCH_COMPLETE; engineering fixes do not substitute for a defensible scientific terminal package.",
   "budgets": {
@@ -79,37 +80,68 @@
     "Repaired 0.2 completed 180 cells without advancement; full mean MSE 0.08410 versus reconstruction+KL 0.04687 is retained in the evidence ledger.",
     "RIPII-MR completed 75 learned runs with 0/60 paired advancement gates passed; three generator seeds with five nested model seeds are not 15 independent generator units.",
     "External confirmatory protocol remains draft and unexecuted; no new protected outcome access.",
+    "Compressed archive bytes remain in memory while arrays load; this is not a memory optimization or decompression-quota implementation.",
+    "Path checks are local integrity checks, not a guarantee against privileged path races or hostile resource exhaustion.",
+    "Content equality does not establish source independence or detect overlapping windows/approximate duplicates.",
+    "Historical negative pilot, objective and RIPII-MR outcomes remain unchanged; external confirmation remains draft/unexecuted.",
     "Final local full-suite status is not all-pass: the retained disk-space preflight requires 10 GiB, above available workspace capacity; reproduced on the unchanged dependency.",
     "GPU backends and scientific efficacy are untested. Nonzero separations below the work precision may be rejected; no universal numerical-exactness guarantee.",
     "Checkpoint tensor keys do not encode the selected numerical wrapper; callers must retain source/version metadata in prospective run configuration."
   ],
   "pending": [
+    "Normal draft-PR integration after resolving its advanced base; hosted CI and full suite not run by this merge.",
     "Draft PR integration after dependency PR22; hosted CI not run by this source publication.",
     "Any future source/version-bound study requires prospective protocol and compute authorization; the default model and held studies remain unchanged.",
     "Source/episode group identity and a prospective independent-unit protocol are still required; exact-content hashes do not establish independence.",
     "External dataset provenance, license, budget and frozen confirmatory protocol remain unresolved as recorded in existing source documents."
   ],
   "validation": {
-    "final_scoped_command": "PYTHONPATH=<isolated-torch>:. OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q -o addopts= tests/test_stable_quantizer.py tests/test_quantizer_qualification.py tests/test_mechanism_semantics.py tests/test_loss_step.py",
-    "final_scoped_passed": 47,
-    "final_new_cases": 37,
-    "final_existing_cases": 10,
-    "lint": "python -m ruff check ripii/models/stable_quantizer.py tests/test_stable_quantizer.py: PASS",
-    "full_suite": "An earlier implementation snapshot ran the full suite; the only failure was the inherited disk-space preflight. Final underflow and zero-dimensional-construction regressions were subsequently verified in the final scoped run. No exact-final-source full-suite pass is claimed.",
-    "inherited_failure": {
-      "test": "tests/test_post_correction_runner.py::test_post_correction_preflight_reports_frozen_cell_count",
-      "cause": "Existing preflight requires 10.00 GiB free; this workspace had 9.16-9.17 GiB. The same failure and error were independently reproduced at the unchanged PR22 dependency head.",
-      "baseline_commit": "66ee627b32387e86bcc4bc0d57e725f63a21fe60",
-      "gate_preserved": true
+    "status": "PASSED_SCOPED_INTEGRATION_CHECKS",
+    "date": "2026-10-10",
+    "parents": [
+      "b969221c9f072dd341cc592490818edb95d3ff71",
+      "2e74062e82450acea2c35e6ca1561d78abe6c309"
+    ],
+    "scope": "Reviewed stable VQ/model regression suite plus all current external loader/content/container cases; generated CPU fixtures only.",
+    "passed": 67,
+    "failed": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "passed": 47,
+        "seconds": 6.49,
+        "new_vq_cases": 37,
+        "retained_model_cases": 10,
+        "command": "PYTHONPATH=<isolated-torch>:. PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q -o addopts='' tests/test_stable_quantizer.py tests/test_quantizer_qualification.py tests/test_mechanism_semantics.py tests/test_loss_step.py"
+      },
+      {
+        "passed": 20,
+        "seconds": 18.64,
+        "scope": "13 inherited external loader/content cases plus 7 latest container-identity cases",
+        "command": "PYTHONPATH=<isolated-torch>:. PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q -o addopts='' tests/test_external_trajectory_data.py tests/test_external_content_overlap.py tests/test_external_container_identity.py"
+      }
+    ],
+    "runtime": {
+      "python": "3.12.14",
+      "torch": "2.5.1+cpu",
+      "device": "CPU",
+      "threads_per_library": 1
     },
-    "runtime": "Python 3.12, isolated PyTorch 2.5.1+cpu; generated CPU fixtures only",
-    "hosted_ci": "Not triggered for this change: inherited workflows include portable study verification and optional self-hosted hardware jobs. Draft commit uses [skip ci].",
-    "untested": [
-      "CUDA",
-      "MPS",
-      "prospective scientific datasets",
-      "runtime/efficacy improvement"
-    ]
+    "lint": "Repository Ruff selection passed for the unchanged VQ source/tests; git diff --check passed.",
+    "source_sha256": {
+      "ripii/models/stable_quantizer.py": "8d760fa612d09f61cd67e380f4e7cf9b1b336b38f053ecd6f8773b67044ad6ef",
+      "tests/test_stable_quantizer.py": "fcbbfb203cb2e92765e7d886d2ed96396b393c441ffefdf87ba1741a0bad4400",
+      "docs/STABLE_VQ_DISTANCE_20261010.md": "30ce6fd763e18fde32424ee85ee163656c8322d1c18d24afb59d2f0ecb824d24",
+      "ripii/world/external_data.py": "dac2058d1c94e5bfc337c9ea2e607613897c47f21fef6d02ab866e4bc3e2f142",
+      "tests/test_external_container_identity.py": "eae0c1925bd5b3600625e4bc7a89d020859370831f4f9e4c904820153d4b467a"
+    },
+    "history_preservation": "Both parent states retain every decision, failure, session event, preserved claim, canonical read entry and complete validation receipt. Conflicting current fields are archived in parent contexts before selecting this integration status.",
+    "prior_full_suite_limitation": "The prior VQ snapshot had one inherited 10 GiB disk preflight failure, reproduced at unchanged dependency. No full-suite run or pass is claimed for this integration; that gate remains intact.",
+    "protected_outcomes_accessed": false,
+    "new_scientific_trials": 0,
+    "provider_calls": 0,
+    "paid_compute": 0,
+    "hosted_ci": "Not triggered; [skip ci] preserves bounded local scope. No hosted-CI result is claimed."
   },
   "project_history": {
     "scope": "This canonical state indexes retained project documents; it is not a claim of a complete new re-audit of every historical artifact.",
@@ -135,6 +167,16 @@
       },
       {
         "date": "2026-10-10",
+        "event": "Reject symlinked directory components and duplicate NPZ names; hash the exact loaded bytes and bind all split records to one parsed manifest snapshot.",
+        "parent_commit": "66ee627b32387e86bcc4bc0d57e725f63a21fe60",
+        "implementation_revision": "ripii.external-container-identity.1",
+        "record": "docs/EXTERNAL_CONTAINER_IDENTITY_20261010.md",
+        "verification_receipt": "research/verification/maintenance_20261010/receipt.json",
+        "protected_outcomes": false,
+        "new_scientific_trials": 0
+      },
+      {
+        "date": "2026-10-10",
         "event": "Begin opt-in VQ distance numerical correction after reading canonical state and refreshing open PRs. No prior numerical outcome is reinterpreted.",
         "dependency_head": "66ee627b32387e86bcc4bc0d57e725f63a21fe60",
         "prior_phase": "prospective_external_data_verification_repair",
@@ -149,10 +191,285 @@
         "protected_outcomes": false,
         "scientific_campaigns": 0,
         "final_scoped_passed": 47
+      },
+      {
+        "date": "2026-10-10",
+        "event": "Integrate the advanced PR22 external-container repair into the existing PR24 branch with two parents; preserve both histories and all three reviewed VQ source/test/document blobs. Reconcile canonical state without deleting either engineering record.",
+        "parents": [
+          "b969221c9f072dd341cc592490818edb95d3ff71",
+          "2e74062e82450acea2c35e6ca1561d78abe6c309"
+        ],
+        "merge_kind": "normal_merge_commit",
+        "protected_outcomes": false,
+        "new_scientific_trials": 0,
+        "field_conflict_history": [
+          {
+            "field": "validation.hosted_ci",
+            "vq_parent_value": "Not triggered for this change: inherited workflows include portable study verification and optional self-hosted hardware jobs. Draft commit uses [skip ci].",
+            "external_parent_value": "Not a hosted-CI result; verify the exact published head separately."
+          },
+          {
+            "field": "independent_source_review",
+            "vq_parent_value": "PASS: root reviewed numerical kernel, parameter/checkpoint/RNG compatibility, oracle tests and scientific boundaries; requested nonfinite and false-zero underflow rejection, reviewed their regressions, and found no further blocker.",
+            "external_parent_value": "PASS: independent root reviewed final NPMS, GaussianMemory, CMU, DRPT, RIPII and LAM source; requested seed/replay and byte-binding corrections are implemented and verified."
+          }
+        ],
+        "validation": {
+          "status": "PASSED_SCOPED_INTEGRATION_CHECKS",
+          "date": "2026-10-10",
+          "parents": [
+            "b969221c9f072dd341cc592490818edb95d3ff71",
+            "2e74062e82450acea2c35e6ca1561d78abe6c309"
+          ],
+          "scope": "Reviewed stable VQ/model regression suite plus all current external loader/content/container cases; generated CPU fixtures only.",
+          "passed": 67,
+          "failed": 0,
+          "skipped": 0,
+          "suites": [
+            {
+              "passed": 47,
+              "seconds": 6.49,
+              "new_vq_cases": 37,
+              "retained_model_cases": 10,
+              "command": "PYTHONPATH=<isolated-torch>:. PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q -o addopts='' tests/test_stable_quantizer.py tests/test_quantizer_qualification.py tests/test_mechanism_semantics.py tests/test_loss_step.py"
+            },
+            {
+              "passed": 20,
+              "seconds": 18.64,
+              "scope": "13 inherited external loader/content cases plus 7 latest container-identity cases",
+              "command": "PYTHONPATH=<isolated-torch>:. PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q -o addopts='' tests/test_external_trajectory_data.py tests/test_external_content_overlap.py tests/test_external_container_identity.py"
+            }
+          ],
+          "runtime": {
+            "python": "3.12.14",
+            "torch": "2.5.1+cpu",
+            "device": "CPU",
+            "threads_per_library": 1
+          },
+          "lint": "Repository Ruff selection passed for the unchanged VQ source/tests; git diff --check passed.",
+          "source_sha256": {
+            "ripii/models/stable_quantizer.py": "8d760fa612d09f61cd67e380f4e7cf9b1b336b38f053ecd6f8773b67044ad6ef",
+            "tests/test_stable_quantizer.py": "fcbbfb203cb2e92765e7d886d2ed96396b393c441ffefdf87ba1741a0bad4400",
+            "docs/STABLE_VQ_DISTANCE_20261010.md": "30ce6fd763e18fde32424ee85ee163656c8322d1c18d24afb59d2f0ecb824d24",
+            "ripii/world/external_data.py": "dac2058d1c94e5bfc337c9ea2e607613897c47f21fef6d02ab866e4bc3e2f142",
+            "tests/test_external_container_identity.py": "eae0c1925bd5b3600625e4bc7a89d020859370831f4f9e4c904820153d4b467a"
+          },
+          "history_preservation": "Both parent states retain every decision, failure, session event, preserved claim, canonical read entry and complete validation receipt. Conflicting current fields are archived in parent contexts before selecting this integration status.",
+          "prior_full_suite_limitation": "The prior VQ snapshot had one inherited 10 GiB disk preflight failure, reproduced at unchanged dependency. No full-suite run or pass is claimed for this integration; that gate remains intact.",
+          "protected_outcomes_accessed": false,
+          "new_scientific_trials": 0,
+          "provider_calls": 0,
+          "paid_compute": 0,
+          "hosted_ci": "Not triggered; [skip ci] preserves bounded local scope. No hosted-CI result is claimed."
+        }
       }
     ]
   },
-  "independent_source_review": "PASS: root reviewed numerical kernel, parameter/checkpoint/RNG compatibility, oracle tests and scientific boundaries; requested nonfinite and false-zero underflow rejection, reviewed their regressions, and found no further blocker.",
+  "independent_source_review": "Both parent implementations retain their recorded independent source reviews. This integration reuses their reviewed source blobs; canonical state is reconciled and affected tests are rerun.",
+  "verification_history": [
+    {
+      "verified_parent_commit": "66ee627b32387e86bcc4bc0d57e725f63a21fe60",
+      "verification": {
+        "command": "PYTHONPATH=<isolated-torch>:. OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q",
+        "passed": 220,
+        "new_cases": 9,
+        "existing_cases": 211,
+        "targeted_passed": 13
+      }
+    },
+    {
+      "verified_commit": "b969221c9f072dd341cc592490818edb95d3ff71",
+      "validation": {
+        "final_scoped_command": "PYTHONPATH=<isolated-torch>:. OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q -o addopts= tests/test_stable_quantizer.py tests/test_quantizer_qualification.py tests/test_mechanism_semantics.py tests/test_loss_step.py",
+        "final_scoped_passed": 47,
+        "final_new_cases": 37,
+        "final_existing_cases": 10,
+        "lint": "python -m ruff check ripii/models/stable_quantizer.py tests/test_stable_quantizer.py: PASS",
+        "full_suite": "An earlier implementation snapshot ran the full suite; the only failure was the inherited disk-space preflight. Final underflow and zero-dimensional-construction regressions were subsequently verified in the final scoped run. No exact-final-source full-suite pass is claimed.",
+        "inherited_failure": {
+          "test": "tests/test_post_correction_runner.py::test_post_correction_preflight_reports_frozen_cell_count",
+          "cause": "Existing preflight requires 10.00 GiB free; this workspace had 9.16-9.17 GiB. The same failure and error were independently reproduced at the unchanged PR22 dependency head.",
+          "baseline_commit": "66ee627b32387e86bcc4bc0d57e725f63a21fe60",
+          "gate_preserved": true
+        },
+        "runtime": "Python 3.12, isolated PyTorch 2.5.1+cpu; generated CPU fixtures only",
+        "hosted_ci": "Not triggered for this change: inherited workflows include portable study verification and optional self-hosted hardware jobs. Draft commit uses [skip ci].",
+        "untested": [
+          "CUDA",
+          "MPS",
+          "prospective scientific datasets",
+          "runtime/efficacy improvement"
+        ]
+      }
+    },
+    {
+      "verified_commit": "2e74062e82450acea2c35e6ca1561d78abe6c309",
+      "validation": {
+        "schema": "research.engineering-verification.v1",
+        "date": "2026-10-10",
+        "repository": "THE-BU1LD/RIPII",
+        "parent_commit": "66ee627b32387e86bcc4bc0d57e725f63a21fe60",
+        "implementation_revision": "ripii.external-container-identity.1",
+        "scope": "affected external trajectory, content-overlap and container suites",
+        "status": "PASSED",
+        "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=. OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -o addopts='' -q tests/test_external_trajectory_data.py tests/test_external_content_overlap.py tests/test_external_container_identity.py",
+        "passed": 20,
+        "new_cases": 7,
+        "seconds": 36.55,
+        "environment": {
+          "python": "3.12.14",
+          "torch": "2.14.1+cpu",
+          "numpy": "2.3.5",
+          "pandas": "2.2.3",
+          "pytest": "9.1.1",
+          "device": "CPU",
+          "threads_per_test_process": 1
+        },
+        "source_sha256": {
+          "ripii/world/external_data.py": "dac2058d1c94e5bfc337c9ea2e607613897c47f21fef6d02ab866e4bc3e2f142",
+          "tests/test_external_container_identity.py": "eae0c1925bd5b3600625e4bc7a89d020859370831f4f9e4c904820153d4b467a"
+        },
+        "protected_outcomes_accessed": false,
+        "new_scientific_trials": 0,
+        "provider_calls": 0,
+        "paid_compute": 0,
+        "hosted_ci": "Not a hosted-CI result; verify the exact published head separately.",
+        "independent_review": "PASS: independent root reviewed final NPMS, GaussianMemory, CMU, DRPT, RIPII and LAM source; requested seed/replay and byte-binding corrections are implemented and verified.",
+        "limitations": [
+          "Compressed archive bytes remain in memory while arrays load; this is not a memory optimization or decompression-quota implementation.",
+          "Path checks are local integrity checks, not a guarantee against privileged path races or hostile resource exhaustion.",
+          "Content equality does not establish source independence or detect overlapping windows/approximate duplicates.",
+          "Historical negative pilot, objective and RIPII-MR outcomes remain unchanged; external confirmation remains draft/unexecuted."
+        ]
+      }
+    },
+    {
+      "integration_parents": [
+        "b969221c9f072dd341cc592490818edb95d3ff71",
+        "2e74062e82450acea2c35e6ca1561d78abe6c309"
+      ],
+      "validation": {
+        "status": "PASSED_SCOPED_INTEGRATION_CHECKS",
+        "date": "2026-10-10",
+        "parents": [
+          "b969221c9f072dd341cc592490818edb95d3ff71",
+          "2e74062e82450acea2c35e6ca1561d78abe6c309"
+        ],
+        "scope": "Reviewed stable VQ/model regression suite plus all current external loader/content/container cases; generated CPU fixtures only.",
+        "passed": 67,
+        "failed": 0,
+        "skipped": 0,
+        "suites": [
+          {
+            "passed": 47,
+            "seconds": 6.49,
+            "new_vq_cases": 37,
+            "retained_model_cases": 10,
+            "command": "PYTHONPATH=<isolated-torch>:. PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q -o addopts='' tests/test_stable_quantizer.py tests/test_quantizer_qualification.py tests/test_mechanism_semantics.py tests/test_loss_step.py"
+          },
+          {
+            "passed": 20,
+            "seconds": 18.64,
+            "scope": "13 inherited external loader/content cases plus 7 latest container-identity cases",
+            "command": "PYTHONPATH=<isolated-torch>:. PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q -o addopts='' tests/test_external_trajectory_data.py tests/test_external_content_overlap.py tests/test_external_container_identity.py"
+          }
+        ],
+        "runtime": {
+          "python": "3.12.14",
+          "torch": "2.5.1+cpu",
+          "device": "CPU",
+          "threads_per_library": 1
+        },
+        "lint": "Repository Ruff selection passed for the unchanged VQ source/tests; git diff --check passed.",
+        "source_sha256": {
+          "ripii/models/stable_quantizer.py": "8d760fa612d09f61cd67e380f4e7cf9b1b336b38f053ecd6f8773b67044ad6ef",
+          "tests/test_stable_quantizer.py": "fcbbfb203cb2e92765e7d886d2ed96396b393c441ffefdf87ba1741a0bad4400",
+          "docs/STABLE_VQ_DISTANCE_20261010.md": "30ce6fd763e18fde32424ee85ee163656c8322d1c18d24afb59d2f0ecb824d24",
+          "ripii/world/external_data.py": "dac2058d1c94e5bfc337c9ea2e607613897c47f21fef6d02ab866e4bc3e2f142",
+          "tests/test_external_container_identity.py": "eae0c1925bd5b3600625e4bc7a89d020859370831f4f9e4c904820153d4b467a"
+        },
+        "history_preservation": "Both parent states retain every decision, failure, session event, preserved claim, canonical read entry and complete validation receipt. Conflicting current fields are archived in parent contexts before selecting this integration status.",
+        "prior_full_suite_limitation": "The prior VQ snapshot had one inherited 10 GiB disk preflight failure, reproduced at unchanged dependency. No full-suite run or pass is claimed for this integration; that gate remains intact.",
+        "protected_outcomes_accessed": false,
+        "new_scientific_trials": 0,
+        "provider_calls": 0,
+        "paid_compute": 0,
+        "hosted_ci": "Not triggered; [skip ci] preserves bounded local scope. No hosted-CI result is claimed."
+      }
+    }
+  ],
+  "implementation_revision": "ripii.external-container-identity.1",
+  "latest_engineering_change": {
+    "date": "2026-10-10",
+    "event": "Integrate the advanced PR22 external-container repair into the existing PR24 branch with two parents; preserve both histories and all three reviewed VQ source/test/document blobs. Reconcile canonical state without deleting either engineering record.",
+    "parents": [
+      "b969221c9f072dd341cc592490818edb95d3ff71",
+      "2e74062e82450acea2c35e6ca1561d78abe6c309"
+    ],
+    "merge_kind": "normal_merge_commit",
+    "protected_outcomes": false,
+    "new_scientific_trials": 0,
+    "field_conflict_history": [
+      {
+        "field": "validation.hosted_ci",
+        "vq_parent_value": "Not triggered for this change: inherited workflows include portable study verification and optional self-hosted hardware jobs. Draft commit uses [skip ci].",
+        "external_parent_value": "Not a hosted-CI result; verify the exact published head separately."
+      },
+      {
+        "field": "independent_source_review",
+        "vq_parent_value": "PASS: root reviewed numerical kernel, parameter/checkpoint/RNG compatibility, oracle tests and scientific boundaries; requested nonfinite and false-zero underflow rejection, reviewed their regressions, and found no further blocker.",
+        "external_parent_value": "PASS: independent root reviewed final NPMS, GaussianMemory, CMU, DRPT, RIPII and LAM source; requested seed/replay and byte-binding corrections are implemented and verified."
+      }
+    ],
+    "validation": {
+      "status": "PASSED_SCOPED_INTEGRATION_CHECKS",
+      "date": "2026-10-10",
+      "parents": [
+        "b969221c9f072dd341cc592490818edb95d3ff71",
+        "2e74062e82450acea2c35e6ca1561d78abe6c309"
+      ],
+      "scope": "Reviewed stable VQ/model regression suite plus all current external loader/content/container cases; generated CPU fixtures only.",
+      "passed": 67,
+      "failed": 0,
+      "skipped": 0,
+      "suites": [
+        {
+          "passed": 47,
+          "seconds": 6.49,
+          "new_vq_cases": 37,
+          "retained_model_cases": 10,
+          "command": "PYTHONPATH=<isolated-torch>:. PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q -o addopts='' tests/test_stable_quantizer.py tests/test_quantizer_qualification.py tests/test_mechanism_semantics.py tests/test_loss_step.py"
+        },
+        {
+          "passed": 20,
+          "seconds": 18.64,
+          "scope": "13 inherited external loader/content cases plus 7 latest container-identity cases",
+          "command": "PYTHONPATH=<isolated-torch>:. PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q -o addopts='' tests/test_external_trajectory_data.py tests/test_external_content_overlap.py tests/test_external_container_identity.py"
+        }
+      ],
+      "runtime": {
+        "python": "3.12.14",
+        "torch": "2.5.1+cpu",
+        "device": "CPU",
+        "threads_per_library": 1
+      },
+      "lint": "Repository Ruff selection passed for the unchanged VQ source/tests; git diff --check passed.",
+      "source_sha256": {
+        "ripii/models/stable_quantizer.py": "8d760fa612d09f61cd67e380f4e7cf9b1b336b38f053ecd6f8773b67044ad6ef",
+        "tests/test_stable_quantizer.py": "fcbbfb203cb2e92765e7d886d2ed96396b393c441ffefdf87ba1741a0bad4400",
+        "docs/STABLE_VQ_DISTANCE_20261010.md": "30ce6fd763e18fde32424ee85ee163656c8322d1c18d24afb59d2f0ecb824d24",
+        "ripii/world/external_data.py": "dac2058d1c94e5bfc337c9ea2e607613897c47f21fef6d02ab866e4bc3e2f142",
+        "tests/test_external_container_identity.py": "eae0c1925bd5b3600625e4bc7a89d020859370831f4f9e4c904820153d4b467a"
+      },
+      "history_preservation": "Both parent states retain every decision, failure, session event, preserved claim, canonical read entry and complete validation receipt. Conflicting current fields are archived in parent contexts before selecting this integration status.",
+      "prior_full_suite_limitation": "The prior VQ snapshot had one inherited 10 GiB disk preflight failure, reproduced at unchanged dependency. No full-suite run or pass is claimed for this integration; that gate remains intact.",
+      "protected_outcomes_accessed": false,
+      "new_scientific_trials": 0,
+      "provider_calls": 0,
+      "paid_compute": 0,
+      "hosted_ci": "Not triggered; [skip ci] preserves bounded local scope. No hosted-CI result is claimed."
+    }
+  },
   "active_development": {
     "version": "ripii-vq-distance-v1",
     "status": "implemented_generated_fixtures_verified_independently_reviewed",
@@ -203,6 +520,15 @@
         "prospective scientific datasets",
         "runtime/efficacy improvement"
       ]
+    },
+    "integration": {
+      "parents": [
+        "b969221c9f072dd341cc592490818edb95d3ff71",
+        "2e74062e82450acea2c35e6ca1561d78abe6c309"
+      ],
+      "vq_source_unchanged": true,
+      "status": "67_scoped_cases_passed",
+      "scope": "All 47 VQ/model and 20 external loader/content/container cases; unchanged reviewed code and no full-suite claim."
     }
   },
   "dependency_validation": {
@@ -213,5 +539,25 @@
     "targeted_passed": 13,
     "source_commit": "66ee627b32387e86bcc4bc0d57e725f63a21fe60",
     "scope": "Recorded by dependency PR22; preserved historical engineering receipt, not a new full-suite pass in this environment."
+  },
+  "integration_parent_contexts": {
+    "b969221c9f072dd341cc592490818edb95d3ff71": {
+      "current_phase": "opt_in_vq_distance_reviewed_draft",
+      "scientific_objective": "Provide an explicitly selected, numerically checked nearest-code kernel while preserving historical research outcomes and default model behavior.",
+      "intended_contribution": "Opt-in VQ numerical correctness; no new mechanism-efficacy or external-generalization claim.",
+      "project_scope": "Prospective numerical implementation and inherited external-data integrity work; completed studies and frozen protocols remain unchanged.",
+      "independent_source_review": "PASS: root reviewed numerical kernel, parameter/checkpoint/RNG compatibility, oracle tests and scientific boundaries; requested nonfinite and false-zero underflow rejection, reviewed their regressions, and found no further blocker."
+    },
+    "2e74062e82450acea2c35e6ca1561d78abe6c309": {
+      "current_phase": "prospective_external_data_verification_repair",
+      "scientific_objective": "Reject copied external trajectories across declared splits even when IDs and archive hashes change.",
+      "intended_contribution": "Reject copied external trajectories across declared splits even when IDs and archive hashes change.",
+      "project_scope": "Generic future external-data interface integrity; no reopening of completed negative studies.",
+      "independent_source_review": "PASS: independent root reviewed final NPMS, GaussianMemory, CMU, DRPT, RIPII and LAM source; requested seed/replay and byte-binding corrections are implemented and verified."
+    }
+  },
+  "independent_source_reviews": {
+    "b969221c9f072dd341cc592490818edb95d3ff71": "PASS: root reviewed numerical kernel, parameter/checkpoint/RNG compatibility, oracle tests and scientific boundaries; requested nonfinite and false-zero underflow rejection, reviewed their regressions, and found no further blocker.",
+    "2e74062e82450acea2c35e6ca1561d78abe6c309": "PASS: independent root reviewed final NPMS, GaussianMemory, CMU, DRPT, RIPII and LAM source; requested seed/replay and byte-binding corrections are implemented and verified."
   }
 }

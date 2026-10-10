@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import io
 import json
 from pathlib import Path, PurePosixPath
 
@@ -16,17 +17,14 @@ REQUIRED_SPLITS = ("train", "validation", "test")
 TRAJECTORY_FINGERPRINT = "ripii-trajectory-content-v1"
 
 
-def _sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def _manifest(root: Path) -> dict:
+def _manifest(root: Path) -> tuple[dict, str]:
     path = root / "manifest.json"
     if path.is_symlink() or not path.is_file():
         raise ValueError("external dataset manifest is missing or unsafe")
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        raw = path.read_bytes()
+        value = json.loads(raw.decode("utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise ValueError("external dataset manifest is invalid JSON") from exc
     required_strings = (
         "dataset_id",
@@ -51,42 +49,70 @@ def _manifest(root: Path) -> dict:
         or not set(REQUIRED_SPLITS) <= set(value["artifacts"])
     ):
         raise ValueError("external dataset manifest violates the required schema")
-    return value
+    return value, hashlib.sha256(raw).hexdigest()
 
 
-def _artifact_path(root: Path, entry: dict, split: str) -> Path:
+def _artifact_bytes(root: Path, entry: dict, split: str) -> bytes:
     relative = entry.get("path") if isinstance(entry, dict) else None
     pure = PurePosixPath(relative) if isinstance(relative, str) else None
     path = root / relative if isinstance(relative, str) else root
+    # Check every lexical component before resolution: a safe-looking leaf
+    # below a symlinked directory can otherwise leave the declared dataset root.
+    unsafe_component = False
+    if pure is not None and not pure.is_absolute():
+        cursor = root
+        for component in pure.parts:
+            cursor = cursor / component
+            if cursor.is_symlink():
+                unsafe_component = True
+                break
+    try:
+        contained = path.resolve().is_relative_to(root.resolve())
+    except (OSError, RuntimeError):
+        contained = False
     if (
         pure is None
         or pure.is_absolute()
         or ".." in pure.parts
+        or unsafe_component
+        or not contained
         or path.is_symlink()
         or not path.is_file()
         or not isinstance(entry.get("bytes"), int)
         or isinstance(entry.get("bytes"), bool)
         or entry["bytes"] < 1
-        or path.stat().st_size != entry["bytes"]
         or not isinstance(entry.get("sha256"), str)
-        or _sha256(path) != entry["sha256"]
     ):
         raise ValueError(f"external dataset artifact failed verification: {split}")
-    return path
+    try:
+        raw = path.read_bytes()
+    except OSError as exc:
+        raise ValueError(f"external dataset artifact failed verification: {split}") from exc
+    if len(raw) != entry["bytes"] or hashlib.sha256(raw).hexdigest() != entry["sha256"]:
+        raise ValueError(f"external dataset artifact failed verification: {split}")
+    return raw
 
 
 def load_trajectory_split(
     root: str | Path, split: str
 ) -> tuple[dict[str, torch.Tensor], dict]:
     root = Path(root).resolve()
-    manifest = _manifest(root)
+    manifest, manifest_sha256 = _manifest(root)
+    return _load_trajectory_split(root, split, manifest, manifest_sha256)
+
+
+def _load_trajectory_split(
+    root: Path, split: str, manifest: dict, manifest_sha256: str
+) -> tuple[dict[str, torch.Tensor], dict]:
     if split not in manifest["artifacts"]:
         raise ValueError(f"external dataset does not declare split: {split}")
     entry = manifest["artifacts"][split]
-    path = _artifact_path(root, entry, split)
+    raw = _artifact_bytes(root, entry, split)
     try:
-        with np.load(path, allow_pickle=False) as archive:
-            if set(archive.files) != {"states", "actions", "mask", "ids"}:
+        # Parse exactly the bytes whose length and digest were admitted. A
+        # second path open could see a concurrent replacement after hashing.
+        with np.load(io.BytesIO(raw), allow_pickle=False) as archive:
+            if len(archive.files) != 4 or set(archive.files) != {"states", "actions", "mask", "ids"}:
                 raise ValueError("trajectory NPZ contains unexpected arrays")
             data = {
                 "states": torch.from_numpy(archive["states"].copy()),
@@ -118,7 +144,7 @@ def load_trajectory_split(
         "max_objects": max_objects,
         "source_path": entry["path"],
         "source_sha256": entry["sha256"],
-        "manifest_sha256": _sha256(root / "manifest.json"),
+        "manifest_sha256": manifest_sha256,
     }
     return data, record
 
@@ -155,12 +181,12 @@ def _trajectory_content_sha256(data: dict[str, torch.Tensor], scene: int) -> str
 
 def verify_trajectory_dataset(root: str | Path) -> dict:
     root = Path(root).resolve()
-    manifest = _manifest(root)
+    manifest, manifest_sha256 = _manifest(root)
     records = {}
     ids_by_split = {}
     content_by_split = {}
     for split in manifest["artifacts"]:
-        data, record = load_trajectory_split(root, split)
+        data, record = _load_trajectory_split(root, split, manifest, manifest_sha256)
         records[split] = record
         ids_by_split[split] = set(data["ids"].tolist())
         content = {
@@ -189,7 +215,7 @@ def verify_trajectory_dataset(root: str | Path) -> dict:
         "format": FORMAT,
         "dataset_id": manifest["dataset_id"],
         "version": manifest["version"],
-        "manifest_sha256": _sha256(root / "manifest.json"),
+        "manifest_sha256": manifest_sha256,
         "splits": records,
         "content_overlap_check": {
             "fingerprint_schema": TRAJECTORY_FINGERPRINT,

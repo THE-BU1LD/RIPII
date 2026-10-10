@@ -1,0 +1,7 @@
+{
+  "source": "ripii/world/external_data.py",
+  "tests": "tests/test_external_container_identity.py",
+  "scope": "CONSTRUCTED_REGRESSIONS_ONLY",
+  "exit_code": 1,
+  "summary": "FAILED tests/test_external_container_identity.py::test_duplicate_npz_member_is_rejected_instead_of_selecting_one_copy"
+}
