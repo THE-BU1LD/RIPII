@@ -1,0 +1,38 @@
+{
+  "schema": "research.engineering-verification.v1",
+  "date": "2026-10-10",
+  "repository": "THE-BU1LD/RIPII",
+  "parent_commit": "66ee627b32387e86bcc4bc0d57e725f63a21fe60",
+  "implementation_revision": "ripii.external-container-identity.1",
+  "scope": "affected external trajectory, content-overlap and container suites",
+  "status": "PASSED",
+  "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=. OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m pytest -o addopts='' -q tests/test_external_trajectory_data.py tests/test_external_content_overlap.py tests/test_external_container_identity.py",
+  "passed": 20,
+  "new_cases": 7,
+  "seconds": 36.55,
+  "environment": {
+    "python": "3.12.14",
+    "torch": "2.14.1+cpu",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "pytest": "9.1.1",
+    "device": "CPU",
+    "threads_per_test_process": 1
+  },
+  "source_sha256": {
+    "ripii/world/external_data.py": "dac2058d1c94e5bfc337c9ea2e607613897c47f21fef6d02ab866e4bc3e2f142",
+    "tests/test_external_container_identity.py": "eae0c1925bd5b3600625e4bc7a89d020859370831f4f9e4c904820153d4b467a"
+  },
+  "protected_outcomes_accessed": false,
+  "new_scientific_trials": 0,
+  "provider_calls": 0,
+  "paid_compute": 0,
+  "hosted_ci": "Not a hosted-CI result; verify the exact published head separately.",
+  "independent_review": "PASS: independent root reviewed final NPMS, GaussianMemory, CMU, DRPT, RIPII and LAM source; requested seed/replay and byte-binding corrections are implemented and verified.",
+  "limitations": [
+    "Compressed archive bytes remain in memory while arrays load; this is not a memory optimization or decompression-quota implementation.",
+    "Path checks are local integrity checks, not a guarantee against privileged path races or hostile resource exhaustion.",
+    "Content equality does not establish source independence or detect overlapping windows/approximate duplicates.",
+    "Historical negative pilot, objective and RIPII-MR outcomes remain unchanged; external confirmation remains draft/unexecuted."
+  ]
+}
