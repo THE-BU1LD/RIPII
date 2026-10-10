@@ -13,6 +13,7 @@ from .data import validate_tensor_dataset
 
 FORMAT = "ripii-trajectory-dataset-v1"
 REQUIRED_SPLITS = ("train", "validation", "test")
+TRAJECTORY_FINGERPRINT = "ripii-trajectory-content-v1"
 
 
 def _sha256(path: Path) -> str:
@@ -122,19 +123,67 @@ def load_trajectory_split(
     return data, record
 
 
+def _trajectory_content_sha256(data: dict[str, torch.Tensor], scene: int) -> str:
+    """Hash one validated trajectory's values independently of its assigned ID.
+
+    Zero padding, signed zero, storage layout, and floating-point dtype do not
+    distinguish otherwise identical observations. Object and time order do.
+    This detects exact copies, not overlapping windows or common source scenes.
+    """
+    digest = hashlib.sha256(TRAJECTORY_FINGERPRINT.encode("ascii"))
+    live = data["mask"][scene].nonzero(as_tuple=False).flatten()
+    for key in ("states", "actions"):
+        values = (
+            data[key][scene]
+            .index_select(1, live)
+            .detach()
+            .to(device="cpu", dtype=torch.float64)
+            .numpy()
+        )
+        canonical = np.array(values, dtype="<f8", order="C", copy=True)
+        canonical[canonical == 0] = 0.0
+        header = json.dumps(
+            {"field": key, "shape": list(canonical.shape)},
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("ascii")
+        digest.update(len(header).to_bytes(8, "big"))
+        digest.update(header)
+        digest.update(canonical.tobytes(order="C"))
+    return digest.hexdigest()
+
+
 def verify_trajectory_dataset(root: str | Path) -> dict:
     root = Path(root).resolve()
     manifest = _manifest(root)
     records = {}
     ids_by_split = {}
+    content_by_split = {}
     for split in manifest["artifacts"]:
         data, record = load_trajectory_split(root, split)
         records[split] = record
         ids_by_split[split] = set(data["ids"].tolist())
+        content = {
+            _trajectory_content_sha256(data, scene)
+            for scene in range(record["scenes"])
+        }
+        content_by_split[split] = content
+        record["content_verification"] = {
+            "fingerprint_schema": TRAJECTORY_FINGERPRINT,
+            "unique_trajectories": len(content),
+            "cohort_sha256": hashlib.sha256(
+                "".join(sorted(content)).encode("ascii")
+            ).hexdigest(),
+        }
     for index, left in enumerate(ids_by_split):
         for right in list(ids_by_split)[index + 1 :]:
             if ids_by_split[left] & ids_by_split[right]:
                 raise ValueError(f"trajectory IDs overlap between {left} and {right}")
+            if content_by_split[left] & content_by_split[right]:
+                raise ValueError(
+                    f"trajectory contents overlap between {left} and {right}; "
+                    "changing IDs does not create independent trajectories"
+                )
     return {
         "status": "PASS",
         "format": FORMAT,
@@ -142,4 +191,13 @@ def verify_trajectory_dataset(root: str | Path) -> dict:
         "version": manifest["version"],
         "manifest_sha256": _sha256(root / "manifest.json"),
         "splits": records,
+        "content_overlap_check": {
+            "fingerprint_schema": TRAJECTORY_FINGERPRINT,
+            "status": "PASS",
+            "scope": "exact ordered state/action trajectories after removing padding",
+            "limitation": (
+                "Does not establish source independence or detect overlapping windows, "
+                "approximate duplicates, or reordered live objects."
+            ),
+        },
     }
