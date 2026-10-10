@@ -1,0 +1,168 @@
+{
+  "content_overlap_check": {
+    "fingerprint_schema": "ripii-trajectory-content-v1",
+    "limitation": "Does not establish source independence or detect overlapping windows, approximate duplicates, or reordered live objects.",
+    "scope": "exact ordered state/action trajectories after removing padding",
+    "status": "PASS"
+  },
+  "dataset_id": "generated.source-group-demo",
+  "format": "ripii-trajectory-dataset-v2",
+  "manifest_sha256": "4b20ae76ef54b420e43643855c4bc2e4c8b22c437f653e492aac89cf0c07790c",
+  "source_group_overlap_check": {
+    "limitation": "Distinct declared identities do not prove independent sources or exclude undeclared aliases.",
+    "schema": "ripii-source-episode-v1",
+    "scope": "Exact caller-declared source/episode pairs occur in one split; every loaded row has one declaration.",
+    "status": "PASS"
+  },
+  "splits": {
+    "test": {
+      "content_verification": {
+        "cohort_sha256": "c0ebc570bf0b010655fb1452ebb02bc6b44b79ed2dd8199250f3e2a2ba146752",
+        "fingerprint_schema": "ripii-trajectory-content-v1",
+        "unique_trajectories": 3
+      },
+      "dataset_id": "generated.source-group-demo",
+      "format": "ripii-trajectory-dataset-v2",
+      "horizon": 2,
+      "license": "repository-generated fixture; no external dataset",
+      "manifest_sha256": "4b20ae76ef54b420e43643855c4bc2e4c8b22c437f653e492aac89cf0c07790c",
+      "max_objects": 8,
+      "observation_dt": 0.05,
+      "preprocessing": "train rows0,1 are overlapping two-step windows from one retained source episode; row2 is a different episode",
+      "scenes": 3,
+      "source_groups": {
+        "cohort_sha256": "b77b95deb0b5490b21d18b8a2c8f16d1dfbb427c36c7c8d56de963afbc841eba",
+        "limitation": "Caller-declared identity; does not authenticate provenance, aliases, or statistical independence.",
+        "records": [
+          {
+            "episode_id": "0",
+            "group_sha256": "2665ddb4a347348bb63aa567258efd78d2311a16fa2057767f26011604f88a85",
+            "source_id": "generated.demo.test",
+            "trajectory_id": 903001
+          },
+          {
+            "episode_id": "1",
+            "group_sha256": "daa1001243ad3fedb3d3f47e26dd196de985fde8f87c6c673a59b1f4a4706173",
+            "source_id": "generated.demo.test",
+            "trajectory_id": 903002
+          },
+          {
+            "episode_id": "2",
+            "group_sha256": "e23186b380ac3d33b8b4a20a2f7c9ee47ef0418d9e5d56cffa2f86442444d7c8",
+            "source_id": "generated.demo.test",
+            "trajectory_id": 903003
+          }
+        ],
+        "schema": "ripii-source-episode-v1",
+        "unique_groups": 3,
+        "unit": "declared_source_episode"
+      },
+      "source_path": "test.npz",
+      "source_sha256": "38914d0860aec9ec61052d024cae394e814ac38ee6f6519d509b866224ac06cd",
+      "split": "test",
+      "split_policy": "all windows of a declared source episode remain in one partition",
+      "units": "synthetic arena units",
+      "version": "1"
+    },
+    "train": {
+      "content_verification": {
+        "cohort_sha256": "4a2d6f8f1db5d870323c4bd51b3a6164eda41c3d74091e07eb8d7aa49d16679a",
+        "fingerprint_schema": "ripii-trajectory-content-v1",
+        "unique_trajectories": 3
+      },
+      "dataset_id": "generated.source-group-demo",
+      "format": "ripii-trajectory-dataset-v2",
+      "horizon": 2,
+      "license": "repository-generated fixture; no external dataset",
+      "manifest_sha256": "4b20ae76ef54b420e43643855c4bc2e4c8b22c437f653e492aac89cf0c07790c",
+      "max_objects": 8,
+      "observation_dt": 0.05,
+      "preprocessing": "train rows0,1 are overlapping two-step windows from one retained source episode; row2 is a different episode",
+      "scenes": 3,
+      "source_groups": {
+        "cohort_sha256": "78b680d68ff54a8f8167dde229c40381a38d44a1a4fc3d2343a6b186794a7902",
+        "limitation": "Caller-declared identity; does not authenticate provenance, aliases, or statistical independence.",
+        "records": [
+          {
+            "episode_id": "0",
+            "group_sha256": "6346a367262e3adc5663d4c2aedd5ad8ee19a41506880041676937f4d271d2c8",
+            "source_id": "generated.demo.train",
+            "trajectory_id": 901001
+          },
+          {
+            "episode_id": "0",
+            "group_sha256": "6346a367262e3adc5663d4c2aedd5ad8ee19a41506880041676937f4d271d2c8",
+            "source_id": "generated.demo.train",
+            "trajectory_id": 901002
+          },
+          {
+            "episode_id": "1",
+            "group_sha256": "a707e135dda3b388c389eb2ff8a4808a29cdfe979a76a902788815f29173ca08",
+            "source_id": "generated.demo.train",
+            "trajectory_id": 901003
+          }
+        ],
+        "schema": "ripii-source-episode-v1",
+        "unique_groups": 2,
+        "unit": "declared_source_episode"
+      },
+      "source_path": "train.npz",
+      "source_sha256": "ae7bf07c446cc02c1029428eb66a6c28366056934bdfb585d18ec52cffb317ff",
+      "split": "train",
+      "split_policy": "all windows of a declared source episode remain in one partition",
+      "units": "synthetic arena units",
+      "version": "1"
+    },
+    "validation": {
+      "content_verification": {
+        "cohort_sha256": "2485c11f90ce1747cecfbc0278218565f29a8040be0b544899560fb598e5d818",
+        "fingerprint_schema": "ripii-trajectory-content-v1",
+        "unique_trajectories": 3
+      },
+      "dataset_id": "generated.source-group-demo",
+      "format": "ripii-trajectory-dataset-v2",
+      "horizon": 2,
+      "license": "repository-generated fixture; no external dataset",
+      "manifest_sha256": "4b20ae76ef54b420e43643855c4bc2e4c8b22c437f653e492aac89cf0c07790c",
+      "max_objects": 8,
+      "observation_dt": 0.05,
+      "preprocessing": "train rows0,1 are overlapping two-step windows from one retained source episode; row2 is a different episode",
+      "scenes": 3,
+      "source_groups": {
+        "cohort_sha256": "d467c3a98493c725074a72498f31c06a6a94da3e1ea54f3e92970f80b15709e0",
+        "limitation": "Caller-declared identity; does not authenticate provenance, aliases, or statistical independence.",
+        "records": [
+          {
+            "episode_id": "0",
+            "group_sha256": "75e5cd78db2cf01747d98fa06b11389cd4d6fe769c6e06c24a330bd1e3978aee",
+            "source_id": "generated.demo.validation",
+            "trajectory_id": 902001
+          },
+          {
+            "episode_id": "1",
+            "group_sha256": "e0d484e4a1eb8648556465b44175a7d708e8e4afb4a67a7514ad5e993c85342c",
+            "source_id": "generated.demo.validation",
+            "trajectory_id": 902002
+          },
+          {
+            "episode_id": "2",
+            "group_sha256": "1e901ed575f3a9787d3e1228860de2d633e31a66f974b7ebbb5888408494e3bd",
+            "source_id": "generated.demo.validation",
+            "trajectory_id": 902003
+          }
+        ],
+        "schema": "ripii-source-episode-v1",
+        "unique_groups": 3,
+        "unit": "declared_source_episode"
+      },
+      "source_path": "validation.npz",
+      "source_sha256": "b086e3a90de35ef3740810b42083cffb31f1c6dd99ccfc2098b0bbb5b86a6e71",
+      "split": "validation",
+      "split_policy": "all windows of a declared source episode remain in one partition",
+      "units": "synthetic arena units",
+      "version": "1"
+    }
+  },
+  "status": "PASS",
+  "version": "1"
+}

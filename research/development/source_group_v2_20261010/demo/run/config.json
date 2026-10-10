@@ -1,0 +1,120 @@
+{
+  "experiment": {
+    "steps": 1,
+    "train_scenes": 3,
+    "eval_scenes": 3,
+    "train_horizon": 2,
+    "test_horizon": 2,
+    "rollout_steps": 1,
+    "batch_size": 2,
+    "hidden": 8,
+    "max_objects": 8,
+    "lr": 0.001,
+    "dt": 0.05,
+    "data_seed": 551,
+    "validate_every": 1,
+    "quantizer_weight": 0.01,
+    "global_coupling": 0.0,
+    "state_noise_std": 0.0,
+    "rollout_curriculum_steps": 0
+  },
+  "model_spec": {
+    "variant": "graph",
+    "hidden": 8,
+    "max_objects": 8,
+    "dt": 0.05,
+    "bottleneck": "continuous",
+    "groups": 4
+  },
+  "seed": 553,
+  "datasets": {
+    "train": {
+      "format": "ripii-trajectory-dataset-v2",
+      "dataset_id": "generated.source-group-demo",
+      "version": "1",
+      "license": "repository-generated fixture; no external dataset",
+      "units": "synthetic arena units",
+      "preprocessing": "train rows0,1 are overlapping two-step windows from one retained source episode; row2 is a different episode",
+      "split_policy": "all windows of a declared source episode remain in one partition",
+      "observation_dt": 0.05,
+      "split": "train",
+      "scenes": 3,
+      "horizon": 2,
+      "max_objects": 8,
+      "source_path": "train.npz",
+      "source_sha256": "ae7bf07c446cc02c1029428eb66a6c28366056934bdfb585d18ec52cffb317ff",
+      "manifest_sha256": "4b20ae76ef54b420e43643855c4bc2e4c8b22c437f653e492aac89cf0c07790c",
+      "source_groups": {
+        "schema": "ripii-source-episode-v1",
+        "unit": "declared_source_episode",
+        "unique_groups": 2,
+        "cohort_sha256": "78b680d68ff54a8f8167dde229c40381a38d44a1a4fc3d2343a6b186794a7902",
+        "records": [
+          {
+            "episode_id": "0",
+            "source_id": "generated.demo.train",
+            "trajectory_id": 901001,
+            "group_sha256": "6346a367262e3adc5663d4c2aedd5ad8ee19a41506880041676937f4d271d2c8"
+          },
+          {
+            "episode_id": "0",
+            "source_id": "generated.demo.train",
+            "trajectory_id": 901002,
+            "group_sha256": "6346a367262e3adc5663d4c2aedd5ad8ee19a41506880041676937f4d271d2c8"
+          },
+          {
+            "episode_id": "1",
+            "source_id": "generated.demo.train",
+            "trajectory_id": 901003,
+            "group_sha256": "a707e135dda3b388c389eb2ff8a4808a29cdfe979a76a902788815f29173ca08"
+          }
+        ],
+        "limitation": "Caller-declared identity; does not authenticate provenance, aliases, or statistical independence."
+      }
+    },
+    "validation": {
+      "format": "ripii-trajectory-dataset-v2",
+      "dataset_id": "generated.source-group-demo",
+      "version": "1",
+      "license": "repository-generated fixture; no external dataset",
+      "units": "synthetic arena units",
+      "preprocessing": "train rows0,1 are overlapping two-step windows from one retained source episode; row2 is a different episode",
+      "split_policy": "all windows of a declared source episode remain in one partition",
+      "observation_dt": 0.05,
+      "split": "validation",
+      "scenes": 3,
+      "horizon": 2,
+      "max_objects": 8,
+      "source_path": "validation.npz",
+      "source_sha256": "b086e3a90de35ef3740810b42083cffb31f1c6dd99ccfc2098b0bbb5b86a6e71",
+      "manifest_sha256": "4b20ae76ef54b420e43643855c4bc2e4c8b22c437f653e492aac89cf0c07790c",
+      "source_groups": {
+        "schema": "ripii-source-episode-v1",
+        "unit": "declared_source_episode",
+        "unique_groups": 3,
+        "cohort_sha256": "d467c3a98493c725074a72498f31c06a6a94da3e1ea54f3e92970f80b15709e0",
+        "records": [
+          {
+            "episode_id": "0",
+            "source_id": "generated.demo.validation",
+            "trajectory_id": 902001,
+            "group_sha256": "75e5cd78db2cf01747d98fa06b11389cd4d6fe769c6e06c24a330bd1e3978aee"
+          },
+          {
+            "episode_id": "1",
+            "source_id": "generated.demo.validation",
+            "trajectory_id": 902002,
+            "group_sha256": "e0d484e4a1eb8648556465b44175a7d708e8e4afb4a67a7514ad5e993c85342c"
+          },
+          {
+            "episode_id": "2",
+            "source_id": "generated.demo.validation",
+            "trajectory_id": 902003,
+            "group_sha256": "1e901ed575f3a9787d3e1228860de2d633e31a66f974b7ebbb5888408494e3bd"
+          }
+        ],
+        "limitation": "Caller-declared identity; does not authenticate provenance, aliases, or statistical independence."
+      }
+    }
+  }
+}

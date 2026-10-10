@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/2a0c1e6ddd92/development-0945/RIPII/scripts/demo_source_groups_v2.py", line 108, in <module>
+    main()
+  File "/workspace/scratch/2a0c1e6ddd92/development-0945/RIPII/scripts/demo_source_groups_v2.py", line 76, in main
+    report["checkpoint"] = str(checkpoint.relative_to(args.output))
+                               ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'relative_to'

@@ -1,0 +1,114 @@
+{
+  "checkpoint": "research/development/source_group_v2_20261010/demo/run/best.pt",
+  "evaluation": {
+    "dataset": {
+      "dataset_id": "generated.source-group-demo",
+      "format": "ripii-trajectory-dataset-v2",
+      "horizon": 2,
+      "license": "repository-generated fixture; no external dataset",
+      "manifest_sha256": "4b20ae76ef54b420e43643855c4bc2e4c8b22c437f653e492aac89cf0c07790c",
+      "max_objects": 8,
+      "observation_dt": 0.05,
+      "preprocessing": "train rows0,1 are overlapping two-step windows from one retained source episode; row2 is a different episode",
+      "scenes": 3,
+      "source_groups": {
+        "cohort_sha256": "b77b95deb0b5490b21d18b8a2c8f16d1dfbb427c36c7c8d56de963afbc841eba",
+        "limitation": "Caller-declared identity; does not authenticate provenance, aliases, or statistical independence.",
+        "records": [
+          {
+            "episode_id": "0",
+            "group_sha256": "2665ddb4a347348bb63aa567258efd78d2311a16fa2057767f26011604f88a85",
+            "source_id": "generated.demo.test",
+            "trajectory_id": 903001
+          },
+          {
+            "episode_id": "1",
+            "group_sha256": "daa1001243ad3fedb3d3f47e26dd196de985fde8f87c6c673a59b1f4a4706173",
+            "source_id": "generated.demo.test",
+            "trajectory_id": 903002
+          },
+          {
+            "episode_id": "2",
+            "group_sha256": "e23186b380ac3d33b8b4a20a2f7c9ee47ef0418d9e5d56cffa2f86442444d7c8",
+            "source_id": "generated.demo.test",
+            "trajectory_id": 903003
+          }
+        ],
+        "schema": "ripii-source-episode-v1",
+        "unique_groups": 3,
+        "unit": "declared_source_episode"
+      },
+      "source_path": "test.npz",
+      "source_sha256": "38914d0860aec9ec61052d024cae394e814ac38ee6f6519d509b866224ac06cd",
+      "split": "test",
+      "split_policy": "all windows of a declared source episode remain in one partition",
+      "units": "synthetic arena units",
+      "version": "1"
+    },
+    "metrics": {
+      "contact_penetration_rmse": 0.0,
+      "kinetic_energy_relative_rmse": 0.008555630221962929,
+      "kinetic_energy_rmse": 0.006569459568709135,
+      "max_abs_predicted_position": 0.7781516313552856,
+      "max_abs_predicted_velocity": 1.0355713367462158,
+      "max_abs_property_drift": 0.0,
+      "max_predicted_contact_penetration": 0.0,
+      "max_predicted_wall_penetration": 0.0,
+      "mean_predicted_wall_penetration": 0.0,
+      "milliseconds_per_scene_step": 0.8142716663617952,
+      "outside_arena_fraction": 0.0,
+      "outside_arena_scene_fraction": 0.0,
+      "passive_step_fraction": 0.0,
+      "passive_step_momentum_rmse": 0.0,
+      "per_scene_position_rmse_p50": 0.0003399190027266741,
+      "per_scene_position_rmse_p90": 0.0005023335688747466,
+      "per_scene_position_rmse_p95": 0.0005226354114711285,
+      "position_rmse": 0.0004144043487031013,
+      "position_rmse_growth_final_over_h1": 2.9388601779937744,
+      "position_rmse_h1": 0.00018878634728025645,
+      "position_rmse_h2": 0.0005548166809603572,
+      "quarter_turn_equivariance_rmse": 0.0012459141435101628,
+      "rollout_seconds": 0.004885629998170771,
+      "scene_momentum_rmse": 0.007091486360877752,
+      "translation_equivariance_rmse": 2.85861187876435e-06,
+      "velocity_rmse": 0.007099309004843235,
+      "worst_scene_id": 903001,
+      "worst_scene_position_rmse": 0.0005429372540675104
+    },
+    "raw_output": "evaluation_raw.npz"
+  },
+  "groups_per_split": {
+    "test": 3,
+    "train": 2,
+    "validation": 3
+  },
+  "optimizer_updates": 0,
+  "predecessor_artifact_sha256": {
+    "dataset/manifest.json": "4b20ae76ef54b420e43643855c4bc2e4c8b22c437f653e492aac89cf0c07790c",
+    "dataset/test.npz": "38914d0860aec9ec61052d024cae394e814ac38ee6f6519d509b866224ac06cd",
+    "dataset/train.npz": "ae7bf07c446cc02c1029428eb66a6c28366056934bdfb585d18ec52cffb317ff",
+    "dataset/train_source_episodes.npz": "60f4cfef517a028ccaad3eea2f7a7c3b3b848ab29ccdde129bd2494f22d5dc34",
+    "dataset/validation.npz": "b086e3a90de35ef3740810b42083cffb31f1c6dd99ccfc2098b0bbb5b86a6e71",
+    "report.json": "38506a0a0f5badbb219e4e41b446cc671d09d70ae247166e2eb7089610ce3e55",
+    "run/best.pt": "7768ee5b47f44999b3e3db8e32aba5f1f0b5c787a109cc20e7990693bdf9edb6",
+    "run/config.json": "44ecdd256bbb80d7e4f954cc354b5b732132332107b94c8e386552d239f527af",
+    "run/final.pt": "c4eeadf9be41d054b29e9ac910d7da80c697c6b3d585ed7b6023c1a04a540ff6",
+    "run/history.jsonl": "3ede3f9c93f27ed455d07ab6d7046cd9f77b18ee67b842686aa0f38b82bb8bf7",
+    "run/latest.pt": "034c191a6a95eeb9efbd2d3379067c65dd2206ee3c78a7958bdbf3a25a6af2c9",
+    "verification.json": "7809f2bc8c39b6b06f6b47e32655917743234c0b222fba02e4748f9a3409d202"
+  },
+  "predecessor_preserved": true,
+  "retained_checkpoint_steps": 1,
+  "scope": "generated engineering fixture; no scientific outcome",
+  "source_sha256": {
+    "ripii/world/cli.py": "63c4a0a6c9eeb307b1a51b482dd6e810537708ba55563fdca1d03dc31569d4a6",
+    "ripii/world/experiment.py": "ef309383588fab037892c953fd611a0a97a210e303ea6cc7918349d5cd440343",
+    "ripii/world/external_benchmark.py": "e6c634c90bb3c0b8be3d4b76ae1451da16b3c008f7541b97dbe898cd3be36d79",
+    "ripii/world/external_data.py": "f8b25ea04d236dbd9a0a210ec43d04c5d7ce18dab95562be8888efdf7c096f1e",
+    "ripii/world/models.py": "04dbbd0aa59f8378ab24cad1b59a15616c97605601098a8e7b19fe516c698665",
+    "ripii/world/physics.py": "5c0c69e8d7d0303b87f8e35f48ad88e0d8cf63165bbf4aa3ed5a8ce8b0bc5f78",
+    "scripts/demo_source_groups_v2.py": "d2cc633286df0358f34daeecf5976b78d8bbbed67e3b970820382395ded4ce69"
+  },
+  "status": "COMPLETED",
+  "wall_seconds": 0.06272779099526815
+}

@@ -1,0 +1,18 @@
+{
+  "schema": "bounded-corrective-verification-v1",
+  "recorded_utc": "2026-10-10T10:05:56.401562+00:00",
+  "reason": "One authorized demo completed its only training update and retained all checkpoints, then the driver incorrectly treated train() checkpoint metadata as a Path. The failed attempt is retained; no source-group admission or model defect was observed.",
+  "failed_attempt": "demo_command.json",
+  "failed_driver_sha256": "9300940c4e65ab1114438304696b5d06974c0187a6f7ceb4fd55d13073e569b8",
+  "contract": "Repair the driver return contract. In one additional recovery-only invocation, load its retained checkpoint, require completed_steps==1 and original dataset manifest identity, save raw evaluation predictions into a fresh directory, hash all predecessor files before/after and require unchanged bytes. No training or optimizer operation in recovery.",
+  "additional_budget": {
+    "maximum_recovery_commands": 1,
+    "maximum_recovery_seconds": 60,
+    "training_runs": 0,
+    "optimizer_updates": 0,
+    "protected_outcomes": 0,
+    "paid_compute": 0
+  },
+  "initial_demo_budget": "EXHAUSTED; original attempt remains FAILED. This corrective verification is declared separately before its execution, not a retry of the trained fixture.",
+  "failure_rule": "Any recovery failure is retained and closes this corrective verification without another invocation."
+}

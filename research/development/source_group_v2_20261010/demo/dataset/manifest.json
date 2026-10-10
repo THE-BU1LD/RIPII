@@ -1,0 +1,80 @@
+{
+  "artifacts": {
+    "test": {
+      "bytes": 1475,
+      "path": "test.npz",
+      "sha256": "38914d0860aec9ec61052d024cae394e814ac38ee6f6519d509b866224ac06cd"
+    },
+    "train": {
+      "bytes": 1208,
+      "path": "train.npz",
+      "sha256": "ae7bf07c446cc02c1029428eb66a6c28366056934bdfb585d18ec52cffb317ff"
+    },
+    "validation": {
+      "bytes": 1283,
+      "path": "validation.npz",
+      "sha256": "b086e3a90de35ef3740810b42083cffb31f1c6dd99ccfc2098b0bbb5b86a6e71"
+    }
+  },
+  "dataset_id": "generated.source-group-demo",
+  "format": "ripii-trajectory-dataset-v2",
+  "license": "repository-generated fixture; no external dataset",
+  "observation_dt": 0.05,
+  "preprocessing": "train rows0,1 are overlapping two-step windows from one retained source episode; row2 is a different episode",
+  "source_groups": {
+    "test": [
+      {
+        "episode_id": "0",
+        "source_id": "generated.demo.test",
+        "trajectory_id": 903001
+      },
+      {
+        "episode_id": "1",
+        "source_id": "generated.demo.test",
+        "trajectory_id": 903002
+      },
+      {
+        "episode_id": "2",
+        "source_id": "generated.demo.test",
+        "trajectory_id": 903003
+      }
+    ],
+    "train": [
+      {
+        "episode_id": "0",
+        "source_id": "generated.demo.train",
+        "trajectory_id": 901001
+      },
+      {
+        "episode_id": "0",
+        "source_id": "generated.demo.train",
+        "trajectory_id": 901002
+      },
+      {
+        "episode_id": "1",
+        "source_id": "generated.demo.train",
+        "trajectory_id": 901003
+      }
+    ],
+    "validation": [
+      {
+        "episode_id": "0",
+        "source_id": "generated.demo.validation",
+        "trajectory_id": 902001
+      },
+      {
+        "episode_id": "1",
+        "source_id": "generated.demo.validation",
+        "trajectory_id": 902002
+      },
+      {
+        "episode_id": "2",
+        "source_id": "generated.demo.validation",
+        "trajectory_id": 902003
+      }
+    ]
+  },
+  "split_policy": "all windows of a declared source episode remain in one partition",
+  "units": "synthetic arena units",
+  "version": "1"
+}

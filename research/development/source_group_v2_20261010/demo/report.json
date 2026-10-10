@@ -1,0 +1,17 @@
+{
+  "error": "'dict' object has no attribute 'relative_to'",
+  "error_type": "AttributeError",
+  "optimizer_updates": 1,
+  "scope": "generated engineering fixture; no scientific outcome",
+  "source_sha256": {
+    "ripii/world/cli.py": "63c4a0a6c9eeb307b1a51b482dd6e810537708ba55563fdca1d03dc31569d4a6",
+    "ripii/world/experiment.py": "ef309383588fab037892c953fd611a0a97a210e303ea6cc7918349d5cd440343",
+    "ripii/world/external_benchmark.py": "e6c634c90bb3c0b8be3d4b76ae1451da16b3c008f7541b97dbe898cd3be36d79",
+    "ripii/world/external_data.py": "f8b25ea04d236dbd9a0a210ec43d04c5d7ce18dab95562be8888efdf7c096f1e",
+    "ripii/world/models.py": "04dbbd0aa59f8378ab24cad1b59a15616c97605601098a8e7b19fe516c698665",
+    "ripii/world/physics.py": "5c0c69e8d7d0303b87f8e35f48ad88e0d8cf63165bbf4aa3ed5a8ce8b0bc5f78",
+    "scripts/demo_source_groups_v2.py": "9300940c4e65ab1114438304696b5d06974c0187a6f7ceb4fd55d13073e569b8"
+  },
+  "status": "FAILED",
+  "wall_seconds": 3.0583289579954
+}
