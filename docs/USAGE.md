@@ -127,3 +127,7 @@ Paths are restricted to the dataset directory, symlinks are rejected, hashes and
 are checked, object masks and physical properties are validated, and NumPy pickle
 loading is disabled. The loader records license metadata but does not decide whether
 redistribution is legally permitted.
+
+### Inference artifact publication
+
+Prediction and rollout outputs must use a fresh path. Existing files and symlinks are refused, and competing writers cannot overwrite one another. Input NPZ archives must contain unique array names; ambiguous duplicate members are rejected. The implementation and constructed-file regression evidence are described in [the dated inference artifact repair](INFERENCE_ARTIFACT_REPAIR_20261010.md).

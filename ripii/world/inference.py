@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import os
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -115,8 +117,13 @@ def load_inference_npz(path: str | Path) -> dict[str, torch.Tensor]:
     if path.is_symlink() or not path.is_file():
         raise ValueError("inference input must be a regular non-symlink NPZ file")
     try:
-        with np.load(path, allow_pickle=False) as payload:
+        payload = np.load(path, allow_pickle=False)
+        if not isinstance(payload, np.lib.npyio.NpzFile):
+            raise ValueError("inference input must be an NPZ archive")
+        with payload:
             keys = set(payload.files)
+            if len(keys) != len(payload.files):
+                raise ValueError("NPZ array names must be unique")
             if keys not in ({"state", "action", "mask"}, {"state", "actions", "mask"}):
                 raise ValueError(
                     "NPZ must contain state, mask, and exactly one of action/actions"
@@ -127,12 +134,22 @@ def load_inference_npz(path: str | Path) -> dict[str, torch.Tensor]:
 
 
 def save_prediction_npz(path: str | Path, states: torch.Tensor) -> None:
+    """Publish one complete prediction archive without overwriting any path."""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_name(f".{path.name}.tmp")
-    with temporary.open("wb") as handle:
-        np.savez_compressed(handle, states=states.detach().cpu().numpy())
-    temporary.replace(path)
+    if path.exists() or path.is_symlink():
+        raise FileExistsError(f"refusing existing prediction output: {path}")
+    fd, temporary = tempfile.mkstemp(prefix=f".{path.name}.", suffix=".tmp", dir=path.parent)
+    try:
+        with os.fdopen(fd, "wb") as handle:
+            np.savez_compressed(handle, states=states.detach().cpu().numpy())
+            handle.flush()
+            os.fsync(handle.fileno())
+        # Linking a complete same-directory file is an atomic, exclusive publish.
+        # A concurrent creator (including a symlink) wins without being replaced.
+        os.link(temporary, path)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
 
 
 def inspect_json(predictor: WorldPredictor) -> str:
