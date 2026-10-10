@@ -1,0 +1,56 @@
+{
+  "base_commit": "317a6ec4163134a56cdc56ce3fd20f5a43decfb4",
+  "accepted_audit_merge": "4b1821ecc3a9af779c3846c77e1156d6a5ae9fcf",
+  "accepted_typing_merge": "327d7abd1a409906d00b6261eed54baec43dbc9e",
+  "type_repair_blob_proof": [
+    {
+      "path": "ripii/models/ripii.py",
+      "main_and_accepted_fix_blob": "55d8b1d8a84a444245703ed05b2212197d861fef"
+    },
+    {
+      "path": "ripii/world/demo.py",
+      "main_and_accepted_fix_blob": "49cdfe56c40cf027515aeb768ac2835bab17e505"
+    },
+    {
+      "path": "ripii/world/models.py",
+      "main_and_accepted_fix_blob": "82f081bf2b374583ef471b86fab31480dd7b7f37"
+    },
+    {
+      "path": "ripii/world/multiresolution.py",
+      "main_and_accepted_fix_blob": "7505b93166b9e48a0728c2aa4c5a48f8953cdb48"
+    }
+  ],
+  "original_files": 262,
+  "unchanged_original_files": 259,
+  "changed_original_paths": [
+    ".github/workflows/security.yml",
+    "pyproject.toml",
+    "uv.lock"
+  ],
+  "locked_packages_unchanged": 63,
+  "locked_mypy": "1.20.2",
+  "hosted_current_main_reference": {
+    "head_sha": "317a6ec4163134a56cdc56ce3fd20f5a43decfb4",
+    "quality_run": 37557796270,
+    "quality_job": 112587936119,
+    "mypy_result": "Success: no issues found in 42 source files",
+    "tests_passed": 211,
+    "coverage_percent": 80.68,
+    "security_run": 37557796268,
+    "dependency_audit_job": 112587936338,
+    "codeql_job": 112587936221,
+    "scope": "Existing accepted main checks, not checks of the new dependency candidate."
+  },
+  "candidate_actions_setup_python": {
+    "source_pr": 8,
+    "source_head": "1ef6e08a6a0059c8622ddda7923d2342e37cc760",
+    "sha": "5fda3b95a4ea91299a34e894583c3862153e4b97",
+    "version": "7.0.0"
+  },
+  "candidate_mypy_requirement": {
+    "source_pr": 6,
+    "source_head": "b29a1860a587d39e4d59a3689e2ae53126df916e",
+    "range": ">=1.17,<3",
+    "locked_version": "1.20.2"
+  }
+}

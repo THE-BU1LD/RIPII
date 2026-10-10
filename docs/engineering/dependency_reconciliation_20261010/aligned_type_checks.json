@@ -1,0 +1,36 @@
+[
+  {
+    "name": "typecheck_aligned_locked_version",
+    "command_normalized": [
+      "<validation-python>",
+      "-m",
+      "mypy",
+      "ripii"
+    ],
+    "exit_code": 2,
+    "wall_seconds": 0.4193904259991541,
+    "log": "typecheck_aligned_locked_version.log",
+    "mypy_version": "1.20.2",
+    "matplotlib_version": "3.11.1",
+    "numpy_version": "2.5.3",
+    "torch_version": "2.14.1+cpu",
+    "scope": "Local typing check with locked Matplotlib/NumPy, reused CPU Torch patch version; hosted exact lock is separately required."
+  },
+  {
+    "name": "typecheck_permitted_2_3_1",
+    "command_normalized": [
+      "<validation-python>",
+      "-m",
+      "mypy",
+      "ripii"
+    ],
+    "exit_code": 2,
+    "wall_seconds": 1.0685017099985998,
+    "log": "typecheck_permitted_2_3_1.log",
+    "mypy_version": "2.3.1",
+    "matplotlib_version": "3.11.1",
+    "numpy_version": "2.5.3",
+    "torch_version": "2.14.1+cpu",
+    "scope": "Local typing check with locked Matplotlib/NumPy, reused CPU Torch patch version; hosted exact lock is separately required."
+  }
+]

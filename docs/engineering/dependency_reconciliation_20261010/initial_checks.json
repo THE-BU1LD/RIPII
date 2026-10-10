@@ -1,0 +1,30 @@
+[
+  {
+    "name": "lock_check",
+    "command": [
+      "uv",
+      "lock",
+      "--check"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 0.0697622309999133,
+    "log": "lock_check.log"
+  },
+  {
+    "name": "production_export",
+    "command": [
+      "uv",
+      "export",
+      "--locked",
+      "--no-dev",
+      "--no-emit-project",
+      "--format",
+      "requirements.txt",
+      "--output-file",
+      "<checkout>/docs/engineering/dependency_reconciliation_20261010/production_requirements.txt"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 0.07875617500030785,
+    "log": "production_export.log"
+  }
+]

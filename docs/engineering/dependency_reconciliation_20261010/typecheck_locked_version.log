@@ -1,0 +1,2 @@
+ripii/world/demo.py:120: error: "Event" has no attribute "key"  [attr-defined]
+Found 1 error in 1 file (checked 42 source files)

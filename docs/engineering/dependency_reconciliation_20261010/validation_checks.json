@@ -1,0 +1,48 @@
+[
+  {
+    "name": "typecheck_locked_version",
+    "command_normalized": [
+      "<validation-python>",
+      "-m",
+      "mypy",
+      "ripii"
+    ],
+    "exit_code": 1,
+    "wall_seconds": 77.84798361699904,
+    "log": "typecheck_locked_version.log"
+  },
+  {
+    "name": "lint",
+    "command_normalized": [
+      "<validation-python>",
+      "-m",
+      "ruff",
+      "check",
+      "."
+    ],
+    "exit_code": 0,
+    "wall_seconds": 0.13760347000061302,
+    "log": "lint.log"
+  },
+  {
+    "name": "strict_audit",
+    "command_normalized": [
+      "<validation-python>",
+      "-m",
+      "pip_audit",
+      "--strict",
+      "--no-deps",
+      "-r",
+      "docs/engineering/dependency_reconciliation_20261010/production_requirements.txt",
+      "--progress-spinner",
+      "off",
+      "--format",
+      "json",
+      "--output",
+      "docs/engineering/dependency_reconciliation_20261010/audit.json"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 180.85090857000068,
+    "log": "strict_audit.log"
+  }
+]

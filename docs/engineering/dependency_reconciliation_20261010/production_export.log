@@ -1,0 +1,4 @@
+Using CPython 3.12.14 interpreter at: <validation-python>
+Resolved 63 packages in 5ms
+
+[Portable export log summary: the complete dependency stdout is retained in production_requirements.txt; its package pins and hashes are unchanged.]
