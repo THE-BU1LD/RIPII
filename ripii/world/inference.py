@@ -34,12 +34,47 @@ class WorldPredictor:
         state: torch.Tensor,
         action: torch.Tensor,
         mask: torch.Tensor,
+        *,
+        sequence: bool = False,
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-        return (
-            torch.as_tensor(state, dtype=torch.float32, device=self.device),
-            torch.as_tensor(action, dtype=torch.float32, device=self.device),
-            torch.as_tensor(mask, dtype=torch.bool, device=self.device),
-        )
+        # Inspect semantic dtypes before conversion: NaN/nonzero numeric masks
+        # must not silently become live objects, nor complex states lose data.
+        state = torch.as_tensor(state, device=self.device)
+        action = torch.as_tensor(action, device=self.device)
+        mask = torch.as_tensor(mask, device=self.device)
+        if not state.is_floating_point() or not action.is_floating_point():
+            raise TypeError("state and actions must be floating-point tensors")
+        if mask.dtype != torch.bool:
+            raise TypeError("mask must be a boolean tensor")
+        objects = self.model.max_objects
+        if state.ndim != 3 or state.shape[0] == 0 or state.shape[1:] != (objects, 6):
+            raise ValueError(f"state must have nonempty shape [batch, {objects}, 6]")
+        if mask.shape != state.shape[:2]:
+            raise ValueError("mask shape must match the state batch and objects")
+        if sequence:
+            if (
+                action.ndim != 4
+                or action.shape[0] != state.shape[0]
+                or action.shape[2:] != (objects, 2)
+            ):
+                raise ValueError("actions must have shape [batch, time, objects, 2]")
+        elif action.shape != (*state.shape[:2], 2):
+            raise ValueError("action must have shape [batch, objects, 2]")
+        # Validate the actual model dtype, including overflow on a float64 cast.
+        state = state.to(dtype=torch.float32)
+        action = action.to(dtype=torch.float32)
+        if not torch.isfinite(state).all() or not torch.isfinite(action).all():
+            raise FloatingPointError("non-finite inference input")
+        if not mask.any(dim=1).all():
+            raise ValueError("every scene must contain at least one live object")
+        if (state[..., 4:][mask] <= 0).any():
+            raise ValueError("live objects require positive radius and mass")
+        if (state.masked_select(~mask.unsqueeze(-1)) != 0).any():
+            raise ValueError("padded state entries must be zero")
+        inactive_actions = ~mask[:, None, :, None] if sequence else ~mask.unsqueeze(-1)
+        if (action.masked_select(inactive_actions) != 0).any():
+            raise ValueError("padded action entries must be zero")
+        return state, action, mask
 
     @torch.inference_mode()
     def predict(
@@ -58,7 +93,7 @@ class WorldPredictor:
         actions: torch.Tensor,
         mask: torch.Tensor,
     ) -> torch.Tensor:
-        state, actions, mask = self._inputs(state, actions, mask)
+        state, actions, mask = self._inputs(state, actions, mask, sequence=True)
         return rollout_model(self.model, state, actions, mask)
 
     def inspect(self) -> dict[str, Any]:
