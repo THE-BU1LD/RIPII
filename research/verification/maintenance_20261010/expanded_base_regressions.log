@@ -1,0 +1,144 @@
+FF.FFFF                                                                  [100%]
+=================================== FAILURES ===================================
+_____ test_parent_symlink_is_rejected_even_with_valid_size_and_hash[False] _____
+
+tmp_path = PosixPath('/workspace/scratch/06398c1e7e72/memory/RIPII_baseline/.test-tmp/system/pytest-of-root/pytest-0/test_parent_symlink_is_rejecte0')
+outside = False
+
+    @pytest.mark.parametrize("outside", [False, True])
+    def test_parent_symlink_is_rejected_even_with_valid_size_and_hash(tmp_path, outside):
+        root = build_dataset(tmp_path / "dataset")
+        target = tmp_path / "external" if outside else root / "nested"
+        target.mkdir()
+        shutil.copyfile(root / "test.npz", target / "test.npz")
+        (root / "link").symlink_to(target, target_is_directory=True)
+        rewrite_manifest(root, "test", "link/test.npz")
+>       with pytest.raises(ValueError, match="failed verification"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_external_container_identity.py:32: Failed
+_____ test_parent_symlink_is_rejected_even_with_valid_size_and_hash[True] ______
+
+tmp_path = PosixPath('/workspace/scratch/06398c1e7e72/memory/RIPII_baseline/.test-tmp/system/pytest-of-root/pytest-0/test_parent_symlink_is_rejecte1')
+outside = True
+
+    @pytest.mark.parametrize("outside", [False, True])
+    def test_parent_symlink_is_rejected_even_with_valid_size_and_hash(tmp_path, outside):
+        root = build_dataset(tmp_path / "dataset")
+        target = tmp_path / "external" if outside else root / "nested"
+        target.mkdir()
+        shutil.copyfile(root / "test.npz", target / "test.npz")
+        (root / "link").symlink_to(target, target_is_directory=True)
+        rewrite_manifest(root, "test", "link/test.npz")
+>       with pytest.raises(ValueError, match="failed verification"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_external_container_identity.py:32: Failed
+_____ test_duplicate_npz_member_is_rejected_instead_of_selecting_one_copy ______
+
+tmp_path = PosixPath('/workspace/scratch/06398c1e7e72/memory/RIPII_baseline/.test-tmp/system/pytest-of-root/pytest-0/test_duplicate_npz_member_is_r0')
+
+    def test_duplicate_npz_member_is_rejected_instead_of_selecting_one_copy(tmp_path):
+        root = build_dataset(tmp_path / "dataset")
+        path = root / "test.npz"
+        with zipfile.ZipFile(path) as archive:
+            states = archive.read("states.npy")
+        with pytest.warns(UserWarning, match="Duplicate name"):
+            with zipfile.ZipFile(path, "a") as archive:
+                archive.writestr("states.npy", states)
+        rewrite_manifest(root, "test", "test.npz")
+>       with pytest.raises(ValueError, match="invalid"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_external_container_identity.py:53: Failed
+___ test_verified_artifact_bytes_are_the_bytes_loaded_after_path_replacement ___
+
+tmp_path = PosixPath('/workspace/scratch/06398c1e7e72/memory/RIPII_baseline/.test-tmp/system/pytest-of-root/pytest-0/test_verified_artifact_bytes_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f910bbfd070>
+
+    def test_verified_artifact_bytes_are_the_bytes_loaded_after_path_replacement(tmp_path, monkeypatch):
+        root = build_dataset(tmp_path / "dataset")
+        expected, expected_record = load_trajectory_split(root, "test")
+        replacement = (root / "train.npz").read_bytes()
+        original_load = external_data.np.load
+    
+        def replace_then_load(source, *args, **kwargs):
+            (root / "test.npz").write_bytes(replacement)
+            return original_load(source, *args, **kwargs)
+    
+        monkeypatch.setattr(external_data.np, "load", replace_then_load)
+        actual, record = load_trajectory_split(root, "test")
+        for key in expected:
+>           torch.testing.assert_close(actual[key], expected[key], rtol=0, atol=0)
+E           AssertionError: Tensor-likes are not equal!
+E           
+E           Mismatched elements: 144 / 432 (33.3%)
+E           Greatest absolute difference: 1.92970871925354 at index (2, 0, 0, 2)
+E           Greatest relative difference: inf at index (1, 0, 3, 0)
+
+tests/test_external_container_identity.py:70: AssertionError
+_________ test_manifest_digest_describes_the_manifest_actually_parsed __________
+
+tmp_path = PosixPath('/workspace/scratch/06398c1e7e72/memory/RIPII_baseline/.test-tmp/system/pytest-of-root/pytest-0/test_manifest_digest_describes0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f910bbfe7b0>
+
+    def test_manifest_digest_describes_the_manifest_actually_parsed(tmp_path, monkeypatch):
+        root = build_dataset(tmp_path / "dataset")
+        manifest_path = root / "manifest.json"
+        original_digest = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+        changed = json.loads(manifest_path.read_text())
+        changed["version"] = "changed-after-parse"
+        original_load = external_data.np.load
+    
+        def replace_then_load(source, *args, **kwargs):
+            manifest_path.write_text(json.dumps(changed))
+            return original_load(source, *args, **kwargs)
+    
+        monkeypatch.setattr(external_data.np, "load", replace_then_load)
+        _, record = load_trajectory_split(root, "test")
+        assert record["version"] == "1"
+>       assert record["manifest_sha256"] == original_digest
+E       AssertionError: assert '4100cad7b22f...392d33863ede2' == '2b2a2a6272ee...fa0e56de12626'
+E         
+E         - 2b2a2a6272eee3ec62be85784e6c7144922053df05cee452cb2fa0e56de12626
+E         + 4100cad7b22f85ad4fdb0dfbbbf7ae08927cc7cb61e8510dc66392d33863ede2
+
+tests/test_external_container_identity.py:90: AssertionError
+_____ test_dataset_verification_uses_one_manifest_snapshot_for_every_split _____
+
+tmp_path = PosixPath('/workspace/scratch/06398c1e7e72/memory/RIPII_baseline/.test-tmp/system/pytest-of-root/pytest-0/test_dataset_verification_uses0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f910a2fe1e0>
+
+    def test_dataset_verification_uses_one_manifest_snapshot_for_every_split(tmp_path, monkeypatch):
+        root = build_dataset(tmp_path / "dataset")
+        manifest_path = root / "manifest.json"
+        original_digest = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+        changed = json.loads(manifest_path.read_text())
+        changed["version"] = "changed-after-first-split"
+        original_load = external_data.np.load
+    
+        def replace_then_load(source, *args, **kwargs):
+            manifest_path.write_text(json.dumps(changed))
+            return original_load(source, *args, **kwargs)
+    
+        monkeypatch.setattr(external_data.np, "load", replace_then_load)
+        result = verify_trajectory_dataset(root)
+        assert result["version"] == "1"
+>       assert result["manifest_sha256"] == original_digest
+E       AssertionError: assert '0c809dc99fa0...d010df3ff8447' == '2b2a2a6272ee...fa0e56de12626'
+E         
+E         - 2b2a2a6272eee3ec62be85784e6c7144922053df05cee452cb2fa0e56de12626
+E         + 0c809dc99fa01990d95e5e5d188f3a0444f3e81e9844d0ab192d010df3ff8447
+
+tests/test_external_container_identity.py:108: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_external_container_identity.py::test_parent_symlink_is_rejected_even_with_valid_size_and_hash[False]
+FAILED tests/test_external_container_identity.py::test_parent_symlink_is_rejected_even_with_valid_size_and_hash[True]
+FAILED tests/test_external_container_identity.py::test_duplicate_npz_member_is_rejected_instead_of_selecting_one_copy
+FAILED tests/test_external_container_identity.py::test_verified_artifact_bytes_are_the_bytes_loaded_after_path_replacement
+FAILED tests/test_external_container_identity.py::test_manifest_digest_describes_the_manifest_actually_parsed
+FAILED tests/test_external_container_identity.py::test_dataset_verification_uses_one_manifest_snapshot_for_every_split
+6 failed, 1 passed in 10.59s

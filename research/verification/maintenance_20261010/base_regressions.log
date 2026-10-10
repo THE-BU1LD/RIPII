@@ -1,0 +1,60 @@
+FF.F                                                                     [100%]
+=================================== FAILURES ===================================
+_____ test_parent_symlink_is_rejected_even_with_valid_size_and_hash[False] _____
+
+tmp_path = PosixPath('/workspace/scratch/06398c1e7e72/memory/RIPII/.test-tmp/pytest/test_parent_symlink_is_rejecte0')
+outside = False
+
+    @pytest.mark.parametrize("outside", [False, True])
+    def test_parent_symlink_is_rejected_even_with_valid_size_and_hash(tmp_path, outside):
+        root = build_dataset(tmp_path / "dataset")
+        target = tmp_path / "external" if outside else root / "nested"
+        target.mkdir()
+        shutil.copyfile(root / "test.npz", target / "test.npz")
+        (root / "link").symlink_to(target, target_is_directory=True)
+        rewrite_manifest(root, "test", "link/test.npz")
+>       with pytest.raises(ValueError, match="failed verification"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_external_container_identity.py:30: Failed
+_____ test_parent_symlink_is_rejected_even_with_valid_size_and_hash[True] ______
+
+tmp_path = PosixPath('/workspace/scratch/06398c1e7e72/memory/RIPII/.test-tmp/pytest/test_parent_symlink_is_rejecte1')
+outside = True
+
+    @pytest.mark.parametrize("outside", [False, True])
+    def test_parent_symlink_is_rejected_even_with_valid_size_and_hash(tmp_path, outside):
+        root = build_dataset(tmp_path / "dataset")
+        target = tmp_path / "external" if outside else root / "nested"
+        target.mkdir()
+        shutil.copyfile(root / "test.npz", target / "test.npz")
+        (root / "link").symlink_to(target, target_is_directory=True)
+        rewrite_manifest(root, "test", "link/test.npz")
+>       with pytest.raises(ValueError, match="failed verification"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_external_container_identity.py:30: Failed
+_____ test_duplicate_npz_member_is_rejected_instead_of_selecting_one_copy ______
+
+tmp_path = PosixPath('/workspace/scratch/06398c1e7e72/memory/RIPII/.test-tmp/pytest/test_duplicate_npz_member_is_r0')
+
+    def test_duplicate_npz_member_is_rejected_instead_of_selecting_one_copy(tmp_path):
+        root = build_dataset(tmp_path / "dataset")
+        path = root / "test.npz"
+        with zipfile.ZipFile(path) as archive:
+            states = archive.read("states.npy")
+        with pytest.warns(UserWarning, match="Duplicate name"):
+            with zipfile.ZipFile(path, "a") as archive:
+                archive.writestr("states.npy", states)
+        rewrite_manifest(root, "test", "test.npz")
+>       with pytest.raises(ValueError, match="invalid"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_external_container_identity.py:51: Failed
+=========================== short test summary info ============================
+FAILED tests/test_external_container_identity.py::test_parent_symlink_is_rejected_even_with_valid_size_and_hash[False]
+FAILED tests/test_external_container_identity.py::test_parent_symlink_is_rejected_even_with_valid_size_and_hash[True]
+FAILED tests/test_external_container_identity.py::test_duplicate_npz_member_is_rejected_instead_of_selecting_one_copy
