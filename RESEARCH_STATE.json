@@ -1,0 +1,107 @@
+{
+  "schema_version": "research-session-successor-index-v1",
+  "repository": "THE-BU1LD/RIPII",
+  "updated_utc_date": "2026-10-10",
+  "index_role": "Additive prospective research-session index for this draft branch.",
+  "purpose": "Make the published engineering change discoverable from AGENTS.md while preserving the prior canonical state and both source histories. This is index reconciliation, not executable branch integration.",
+  "canonical_read_order": [
+    "RESEARCH_STATE.json",
+    "research/state_snapshots/PR24_b969221c9f07_RESEARCH_STATE.json",
+    "RESEARCH_TRUTH.md",
+    "docs/POWER_PLAN_V2_20261010.md"
+  ],
+  "session_rule": "Read this index, the exact predecessor snapshot and applicable truth/protocol records before work. Append actual changes, verification and failures before finishing. Preserve negative, mixed, invalid and frozen evidence and its source identities.",
+  "predecessor_canonical_record": {
+    "pull_request": "https://github.com/THE-BU1LD/RIPII/pull/24",
+    "commit": "b969221c9f072dd341cc592490818edb95d3ff71",
+    "branch": "codex/portfolio-20261010-stable-vq",
+    "original_path": "RESEARCH_STATE.json",
+    "immutable_url": "https://github.com/THE-BU1LD/RIPII/blob/b969221c9f072dd341cc592490818edb95d3ff71/RESEARCH_STATE.json",
+    "snapshot_path": "research/state_snapshots/PR24_b969221c9f07_RESEARCH_STATE.json",
+    "git_blob": "c9e88f2cc58e3d4de862a10d2b8ba586b20b71a3",
+    "sha256": "b7da33b7ab8b946f8b3e77c9ee16139a8f6f038295cf17df5c8392561eb0442c",
+    "preservation": "Entire original file retained byte for byte, including history, failures, test/source bindings, linked receipts and incomplete-import qualifications.",
+    "path_resolution": "Relative paths and source/test claims inside the snapshot refer to its immutable source commit, not to this draft branch.",
+    "code_imported_by_this_reconciliation": false
+  },
+  "separate_development_candidates": [
+    {
+      "pull_request": "https://github.com/THE-BU1LD/RIPII/pull/24",
+      "source_commit": "b969221c9f072dd341cc592490818edb95d3ff71",
+      "record": "https://github.com/THE-BU1LD/RIPII/blob/b969221c9f072dd341cc592490818edb95d3ff71/RESEARCH_STATE.json",
+      "status": "DRAFT_UNMERGED",
+      "implementation_present_in_this_branch": false,
+      "qualification": "The source-bound record is indexed, but its separate implementation is not imported or claimed to have passed combined tests."
+    },
+    {
+      "pull_request": "https://github.com/THE-BU1LD/RIPII/pull/23",
+      "source_commit": "fc623b23842e27bd5be4a7c9ff703a5c383839ab",
+      "record": "https://github.com/THE-BU1LD/RIPII/blob/fc623b23842e27bd5be4a7c9ff703a5c383839ab/docs/POWER_PLAN_V2_20261010.md",
+      "status": "DRAFT_UNMERGED",
+      "implementation_present_in_this_branch": true,
+      "source_blobs": [
+        {
+          "path": "ripii/utils/power_v2.py",
+          "git_blob": "d1087883ba853cbfcb9182714095c3ff5fd4655e",
+          "mode": "100644"
+        },
+        {
+          "path": "scripts/plan_power_v2.py",
+          "git_blob": "39f3929e3ea873a6a39b0877ca9d00ab8efef68e",
+          "mode": "100644"
+        },
+        {
+          "path": "tests/test_power_v2.py",
+          "git_blob": "26bae369a8051711e132329bfbd04ef824e0555e",
+          "mode": "100644"
+        }
+      ],
+      "scope": "Opt-in alpha-aware paired planning and recomputed artifact admission; pinned v1 analysis, retained plans and negative studies remain unchanged.",
+      "qualification": "The retained verification applies only to the immutable implementation commit and the documented focused scope. No new test run is implied by this index update."
+    }
+  ],
+  "linked_development_receipts": [
+    {
+      "recorded_on": "2026-10-10",
+      "pull_request": "https://github.com/THE-BU1LD/RIPII/pull/23",
+      "implementation_commit": "fc623b23842e27bd5be4a7c9ff703a5c383839ab",
+      "artifact_path": "docs/POWER_PLAN_V2_20261010.md",
+      "immutable_receipt": "https://github.com/THE-BU1LD/RIPII/blob/fc623b23842e27bd5be4a7c9ff703a5c383839ab/docs/POWER_PLAN_V2_20261010.md",
+      "artifact_git_blob": "0651287e0205017a6a20ed22049c4eee54ca1fa5",
+      "artifact_sha256": "6c4157d17bf2c5f1edaa1d94b5029aee1a5638ee808f340893eba75f8fa7f5f2",
+      "scope": "Opt-in alpha-aware paired planning and recomputed artifact admission; pinned v1 analysis, retained plans and negative studies remain unchanged.",
+      "verification": {
+        "passed": 35,
+        "scope": "33 new generated-vector/actual-CLI cases and two retained planning tests; no model training."
+      },
+      "status": "Published engineering candidate; draft and unmerged.",
+      "scientific_disposition_change": "None. The engineering result does not advance a scientific checkpoint, replace retained findings, or authorize a protected run.",
+      "integration_state": "The implementation is present in this draft branch. The separately indexed predecessor candidate has not been combined with it."
+    }
+  ],
+  "scientific_status": {
+    "disposition_change": "NONE",
+    "phase_or_checkpoint_advanced": false,
+    "research_completion_claimed": false,
+    "authority": "Retained truth/protocol records and the source-bound predecessor snapshot remain authoritative. Separate candidates and their development checks do not establish empirical efficacy.",
+    "protected_execution": "All existing evaluation holds, budget requirements and prospective protocol requirements remain binding."
+  },
+  "index_reconciliation": {
+    "date": "2026-10-10",
+    "status": "COMPLETE",
+    "implementation_commit_preserved": "fc623b23842e27bd5be4a7c9ff703a5c383839ab",
+    "action": "Add AGENTS.md, this successor index, and the exact predecessor-state snapshot; preserve every pre-existing branch file.",
+    "copied_instruction_blob": "3ca2dadc779b1aad422e0dadb3a7233970b39b75",
+    "new_code_or_model_changes": false,
+    "new_training_or_scientific_runs": 0,
+    "paid_compute": 0,
+    "provider_calls": 0,
+    "new_hosted_ci_claim": false,
+    "verification": "JSON parsing, predecessor and note Git-blob/SHA-256 bindings, copied instruction identity, explicit separate-candidate states, and complete remote-tree preservation."
+  },
+  "history_index_coverage": {
+    "status": "INCOMPLETE_IMPORT",
+    "scope": "Exact predecessor record, its already-linked receipts, and the newly linked engineering candidate only.",
+    "limits": "No complete repository-history audit or combination of separate implementations is claimed. Keep source identities when future authorized integration adds evidence."
+  }
+}
