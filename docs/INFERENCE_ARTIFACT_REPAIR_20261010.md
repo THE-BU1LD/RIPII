@@ -1,0 +1,9 @@
+# Inference artifact integrity — 10 October 2026
+
+The inspected parent is `db45f504546a21c589ba85028b67bd6db037991c`. Eight additional constructed-file regression cases failed, while the two existing inference API cases passed. NPZ loading collapsed duplicate names into a set, accepting conflicting array members; a disguised NPY file escaped the intended contract error. Prediction publication reused a fixed temporary name, followed an existing temporary symlink, replaced existing outputs, raced between writers, and left partial temporary files after serialization failure.
+
+The loader now requires an actual NPZ container with unique member names, preserving the existing exact key sets and non-pickled array loading. Prediction saving creates an exclusive unpredictable temporary file in the destination directory, serializes/flushes/fsyncs it, then publishes with an exclusive hard link. Existing regular files, symlinks and concurrent winners are never replaced. Only this attempt's temporary file is removed on completion/failure; a filesystem without hard-link support fails rather than using a destructive fallback.
+
+The ten selected local tests pass on CPU PyTorch 2.14.1 and include a real four-writer contention case, all existing-output variants, an unrelated-file temporary-symlink regression, complete archive readback and injected serialization failure. No external data, checkpoints or scientific runs are needed. The CLI now requires a fresh output path for each prediction/rollout artifact.
+
+The model, training/evaluation code, negative/no-advance studies, source-bound capsules and scientific claims are unchanged. This is an inference serialization/publication repair, not scientific reproduction or evidence of improved prediction. Hosted validation is recorded at exact revisions in the PR.

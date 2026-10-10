@@ -29,8 +29,18 @@ metadata = predictor.inspect()
 ```
 
 The returned rollout includes the initial state, so a request with `T` actions returns
-`T + 1` states. `WorldPredictor` uses inference mode and moves inputs to the requested
-device. CUDA requests fail rather than silently falling back to CPU.
+`T + 1` states. A zero-action rollout returns the validated initial state. The complete
+action sequence is validated before the first model call, including later actions.
+`WorldPredictor` uses inference mode and moves inputs to the requested device. It
+accepts floating tensors or NumPy arrays and converts state/actions to float32, rejecting
+non-finite values or overflow in that conversion. Masks must already be boolean;
+numeric masks are not converted to live-object flags. Empty batches, empty scenes,
+invalid physical properties and nonzero padded entries are rejected. CUDA requests
+fail rather than silently falling back to CPU.
+
+The 2026-10-10 inference admission repair applies to this public wrapper. The frozen
+model implementation, training/evaluation runners, historical protocols and retained
+negative/no-advance artifacts are unchanged. It supplies no new research outcome.
 
 Only load checkpoints from trusted sources. PyTorch's restricted loader and RIPII's
 schema validation reduce risk but do not establish provenance.
@@ -117,3 +127,7 @@ Paths are restricted to the dataset directory, symlinks are rejected, hashes and
 are checked, object masks and physical properties are validated, and NumPy pickle
 loading is disabled. The loader records license metadata but does not decide whether
 redistribution is legally permitted.
+
+### Inference artifact publication
+
+Prediction and rollout outputs must use a fresh path. Existing files and symlinks are refused, and competing writers cannot overwrite one another. Input NPZ archives must contain unique array names; ambiguous duplicate members are rejected. The implementation and constructed-file regression evidence are described in [the dated inference artifact repair](INFERENCE_ARTIFACT_REPAIR_20261010.md).
