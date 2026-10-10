@@ -1,0 +1,191 @@
+{
+  "schema": "RIPII_DEPENDENCY_RECONCILIATION_V1",
+  "recorded_utc": "2026-10-10T14:54:37.196273+00:00",
+  "status": "LOCAL_VALIDATED_DRAFT_REVIEW_READY",
+  "base_commit": "317a6ec4163134a56cdc56ce3fd20f5a43decfb4",
+  "branch": "integration/ripii-dependency-reconciliation-20261010",
+  "source_reconciliation": "source_reconciliation.json",
+  "source_manifest": "main_source_manifest.json",
+  "historical_failed_jobs": "historical_failures.json",
+  "original_changed_lines": 3,
+  "original_changed_files": 3,
+  "original_unchanged_files": 259,
+  "locked_package_entries_unchanged": 63,
+  "lock_check_passed": true,
+  "production_export_passed": true,
+  "ruff_full_repository_passed": true,
+  "strict_audit": {
+    "exit_code": 0,
+    "collected_dependencies": 34,
+    "vulnerabilities": 0,
+    "skipped_dependencies": 0,
+    "local_ripii_included": false,
+    "host_python": "3.12.14",
+    "scope": "Exact accepted strict command on the locked export; marker selection uses this local Python3.12 environment. Hosted security job selects Python3.11.",
+    "report": "audit.json"
+  },
+  "type_checks": [
+    {
+      "name": "typecheck_ci_libraries_1_20_2",
+      "command_normalized": [
+        "<validation-python>",
+        "-m",
+        "mypy",
+        "ripii"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 72.72263609400034,
+      "log": "typecheck_ci_libraries_1_20_2.log",
+      "mypy_version": "1.20.2",
+      "matplotlib_version": "3.11.1",
+      "numpy_version": "2.4.6",
+      "torch_version": "2.14.1+cpu",
+      "scope": "Local typing check with the quality job Python3.11-selected NumPy/Matplotlib versions; actual host is Python3.12 and CPU Torch patch version. Exact locked hosted check is separately required."
+    },
+    {
+      "name": "typecheck_ci_libraries_2_3_1",
+      "command_normalized": [
+        "<validation-python>",
+        "-m",
+        "mypy",
+        "ripii"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 59.880192077000174,
+      "log": "typecheck_ci_libraries_2_3_1.log",
+      "mypy_version": "2.3.1",
+      "matplotlib_version": "3.11.1",
+      "numpy_version": "2.4.6",
+      "torch_version": "2.14.1+cpu",
+      "scope": "Local typing check with the quality job Python3.11-selected NumPy/Matplotlib versions; actual host is Python3.12 and CPU Torch patch version. Exact locked hosted check is separately required."
+    }
+  ],
+  "local_environment_diagnostics_preserved": {
+    "first_attempt": "mypy1.20.2 with workspace Matplotlib3.10.8 reports one Event.key stub error on unchanged source; this is not the quality-job dependency set.",
+    "second_attempt": "Using Python3.12-selected NumPy2.5.3 with the project Python3.10 mypy target stops in third-party NumPy stubs using Python3.12 type statements, for both checker versions.",
+    "resolution": "Use actual quality-job locked NumPy2.4.6 and Matplotlib3.11.1; both mypy1.20.2 and separately installed mypy2.3.1 pass unchanged package source.",
+    "logs": [
+      "typecheck_locked_version.log",
+      "typecheck_aligned_locked_version.log",
+      "typecheck_permitted_2_3_1.log"
+    ]
+  },
+  "independent_source_review": {
+    "reviewer": "parent agent",
+    "result": "PASS",
+    "scope": "Compared three-line diff to main; verified pinned setup-python change, mypy metadata bound and unchanged locked distribution version; no source, test or audit-command changes."
+  },
+  "hosted_candidate_status": "PENDING_AT_PUBLICATION; final PR body will link automatically triggered exact-head workflow results. No reruns were requested.",
+  "boundaries": {
+    "scientific_experiments": 0,
+    "protected_outcomes_accessed": 0,
+    "paid_compute": 0,
+    "manual_workflow_dispatches": 0,
+    "runtime_source_changes": 0,
+    "test_or_gate_suppressions": 0,
+    "main_merges": 0,
+    "evidence_deletions": 0,
+    "existing_dependency_branches_modified": false,
+    "historical_negative_research_disposition": "PRESERVED",
+    "latest_unmerged_research_state_inspected": "e7ceda31d94ce58595829d0b4ce607a212a9afc4:RESEARCH_STATE.json",
+    "new_scientific_claims": false
+  },
+  "normalization": "Machine-specific checkout/runtime prefixes in exported headers and command logs are normalized to portable placeholders. Pins, package hashes, diagnostics and results are retained. The successful export log stores its diagnostics plus a pointer to the separately retained complete requirements stdout, avoiding duplicate hash listings.",
+  "artifact_digests": [
+    {
+      "path": "README.md",
+      "sha256": "47107314ae9ce61100129cd40432ca800444db0943d886a9b6fb4261722ceda2",
+      "bytes": 5644
+    },
+    {
+      "path": "aligned_type_checks.json",
+      "sha256": "a579d4f816cfe05ab6eff500895aac39a9b024a1b922b23a10703c30102329e2",
+      "bytes": 1070
+    },
+    {
+      "path": "audit.json",
+      "sha256": "d4fc38f2468d8f8e4ebd01771c04ed38f12dd442bb3870fb3b5d7cd25e1f3847",
+      "bytes": 2081
+    },
+    {
+      "path": "ci_library_type_checks.json",
+      "sha256": "fc31470c26fcd74c5379c5242341d2e089fb0bbada78893086ea30aa7dc981c8",
+      "bytes": 1207
+    },
+    {
+      "path": "historical_failures.json",
+      "sha256": "e81f42998983b34cb5c635ab6c4ce1852339ea8c773e356030860161864379ab",
+      "bytes": 7271
+    },
+    {
+      "path": "initial_checks.json",
+      "sha256": "a15be361034533313cc3de5170bcd31f1b0dad570d3a10150d7926191acadc31",
+      "bytes": 611
+    },
+    {
+      "path": "lint.log",
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      "bytes": 19
+    },
+    {
+      "path": "lock_check.log",
+      "sha256": "48d139ed8b47d0963df90e1c55c7c694dd22b5e3f3928e5f6560c1fb40ca066a",
+      "bytes": 87
+    },
+    {
+      "path": "main_source_manifest.json",
+      "sha256": "ddea8d62854cec9d9d2f03dfdc0298706cb77160bbf8a19358f19ff07ee467d5",
+      "bytes": 50659
+    },
+    {
+      "path": "production_export.log",
+      "sha256": "2967b8232a6c9e345a8ab5698a7876d7b719857bef7105d7f0af6d5e2d911518",
+      "bytes": 236
+    },
+    {
+      "path": "production_requirements.txt",
+      "sha256": "33e0708a548fce5b4cc492fb0a38be03bd1c24720d85a4cc1a361bccb04962e8",
+      "bytes": 86164
+    },
+    {
+      "path": "source_reconciliation.json",
+      "sha256": "c6ab62a0c6d8638d2a63f9627f7ad51ff11d0cb906d4f232537fa3b54e54d99a",
+      "bytes": 1870
+    },
+    {
+      "path": "strict_audit.log",
+      "sha256": "79d30422388543b2563e1dde76bb7e7857d7ef0c6fdf05c8c71598633ca07e1e",
+      "bytes": 265
+    },
+    {
+      "path": "typecheck_aligned_locked_version.log",
+      "sha256": "a09cca2fc2200b774a63e1e46f50956f578fdd53f0a75c02611ac59e569d6ce3",
+      "bytes": 207
+    },
+    {
+      "path": "typecheck_ci_libraries_1_20_2.log",
+      "sha256": "e6a337f5d3c5bfc91aa5e09a3e3e6ba1ed5d06d2dac23e22cac9db017a5c00ea",
+      "bytes": 44
+    },
+    {
+      "path": "typecheck_ci_libraries_2_3_1.log",
+      "sha256": "e6a337f5d3c5bfc91aa5e09a3e3e6ba1ed5d06d2dac23e22cac9db017a5c00ea",
+      "bytes": 44
+    },
+    {
+      "path": "typecheck_locked_version.log",
+      "sha256": "00b6cbc4fadc64448603beb20151cbef96b88765314300f13763442d8e6ab82f",
+      "bytes": 129
+    },
+    {
+      "path": "typecheck_permitted_2_3_1.log",
+      "sha256": "a09cca2fc2200b774a63e1e46f50956f578fdd53f0a75c02611ac59e569d6ce3",
+      "bytes": 207
+    },
+    {
+      "path": "validation_checks.json",
+      "sha256": "86388ad140c17a21c65b334e09884fdd022ab7808f853dea1e3427b05614ec24",
+      "bytes": 1006
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "source": "operations_execution/github_failure_evidence_20261010.json",
+  "source_assembled_at": "2026-10-10T14:40:13.685Z",
+  "scope": "Exact retained failed-job excerpts for the original stale dependency proposal heads. Historical failures are not current-main outcomes.",
+  "job_log_evidence": [
+    {
+      "repo": "THE-BU1LD/RIPII",
+      "pr": 6,
+      "job": 105856650272,
+      "head": "b29a1860a587d39e4d59a3689e2ae53126df916e",
+      "job_url": "https://github.com/THE-BU1LD/RIPII/actions/runs/35427787081/job/105856650272",
+      "retrieval": "decoded",
+      "source_line_count": 433,
+      "raw_failure_and_validation_lines": [
+        {
+          "line": 416,
+          "text": "2026-09-19T06:53:41.2632764Z ERROR:pip_audit._cli:ripii: Dependency not found on PyPI and could not be audited: ripii (0.2.0)"
+        },
+        {
+          "line": 417,
+          "text": "2026-09-19T06:53:41.3068086Z ##[error]Process completed with exit code 1."
+        }
+      ]
+    },
+    {
+      "repo": "THE-BU1LD/RIPII",
+      "pr": 6,
+      "job": 105856650005,
+      "head": "b29a1860a587d39e4d59a3689e2ae53126df916e",
+      "job_url": "https://github.com/THE-BU1LD/RIPII/actions/runs/35427787023/job/105856650005",
+      "retrieval": "decoded",
+      "source_line_count": 391,
+      "raw_failure_and_validation_lines": [
+        {
+          "line": 330,
+          "text": "2026-09-19T06:53:11.7600295Z ripii/world/multiresolution.py:72: error: Argument 1 to \"zeros_\" has incompatible type \"Tensor | Module\"; expected \"Tensor\"  [arg-type]"
+        },
+        {
+          "line": 331,
+          "text": "2026-09-19T06:53:11.7601482Z ripii/world/multiresolution.py:73: error: Argument 1 to \"zeros_\" has incompatible type \"Tensor | Module\"; expected \"Tensor\"  [arg-type]"
+        },
+        {
+          "line": 332,
+          "text": "2026-09-19T06:53:11.7602619Z ripii/world/multiresolution.py:261: error: Argument 1 to \"constant_\" has incompatible type \"Tensor | Module\"; expected \"Tensor\"  [arg-type]"
+        },
+        {
+          "line": 333,
+          "text": "2026-09-19T06:53:11.9257669Z ripii/world/models.py:47: error: Cannot assign to a method  [method-assign]"
+        },
+        {
+          "line": 334,
+          "text": "2026-09-19T06:53:11.9258485Z ripii/world/models.py:47: error: Incompatible types in assignment (expression has type \"float\", variable has type \"Callable[[], FSQ]\")  [assignment]"
+        },
+        {
+          "line": 335,
+          "text": "2026-09-19T06:53:11.9259490Z ripii/world/models.py:52: error: Unsupported operand types for * (\"Tensor\" and \"Callable[[], FSQ]\")  [operator]"
+        },
+        {
+          "line": 336,
+          "text": "2026-09-19T06:53:11.9260082Z ripii/world/models.py:56: error: Unsupported operand types for / (\"Tensor\" and \"Callable[[], FSQ]\")  [operator]"
+        },
+        {
+          "line": 337,
+          "text": "2026-09-19T06:53:11.9260791Z ripii/world/models.py:239: error: Incompatible types in assignment (expression has type \"HierarchicalVectorQuantizer\", variable has type \"FSQ\")  [assignment]"
+        },
+        {
+          "line": 338,
+          "text": "2026-09-19T06:53:11.9261553Z ripii/world/models.py:242: error: Argument 1 to \"zeros_\" has incompatible type \"Tensor | Module\"; expected \"Tensor\"  [arg-type]"
+        },
+        {
+          "line": 339,
+          "text": "2026-09-19T06:53:11.9262191Z ripii/world/models.py:243: error: Argument 1 to \"zeros_\" has incompatible type \"Tensor | Module\"; expected \"Tensor\"  [arg-type]"
+        },
+        {
+          "line": 340,
+          "text": "2026-09-19T06:53:11.9262701Z ripii/world/models.py:343: error: \"Tensor\" not callable  [operator]"
+        },
+        {
+          "line": 341,
+          "text": "2026-09-19T06:53:11.9263202Z ripii/world/models.py:367: error: No overload variant of \"int\" matches argument type \"Callable[[], FSQ]\"  [call-overload]"
+        },
+        {
+          "line": 345,
+          "text": "2026-09-19T06:53:11.9401655Z ripii/models/ripii.py:286: error: Incompatible return value type (got \"dict[str, object]\", expected \"dict[str, Tensor]\")  [return-value]"
+        },
+        {
+          "line": 346,
+          "text": "2026-09-19T06:53:11.9402784Z ripii/models/ripii.py:372: error: Argument 1 to \"log\" has incompatible type \"Tensor | Module\"; expected \"Tensor\"  [arg-type]"
+        },
+        {
+          "line": 347,
+          "text": "2026-09-19T06:53:11.9405849Z ripii/models/ripii.py:395: error: Unsupported operand types for - (\"Tensor\" and Module)  [operator]"
+        },
+        {
+          "line": 349,
+          "text": "2026-09-19T06:53:12.0754832Z ripii/world/demo.py:43: error: No overload variant of \"add_axes\" of \"FigureBase\" matches argument type \"list[float]\"  [call-overload]"
+        },
+        {
+          "line": 353,
+          "text": "2026-09-19T06:53:12.0757254Z ripii/world/demo.py:74: error: No overload variant of \"add_axes\" of \"FigureBase\" matches argument type \"list[float]\"  [call-overload]"
+        },
+        {
+          "line": 357,
+          "text": "2026-09-19T06:53:12.0759962Z ripii/world/demo.py:82: error: No overload variant of \"add_axes\" of \"FigureBase\" matches argument type \"list[float]\"  [call-overload]"
+        },
+        {
+          "line": 361,
+          "text": "2026-09-19T06:53:12.0762036Z ripii/world/demo.py:92: error: No overload variant of \"add_axes\" of \"FigureBase\" matches argument type \"list[float]\"  [call-overload]"
+        },
+        {
+          "line": 365,
+          "text": "2026-09-19T06:53:12.0764120Z ripii/world/demo.py:100: error: No overload variant of \"add_axes\" of \"FigureBase\" matches argument type \"list[float]\"  [call-overload]"
+        },
+        {
+          "line": 369,
+          "text": "2026-09-19T06:53:12.0766235Z ripii/world/demo.py:110: error: No overload variant of \"add_axes\" of \"FigureBase\" matches argument types \"list[float]\", \"str\"  [call-overload]"
+        },
+        {
+          "line": 373,
+          "text": "2026-09-19T06:53:12.0768530Z ripii/world/demo.py:245: error: Argument 1 to \"Circle\" has incompatible type \"ndarray[tuple[Any, ...], dtype[Any]]\"; expected \"tuple[float, float]\"  [arg-type]"
+        },
+        {
+          "line": 374,
+          "text": "2026-09-19T06:53:12.1815753Z Found 22 errors in 4 files (checked 42 source files)"
+        },
+        {
+          "line": 375,
+          "text": "2026-09-19T06:53:12.2262162Z ##[error]Process completed with exit code 1."
+        }
+      ]
+    },
+    {
+      "repo": "THE-BU1LD/RIPII",
+      "pr": 8,
+      "job": 105843753552,
+      "head": "1ef6e08a6a0059c8622ddda7923d2342e37cc760",
+      "job_url": "https://github.com/THE-BU1LD/RIPII/actions/runs/35422923289/job/105843753552",
+      "retrieval": "decoded",
+      "source_line_count": 430,
+      "raw_failure_and_validation_lines": [
+        {
+          "line": 413,
+          "text": "2026-09-19T05:05:02.8124481Z ERROR:pip_audit._cli:ripii: Dependency not found on PyPI and could not be audited: ripii (0.2.0)"
+        },
+        {
+          "line": 414,
+          "text": "2026-09-19T05:05:02.8503839Z ##[error]Process completed with exit code 1."
+        }
+      ]
+    }
+  ]
+}
