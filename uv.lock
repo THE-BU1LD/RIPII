@@ -1844,7 +1844,7 @@ dev = [
 requires-dist = [
     { name = "h5py", marker = "extra == 'data'", specifier = ">=3.11,<4" },
     { name = "matplotlib", specifier = ">=3.8,<4" },
-    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.17,<2" },
+    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.17,<3" },
     { name = "numpy", specifier = ">=1.24,<3" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8,<10" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=6,<8" },
