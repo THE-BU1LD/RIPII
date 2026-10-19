@@ -1,0 +1,21 @@
+{
+  "artifacts": [
+    {
+      "bytes": 672449,
+      "path": "evidence.tar.gz",
+      "sha256": "9f89a02c5e75ec36e5801e234c1d42605cf0a3d290eb6056beb134c2ade7985f"
+    },
+    {
+      "bytes": 2888,
+      "path": "report.md",
+      "sha256": "586949c9f1b671254437ad25bcdd2bd66f8d32396989ba510d3a5bee8c3a1648"
+    },
+    {
+      "bytes": 34161,
+      "path": "summary.json",
+      "sha256": "f25c7ba6f99084a918ba3ac33b2d18787af435e09f9d04297c59e8fd3183905b"
+    }
+  ],
+  "format": "ripii-contract-and-mechanics-package-manifest-v1",
+  "verification_scope": "Byte integrity of generated report, machine-readable summary and full session archive; no independent replay or authenticated signature."
+}

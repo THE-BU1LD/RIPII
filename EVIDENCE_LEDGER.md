@@ -31,3 +31,21 @@
 Raw values remain in retained JSON/CSV and self-checksummed capsules; prose rounding is
 never the authoritative source. These SHA-256 digests detect corruption but are not
 authenticated author signatures. Historical artifacts are not rewritten after code changes.
+
+## Engineering refresh — 19 October 2026
+
+This section qualifies the historical rows above without replacing their outcomes.
+The inspected base is `33b799fb3bb0d5215e954c5f80d2225c51a5caaa`; execution used
+the repaired working tree whose exact source hashes and snapshots are retained in
+the new [evidence package](research/results/development/ripii_contract_audit_20261019/summary.json).
+See the [session handoff](docs/SESSION_HANDOFF_2026-10-19.md) for commands, environment,
+remaining gaps, and reproduction instructions. No readiness state is reassigned.
+
+| Claim | Classification | Evidence | Boundary |
+|---|---|---|---|
+| Complete inference requests reject malformed masks, padding, and zero-step inputs before execution | locally engineering-verified | 52 contract cases; full suite 273 passed; retained before/after logs | zero-step valid requests remain supported; CPU verification |
+| Valid predictions and parameter gradients preserve the original computation | bounded compatibility verification | original and repaired source both replay eight variants against retained tensors; 208 gradient tensors per revision match exactly | one four-scene float32 fixture per variant; input validation adds work and may synchronize devices |
+| Action-only MR conservation conflicts with drag, wall forces, and substepped force integration | synthetic construction evidence | nine fixtures, eight steps, two initialized MR variants; zero training updates; analytic references and conservation bounds | single-object obstructions are weight-independent; multi-object bounds require verified conservative constraints; no attribution of historical error share |
+| The original MR routing limitation concerns `ripii_mr`; existing `ripii_mr_v2` skips its off route | local execution/gradient evidence | coarsener hooks: v1 off/on 1/1, v2 off/on 0/1; v2 off router task gradient is zero at logit -1 | one disclosed contact fixture; no latency, training-collapse, or accuracy-compute claim |
+| Portable historical summaries/capsules retain their integrity | portable verification only | `scripts/verify_artifact.sh` completed successfully | omitted checkpoints and original source execution were not replayed |
+| The historical 75-run MR result is not freshly verified in this checkout | source-reported negative result | original manifest/report/summary directory is absent; verify-only command fails with missing manifest | preserves 75 runs, 0/60 passes, and `no_advance` as source reports; does not authenticate or reconstruct missing artifacts |

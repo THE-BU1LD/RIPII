@@ -134,8 +134,7 @@ class EquivariantDynamics(nn.Module):
         aggregate = (scalar_messages * edges.unsqueeze(-1)).sum(2)
         h = self.update(torch.cat([h, aggregate], -1)) * live
         pair_vector = (
-            coefficients[..., :1] * relative
-            + coefficients[..., 1:] * relative_velocity
+            coefficients[..., :1] * relative + coefficients[..., 1:] * relative_velocity
         )
         pair_vector = (pair_vector * edges.unsqueeze(-1)).sum(2)
         vector = pair_vector * self.vector_gate(h) + (
@@ -165,10 +164,11 @@ class WorldModel(nn.Module):
         groups=4,
     ):
         super().__init__()
-        if (
-            variant not in MODEL_VARIANTS
-            or bottleneck not in {"continuous", "fsq", "vq"}
-        ):
+        if variant not in MODEL_VARIANTS or bottleneck not in {
+            "continuous",
+            "fsq",
+            "vq",
+        }:
             raise ValueError("unknown model variant or bottleneck")
         if variant in CONTINUOUS_DYNAMICS_VARIANTS and bottleneck != "continuous":
             raise ValueError(
@@ -250,15 +250,35 @@ class WorldModel(nn.Module):
         self.last_assignments = None
         self.last_quantizer_stats: dict[str, torch.Tensor] = {}
 
-    def forward(self, state, action, mask):
+    def validate_inputs(self, state, action, mask, *, sequence: bool = False) -> None:
+        """Validate the complete request, including an empty action sequence.
+
+        This checks the documented zero-padding contract before any learned
+        operation. It does not normalize data or change checkpoint semantics.
+        """
+        if not all(isinstance(value, torch.Tensor) for value in (state, action, mask)):
+            raise TypeError("state, action, and mask must be tensors")
         if state.ndim != 3 or state.shape[1:] != (self.max_objects, 6):
             raise ValueError(f"expected [batch, {self.max_objects}, 6] state")
-        if action.shape != (*state.shape[:2], 2) or mask.shape != state.shape[:2]:
+        if state.shape[0] == 0:
+            raise ValueError("state batch must not be empty")
+        if sequence:
+            if (
+                action.ndim != 4
+                or action.shape[0] != state.shape[0]
+                or action.shape[2:] != (self.max_objects, 2)
+            ):
+                raise ValueError("actions must have shape [batch, time, objects, 2]")
+        elif action.shape != (*state.shape[:2], 2):
+            raise ValueError("invalid action shape")
+        if mask.shape != state.shape[:2]:
             raise ValueError("invalid actions or empty scene mask")
         if mask.dtype != torch.bool:
             raise TypeError("mask must be a boolean tensor")
         if not state.is_floating_point() or not action.is_floating_point():
             raise TypeError("state and action must be floating-point tensors")
+        if state.dtype != action.dtype:
+            raise TypeError("state and action must share a floating-point dtype")
         if state.device != action.device or state.device != mask.device:
             raise ValueError("state, action, and mask must share a device")
         if not mask.any(dim=1).all():
@@ -267,6 +287,14 @@ class WorldModel(nn.Module):
             raise FloatingPointError("non-finite world-model input")
         if (state[..., 4:][mask] <= 0).any():
             raise ValueError("live objects require positive radius and mass")
+        if (state[~mask] != 0).any():
+            raise ValueError("state padding must be zero")
+        action_padding = ~mask[:, None, :, None] if sequence else ~mask[..., None]
+        if (action.masked_select(action_padding) != 0).any():
+            raise ValueError("action padding must be zero")
+
+    def forward(self, state, action, mask):
+        self.validate_inputs(state, action, mask)
         live = mask.unsqueeze(-1)
         self.last_assignments = None
         self.last_quantizer_stats = {}
@@ -322,9 +350,7 @@ class WorldModel(nn.Module):
             quantized, stats = vq_quantizer(h[mask])
             h = h.clone()
             h[mask] = quantized
-            self.aux_loss = (
-                stats["vq_commit"] + stats["vq_code"] + stats["vq_balance"]
-            )
+            self.aux_loss = stats["vq_commit"] + stats["vq_code"] + stats["vq_balance"]
             self.last_quantizer_stats = {
                 key: value.detach() for key, value in stats.items()
             }
@@ -378,9 +404,7 @@ class WorldModel(nn.Module):
             utilization, effective = [], []
             for dimension in range(active_codes.shape[-1]):
                 indices = active_codes[:, dimension] + int(fsq_quantizer.half_range)
-                counts = torch.bincount(
-                    indices, minlength=fsq_quantizer.levels
-                ).float()
+                counts = torch.bincount(indices, minlength=fsq_quantizer.levels).float()
                 probabilities = counts / counts.sum().clamp_min(1)
                 nonzero = probabilities > 0
                 entropy = -(probabilities[nonzero] * probabilities[nonzero].log()).sum()
@@ -417,8 +441,9 @@ class WorldModel(nn.Module):
 def rollout(
     model: WorldModel, state: torch.Tensor, actions: torch.Tensor, mask: torch.Tensor
 ) -> torch.Tensor:
-    if actions.ndim != 4 or actions.shape[0] != state.shape[0]:
-        raise ValueError("actions must have shape [batch, time, objects, 2]")
+    # Validate all timesteps before execution, so a malformed later action cannot
+    # partially update diagnostic counters or leave an invalid zero-step result.
+    model.validate_inputs(state, actions, mask, sequence=True)
     states = [state]
     for t in range(actions.shape[1]):
         state = model(state, actions[:, t], mask)

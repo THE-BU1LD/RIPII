@@ -31,7 +31,7 @@ prolongation, deterministic adaptive coarse routing, and a semi-implicit physica
 update. Construction tests cover partition of unity, mass accounting, permutation and
 E(2) behavior, internal momentum/torque preservation, external-force semantics and
 gradient reachability. These are implementation properties, not evidence of predictive
-advantage. The current route gates the coarse contribution after the coarse path has
+advantage. The `ripii_mr` route gates the coarse contribution after the coarse path has
 already been computed, so it does not establish conditional-compute or efficiency
 benefits.
 
@@ -61,6 +61,26 @@ implementation, improvement, addition, and abstraction classifications—is
 [`audit/ULTIMATE_CHECKLIST.md`](audit/ULTIMATE_CHECKLIST.md).
 Focused guides under `docs/` cover research status, architecture, experiments,
 reproducibility, and preserved failures.
+
+### Contract repair and mechanics diagnostic (19 October 2026)
+
+The [engineering handoff](docs/SESSION_HANDOFF_2026-10-19.md) records stricter
+action-conditioned inference validation, regression tests, valid-input compatibility,
+and a [nine-fixture synthetic mechanics diagnostic](research/results/development/ripii_contract_audit_20261019/report.md).
+The diagnostic finds unavoidable single-object errors from simulator drag/wall forces
+and an integration mismatch under constant force. It uses no training and does not
+attribute the historical performance gap to those obstructions.
+
+The experimental `ripii_mr_v2` variant already present in the inspected source really
+skips coarse execution when its route is off. The diagnostic measures that execution
+and the off-path router task-gradient limitation; it does not establish a speedup or
+predictive advantage. This does not change the frozen `ripii_mr` result above.
+
+The original `runs/ripii_mr_development_v1` directory is absent from this checkout.
+Its 75-run/0-of-60/no-advance figures remain source-reported here. Restore the original
+artifact directory and its recorded source before attempting full verification or
+using it to rebuild research claims. The new diagnostic retains its own sources,
+weights, measurements, logs, and integrity manifest in a separate evidence archive.
 
 ## Object-state world model
 

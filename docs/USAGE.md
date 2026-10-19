@@ -15,6 +15,9 @@ Each scene is padded to the checkpoint's `max_objects` value. Inputs are:
 
 Padded state and action entries must be zero. Every live radius and mass must be
 positive. Position and time units must match the dataset recorded in the checkpoint.
+All values must be finite. Batches must be nonempty, with at least one live object
+per scene. Numeric masks are rejected; use actual Boolean tensors or NumPy arrays.
+The direct `WorldModel` API requires matching floating state/action dtypes and devices.
 
 ## Python API
 
@@ -31,6 +34,13 @@ metadata = predictor.inspect()
 The returned rollout includes the initial state, so a request with `T` actions returns
 `T + 1` states. `WorldPredictor` uses inference mode and moves inputs to the requested
 device. CUDA requests fail rather than silently falling back to CPU.
+Floating inputs are converted to float32; integer state/action arrays are rejected.
+Zero-step rollouts are supported and return the validated initial state without
+executing the model. The entire action sequence is validated before any forward pass.
+
+These input checks do not change parameters, model updates, checkpoint formats, or
+valid zero-padded predictions. Older malformed requests that bypassed validation now
+fail explicitly. Historical research still requires its recorded source revision.
 
 Only load checkpoints from trusted sources. PyTorch's restricted loader and RIPII's
 schema validation reduce risk but do not establish provenance.

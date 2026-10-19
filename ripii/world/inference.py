@@ -23,9 +23,7 @@ class WorldPredictor:
         self.checkpoint = checkpoint
 
     @classmethod
-    def from_checkpoint(
-        cls, path: str | Path, device: str = "cpu"
-    ) -> WorldPredictor:
+    def from_checkpoint(cls, path: str | Path, device: str = "cpu") -> WorldPredictor:
         model, checkpoint = load_model(path)
         return cls(model, checkpoint, device)
 
@@ -35,10 +33,19 @@ class WorldPredictor:
         action: torch.Tensor,
         mask: torch.Tensor,
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        # Inspect original dtypes before conversion: NaN, 2, or 0.5 must not be
+        # silently converted into live objects by a Boolean cast.
+        state = torch.as_tensor(state)
+        action = torch.as_tensor(action)
+        mask = torch.as_tensor(mask)
+        if mask.dtype != torch.bool:
+            raise TypeError("mask must be a boolean tensor or array")
+        if not state.is_floating_point() or not action.is_floating_point():
+            raise TypeError("state and action must be floating-point tensors or arrays")
         return (
-            torch.as_tensor(state, dtype=torch.float32, device=self.device),
-            torch.as_tensor(action, dtype=torch.float32, device=self.device),
-            torch.as_tensor(mask, dtype=torch.bool, device=self.device),
+            state.to(dtype=torch.float32, device=self.device),
+            action.to(dtype=torch.float32, device=self.device),
+            mask.to(device=self.device),
         )
 
     @torch.inference_mode()

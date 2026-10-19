@@ -1,0 +1,913 @@
+{
+  "archive": {
+    "bytes": 672449,
+    "path": "evidence.tar.gz",
+    "retained_files": 99,
+    "session_manifest_sha256": "77226f97eaed2e8c8d015d077db1321755c7250e24e65c4ad84f6d24b567bbca",
+    "sha256": "9f89a02c5e75ec36e5801e234c1d42605cf0a3d290eb6056beb134c2ade7985f"
+  },
+  "base_commit": "33b799fb3bb0d5215e954c5f80d2225c51a5caaa",
+  "branch": "fix/ripii-contract-audit-20261019",
+  "compatibility": {
+    "boundary": "One retained four-scene float32 fixture and disclosed untrained parameters per variant; no runtime equivalence or population claim.",
+    "full_receipt": "engineering_contract_audit_20261019/valid-input-replay.log",
+    "gradient_tensors_per_revision": 208,
+    "loss": "prediction[..., :4].square().mean()",
+    "status": "PASS",
+    "variants": 8
+  },
+  "delivery_revision": "The Git commit containing this file. Execution used the recorded base plus the retained working-tree source snapshots.",
+  "diagnostic": {
+    "boundaries": [
+      "RMSE bounds are per-coordinate over eight steps, excluding initial frame.",
+      "Single-object obstructions are independent of learned weights; multi-object bounds require verified conservative P/Q constraints.",
+      "Wall analytic reference covers the first observation only.",
+      "Zero bound does not establish trajectory accuracy.",
+      "Routing counters and task gradients do not establish speedup, learned quality, or training collapse.",
+      "Verifier checks integrity/completion, not independent reproduction or author authentication."
+    ],
+    "budget": {
+      "cpu_lanes": 1,
+      "hidden": 16,
+      "horizon": 8,
+      "max_objects": 8,
+      "max_seconds": 120,
+      "torch_threads": 1,
+      "training_updates": 0
+    },
+    "completed_fixtures": 9,
+    "elapsed_seconds": 1.3728866769961314,
+    "evidence_kind": "deterministic synthetic construction diagnostic",
+    "fixtures": [
+      {
+        "analytic_reference_max_error": 8.326672684688674e-17,
+        "name": "free_motion",
+        "position_rmse_lower_bound": 4.8260854871323025e-17,
+        "untrained_model_metrics": {
+          "ripii_mr": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 1.0,
+              "assignment_entropy": 0.0,
+              "assignment_max_occupancy": 1.0,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.0,
+              "coarse_edge_count": 0.0,
+              "fine_edge_count": 0.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 0.0,
+              "restriction_mass_max_error": 0.0,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 0.0,
+            "position_constraint_residual_max": 2.7755575615628914e-17,
+            "position_rmse": 3.5039696624640784e-17,
+            "velocity_rmse": 0.0
+          },
+          "ripii_mr_v2": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 1.0,
+              "assignment_entropy": 0.0,
+              "assignment_max_occupancy": 1.0,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.0,
+              "coarse_compute_calls": 1.0,
+              "coarse_compute_calls_total": 8.0,
+              "coarse_edge_count": 0.0,
+              "coarse_group_count": 1.0,
+              "coarse_scenes_processed": 1.0,
+              "coarse_scenes_processed_total": 8.0,
+              "fine_edge_count": 0.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 0.0,
+              "restriction_mass_max_error": 0.0,
+              "routed_scene_count": 1.0,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 0.0,
+            "position_constraint_residual_max": 2.7755575615628914e-17,
+            "position_rmse": 3.5039696624640784e-17,
+            "velocity_rmse": 0.0
+          }
+        },
+        "velocity_rmse_lower_bound": 0.0
+      },
+      {
+        "analytic_reference_max_error": 5.551115123125783e-16,
+        "name": "drag_light",
+        "position_rmse_lower_bound": 0.001030602190474317,
+        "untrained_model_metrics": {
+          "ripii_mr": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 1.0,
+              "assignment_entropy": 0.0,
+              "assignment_max_occupancy": 1.0,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.0,
+              "coarse_edge_count": 0.0,
+              "fine_edge_count": 0.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 0.0,
+              "restriction_mass_max_error": 0.0,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 0.0,
+            "position_constraint_residual_max": 2.7755575615628914e-17,
+            "position_rmse": 0.0010306021904743312,
+            "velocity_rmse": 0.006041923092639428
+          },
+          "ripii_mr_v2": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 1.0,
+              "assignment_entropy": 0.0,
+              "assignment_max_occupancy": 1.0,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.0,
+              "coarse_compute_calls": 1.0,
+              "coarse_compute_calls_total": 16.0,
+              "coarse_edge_count": 0.0,
+              "coarse_group_count": 1.0,
+              "coarse_scenes_processed": 1.0,
+              "coarse_scenes_processed_total": 16.0,
+              "fine_edge_count": 0.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 0.0,
+              "restriction_mass_max_error": 0.0,
+              "routed_scene_count": 1.0,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 0.0,
+            "position_constraint_residual_max": 2.7755575615628914e-17,
+            "position_rmse": 0.0010306021904743312,
+            "velocity_rmse": 0.006041923092639428
+          }
+        },
+        "velocity_rmse_lower_bound": 0.006041923092639402
+      },
+      {
+        "analytic_reference_max_error": 4.718447854656915e-16,
+        "name": "drag_heavy",
+        "position_rmse_lower_bound": 0.0005177905092728053,
+        "untrained_model_metrics": {
+          "ripii_mr": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 1.0,
+              "assignment_entropy": 0.0,
+              "assignment_max_occupancy": 1.0,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.0,
+              "coarse_edge_count": 0.0,
+              "fine_edge_count": 0.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 0.0,
+              "restriction_mass_max_error": 0.0,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 0.0,
+            "position_constraint_residual_max": 5.551115123125783e-17,
+            "position_rmse": 0.0005177905092728209,
+            "velocity_rmse": 0.003040693399101073
+          },
+          "ripii_mr_v2": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 1.0,
+              "assignment_entropy": 0.0,
+              "assignment_max_occupancy": 1.0,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.0,
+              "coarse_compute_calls": 1.0,
+              "coarse_compute_calls_total": 24.0,
+              "coarse_edge_count": 0.0,
+              "coarse_group_count": 1.0,
+              "coarse_scenes_processed": 1.0,
+              "coarse_scenes_processed_total": 24.0,
+              "fine_edge_count": 0.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 0.0,
+              "restriction_mass_max_error": 0.0,
+              "routed_scene_count": 1.0,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 0.0,
+            "position_constraint_residual_max": 5.551115123125783e-17,
+            "position_rmse": 0.0005177905092728209,
+            "velocity_rmse": 0.003040693399101073
+          }
+        },
+        "velocity_rmse_lower_bound": 0.0030406933991010483
+      },
+      {
+        "analytic_reference_max_error": 2.220446049250313e-16,
+        "name": "wall_contact",
+        "position_rmse_lower_bound": 0.06741855675228993,
+        "untrained_model_metrics": {
+          "ripii_mr": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 1.0,
+              "assignment_entropy": 0.0,
+              "assignment_max_occupancy": 1.0,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.0,
+              "coarse_edge_count": 0.0,
+              "fine_edge_count": 0.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 0.0,
+              "restriction_mass_max_error": 0.0,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 0.0,
+            "position_constraint_residual_max": 0.0,
+            "position_rmse": 0.06741855675228993,
+            "velocity_rmse": 0.2982162539076036
+          },
+          "ripii_mr_v2": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 1.0,
+              "assignment_entropy": 0.0,
+              "assignment_max_occupancy": 1.0,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.0,
+              "coarse_compute_calls": 1.0,
+              "coarse_compute_calls_total": 32.0,
+              "coarse_edge_count": 0.0,
+              "coarse_group_count": 1.0,
+              "coarse_scenes_processed": 1.0,
+              "coarse_scenes_processed_total": 32.0,
+              "fine_edge_count": 0.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 0.0,
+              "restriction_mass_max_error": 0.0,
+              "routed_scene_count": 1.0,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 0.0,
+            "position_constraint_residual_max": 0.0,
+            "position_rmse": 0.06741855675228993,
+            "velocity_rmse": 0.2982162539076036
+          }
+        },
+        "velocity_rmse_lower_bound": 0.2982162539076036
+      },
+      {
+        "analytic_reference_max_error": 5.551115123125783e-17,
+        "name": "force_four_substeps",
+        "position_rmse_lower_bound": 0.0014346619610912013,
+        "untrained_model_metrics": {
+          "ripii_mr": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 1.0,
+              "assignment_entropy": 0.0,
+              "assignment_max_occupancy": 1.0,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.0,
+              "coarse_edge_count": 0.0,
+              "fine_edge_count": 0.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 0.0,
+              "restriction_mass_max_error": 0.0,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 1.3877787807814457e-17,
+            "position_constraint_residual_max": 1.734723475976807e-18,
+            "position_rmse": 0.0014346619610912013,
+            "velocity_rmse": 1.939479807224432e-17
+          },
+          "ripii_mr_v2": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 1.0,
+              "assignment_entropy": 0.0,
+              "assignment_max_occupancy": 1.0,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.0,
+              "coarse_compute_calls": 1.0,
+              "coarse_compute_calls_total": 40.0,
+              "coarse_edge_count": 0.0,
+              "coarse_group_count": 1.0,
+              "coarse_scenes_processed": 1.0,
+              "coarse_scenes_processed_total": 40.0,
+              "fine_edge_count": 0.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 0.0,
+              "restriction_mass_max_error": 0.0,
+              "routed_scene_count": 1.0,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 1.3877787807814457e-17,
+            "position_constraint_residual_max": 1.734723475976807e-18,
+            "position_rmse": 0.0014346619610912013,
+            "velocity_rmse": 1.939479807224432e-17
+          }
+        },
+        "velocity_rmse_lower_bound": 1.5916376077566072e-17
+      },
+      {
+        "analytic_reference_max_error": 1.3877787807814457e-17,
+        "name": "force_one_substep",
+        "position_rmse_lower_bound": 6.926713597230116e-19,
+        "untrained_model_metrics": {
+          "ripii_mr": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 1.0,
+              "assignment_entropy": 0.0,
+              "assignment_max_occupancy": 1.0,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.0,
+              "coarse_edge_count": 0.0,
+              "fine_edge_count": 0.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 0.0,
+              "restriction_mass_max_error": 0.0,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 1.3877787807814457e-17,
+            "position_constraint_residual_max": 1.734723475976807e-18,
+            "position_rmse": 0.0,
+            "velocity_rmse": 0.0
+          },
+          "ripii_mr_v2": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 1.0,
+              "assignment_entropy": 0.0,
+              "assignment_max_occupancy": 1.0,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.0,
+              "coarse_compute_calls": 1.0,
+              "coarse_compute_calls_total": 48.0,
+              "coarse_edge_count": 0.0,
+              "coarse_group_count": 1.0,
+              "coarse_scenes_processed": 1.0,
+              "coarse_scenes_processed_total": 48.0,
+              "fine_edge_count": 0.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 0.0,
+              "restriction_mass_max_error": 0.0,
+              "routed_scene_count": 1.0,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 1.3877787807814457e-17,
+            "position_constraint_residual_max": 1.734723475976807e-18,
+            "position_rmse": 0.0,
+            "velocity_rmse": 0.0
+          }
+        },
+        "velocity_rmse_lower_bound": 8.935192059122147e-18
+      },
+      {
+        "analytic_reference_max_error": null,
+        "name": "internal_contact",
+        "position_rmse_lower_bound": 0.0,
+        "untrained_model_metrics": {
+          "ripii_mr": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 2.0,
+              "assignment_entropy": 0.3653338550872077,
+              "assignment_max_occupancy": 0.5,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.2635326705015809,
+              "coarse_edge_count": 1.0,
+              "fine_edge_count": 1.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 1.1102230246251565e-16,
+              "restriction_mass_max_error": 2.220446049250313e-16,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 0.0,
+            "position_constraint_residual_max": 0.0,
+            "position_rmse": 0.015815978817572515,
+            "velocity_rmse": 0.07268853584530487
+          },
+          "ripii_mr_v2": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 2.0,
+              "assignment_entropy": 0.3653338550872077,
+              "assignment_max_occupancy": 0.5,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.2635326705015809,
+              "coarse_compute_calls": 1.0,
+              "coarse_compute_calls_total": 56.0,
+              "coarse_edge_count": 1.0,
+              "coarse_group_count": 2.0,
+              "coarse_scenes_processed": 1.0,
+              "coarse_scenes_processed_total": 56.0,
+              "fine_edge_count": 1.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 1.1102230246251565e-16,
+              "restriction_mass_max_error": 2.220446049250313e-16,
+              "routed_scene_count": 1.0,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 0.0,
+            "position_constraint_residual_max": 0.0,
+            "position_rmse": 0.015815978817572515,
+            "velocity_rmse": 0.07268853584530487
+          }
+        },
+        "velocity_rmse_lower_bound": 0.0
+      },
+      {
+        "analytic_reference_max_error": null,
+        "name": "long_range_coupling",
+        "position_rmse_lower_bound": 0.0,
+        "untrained_model_metrics": {
+          "ripii_mr": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 2.0,
+              "assignment_entropy": 0.3653338550872077,
+              "assignment_max_occupancy": 0.5,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.2635326705015809,
+              "coarse_edge_count": 1.0,
+              "fine_edge_count": 0.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 1.1102230246251565e-16,
+              "restriction_mass_max_error": 2.220446049250313e-16,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 0.0,
+            "position_constraint_residual_max": 0.0,
+            "position_rmse": 0.029954833525514164,
+            "velocity_rmse": 0.16945949340257851
+          },
+          "ripii_mr_v2": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 2.0,
+              "assignment_entropy": 0.3653338550872077,
+              "assignment_max_occupancy": 0.5,
+              "assignment_min_occupancy": 0.0,
+              "assignment_normalized_entropy": 0.2635326705015809,
+              "coarse_compute_calls": 1.0,
+              "coarse_compute_calls_total": 64.0,
+              "coarse_edge_count": 1.0,
+              "coarse_group_count": 2.0,
+              "coarse_scenes_processed": 1.0,
+              "coarse_scenes_processed_total": 64.0,
+              "fine_edge_count": 0.0,
+              "internal_momentum_residual_max": 0.0,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 1.1102230246251565e-16,
+              "restriction_mass_max_error": 2.220446049250313e-16,
+              "routed_scene_count": 1.0,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 0.0,
+            "position_constraint_residual_max": 0.0,
+            "position_rmse": 0.029954833525514164,
+            "velocity_rmse": 0.16945949340257851
+          }
+        },
+        "velocity_rmse_lower_bound": 0.0
+      },
+      {
+        "analytic_reference_max_error": 2.7755575615628914e-16,
+        "name": "five_objects_drag",
+        "position_rmse_lower_bound": 0.00034808724299082556,
+        "untrained_model_metrics": {
+          "ripii_mr": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 3.737107188433368,
+              "assignment_entropy": 0.6645042942697683,
+              "assignment_max_occupancy": 0.35740232566047375,
+              "assignment_min_occupancy": 0.11555752890359647,
+              "assignment_normalized_entropy": 0.4793385249962076,
+              "coarse_edge_count": 5.0,
+              "fine_edge_count": 4.0,
+              "internal_momentum_residual_max": 1.3010426069826053e-17,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 0.0,
+              "restriction_mass_max_error": 8.881784197001252e-16,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 1.1102230246251565e-16,
+            "position_constraint_residual_max": 1.6653345369377348e-16,
+            "position_rmse": 0.032501057543882564,
+            "velocity_rmse": 0.17279834403556207
+          },
+          "ripii_mr_v2": {
+            "diagnostics_last_step": {
+              "assignment_effective_groups": 3.737107188433368,
+              "assignment_entropy": 0.6645042942697683,
+              "assignment_max_occupancy": 0.35740232566047375,
+              "assignment_min_occupancy": 0.11555752890359647,
+              "assignment_normalized_entropy": 0.4793385249962076,
+              "coarse_compute_calls": 1.0,
+              "coarse_compute_calls_total": 72.0,
+              "coarse_edge_count": 5.0,
+              "coarse_group_count": 4.0,
+              "coarse_scenes_processed": 1.0,
+              "coarse_scenes_processed_total": 72.0,
+              "fine_edge_count": 4.0,
+              "internal_momentum_residual_max": 1.3010426069826053e-17,
+              "internal_torque_residual_max": 0.0,
+              "partition_unity_max_error": 0.0,
+              "restriction_mass_max_error": 8.881784197001252e-16,
+              "routed_scene_count": 1.0,
+              "routing_probability_mean": 0.7310585786300049,
+              "routing_rate": 1.0
+            },
+            "momentum_constraint_residual_max": 1.1102230246251565e-16,
+            "position_constraint_residual_max": 1.6653345369377348e-16,
+            "position_rmse": 0.032501057543882564,
+            "velocity_rmse": 0.17279834403556207
+          }
+        },
+        "velocity_rmse_lower_bound": 0.0020420524046149318
+      }
+    ],
+    "format": "ripii-mr-mechanics-audit-v1",
+    "manifest_sha256": "d8f16d4a587adb13a35ce201b5bf272bf43dbe5aedfd65c697b3a202ecfc1d6a",
+    "routing_probe": [
+      {
+        "coarse_scenes_processed": 1,
+        "coarsener_calls": 1,
+        "route_on": false,
+        "router_task_gradient_l1": 0.00019191493033622853,
+        "routing_probability": 0.2689414213699951,
+        "variant": "ripii_mr"
+      },
+      {
+        "coarse_scenes_processed": 1,
+        "coarsener_calls": 1,
+        "route_on": true,
+        "router_task_gradient_l1": 0.00017259380341039178,
+        "routing_probability": 0.7310585786300049,
+        "variant": "ripii_mr"
+      },
+      {
+        "coarse_scenes_processed": 0,
+        "coarsener_calls": 0,
+        "route_on": false,
+        "router_task_gradient_l1": 0.0,
+        "routing_probability": 0.2689414213699951,
+        "variant": "ripii_mr_v2"
+      },
+      {
+        "coarse_scenes_processed": 1,
+        "coarsener_calls": 1,
+        "route_on": true,
+        "router_task_gradient_l1": 0.00017259380341039178,
+        "routing_probability": 0.7310585786300049,
+        "variant": "ripii_mr_v2"
+      }
+    ],
+    "seed": 1907,
+    "training_updates": 0
+  },
+  "environment": {
+    "baseline_commit": "33b799fb3bb0d5215e954c5f80d2225c51a5caaa",
+    "baseline_dirty_tree": "",
+    "branch": "fix/ripii-contract-audit-20261019",
+    "cpu_lane": 1,
+    "cuda_available": false,
+    "device": "cpu",
+    "environment_scope": "Local venv inherits system site packages; core runtime and tooling matched lock versions except CPU torch build. Full installed distributions retained.",
+    "max_diagnostic_seconds": 120,
+    "max_test_seconds": 600,
+    "mps_available": false,
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "scientific_training_updates": 0,
+    "test_only_optimizer_updates": "Existing smoke, training, resume, and checkpoint tests may run their bounded optimizer fixtures; no new scientific matrix or fitted diagnostic.",
+    "torch": "2.14.0+cpu",
+    "torch_threads": 1,
+    "writer": "ChatGPT root; read-only delegated audits"
+  },
+  "final_coverage_percent": 81.42,
+  "format": "ripii-contract-and-mechanics-evidence-v1",
+  "go_no_go": {
+    "engineering_review": "GO",
+    "new_frozen_architecture_matrix": "NO_GO",
+    "research_advancement": "NO_GO"
+  },
+  "historical_mr": {
+    "bounded_accessible_archive_lookup_recovered_original": false,
+    "checkout_runtime_artifacts_present": false,
+    "reported_comparison_passes": 0,
+    "reported_comparisons": 60,
+    "reported_decision": "no_advance",
+    "reported_runs": 75,
+    "status": "SOURCE_REPORTED_NOT_FRESHLY_VERIFIED"
+  },
+  "new_contract_cases": 52,
+  "new_mechanics_cases": 10,
+  "next_single_action": "Recover the original 75-run MR archive with its recorded source and verify it in a fresh evidence directory.",
+  "repository": "https://github.com/THE-BU1LD/RIPII",
+  "resources": {
+    "budget_note": "One sequential verification process; OMP_NUM_THREADS=1, MKL_NUM_THREADS=1; 600-second full-test and 120-second diagnostic limits.",
+    "disk_free_bytes": 20221186048,
+    "disk_total_bytes": 33770192896,
+    "logical_cpus": 9,
+    "memory": {
+      "MemAvailable_bytes": 9361936384,
+      "MemTotal_bytes": 10451439616
+    },
+    "observed_unix_time": 1792413193.9122183
+  },
+  "status": {
+    "implemented": true,
+    "independently_reproduced": false,
+    "locally_tested": true,
+    "remotely_executed_experiments": false,
+    "scientific_support": "Conditional conservative constraints and explicit deterministic synthetic fixture observations only; no learned predictive advantage, novelty, historical error attribution, or research advancement claim."
+  },
+  "test_counts": {
+    "baseline-tests.xml": {
+      "errors": 0,
+      "failures": 0,
+      "seconds": 15.441,
+      "skipped": 0,
+      "tests": 83
+    },
+    "before-dependency-completion-full-tests.xml": {
+      "errors": 4,
+      "failures": 0,
+      "seconds": 3.197,
+      "skipped": 0,
+      "tests": 4
+    },
+    "contracts-after.xml": {
+      "errors": 0,
+      "failures": 0,
+      "seconds": 1.483,
+      "skipped": 0,
+      "tests": 64
+    },
+    "full-tests.xml": {
+      "errors": 0,
+      "failures": 0,
+      "seconds": 86.602,
+      "skipped": 0,
+      "tests": 273
+    },
+    "mechanics-tests.xml": {
+      "errors": 0,
+      "failures": 0,
+      "seconds": 2.792,
+      "skipped": 0,
+      "tests": 62
+    },
+    "regressions-before.xml": {
+      "errors": 0,
+      "failures": 42,
+      "seconds": 2.515,
+      "skipped": 0,
+      "tests": 52
+    }
+  },
+  "verification_commands": [
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "ruff",
+        "check",
+        "."
+      ],
+      "elapsed_seconds": 0.06417943099950207,
+      "environment_overrides": {
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "exit_code": 0,
+      "name": "ruff"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "mypy",
+        "ripii"
+      ],
+      "elapsed_seconds": 0.3149646180027048,
+      "environment_overrides": {
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "exit_code": 2,
+      "name": "mypy"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "compileall",
+        "-q",
+        "ripii",
+        "scripts",
+        "tests"
+      ],
+      "elapsed_seconds": 0.11439843699918129,
+      "environment_overrides": {
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "exit_code": 0,
+      "name": "compileall"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_cov",
+        "--cov=ripii",
+        "--cov-report=term-missing",
+        "--junitxml=runs/engineering_contract_audit_20261019/full-tests.xml"
+      ],
+      "elapsed_seconds": 88.43076039900188,
+      "environment_overrides": {
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "exit_code": 0,
+      "name": "full-tests"
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/verify_artifact.sh"
+      ],
+      "elapsed_seconds": 17.82330049599841,
+      "environment_overrides": {
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "exit_code": 0,
+      "name": "portable-evidence"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/run_ripii_mr_matrix.py",
+        "--output",
+        "runs/ripii_mr_development_v1",
+        "--verify-only"
+      ],
+      "elapsed_seconds": 1.618811487001949,
+      "environment_overrides": {
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "exit_code": 1,
+      "name": "missing-mr-verification"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "runs/engineering_contract_audit_20261019/replay_compatibility.py",
+        "runs/engineering_contract_audit_20261019/baseline-valid-tensors.pt"
+      ],
+      "elapsed_seconds": 2.9235224329968332,
+      "environment_overrides": {
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "exit_code": 0,
+      "name": "valid-input-replay"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "mypy",
+        "--python-version",
+        "3.12",
+        "ripii"
+      ],
+      "elapsed_seconds": 1.1674650849963655,
+      "environment_overrides": {
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "exit_code": 0,
+      "name": "mypy-python312-final"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/check_ci_performance.py"
+      ],
+      "elapsed_seconds": 1.4182024379988434,
+      "environment_overrides": {
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "exit_code": 0,
+      "name": "cpu-performance"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pip",
+        "wheel",
+        "--no-build-isolation",
+        "--no-deps",
+        "--no-index",
+        "--wheel-dir",
+        "runs/engineering_contract_audit_20261019/wheel",
+        "."
+      ],
+      "elapsed_seconds": 1.3177065690033487,
+      "environment_overrides": {
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "exit_code": 0,
+      "name": "wheel-build"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "ripii.world.mechanics_audit",
+        "--output",
+        "runs/engineering_contract_audit_20261019/mechanics_v1"
+      ],
+      "elapsed_seconds": 3.224471228000766,
+      "environment_overrides": {
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "exit_code": 0,
+      "name": "mechanics-run"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "ripii.world.mechanics_audit",
+        "--verify",
+        "runs/engineering_contract_audit_20261019/mechanics_v1"
+      ],
+      "elapsed_seconds": 1.7195532309997361,
+      "environment_overrides": {
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "exit_code": 0,
+      "name": "mechanics-verify"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "ruff",
+        "check",
+        "."
+      ],
+      "elapsed_seconds": 0.06432768100057729,
+      "environment_overrides": {
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "exit_code": 0,
+      "name": "ruff-final"
+    }
+  ],
+  "writer": "ChatGPT root; read-only delegated audits"
+}
