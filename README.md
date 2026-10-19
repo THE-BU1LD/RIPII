@@ -1,5 +1,10 @@
 # RIPII
 
+Research sessions start with [`RESEARCH_STATE.json`](RESEARCH_STATE.json).
+The separately versioned [closure study v1](research/closure_study_v1/SPECIFICATION.md)
+tests physical-contract corrections and hierarchy utility under a finite,
+prospective protocol. Its results must not overwrite the historical studies below.
+
 RIPII is an experimental object-state dynamics and structured-latent toolkit built
 around learned soft grouping, latent graph refinement, and optional discrete motifs.
 It has no validated performance, novelty, or publication claim; see

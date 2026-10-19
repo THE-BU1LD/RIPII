@@ -1,0 +1,139 @@
+{
+  "format": "ripii-canonical-research-state-v1",
+  "updated_utc": "2026-10-19T14:08:12.349841+00:00",
+  "repository": "https://github.com/THE-BU1LD/RIPII",
+  "active_branch": "research/ripii-closure-study-v1-20261019",
+  "predecessor_commit": "bde5e3d46911e20ac8cacd4174188995df3ca848",
+  "active_study": "closure_study_v1",
+  "phase": "run_readiness",
+  "question": "For the declared coupled open-system soft-disc simulator, does correcting external-force closure and observation-step integration improve a constrained predictor, and does a conservative hierarchy add at least 5% rollout accuracy over equally informed simpler controls within the frozen CPU budget?",
+  "intended_contribution": "A reproducible constraint-misspecification and hierarchy diagnostic. Architectural novelty and state-of-the-art superiority are not established.",
+  "scope": {
+    "state": "2D position, velocity, radius and mass; fully observed synthetic discs",
+    "capacity": 8,
+    "physics": "Known fixed wall and drag laws; fixed hidden-to-learned-model coupling coefficient 1; dt 0.05; simulator substeps 4",
+    "excluded": [
+      "Worldcastr",
+      "external-dataset superiority",
+      "large-particle scaling claims",
+      "default-branch merge",
+      "release or submission",
+      "deployment",
+      "paid compute",
+      "messages to others",
+      "scheduled work"
+    ]
+  },
+  "budget": {
+    "development_repetitions": 3,
+    "confirmatory_repetitions": 6,
+    "maximum_base_updates_per_arm": 120,
+    "maximum_compute_control_updates_per_arm": 480,
+    "maximum_outcome_bearing_wall_seconds": 2100,
+    "maximum_dry_run_wall_seconds": 180,
+    "scientific_revisions_after_development": 0,
+    "compute_lane": "One CPU process at a time, one Torch thread; no GPU or paid execution"
+  },
+  "protected_boundary": {
+    "state": "not_generated_not_inspected",
+    "confirmation_requires": "A code commit plus frozen protocol/source/environment and a valid bounded development pipeline; no positive-result gate",
+    "confirmation_seeds": [
+      82003,
+      82013,
+      82021,
+      82031,
+      82037,
+      82039
+    ],
+    "post_freeze_policy": "No outcome-driven architecture, hyperparameter, endpoint or exclusion changes"
+  },
+  "canonical_documents": {
+    "specification": "research/closure_study_v1/SPECIFICATION.md",
+    "protocol": "research/closure_study_v1/protocol.json",
+    "related_work": "research/closure_study_v1/RELATED_WORK.md",
+    "flaws": "research/closure_study_v1/FLAWS.csv",
+    "history": "EVIDENCE_LEDGER.md",
+    "engineering_handoff": "docs/SESSION_HANDOFF_2026-10-19.md"
+  },
+  "claims": {
+    "engineering_contract": "Published and tested; finite valid-input replay is bitwise equivalent on the retained fixture",
+    "single_particle_obstruction": "Analytically established and numerically checked in the October 19 mechanics audit",
+    "historical_mr_v1": "75 runs and 0/60 passes remain manuscript-reported no_advance; original runtime archive not recovered",
+    "closure_study_v1": "No development or confirmation outcomes observed; literal implementation checks passed"
+  },
+  "resource_state": {
+    "host": "Linux x86_64, Python 3.12.14, CPU-only Torch 2.14.0+cpu",
+    "kaggle": "No authenticated notebook, accelerator, quota, dataset or running-job state established; browser initialization timed out",
+    "typecheck_limit": "Actual Python 3.12 target passed previously; configured Python 3.10 target blocked by NumPy stub syntax in this environment"
+  },
+  "decisions": [
+    {
+      "id": "D001",
+      "decision": "Preserve the published engineering phase and all historical negative evidence"
+    },
+    {
+      "id": "D002",
+      "decision": "Treat closure/substeps as established correctness principles, not new architectural inventions"
+    },
+    {
+      "id": "D003",
+      "decision": "Separate the physical-prior and numerical factorial from the hierarchy comparison; include exact-parameter, compute-budget and analytic-law controls"
+    },
+    {
+      "id": "D004",
+      "decision": "Use the attachment's final honest-terminal-state rule; do not search indefinitely for positive results"
+    },
+    {
+      "id": "D005",
+      "decision": "The prospective specification corrects repository license to NOASSERTION; no owner-approved license is established"
+    }
+  ],
+  "history": [
+    {
+      "study": "historical_studies",
+      "disposition": "Preserved as recorded",
+      "index": "research/NEGATIVE_RESULT_SYNTHESIS.md"
+    },
+    {
+      "study": "ripii_contract_audit_20261019",
+      "disposition": "Engineering complete; no new superiority claim",
+      "commit": "bde5e3d46911e20ac8cacd4174188995df3ca848",
+      "artifact": "research/results/development/ripii_contract_audit_20261019/manifest.json"
+    },
+    {
+      "study": "closure_study_v1",
+      "disposition": "Prospective specification; no outcomes",
+      "predecessor": "ripii_contract_audit_20261019"
+    }
+  ],
+  "failures": [
+    "Historical MR source/result/checkpoint archive remains unresolved after bounded recovery search",
+    "Configured Python 3.10 static-check target not validated in this Python 3.12 environment",
+    "Authenticated Kaggle state could not be established"
+  ],
+  "checkpoints": {
+    "idea_ready": "diagnostic contribution only",
+    "model_specification_ready": true,
+    "methodology_ready": "prospective protocol; protected freeze pending",
+    "model_implemented": true,
+    "experiment_system_implemented": true,
+    "run_ready": "timing-only dry run pending",
+    "confirmatory_protocol_frozen": false,
+    "evidence_locked": false,
+    "verified": "481-test suite passed; no scientific outcomes yet",
+    "research_complete": false
+  },
+  "verification": {
+    "full_suite": {
+      "tests": 481,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 112.836,
+      "combined_statement_branch_coverage_percent": 82.07654955726935
+    },
+    "target_python312_mypy": "pass",
+    "ruff": "pass",
+    "note": "A subsequent stricter invalid-analysis freeze gate is being checked by the dry-run artifact verifier."
+  }
+}

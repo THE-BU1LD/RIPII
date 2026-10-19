@@ -1,0 +1,45 @@
+{
+  "format": "ripii-closure-study-protocol-v1",
+  "study_id": "closure_study_v1",
+  "created_utc": "2026-10-19T13:35:53Z",
+  "scientific_revisions": 0,
+  "dataset": {
+    "dataset_id": "ripii.synthetic.soft_discs",
+    "version": "1",
+    "max_objects": 8,
+    "train_scenes": 96,
+    "train_horizon": 16,
+    "validation_scenes": 16,
+    "evaluation_scenes": 24,
+    "evaluation_horizon": 32,
+    "evaluation_splits": ["test", "more_objects", "composition", "fast"],
+    "physics": {"dt": 0.05, "substeps": 4, "stiffness": 100.0, "damping": 1.5, "drag": 0.06, "global_coupling": 1.0},
+    "initial_noise_std": 0.01
+  },
+  "model": {"hidden": 16, "groups": 4, "memberships": 2, "local_radius": 0.6, "force_scale": 20.0, "learned_coupling_initial": 0.25},
+  "arms": [
+    {"id": "local_none_s1", "kind": "local", "closure": false, "substeps": 1},
+    {"id": "local_env_s1", "kind": "local", "closure": true, "substeps": 1},
+    {"id": "local_none_s4", "kind": "local", "closure": false, "substeps": 4},
+    {"id": "local_env_s4", "kind": "local", "closure": true, "substeps": 4},
+    {"id": "hier_env_s4", "kind": "hierarchy", "closure": true, "substeps": 4},
+    {"id": "global_env_s4", "kind": "global", "closure": true, "substeps": 4},
+    {"id": "mean_env_s4", "kind": "mean", "closure": true, "substeps": 4},
+    {"id": "law_env_s4", "kind": "law", "closure": true, "substeps": 4},
+    {"id": "prior_env_s4", "kind": "prior", "closure": true, "substeps": 4},
+    {"id": "oracle", "kind": "oracle", "closure": true, "substeps": 4}
+  ],
+  "compute_control": {"id": "global_compute", "source_arm": "global_env_s4", "target_arm": "hier_env_s4", "max_update_multiplier": 4, "time_metric": "cumulative optimization wall time including window sampling, forward, backward, clipping, optimizer step; excluding validation/evaluation"},
+  "training": {"base_updates": 120, "timing_only_fallback_updates": 80, "batch_size": 8, "rollout_horizon": 4, "learning_rate": 0.003, "law_learning_rate": 0.03, "adam_betas": [0.9, 0.999], "adam_epsilon": 1e-8, "gradient_clip": 5.0, "validation_every": 40, "selection": "minimum validation 32-step position RMSE; earliest on exact tie", "window_seed_offset": 9000000},
+  "seeds": {
+    "dry_run": {"data": 61001, "model": 16001},
+    "development": [{"data": 71011, "model": 19011}, {"data": 71023, "model": 19023}, {"data": 71039, "model": 19039}],
+    "confirmation": [{"data": 82003, "model": 29003}, {"data": 82013, "model": 29013}, {"data": 82021, "model": 29021}, {"data": 82031, "model": 29031}, {"data": 82037, "model": 29037}, {"data": 82039, "model": 29039}]
+  },
+  "budget": {"dry_run_seconds": 180, "outcome_bearing_seconds": 2100, "projection_threshold_seconds": 1800, "projection_safety_factor": 1.3, "torch_threads": 1, "device": "cpu", "allow_paid_compute": false, "outcome_driven_revisions": 0, "allow_seed_replacement": false},
+  "statistics": {"primary_candidate": "hier_env_s4", "primary_control": "global_compute", "primary_metric": "equal mean of three OOD 32-step position RMSEs", "paired_effect": "log(candidate/control)", "practical_ratio": 0.95, "bootstrap_repetitions": 10000, "bootstrap_seed": 46001, "interval_percentiles": [2.5, 97.5], "primary_test": "two-sided exhaustive sign flip about log(0.95); symmetry/exchangeability assumption", "alpha": 0.05, "iid_max_ratio": 1.05, "required_other_controls": ["mean_env_s4", "law_env_s4"], "secondary_inference": "descriptive only"},
+  "guard_interpretation": {"iid": "across-unit geometric hierarchy/global_compute IID ratio <=1.05; point estimate", "other_controls": "each across-unit geometric hierarchy/control OOD ratio <0.95; point estimate", "incomplete_compute_coverage": "overall H2 INCONCLUSIVE; other comparisons descriptive"},
+  "protected_policy": "Generate confirmation tensors only after exact source commit/environment/protocol freeze; no favorable-development gate and no adaptive changes after outcomes",
+  "failure_policy": "Retain status, partial outputs and exception; no exclusions, seed substitutions or unrecorded reruns; partial grid is inconclusive, defect-invalidated work is invalid",
+  "claims_excluded": ["architectural novelty", "official SOTA comparison", "external-data generalization", "large-N advantage", "perfect model", "continuous-law identification", "historical error attribution"]
+}
