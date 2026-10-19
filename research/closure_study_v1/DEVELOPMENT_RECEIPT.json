@@ -1,0 +1,90 @@
+{
+  "format": "ripii-closure-development-receipt-v1",
+  "created_utc": "2026-10-19T14:25:54.204495+00:00",
+  "source_implementation_commit": "6b99a71768e429ace84116116a7ca8ffca06f35f",
+  "scientific_source_sha256": "37e6ad8b22a2a50cfcfb3ee2fb482d5c3c02b0be455c9bd8188ab09dc6c65aa6",
+  "protocol_sha256": "41e20eb8a6342b41c4183dd33cd70ff6b5bb743c8d461c70d387f54bfa31801f",
+  "phase_wall_seconds": 130.52707034600462,
+  "remaining_scientific_wall_seconds": 1969.4729296539954,
+  "eligible_for_unchanged_confirmation": true,
+  "eligibility": "Valid bounded pipeline; independent of favorable accuracy",
+  "confirmation_data_state": "not generated or inspected",
+  "scientific_revisions_after_development": 0,
+  "verification": {
+    "files_verified": 440,
+    "manifest_sha256": "83ac5d7f075d210b50ce3b98e7581c10111fe58e094fe5d465e3ba1f3c04d76a",
+    "raw_split_metrics_verified": 132,
+    "checkpoint_split_replays": 132,
+    "analysis_regenerated": true,
+    "scope": "integrity, grid, config/source/seed identities, raw metrics and statistical analysis; optional deterministic checkpoint replay; not an external hardware reproduction"
+  },
+  "independent_verification": {
+    "passed": true,
+    "errors": [],
+    "prediction_splits_checked": 165,
+    "scalar_or_array_comparisons": 8862,
+    "max_absolute_discrepancy": 4.409302285068861e-06,
+    "max_tolerance_fraction": 0.17050426283214967,
+    "verifier_source_sha256": "1bd31624ddbe6b7407e050c3b1aedbb0a62559b3a30c574734e395d0f4f4c9b3"
+  },
+  "descriptive_hierarchy_comparisons": {
+    "global_compute": {
+      "geometric_ratio": 1.0443262529320416,
+      "interval_95": [
+        1.0267742167208356,
+        1.0570947711389211
+      ],
+      "n_pairs": 3,
+      "primary_sign_flip_p": null
+    },
+    "iid": {
+      "geometric_ratio": 1.1925152198678037,
+      "interval_95": [
+        1.1573593243567937,
+        1.2474930182300377
+      ],
+      "n_pairs": 3,
+      "primary_sign_flip_p": null
+    },
+    "law_env_s4": {
+      "geometric_ratio": 104.44440242625336,
+      "interval_95": [
+        85.66259878718546,
+        140.97598324074934
+      ],
+      "n_pairs": 3,
+      "primary_sign_flip_p": null
+    },
+    "mean_env_s4": {
+      "geometric_ratio": 0.8379540911149101,
+      "interval_95": [
+        0.8054383838195441,
+        0.8615099490642273
+      ],
+      "n_pairs": 3,
+      "primary_sign_flip_p": null
+    }
+  },
+  "evidence_files": {
+    "runs/closure_study_v1_20261019/development/manifest.json": {
+      "sha256": "83ac5d7f075d210b50ce3b98e7581c10111fe58e094fe5d465e3ba1f3c04d76a",
+      "bytes": 69101
+    },
+    "runs/closure_study_v1_20261019/development/phase_results.json": {
+      "sha256": "2dd01d97d3a05c95cc23eee9d596fc8a14ad4a6093630e479ee15534de778cea",
+      "bytes": 202502
+    },
+    "runs/closure_study_v1_20261019/development/analysis/analysis.json": {
+      "sha256": "084c48e51a0ee3530d3f3a7f7b2ed1185431846b0fda8d532c15ca3cd2f8d503",
+      "bytes": 389893
+    },
+    "runs/closure_study_v1_20261019/verification/development_replay.json": {
+      "sha256": "9d30cff42d49ec569f959b03ee361087248347a33992deeb978300110b828cea",
+      "bytes": 387
+    },
+    "runs/closure_study_v1_20261019/verification/development_independent.json": {
+      "sha256": "969eb17f28cd339093ef31a2a9538c47b319a398a998757b34bca75ebca39351",
+      "bytes": 265013
+    }
+  }
+}

@@ -1,11 +1,11 @@
 {
   "format": "ripii-canonical-research-state-v1",
-  "updated_utc": "2026-10-19T14:08:12.349841+00:00",
+  "updated_utc": "2026-10-19T14:25:54.204495+00:00",
   "repository": "https://github.com/THE-BU1LD/RIPII",
   "active_branch": "research/ripii-closure-study-v1-20261019",
   "predecessor_commit": "bde5e3d46911e20ac8cacd4174188995df3ca848",
   "active_study": "closure_study_v1",
-  "phase": "run_readiness",
+  "phase": "confirmation_ready",
   "question": "For the declared coupled open-system soft-disc simulator, does correcting external-force closure and observation-step integration improve a constrained predictor, and does a conservative hierarchy add at least 5% rollout accuracy over equally informed simpler controls within the frozen CPU budget?",
   "intended_contribution": "A reproducible constraint-misspecification and hierarchy diagnostic. Architectural novelty and state-of-the-art superiority are not established.",
   "scope": {
@@ -32,7 +32,8 @@
     "maximum_outcome_bearing_wall_seconds": 2100,
     "maximum_dry_run_wall_seconds": 180,
     "scientific_revisions_after_development": 0,
-    "compute_lane": "One CPU process at a time, one Torch thread; no GPU or paid execution"
+    "compute_lane": "One CPU process at a time, one Torch thread; no GPU or paid execution",
+    "selected_base_updates": 120
   },
   "protected_boundary": {
     "state": "not_generated_not_inspected",
@@ -59,7 +60,7 @@
     "engineering_contract": "Published and tested; finite valid-input replay is bitwise equivalent on the retained fixture",
     "single_particle_obstruction": "Analytically established and numerically checked in the October 19 mechanics audit",
     "historical_mr_v1": "75 runs and 0/60 passes remain manuscript-reported no_advance; original runtime archive not recovered",
-    "closure_study_v1": "No development or confirmation outcomes observed; literal implementation checks passed"
+    "closure_study_v1": "Development complete and verified; hierarchy/geometric OOD ratio versus compute-budget global 1.044326, versus one-parameter law 104.4444; descriptive only. No confirmation outcomes generated or observed."
   },
   "resource_state": {
     "host": "Linux x86_64, Python 3.12.14, CPU-only Torch 2.14.0+cpu",
@@ -86,6 +87,10 @@
     {
       "id": "D005",
       "decision": "The prospective specification corrects repository license to NOASSERTION; no owner-approved license is established"
+    },
+    {
+      "id": "D006",
+      "decision": "Unfavorable descriptive development outcomes do not alter the frozen model, updates, data policy, statistics or protected confirmation; scientific revisions remain zero."
     }
   ],
   "history": [
@@ -102,7 +107,7 @@
     },
     {
       "study": "closure_study_v1",
-      "disposition": "Prospective specification; no outcomes",
+      "disposition": "Three-unit development complete and independently verified; protected six-unit confirmation pending",
       "predecessor": "ripii_contract_audit_20261019"
     }
   ],
@@ -114,13 +119,13 @@
   "checkpoints": {
     "idea_ready": "diagnostic contribution only",
     "model_specification_ready": true,
-    "methodology_ready": "prospective protocol; protected freeze pending",
+    "methodology_ready": "Complete prospective protocol; valid development eligibility established; exact confirmation freeze next",
     "model_implemented": true,
     "experiment_system_implemented": true,
-    "run_ready": "timing-only dry run pending",
+    "run_ready": true,
     "confirmatory_protocol_frozen": false,
     "evidence_locked": false,
-    "verified": "481-test suite passed; no scientific outcomes yet",
+    "verified": "481 tests passed; dry and development exact checkpoint replay plus independent development float64 metric verification passed",
     "research_complete": false
   },
   "verification": {
@@ -134,6 +139,31 @@
     },
     "target_python312_mypy": "pass",
     "ruff": "pass",
-    "note": "A subsequent stricter invalid-analysis freeze gate is being checked by the dry-run artifact verifier."
-  }
+    "note": "The final invalid-analysis rejection gate was published before outcome-bearing work and exercised successfully by dry and development artifact verification.",
+    "dry_run": {
+      "all_arms_complete": true,
+      "files_verified": 195,
+      "raw_split_metrics_verified": 44,
+      "exact_checkpoint_split_replays": 44,
+      "analysis_regenerated": true,
+      "calibration_selected_updates": 120,
+      "projected_total_scientific_seconds": 460.5831893584138
+    },
+    "development": {
+      "wall_seconds": 130.52707034600462,
+      "complete_units": 3,
+      "arms_per_unit": 11,
+      "files_verified": 440,
+      "manifest_sha256": "83ac5d7f075d210b50ce3b98e7581c10111fe58e094fe5d465e3ba1f3c04d76a",
+      "raw_split_metrics_verified": 132,
+      "checkpoint_split_replays": 132,
+      "analysis_regenerated": true,
+      "scope": "integrity, grid, config/source/seed identities, raw metrics and statistical analysis; optional deterministic checkpoint replay; not an external hardware reproduction",
+      "independent_passed": true,
+      "independent_prediction_splits": 165,
+      "independent_comparisons": 8862,
+      "independent_max_absolute_discrepancy": 4.409302285068861e-06
+    }
+  },
+  "source_implementation_commit": "6b99a71768e429ace84116116a7ca8ffca06f35f"
 }
