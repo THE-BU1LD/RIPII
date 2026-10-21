@@ -5,10 +5,11 @@ import hashlib
 import json
 import math
 import platform
-from datetime import UTC, datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import torch
+
 from ripii.world.data import DatasetSpec, load_dataset
 from ripii.world.experiment import Experiment, load_model, verify, write_json
 from ripii.world.physics import Physics
