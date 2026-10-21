@@ -7,13 +7,12 @@ name = "ripii"
 version = "0.2.0"
 description = "Experimental object-state dynamics and structured-latent research toolkit"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 keywords = ["dynamics", "graph-neural-networks", "research", "world-models"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Science/Research",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Topic :: Scientific/Engineering :: Artificial Intelligence",
@@ -24,6 +23,7 @@ dependencies = [
   "pyyaml>=6.0,<7",
   "tqdm>=4.66,<5",
   "matplotlib>=3.8,<4",
+  "pillow>=13,<14",
 ]
 
 [project.optional-dependencies]
@@ -63,7 +63,7 @@ fail_under = 75
 show_missing = true
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 check_untyped_defs = true
 disallow_any_generics = false
 no_implicit_optional = true

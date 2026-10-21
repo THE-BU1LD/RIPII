@@ -58,7 +58,7 @@
   "hosted_version_number": 1,
   "receipt": "hosted/kaggle/v1/intake-receipt.json",
   "profile": "hosted/kaggle/v1/extracted/execution/attempt-1/profile.json",
-  "next_action": "Full 140-fit comparison remains cost-blocked after qualified execution optimization. Preserve old outcomes and all charges; no adaptive efficacy claim. Paper evidence report and scoped GitHub review are being prepared.",
+  "next_action": "No scientific training admitted: optimized update-only matrix still projects13.10 host-hours versus1.71 remaining dual-T4 hours. Review PR32 and evidence report. Authorship/affiliations/license input and independently reproduced adequate scientific comparison remain open.",
   "qualification": {
     "local_control_tests": 14,
     "hosted_original_cpu_tests": 10,
@@ -76,5 +76,17 @@
     "status": "PROTOCOL_MATCHED_FIXTURE_PASS_COST_STILL_BLOCKED",
     "minimum_update_only_host_hours": 13.099032706666472,
     "scientific_training_admitted": false
+  },
+  "paper": {
+    "source": "../../../paper/radial_adaptation_20261021/main.tex",
+    "pdf": "../../../output/pdf/ripii-radial-adaptation-evidence.pdf",
+    "pages": 7,
+    "compiled_and_visually_reviewed": true,
+    "submission_ready": false
+  },
+  "publication": {
+    "pull_request": "https://github.com/THE-BU1LD/RIPII/pull/32",
+    "commit": "bc85a5a4f5773abf606ce81ad2ea45c5620db98f",
+    "draft": true
   }
 }

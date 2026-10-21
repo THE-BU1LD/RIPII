@@ -1,0 +1,7 @@
+extend = "../../../pyproject.toml"
+# Retained source/artifact bytes are immutable; lint active maintained source.
+extend-exclude = ["vendor", "hosted", "portable", "history"]
+
+[lint.isort]
+# Preserve standalone capsule import classification across checkout layouts.
+known-third-party = ["control", "optimized"]

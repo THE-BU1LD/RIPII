@@ -30,3 +30,9 @@ This checklist records concrete findings, repairs, and acceptance evidence. A pa
 | Stale project checkout identity | PROJECT_STATE carried 33b799 while checkout is b612f2 | Medium | Record current checkout separately without erasing historical verified remote identity | Current git receipt and explicit verification timestamp | RECONCILED; OLD IDENTITY RETAINED |
 | Release ownership fields missing | No approved author list, affiliations or whole-repo license | High | Ask owner; retain anonymous draft and do not invent license | Owner response, metadata validator | OWNER INPUT PENDING |
 | Independent reproduction incomplete | Same assistant validates artifacts; no independent complete scientific campaign | High | Label artifact replay versus independent reproduction separately | Independent environment/team full result reproduction | OPEN |
+
+## Publication checks discovered during this pass
+
+- **High:** eight Pillow 12.3.0 advisories in the base lock. Repair: prospective Python >=3.11/Pillow >=13 environment and updated CI matrix on PR32; no ignored advisories. Acceptance: dependency audit and all supported-version tests pass. Existing dirty dependency files remain untouched.
+- **Medium:** CI lint traversed immutable hosted notebooks and original upstream snapshots. Repair: scoped artifact exclusions and fixed standalone import classification; maintained-source rules are unchanged. Acceptance: full branch quality check plus exact frozen-source hash verification.
+- **Medium:** first paper wrapper lacked Python kernel metadata; a stale notebook was selected for the first retry. Both failed before compilation. Repair: current builder includes kernel metadata and a cell ID; transport now rejects missing kernel metadata. Acceptance: exact-source seven-page successful CPU build and visual review.
