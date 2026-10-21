@@ -51,3 +51,7 @@ Source freeze SHA-256: `2904cd7cb3487219a6d0acb2586c4d3f0d81e5d6f7ccddebc3fab7fa
 ## Later execution investigation (21 October 2026)
 
 The separately retained [radial execution study](../../engineering/radial_execution_v1/REPORT.md) passed corrected five-model equivalence fixtures and reduced measured captured-update timings. The update-only minimum matrix projection remains 13.10 host-hours, before data and validation. The full scientific matrix is still not admitted. Across the original run and two engineering checks, the cumulative conservative charge is 0.5748 allocated GPU-hours, leaving 3.4252 of the original four. The original run-only budget table above is historical, not the current remaining authorization.
+
+## Rebuilding from the GitHub review branch
+
+Run `python scripts/rebuild_radial_capsule.py --output /tmp/radial-reproduced.ipynb`. This independently reconstructs the frozen 59-file payload and requires byte identity with the retained hosted notebook. It does not re-audit the 616 MB historical raw archive, which remains locally preserved and hash-bound in PREDECESSOR.json. The original `build.py` additionally requires that historical archive and its predecessor files; use the published reproducer for this successor-only checkout. Hosted scientific execution is still prohibited unless a fresh admissible cumulative budget is established; reproducing a package is not permission to reset the four-hour cap.
