@@ -66,7 +66,7 @@ def main():
         source = "research/engineering/radial_execution_v1/STATE.json"
         if source not in project["status_sources"]:
             project["status_sources"].append(source)
-    now = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    now = datetime.datetime.now(datetime.UTC).isoformat()
     project["history"].append(
         f"{now} New radial-adaptation v1 indexed: {state['status']}; "
         f"scientific result {state['scientific_result']}; test data opened "

@@ -58,7 +58,7 @@
   "hosted_version_number": 1,
   "receipt": "hosted/kaggle/v1/intake-receipt.json",
   "profile": "hosted/kaggle/v1/extracted/execution/attempt-1/profile.json",
-  "next_action": "No scientific training admitted: optimized update-only matrix still projects13.10 host-hours versus1.71 remaining dual-T4 hours. Review PR32 and evidence report. Authorship/affiliations/license input and independently reproduced adequate scientific comparison remain open.",
+  "next_action": "No scientific training admitted: optimized update-only matrix still projects 13.10 host-hours versus 1.71 remaining dual-T4 hours. Review PR32 and evidence report. Authorship/affiliations/license input and independently reproduced adequate scientific comparison remain open.",
   "qualification": {
     "local_control_tests": 14,
     "hosted_original_cpu_tests": 10,
@@ -86,7 +86,7 @@
   },
   "publication": {
     "pull_request": "https://github.com/THE-BU1LD/RIPII/pull/32",
-    "commit": "bc85a5a4f5773abf606ce81ad2ea45c5620db98f",
+    "commit": "ebb8de62de2a28543802b05cf1d3e4ec2d927599",
     "draft": true
   }
 }

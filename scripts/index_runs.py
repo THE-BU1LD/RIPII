@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timezone
 from pathlib import Path
 
 
@@ -62,7 +62,7 @@ def inventory(root: Path) -> dict:
         raise FloatingPointError("invalid run inventory metadata")
     return {
         "format": "ripii-run-index-v1",
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
         "root": str(root.resolve()),
         "claim_boundary": (
             "inventory only; a manifest must be cryptographically verified before "
