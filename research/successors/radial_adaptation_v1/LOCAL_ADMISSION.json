@@ -1,0 +1,34 @@
+{
+  "status": "BLOCKED",
+  "reasons": [
+    "INCREASING_pageouts",
+    "INCREASING_swapins",
+    "INCREASING_swapouts",
+    "MEMORY_BELOW_512_MIB",
+    "[Errno 1] Operation not permitted: 'ps'"
+  ],
+  "samples": [
+    {
+      "time": 1792558417.624195,
+      "errors": [
+        "[Errno 1] Operation not permitted: 'ps'"
+      ],
+      "free": 241958912,
+      "pageouts": 17932,
+      "swapins": 17558,
+      "swapouts": 173904,
+      "disk": 177412775936
+    },
+    {
+      "time": 1792558420.659366,
+      "errors": [
+        "[Errno 1] Operation not permitted: 'ps'"
+      ],
+      "free": 152567808,
+      "pageouts": 18069,
+      "swapins": 17614,
+      "swapouts": 178444,
+      "disk": 177411940352
+    }
+  ]
+}

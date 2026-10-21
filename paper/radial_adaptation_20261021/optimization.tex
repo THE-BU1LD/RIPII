@@ -1,0 +1,12 @@
+The amended execution candidate passed all five model fixtures at the scientific weight decay $10^{-4}$, including a captured tensor learning-rate change from 0.001 to 0.0005. The initial optimizer fixture at default weight decay 0.01 is retained as a separate earlier attempt.
+
+The largest absolute parameter-gradient and ordinary optimizer-update differences were 2.38e-07 and 3.99e-07, respectively. Captured-versus-eager optimizer updates and serialized forecast replay were exact in the tested cases. These finite fixtures are not a proof over every input or an independently reproduced training campaign.
+
+\begin{table}[ht]\centering\small\caption{Protocol-matched captured training-step measurements. Maximum of seven timed updates; engineering fixtures only.}\begin{tabular}{lr}\toprule Model & Seconds per update\\\midrule
+radial\_mixture & 0.0537\\
+radial\_fixed & 0.0482\\
+graph & 0.0600\\
+simple\_pool & 0.0621\\
+transformer & 0.0566\\
+\bottomrule\end{tabular}\end{table}
+The update-only minimum-step extrapolation is 13.10 host-hours, excluding data generation, validation, graph capture, serialization, and safety reserve. This remains above the remaining authorized host time; the full study was not admitted. All three numerical attempts together charge 0.5748 allocated GPU-hours, including export reserves, with zero cloud spend.

@@ -1,0 +1,4 @@
+{
+  "error": "RuntimeError: BLOCKED_COST_FULL_CONVERGENCE_MATRIX",
+  "traceback": "Traceback (most recent call last):\n  File \"/kaggle/working/radial-adaptation-v1-source/run.py\", line 152, in main\n    raise RuntimeError(lines[-1] if lines else \"Worker failed without output\")\nRuntimeError: RuntimeError: BLOCKED_COST_FULL_CONVERGENCE_MATRIX\n"
+}

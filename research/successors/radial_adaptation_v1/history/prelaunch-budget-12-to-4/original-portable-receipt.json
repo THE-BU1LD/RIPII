@@ -1,0 +1,10 @@
+{
+  "bytes": 116132,
+  "files": 59,
+  "notebook": "/Volumes/PRO-BLADE/GitHubRepos/Personal-Research/RIPII/research/successors/radial_adaptation_v1/portable/radial-adaptation-v1-8fbc2cefd6a8.ipynb",
+  "notebook_sha256": "65463861607abf2bf09c65bfd8bc3b908040ab6dfec8149f888fa77275461080",
+  "payload_sha256": "8fbc2cefd6a82ec4ac5ef08d7b3e882b9f193617fadbe95664be23bacd779fd3",
+  "roundtrip": "PASS",
+  "secrets_included": false,
+  "source_sha256": "1cb4a1f9b85b7017cb2cc9c1f13b35e0b63d575ddb32a9436432f5b656bffe5c"
+}

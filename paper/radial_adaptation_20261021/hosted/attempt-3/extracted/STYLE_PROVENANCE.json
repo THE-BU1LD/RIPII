@@ -1,0 +1,13 @@
+{
+  "source": "/Users/ryan/Documents/Codex/2026-10-20/task/library/codex_catchup_20261020/provenance/arxiv.sty",
+  "sha256": "08cbf7d94d1460e4002c29768c3d576f8c716e3ac173d3ead34e526d865fb59d",
+  "unchanged": true,
+  "provenance": {
+    "source_archive": "rebirth_input_recovery/Hedge_Fund_Moses_Lua.zip",
+    "source_member": "arxiv.sty",
+    "compression_method": 8,
+    "uncompressed_size": 8927,
+    "sha256": "08cbf7d94d1460e4002c29768c3d576f8c716e3ac173d3ead34e526d865fb59d",
+    "note": "Extracted byte-for-byte; no edits. This preserves the user-supplied style file; do not assume it is current/accepted for a target venue without checking."
+  }
+}

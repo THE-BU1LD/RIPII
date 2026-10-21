@@ -1,0 +1,124 @@
+[{"stream_name":"stderr","time":9.178706092,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.178786494,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.178791834,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.178794627,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":9.955483825,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.955523228,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.955529219,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.955533812,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":60.6074201,"data":"Collecting pymupdf==1.26.4\n"}
+,{"stream_name":"stdout","time":60.662956196,"data":"  Downloading pymupdf-1.26.4-cp39-abi3-manylinux_2_28_x86_64.whl.metadata (3.4 kB)\n"}
+,{"stream_name":"stdout","time":60.702575831,"data":"Downloading pymupdf-1.26.4-cp39-abi3-manylinux_2_28_x86_64.whl (24.1 MB)\n"}
+,{"stream_name":"stdout","time":60.811165131,"data":"Collecting pymupdf==1.26.4\n"}
+,{"stream_name":"stdout","time":60.811194066,"data":"  Downloading pymupdf-1.26.4-cp39-abi3-manylinux_2_28_x86_64.whl.metadata (3.4 kB)\n"}
+,{"stream_name":"stdout","time":60.811200331,"data":"Downloading pymupdf-1.26.4-cp39-abi3-manylinux_2_28_x86_64.whl (24.1 MB)\n"}
+,{"stream_name":"stdout","time":62.170518313,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 24.1/24.1 MB 17.4 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":62.372957311,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 24.1/24.1 MB 17.4 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":64.59701269,"data":"Installing collected packages: pymupdf\n"}
+,{"stream_name":"stdout","time":64.799715425,"data":"Installing collected packages: pymupdf\n"}
+,{"stream_name":"stdout","time":65.778737175,"data":"Successfully installed pymupdf-1.26.4\n"}
+,{"stream_name":"stdout","time":65.986965745,"data":"Successfully installed pymupdf-1.26.4\n"}
+,{"stream_name":"stdout","time":66.367744533,"data":"{\"status\": \"COMPILED_AND_RENDERED\", \"gpu_used\": false, \"cloud_spend_usd\": 0, \"pages\": 7, \"elapsed_cpu_host_seconds\": 54.951439805999996}\n"}
+,{"stream_name":"stdout","time":66.36777449,"data":"etex.def\n"}
+,{"stream_name":"stdout","time":66.367780146,"data":"note: downloading natbib.sty\n"}
+,{"stream_name":"stdout","time":66.367785136,"data":"note: downloading hyperref.sty\n"}
+,{"stream_name":"stdout","time":66.367789957,"data":"note: downloading ltxcmds.sty\n"}
+,{"stream_name":"stdout","time":66.367809368,"data":"note: downloading pdftexcmds.sty\n"}
+,{"stream_name":"stdout","time":66.367816109,"data":"note: downloading infwarerr.sty\n"}
+,{"stream_name":"stdout","time":66.367820787,"data":"note: downloading kvsetkeys.sty\n"}
+,{"stream_name":"stdout","time":66.367825321,"data":"note: downloading kvdefinekeys.sty\n"}
+,{"stream_name":"stdout","time":66.367830242,"data":"note: downloading pdfescape.sty\n"}
+,{"stream_name":"stdout","time":66.36783485,"data":"note: downloading hycolor.sty\n"}
+,{"stream_name":"stdout","time":66.367839763,"data":"note: downloading letltxmacro.sty\n"}
+,{"stream_name":"stdout","time":66.367859786,"data":"note: downloading auxhook.sty\n"}
+,{"stream_name":"stdout","time":66.367864324,"data":"note: downloading kvoptions.sty\n"}
+,{"stream_name":"stdout","time":66.367867687,"data":"note: downloading pd1enc.def\n"}
+,{"stream_name":"stdout","time":66.367871204,"data":"note: downloading intcalc.sty\n"}
+,{"stream_name":"stdout","time":66.367874381,"data":"note: downloading etexcmds.sty\n"}
+,{"stream_name":"stdout","time":66.367878131,"data":"note: downloading puenc.def\n"}
+,{"stream_name":"stdout","time":66.367881974,"data":"note: downloading url.sty\n"}
+,{"stream_name":"stdout","time":66.367885589,"data":"note: downloading pzdr.tfm\n"}
+,{"stream_name":"stdout","time":66.36788912,"data":"note: downloading bitset.sty\n"}
+,{"stream_name":"stdout","time":66.367892751,"data":"note: downloading bigintcalc.sty\n"}
+,{"stream_name":"stdout","time":66.367896402,"data":"note: downloading hxetex.def\n"}
+,{"stream_name":"stdout","time":66.367900115,"data":"note: downloading stringenc.sty\n"}
+,{"stream_name":"stdout","time":66.367903701,"data":"note: downloading rerunfilecheck.sty\n"}
+,{"stream_name":"stdout","time":66.367907409,"data":"note: downloading uniquecounter.sty\n"}
+,{"stream_name":"stdout","time":66.367910838,"data":"note: downloading l3backend-xetex.def\n"}
+,{"stream_name":"stdout","time":66.367914544,"data":"note: downloading ts1cmr.fd\n"}
+,{"stream_name":"stdout","time":66.367917951,"data":"note: downloading nameref.sty\n"}
+,{"stream_name":"stdout","time":66.367921843,"data":"note: downloading refcount.sty\n"}
+,{"stream_name":"stdout","time":66.367925493,"data":"note: downloading gettitlestring.sty\n"}
+,{"stream_name":"stdout","time":66.367929233,"data":"note: downloading ptmrc8t.tfm\n"}
+,{"stream_name":"stdout","time":66.367932658,"data":"note: downloading cmex7.tfm\n"}
+,{"stream_name":"stdout","time":66.367936493,"data":"note: downloading umsa.fd\n"}
+,{"stream_name":"stdout","time":66.36794036,"data":"note: downloading msam10.tfm\n"}
+,{"stream_name":"stdout","time":66.367943984,"data":"note: downloading msam7.tfm\n"}
+,{"stream_name":"stdout","time":66.367947798,"data":"note: downloading msam5.tfm\n"}
+,{"stream_name":"stdout","time":66.36795153,"data":"note: downloading umsb.fd\n"}
+,{"stream_name":"stdout","time":66.367954996,"data":"note: downloading msbm10.tfm\n"}
+,{"stream_name":"stdout","time":66.367958471,"data":"note: downloading msbm7.tfm\n"}
+,{"stream_name":"stdout","time":66.367962301,"data":"note: downloading msbm5.tfm\n"}
+,{"stream_name":"stdout","time":66.367966525,"data":"note: downloading ptmb8t.tfm\n"}
+,{"stream_name":"stdout","time":66.36797009,"data":"note: downloading ptmbc8t.tfm\n"}
+,{"stream_name":"stdout","time":66.367974002,"data":"note: downloading ptmbi8t.tfm\n"}
+,{"stream_name":"stdout","time":66.367977233,"data":"note: downloading t1lmtt.fd\n"}
+,{"stream_name":"stdout","time":66.367980838,"data":"note: downloading ec-lmtt10.tfm\n"}
+,{"stream_name":"stdout","time":66.367984685,"data":"note: downloading cmss10.tfm\n"}
+,{"stream_name":"stdout","time":66.367988597,"data":"note: downloading cmss8.tfm\n"}
+,{"stream_name":"stdout","time":66.367992081,"data":"note: downloading cmr9.tfm\n"}
+,{"stream_name":"stdout","time":66.36799609,"data":"note: downloading cmr6.tfm\n"}
+,{"stream_name":"stdout","time":66.367999656,"data":"note: downloading cmmi9.tfm\n"}
+,{"stream_name":"stdout","time":66.36800341,"data":"note: downloading cmmi6.tfm\n"}
+,{"stream_name":"stdout","time":66.368007059,"data":"note: downloading cmsy9.tfm\n"}
+,{"stream_name":"stdout","time":66.368016682,"data":"note: downloading cmsy6.tfm\n"}
+,{"stream_name":"stdout","time":66.368031759,"data":"note: downloading cmex9.tfm\n"}
+,{"stream_name":"stdout","time":66.368035537,"data":"note: downloading cmss9.tfm\n"}
+,{"stream_name":"stdout","time":66.368039004,"data":"warning: main.tex:166: Underfull \\vbox (badness 6575) has occurred while \\output is active\n"}
+,{"stream_name":"stdout","time":66.368043116,"data":"note: Rerunning TeX because \"main.aux\" changed ...\n"}
+,{"stream_name":"stdout","time":66.368046926,"data":"warning: main.tex:166: Underfull \\vbox (badness 6575) has occurred while \\output is active\n"}
+,{"stream_name":"stdout","time":66.36805369,"data":"warning: warnings were issued by the TeX engine; use --print and/or --keep-logs for details.\n"}
+,{"stream_name":"stdout","time":66.368057728,"data":"note: Running xdvipdfmx ...\n"}
+,{"stream_name":"stdout","time":66.36806137,"data":"note: downloading pdftex.map\n"}
+,{"stream_name":"stdout","time":66.36806511,"data":"note: downloading kanjix.map\n"}
+,{"stream_name":"stdout","time":66.368068824,"data":"note: downloading ckx.map\n"}
+,{"stream_name":"stdout","time":66.368072526,"data":"note: downloading texglyphlist.txt\n"}
+,{"stream_name":"stdout","time":66.368076592,"data":"note: downloading pdfglyphlist.txt\n"}
+,{"stream_name":"stdout","time":66.368080377,"data":"note: downloading glyphlist.txt\n"}
+,{"stream_name":"stdout","time":66.36808413,"data":"note: downloading ptmrc8t.vf\n"}
+,{"stream_name":"stdout","time":66.368087915,"data":"note: downloading ptmr8r.tfm\n"}
+,{"stream_name":"stdout","time":66.368091886,"data":"note: downloading 8r.enc\n"}
+,{"stream_name":"stdout","time":66.368095677,"data":"note: downloading utmr8a.pfb\n"}
+,{"stream_name":"stdout","time":66.368099286,"data":"note: downloading ptmb8t.vf\n"}
+,{"stream_name":"stdout","time":66.368102893,"data":"note: downloading ptmb8r.tfm\n"}
+,{"stream_name":"stdout","time":66.368106693,"data":"note: downloading utmb8a.pfb\n"}
+,{"stream_name":"stdout","time":66.368110491,"data":"note: downloading ptmr8t.vf\n"}
+,{"stream_name":"stdout","time":66.368114206,"data":"note: downloading ptmbc8t.vf\n"}
+,{"stream_name":"stdout","time":66.368117766,"data":"note: downloading ptmbi8t.vf\n"}
+,{"stream_name":"stdout","time":66.368121697,"data":"note: downloading ptmbi8r.tfm\n"}
+,{"stream_name":"stdout","time":66.368125423,"data":"note: downloading utmbi8a.pfb\n"}
+,{"stream_name":"stdout","time":66.368129131,"data":"note: downloading cmsy10.pfb\n"}
+,{"stream_name":"stdout","time":66.368132796,"data":"note: downloading lm-ec.enc\n"}
+,{"stream_name":"stdout","time":66.368136835,"data":"note: downloading lmtt10.pfb\n"}
+,{"stream_name":"stdout","time":66.368140601,"data":"note: downloading cmmi10.pfb\n"}
+,{"stream_name":"stdout","time":66.368144311,"data":"note: downloading cmr10.pfb\n"}
+,{"stream_name":"stdout","time":66.368148298,"data":"note: downloading cmmi7.pfb\n"}
+,{"stream_name":"stdout","time":66.368151882,"data":"note: downloading msbm10.pfb\n"}
+,{"stream_name":"stdout","time":66.368155113,"data":"note: downloading cmr7.pfb\n"}
+,{"stream_name":"stdout","time":66.368158461,"data":"note: downloading cmsy7.pfb\n"}
+,{"stream_name":"stdout","time":66.368162052,"data":"note: downloading cmex10.pfb\n"}
+,{"stream_name":"stdout","time":66.368165888,"data":"note: downloading cmss8.pfb\n"}
+,{"stream_name":"stdout","time":66.368169917,"data":"note: Writing `main.pdf` (81.79296875 KiB)\n"}
+,{"stream_name":"stdout","time":66.368173644,"data":"note: Writing `main.log` (13.8466796875 KiB)\n"}
+,{"stream_name":"stdout","time":66.368183267,"data":"note: Writing `main.out` (4.0126953125 KiB)\n"}
+,{"stream_name":"stdout","time":66.36818785,"data":"note: Writing `main.aux` (4.4443359375 KiB)\n"}
+,{"stream_name":"stdout","time":66.368191411,"data":"\n"}
+,{"stream_name":"stderr","time":69.627746549,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":69.627784027,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":69.835913441,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":69.835944662,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":70.777819544,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":70.867979315,"data":"[NbConvertApp] Writing 31508 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":73.962336102,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":74.589592184,"data":"[NbConvertApp] Writing 325426 bytes to __results__.html\n"}
+]

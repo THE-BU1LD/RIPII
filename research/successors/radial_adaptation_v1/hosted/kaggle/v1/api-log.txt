@@ -1,0 +1,114 @@
+[{"stream_name":"stdout","time":396.154431177,"data":"{\n"}
+,{"stream_name":"stdout","time":396.154525955,"data":"  \"status\": \"BLOCKED\",\n"}
+,{"stream_name":"stdout","time":396.154534061,"data":"  \"scientific_result\": \"NOT_EVALUATED\",\n"}
+,{"stream_name":"stdout","time":396.154539267,"data":"  \"test_data_opened\": false,\n"}
+,{"stream_name":"stdout","time":396.154543622,"data":"  \"reason\": \"RuntimeError: BLOCKED_COST_FULL_CONVERGENCE_MATRIX\"\n"}
+,{"stream_name":"stdout","time":396.154547865,"data":"}\n"}
+,{"stream_name":"stdout","time":396.61924924,"data":"{\n"}
+,{"stream_name":"stdout","time":396.619290418,"data":"  \"reason\": \"RuntimeError: BLOCKED_COST_FULL_CONVERGENCE_MATRIX\",\n"}
+,{"stream_name":"stdout","time":396.619296026,"data":"  \"scientific_result\": \"NOT_EVALUATED\",\n"}
+,{"stream_name":"stdout","time":396.619301159,"data":"  \"status\": \"BLOCKED\",\n"}
+,{"stream_name":"stdout","time":396.619305229,"data":"  \"test_data_opened\": false\n"}
+,{"stream_name":"stdout","time":396.619309574,"data":"}\n"}
+,{"stream_name":"stdout","time":396.619314008,"data":"\n"}
+,{"stream_name":"stdout","time":396.619318487,"data":"{\n"}
+,{"stream_name":"stdout","time":396.61932231,"data":"  \"gate\": \"BLOCKED_COST\",\n"}
+,{"stream_name":"stdout","time":396.619326874,"data":"  \"minimum_steps_projection_seconds\": 644749.682353726,\n"}
+,{"stream_name":"stdout","time":396.619331174,"data":"  \"projected_maximum_seconds\": 2599176.570876203,\n"}
+,{"stream_name":"stdout","time":396.619335139,"data":"  \"real_data_seconds\": 278.409840141,\n"}
+,{"stream_name":"stdout","time":396.619339345,"data":"  \"remaining_seconds\": 6637.443760972,\n"}
+,{"stream_name":"stdout","time":396.619343575,"data":"  \"rows\": [\n"}
+,{"stream_name":"stdout","time":396.619347515,"data":"    {\n"}
+,{"stream_name":"stdout","time":396.619351621,"data":"      \"model\": \"radial_mixture\",\n"}
+,{"stream_name":"stdout","time":396.619356255,"data":"      \"step_seconds_max\": 0.5350072409999598,\n"}
+,{"stream_name":"stdout","time":396.61936064,"data":"      \"validation_and_train_seconds\": 8.332424937000042\n"}
+,{"stream_name":"stdout","time":396.619364999,"data":"    },\n"}
+,{"stream_name":"stdout","time":396.619369631,"data":"    {\n"}
+,{"stream_name":"stdout","time":396.619374117,"data":"      \"model\": \"radial_fixed\",\n"}
+,{"stream_name":"stdout","time":396.619379085,"data":"      \"step_seconds_max\": 0.47000462600004767,\n"}
+,{"stream_name":"stdout","time":396.619383385,"data":"      \"validation_and_train_seconds\": 7.244196191999947\n"}
+,{"stream_name":"stdout","time":396.619387451,"data":"    },\n"}
+,{"stream_name":"stdout","time":396.619391185,"data":"    {\n"}
+,{"stream_name":"stdout","time":396.619395474,"data":"      \"model\": \"graph\",\n"}
+,{"stream_name":"stdout","time":396.619399549,"data":"      \"step_seconds_max\": 0.9993101700000011,\n"}
+,{"stream_name":"stdout","time":396.619404761,"data":"      \"validation_and_train_seconds\": 15.772087241000008\n"}
+,{"stream_name":"stdout","time":396.619408965,"data":"    },\n"}
+,{"stream_name":"stdout","time":396.619413319,"data":"    {\n"}
+,{"stream_name":"stdout","time":396.619417705,"data":"      \"model\": \"simple_pool\",\n"}
+,{"stream_name":"stdout","time":396.619422035,"data":"      \"step_seconds_max\": 0.9587913189999995,\n"}
+,{"stream_name":"stdout","time":396.619426178,"data":"      \"validation_and_train_seconds\": 17.27228743699999\n"}
+,{"stream_name":"stdout","time":396.619430708,"data":"    },\n"}
+,{"stream_name":"stdout","time":396.619435111,"data":"    {\n"}
+,{"stream_name":"stdout","time":396.619439299,"data":"      \"model\": \"transformer\",\n"}
+,{"stream_name":"stdout","time":396.619455179,"data":"      \"step_seconds_max\": 0.7543082149999805,\n"}
+,{"stream_name":"stdout","time":396.619459491,"data":"      \"validation_and_train_seconds\": 11.566082841000025\n"}
+,{"stream_name":"stdout","time":396.619463828,"data":"    }\n"}
+,{"stream_name":"stdout","time":396.619467422,"data":"  ]\n"}
+,{"stream_name":"stdout","time":396.61947226,"data":"}\n"}
+,{"stream_name":"stdout","time":396.619476185,"data":"\n"}
+,{"stream_name":"stdout","time":396.619480421,"data":"test_adaptation_and_architecture_are_separate (test_control.ControlTests.test_adaptation_and_architecture_are_separate) ... ok\n"}
+,{"stream_name":"stdout","time":396.619485094,"data":"test_complete_positive_fixture (test_control.ControlTests.test_complete_positive_fixture) ... ok\n"}
+,{"stream_name":"stdout","time":396.619488898,"data":"test_exact_six_unit_probability (test_control.ControlTests.test_exact_six_unit_probability) ... ok\n"}
+,{"stream_name":"stdout","time":396.619493439,"data":"test_fitting_and_stability_required (test_control.ControlTests.test_fitting_and_stability_required) ... ok\n"}
+,{"stream_name":"stdout","time":396.61949755,"data":"test_holm (test_control.ControlTests.test_holm) ... ok\n"}
+,{"stream_name":"stdout","time":396.619501726,"data":"test_minimum_steps (test_control.ControlTests.test_minimum_steps) ... ok\n"}
+,{"stream_name":"stdout","time":396.619505687,"data":"test_missing_and_duplicate_cells (test_control.ControlTests.test_missing_and_duplicate_cells) ... ok\n"}
+,{"stream_name":"stdout","time":396.61953876,"data":"test_nonfinite_fails (test_control.ControlTests.test_nonfinite_fails) ... ok\n"}
+,{"stream_name":"stdout","time":396.619542913,"data":"test_poor_plateau_cannot_pass (test_control.ControlTests.test_poor_plateau_cannot_pass) ... ok\n"}
+,{"stream_name":"stdout","time":396.619548522,"data":"test_short_curriculum_cannot_pass (test_control.ControlTests.test_short_curriculum_cannot_pass) ... ok\n"}
+,{"stream_name":"stdout","time":396.619552777,"data":"test_split_seeds_are_disjoint_from_old_study (test_control.ControlTests.test_split_seeds_are_disjoint_from_old_study) ... ok\n"}
+,{"stream_name":"stdout","time":396.619557154,"data":"test_training_still_improving_fails (test_control.ControlTests.test_training_still_improving_fails) ... ok\n"}
+,{"stream_name":"stdout","time":396.619561055,"data":"test_undertrained_test_cannot_be_reported (test_control.ControlTests.test_undertrained_test_cannot_be_reported) ... ok\n"}
+,{"stream_name":"stdout","time":396.619565357,"data":"test_weak_fixed_gain_not_rescued_by_baseline_win (test_control.ControlTests.test_weak_fixed_gain_not_rescued_by_baseline_win) ... ok\n"}
+,{"stream_name":"stdout","time":396.619569553,"data":"\n"}
+,{"stream_name":"stdout","time":396.619573171,"data":"----------------------------------------------------------------------\n"}
+,{"stream_name":"stdout","time":396.619576892,"data":"Ran 14 tests in 0.019s\n"}
+,{"stream_name":"stdout","time":396.619581002,"data":"\n"}
+,{"stream_name":"stdout","time":396.619585423,"data":"OK\n"}
+,{"stream_name":"stdout","time":396.619589708,"data":"test_all_models_share_contract (frozen_tests.NumericTests.test_all_models_share_contract) ... ok\n"}
+,{"stream_name":"stdout","time":396.619594235,"data":"test_candidate_is_axis_permutation_equivariant (frozen_tests.NumericTests.test_candidate_is_axis_permutation_equivariant) ... ok\n"}
+,{"stream_name":"stdout","time":396.619599209,"data":"test_candidate_is_object_permutation_equivariant (frozen_tests.NumericTests.test_candidate_is_object_permutation_equivariant) ... ok\n"}
+,{"stream_name":"stdout","time":396.619603758,"data":"test_candidate_shape_finite_and_backward (frozen_tests.NumericTests.test_candidate_shape_finite_and_backward) ... ok\n"}
+,{"stream_name":"stdout","time":396.619612279,"data":"test_invalid_inputs_fail_closed (frozen_tests.NumericTests.test_invalid_inputs_fail_closed) ... ok\n"}
+,{"stream_name":"stdout","time":396.619616995,"data":"test_learned_and_fixed_gate_contract (frozen_tests.NumericTests.test_learned_and_fixed_gate_contract) ... ok\n"}
+,{"stream_name":"stdout","time":396.619621115,"data":"test_pair_forces_conserve_total_momentum (frozen_tests.NumericTests.test_pair_forces_conserve_total_momentum) ... ok\n"}
+,{"stream_name":"stdout","time":396.619625512,"data":"test_predecessor_comparator_width_is_frozen (frozen_tests.NumericTests.test_predecessor_comparator_width_is_frozen) ... ok\n"}
+,{"stream_name":"stdout","time":396.61963047,"data":"test_width_matching_is_optimal_on_search_grid (frozen_tests.NumericTests.test_width_matching_is_optimal_on_search_grid) ... ok\n"}
+,{"stream_name":"stdout","time":396.619634746,"data":"test_zero_initialized_candidate_is_constant_velocity (frozen_tests.NumericTests.test_zero_initialized_candidate_is_constant_velocity) ... ok\n"}
+,{"stream_name":"stdout","time":396.619639107,"data":"\n"}
+,{"stream_name":"stdout","time":396.619643055,"data":"----------------------------------------------------------------------\n"}
+,{"stream_name":"stdout","time":396.61964753,"data":"Ran 10 tests in 0.586s\n"}
+,{"stream_name":"stdout","time":396.619651348,"data":"\n"}
+,{"stream_name":"stdout","time":396.61965572,"data":"OK\n"}
+,{"stream_name":"stdout","time":396.619659898,"data":"/kaggle/working/radial-adaptation-v1-source/vendor/research/successors/simple_graph_v1/upstream/data/synthetic_sim.py:264: RuntimeWarning: invalid value encountered in power\n"}
+,{"stream_name":"stdout","time":396.619664401,"data":"  l2_dist_power3 = np.power(\n"}
+,{"stream_name":"stdout","time":396.619668426,"data":"/kaggle/working/radial-adaptation-v1-source/vendor/research/successors/simple_graph_v1/upstream/data/synthetic_sim.py:235: RuntimeWarning: invalid value encountered in power\n"}
+,{"stream_name":"stdout","time":396.619672864,"data":"  l2_dist_power3 = np.power(\n"}
+,{"stream_name":"stdout","time":396.619677125,"data":"/kaggle/working/radial-adaptation-v1-source/vendor/research/successors/simple_graph_v1/upstream/data/synthetic_sim.py:264: RuntimeWarning: invalid value encountered in power\n"}
+,{"stream_name":"stdout","time":396.619681665,"data":"  l2_dist_power3 = np.power(\n"}
+,{"stream_name":"stdout","time":396.619686062,"data":"/kaggle/working/radial-adaptation-v1-source/vendor/research/successors/simple_graph_v1/upstream/data/synthetic_sim.py:235: RuntimeWarning: invalid value encountered in power\n"}
+,{"stream_name":"stdout","time":396.619690639,"data":"  l2_dist_power3 = np.power(\n"}
+,{"stream_name":"stdout","time":396.6196946,"data":"/kaggle/working/radial-adaptation-v1-source/vendor/research/successors/simple_graph_v1/upstream/data/synthetic_sim.py:235: RuntimeWarning: invalid value encountered in power\n"}
+,{"stream_name":"stdout","time":396.619699063,"data":"  l2_dist_power3 = np.power(\n"}
+,{"stream_name":"stdout","time":396.619702868,"data":"/kaggle/working/radial-adaptation-v1-source/vendor/research/successors/simple_graph_v1/upstream/data/synthetic_sim.py:264: RuntimeWarning: invalid value encountered in power\n"}
+,{"stream_name":"stdout","time":396.619707426,"data":"  l2_dist_power3 = np.power(\n"}
+,{"stream_name":"stdout","time":396.619714775,"data":"{\"rows\": [{\"model\": \"radial_mixture\", \"step_seconds_max\": 0.5350072409999598, \"validation_and_train_seconds\": 8.332424937000042}, {\"model\": \"radial_fixed\", \"step_seconds_max\": 0.47000462600004767, \"validation_and_train_seconds\": 7.244196191999947}, {\"model\": \"graph\", \"step_seconds_max\": 0.9993101700000011, \"validation_and_train_seconds\": 15.772087241000008}, {\"model\": \"simple_pool\", \"step_seconds_max\": 0.9587913189999995, \"validation_and_train_seconds\": 17.27228743699999}, {\"model\": \"transformer\", \"step_seconds_max\": 0.7543082149999805, \"validation_and_train_seconds\": 11.566082841000025}], \"real_data_seconds\": 278.409840141, \"projected_maximum_seconds\": 2599176.570876203, \"remaining_seconds\": 6637.443760972, \"gate\": \"BLOCKED_COST\", \"minimum_steps_projection_seconds\": 644749.682353726}\n"}
+,{"stream_name":"stdout","time":396.619729826,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":396.619734095,"data":"  File \"/kaggle/working/radial-adaptation-v1-source/run.py\", line 200, in \u003cmodule\u003e\n"}
+,{"stream_name":"stdout","time":396.619739534,"data":"    main()\n"}
+,{"stream_name":"stdout","time":396.619743815,"data":"    ~~~~^^\n"}
+,{"stream_name":"stdout","time":396.619748612,"data":"  File \"/kaggle/working/radial-adaptation-v1-source/run.py\", line 67, in main\n"}
+,{"stream_name":"stdout","time":396.619752962,"data":"    engine.profile()\n"}
+,{"stream_name":"stdout","time":396.61975722,"data":"    ~~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stdout","time":396.619761271,"data":"  File \"/kaggle/working/radial-adaptation-v1-source/engine.py\", line 363, in profile\n"}
+,{"stream_name":"stdout","time":396.61976602,"data":"    raise RuntimeError(\"BLOCKED_COST_FULL_CONVERGENCE_MATRIX\")\n"}
+,{"stream_name":"stdout","time":396.619769809,"data":"RuntimeError: BLOCKED_COST_FULL_CONVERGENCE_MATRIX\n"}
+,{"stream_name":"stdout","time":396.619773612,"data":"\n"}
+,{"stream_name":"stdout","time":396.619777864,"data":"All artifacts retained in radial-adaptation-v1-results.zip\n"}
+,{"stream_name":"stderr","time":398.953111106,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":398.953180362,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":399.223943758,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":399.223981651,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":400.127660522,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":401.1841176,"data":"[NbConvertApp] Writing 395843 bytes to __results__.html\n"}
+]

@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "updated_at_utc": "2026-10-21T06:01:26.236442+00:00",
+  "checkout": {
+    "head": "b612f235500bc9d678ccf29cf2372ff2cf1d2b24",
+    "branch": "codex/research-execution-wave1",
+    "remote_main_verified_live": "33b799fb3bb0d5215e954c5f80d2225c51a5caaa",
+    "remote_verified_at_utc": "2026-10-21T06:01:26.236442+00:00",
+    "relationship": "LOCAL_CHECKOUT_AHEAD_OF_VERIFIED_REMOTE_MAIN_WITH_DIRTY_RESEARCH_WORK"
+  },
+  "research": {
+    "overall": "EVIDENCE_PARTIAL_NEGATIVE_AND_INCONCLUSIVE_DEVELOPMENT",
+    "original_ripii": "NEGATIVE_NO_ADVANCE",
+    "ripii_mr": "NEGATIVE_NO_ADVANCE_0_OF_60_COMPARISONS_PASSED",
+    "simple_graph_v1": {
+      "status": "TERMINAL",
+      "decision": "INCONCLUSIVE_UNDERTRAINED",
+      "fits": 144,
+      "evaluation_cells": 72,
+      "inadequate_cells": 29,
+      "advance": false,
+      "evidence": "research/successors/simple_graph_v1/STATE.json"
+    },
+    "ic1_v1": {
+      "status": "NOT_EVALUATED",
+      "qualification": "PRIOR_SOURCE_ENGINEERING_PASS_CURRENT_CORRECTED_SOURCE_NOT_NUMERICALLY_QUALIFIED",
+      "development": "NOT_RUN_COST_BLOCKED",
+      "evidence": "research/successors/ic1_v1/STATE.json"
+    },
+    "adaptive_context_v2": {
+      "status": "QUALIFIED_FIXTURE_COMPLETE_DEVELOPMENT_COST_BLOCKED",
+      "scientific_result": "NOT_EVALUATED",
+      "local_execution": "BLOCKED_RESOURCE",
+      "portable_roundtrip": "PASS",
+      "uploaded": true,
+      "executed": true,
+      "development": "NOT_RUN_COST_BLOCKED",
+      "fixture": "ENGINEERING_FIXTURE_ONLY_FAILED_PRIMARY_OOD_AND_CONVERGENCE_GATES",
+      "evidence": "research/successors/simple_graph_v2/STATE.json"
+    },
+    "radial_mixture_v3": {
+      "status": "TERMINAL",
+      "scientific_result": "INCONCLUSIVE_UNDERTRAINED",
+      "control_qualification": "PASS_24_OF_24",
+      "portable_reproducibility": "PASS_TWO_CONSECUTIVE_IDENTICAL_BUILDS",
+      "hosted_kernel": "ryangomez010/ripii-radial-mixture-v3-3557823e41ee",
+      "hosted_kernel_version": 1,
+      "uploaded": true,
+      "executed": true,
+      "development": "COMPLETE_96_OF_96_39_CONVERGENCE_INADEQUATE_NO_ADVANCE",
+      "evidence": "research/successors/simple_graph_v3/STATE.json"
+    },
+    "renormalized_projection_v5": {
+      "status": "GPU_QUALIFIED_FIXTURE_COMPLETE",
+      "scientific_result": "NOT_EVALUATED",
+      "source_sha256": "304e46cf518d2454a0cbe817b9d04e55d0adf225a38bd1f242b91ac75b05d33d",
+      "cpu_numerical_tests": "32_PASS_ZERO_SKIPS",
+      "cuda_numerical_tests": "32_PASS_ZERO_SKIPS",
+      "fixture": "100_STEPS_COMPLETE_SERIALIZED_PREDICTION_REPLAY_PASS_ENGINEERING_ONLY",
+      "evidence": "research/successors/renormalized_projection_v5/STATE.json"
+    },
+    "rg_v5_rmd17_v1": {
+      "status": "COMPLETE_VERIFIED",
+      "scientific_result": "INCONCLUSIVE_UNDERTRAINED",
+      "protocol_sha256": "509aef8ea119f898de3bbbe28fb0c4abe1069bc5f0656216948ad23de7419579",
+      "planned_fits": 60,
+      "completed_fits": 60,
+      "adequate_fits": 0,
+      "numerical_qualification": "32_ORIGINAL_PLUS_12_BENCHMARK_CPU_AND_CUDA_PASS_ZERO_SKIPS",
+      "independent_metric_and_adequacy_replay": "PASS_ALL_60",
+      "remaining_cuda_seconds": 1944.158216549,
+      "test_metrics_computed": true,
+      "advance": false,
+      "evidence": "research/benchmarks/rg_v5_rmd17_v1/STATE.json"
+    },
+    "variable_radial_v4": {
+      "status": "IMPLEMENTATION_AMENDED_STATIC_PASS_HOSTED_REQUALIFICATION_READY",
+      "scientific_result": "NOT_EVALUATED",
+      "interface_frozen_preoutcome": true,
+      "implementation_started": true,
+      "numerical_tests_executed": true,
+      "numerical_qualification_passed": false,
+      "mathematical_test_splits_opened": false,
+      "advance": false,
+      "evidence": "research/successors/variable_radial_v4/STATE.json"
+    },
+    "radial_adaptation_v1": {
+      "status": "QUALIFIED_COST_BLOCKED",
+      "scientific_result": "NOT_EVALUATED",
+      "qualification": "14_CONTROL_10_CPU_AND_5_CUDA_MODEL_CHECKS_PASS",
+      "comparison_fits": 0,
+      "test_data_opened": false,
+      "advance": false,
+      "budget": {
+        "allocated_gpu_hours": 4,
+        "host_wall_seconds": 7200,
+        "allocated_gpus": 2,
+        "cloud_spend_usd": 0,
+        "charged_allocated_gpu_hours": 0.5747906723183334,
+        "remaining_allocated_gpu_hours": 3.4252093276816664,
+        "charge_includes_export_reserve": true,
+        "original_study_charge_gpu_hours": 0.31951792752666663,
+        "accounting_scope": "Original study plus both engineering qualification attempts, same original 4 GPU-hour authorization"
+      },
+      "hosted_version_id": 360654457,
+      "evidence": "research/successors/radial_adaptation_v1/STATE.json"
+    },
+    "radial_execution_v1": {
+      "status": "PROTOCOL_MATCHED_FIXTURE_PASS_COST_STILL_BLOCKED",
+      "scientific_result": "NOT_EVALUATED",
+      "receipt": "research/engineering/radial_execution_v1/hosted/attempt-2/intake.json",
+      "cumulative_gpu_hours": 0.5747906723183334,
+      "remaining_gpu_hours": 3.4252093276816664
+    }
+  },
+  "engineering": {
+    "base_ci_last_verified_remote_main": "PASS",
+    "release_gate": "BLOCKED_OWNER_INPUT",
+    "release_blockers": [
+      "LICENSE",
+      "CITATION.cff",
+      "release/OWNER_METADATA.json",
+      "output/release/manifest.json"
+    ],
+    "release_metadata_validator": "STRICT_NESTED_PLACEHOLDER_AND_APPROVAL_CONTRACT",
+    "release_artifact_validator": "LOCK_EXACT_SBOM_RECORD_VERIFIED_WHEEL_SAFE_SDIST_AND_TAMPER_EVIDENT_MANIFEST_CONTRACT",
+    "mathematical_dataset_static_gate": "PASS_7_CONTROL_TESTS_TOOLING_ONLY_NO_DATASET_ADMITTED",
+    "mathematical_dataset_deep_gate": "NOT_RUN_RESOURCE_BLOCKED",
+    "mathematical_dataset_execution": "NOT_RUN_DATASETS_UNSELECTED_PROTOCOL_NOT_FROZEN",
+    "v3_mathematical_compatibility": "BLOCKED_INCOMPATIBLE_CONTRACT_HASH_BOUND_RECEIPT",
+    "v4_interface_design": "FROZEN_PREOUTCOME_SHA256_a5da3e135a1ed24d9702bb2c96774f0003e1eec983bd52fe6cb87c6307ed099f",
+    "v4_implementation": "AMENDED_STATIC_PASS_5_CONTROL_TESTS_ATTEMPT_2_EIGHT_NUMERICAL_METHODS_PASS_ASSERTION_BUG_CORRECTED_FRESH_RUN_REQUIRED",
+    "v4_requalification_payload": "A4C89314F908B1412A9540A48CFA9B6B43EAC091D61A2AD739FE89B3B9F41DE5",
+    "v4_requalification_notebook_sha256": "9f4cb27033cfcd14b96eba7edb6ff672aaec4afb673d7c519fc0f3255df291da",
+    "v4_requalification_source_fingerprint_sha256": "0522dfc71ed284962f55e256960775aa268a4af8a6e747d27cae595f3189d75d",
+    "v4_requalification_receipt": "research/successors/variable_radial_v4/hosted/kaggle/ripii-variable-radial-v4-a4c89314f908-v1/launch_receipt.json",
+    "scientific_run_readiness": "V3_TERMINAL_INCONCLUSIVE_V4_REQUALIFICATION_READY_EXTERNAL_UPLOAD_AUTH_REQUIRED",
+    "scientific_readiness_receipt": "audit/SCIENTIFIC_RUN_READINESS_V4_LOCAL_2026-10-18T140651Z.json",
+    "simple_graph_v1_capsule": "VERIFIED_1883_ENTRY_DEVELOPMENT_MANIFEST",
+    "v2_control_tests": "22_PASS",
+    "v2_numerical_tests": "6_PASS_PRIVATE_KAGGLE_EXACT_IDENTITY",
+    "v2_fixture": "12_OF_12_COMPLETE_INTEGRITY_PASS_ENGINEERING_ONLY",
+    "v2_development": "NOT_RUN_COST_BLOCKED_102656_SECONDS_PROJECTED_VS_21535_REMAINING",
+    "v3_control_tests": "24_PASS",
+    "v3_portable": "ROUNDTRIP_PASS_TWO_IDENTICAL_BUILDS_NOTEBOOK_SHA256_28e5045f5b343bf53a548526befd353ce29b6632daf2fa8d3e2d06f4a4a7bfd3",
+    "v3_hosted_execution": "COMPLETE_VERIFIED_PRIVATE_CPU_10_TESTS_12_FIXTURE_CELLS_96_DEVELOPMENT_CELLS_INCONCLUSIVE_UNDERTRAINED",
+    "v3_archive_intake": "PASS_13_TESTS_AND_TERMINAL_RECEIPT_603720078F314EA96335E5AE31647ACDCA340CEDE0C590E9F99F223A40275876",
+    "v4_archive_intake": "PASS_6_TESTS_TERMINAL_SOURCE_MANIFEST_RESOURCE_RUNTIME_AND_NUMERICAL_BINDING",
+    "v3_readiness_contract_tests": "PASS_9_PROTOCOL_MUTATION_COMPATIBILITY_V4_AMENDMENT_AND_TERMINAL_GATE_TESTS",
+    "selected_release_scientific_tests": "PASS_48"
+  },
+  "claim_boundary": "Engineering readiness, synthetic development evidence, release readiness, and confirmation are separate. No current evidence supports superiority, SOTA, real-world utility, novelty, publication, or deployment claims.",
+  "checkout_history": [
+    {
+      "head": "33b799fb3bb0d5215e954c5f80d2225c51a5caaa",
+      "branch": "codex/ripii-checklist-close",
+      "remote_main_verified_live": "33b799fb3bb0d5215e954c5f80d2225c51a5caaa",
+      "remote_verified_at_utc": "2026-10-18T04:37:00Z",
+      "relationship": "LOCAL_CHECKOUT_AT_VERIFIED_REMOTE_MAIN_WITH_UNCOMMITTED_RESEARCH_WORK"
+    }
+  ]
+}

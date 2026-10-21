@@ -1,0 +1,21 @@
+{
+  "verified_at_utc": "2026-10-21T05:40:29.473820+00:00",
+  "archive_sha256": "9f7bdfcd5ae30fe7a9d4bbf8c5edb6a43b72d031f4545eba0b5d8bf4929cbc40",
+  "local_expected_source_match": true,
+  "local_expected_protocol_match": true,
+  "verification": {
+    "status": "PASS",
+    "files": 19,
+    "scientific_result": "NOT_EVALUATED",
+    "test_data_opened": false,
+    "evaluations": 0,
+    "numeric_replay": false
+  },
+  "preserved_historical_artifacts": 7,
+  "preserved_vendor_files": 49,
+  "version_id": 360654457,
+  "version_number": 1,
+  "kaggle_status": "complete",
+  "private": true,
+  "remote_numeric_verifier_caveat": "Requested numeric replay but zero evaluation rows existed; this is not metric validation."
+}

@@ -1,0 +1,35 @@
+{
+  "checks": [
+    {
+      "full_horizon_backward_and_replay": "PASS",
+      "gradient_active_parameters": 21956,
+      "model": "radial_mixture",
+      "parameters": 21956
+    },
+    {
+      "full_horizon_backward_and_replay": "PASS",
+      "gradient_active_parameters": 17475,
+      "model": "radial_fixed",
+      "parameters": 21956
+    },
+    {
+      "full_horizon_backward_and_replay": "PASS",
+      "gradient_active_parameters": 23296,
+      "model": "graph",
+      "parameters": 23296
+    },
+    {
+      "full_horizon_backward_and_replay": "PASS",
+      "gradient_active_parameters": 21796,
+      "model": "simple_pool",
+      "parameters": 21796
+    },
+    {
+      "full_horizon_backward_and_replay": "PASS",
+      "gradient_active_parameters": 22756,
+      "model": "transformer",
+      "parameters": 22756
+    }
+  ],
+  "status": "PASS"
+}

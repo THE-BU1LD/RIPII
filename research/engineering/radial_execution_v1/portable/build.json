@@ -1,0 +1,14 @@
+{
+  "payload_sha256": "a9bc3d2b144269559ee5ad7731a5dbacfb525fa971e8e9da74e5e23a6a4303cf",
+  "notebook_sha256": "e57f22a94d9d40f33ed6cf1495e80613419967ae50d47e18e9525a1d81884bbe",
+  "notebook": "/Volumes/PRO-BLADE/GitHubRepos/Personal-Research/RIPII/research/engineering/radial_execution_v1/portable/radial-execution-v1-a9bc3d2b1442.ipynb",
+  "source_files": 63,
+  "budget": {
+    "total_allocated_gpu_hours": 4,
+    "prior_charged_gpu_seconds": 1621.327546966,
+    "this_probe_max_host_seconds": 1200,
+    "export_reserve_seconds": 180,
+    "charged_devices": 2,
+    "cloud_spend_usd": 0
+  }
+}

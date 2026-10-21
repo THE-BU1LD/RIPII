@@ -1,0 +1,24 @@
+{
+  "models": [
+    "radial_mixture",
+    "radial_fixed",
+    "graph",
+    "simple_pool",
+    "transformer"
+  ],
+  "initial": [
+    0.5350072409999598,
+    0.47000462600004767,
+    0.9993101700000011,
+    0.9587913189999995,
+    0.7543082149999805
+  ],
+  "optimized": [
+    0.05372225899998284,
+    0.048219490000008136,
+    0.05998553699998865,
+    0.06213274399999591,
+    0.056633528000020306
+  ],
+  "boundary": "Descriptive timings from separate Kaggle T4 runs; no efficacy or paired speedup inference."
+}

@@ -1,0 +1,8 @@
+{
+  "charged_gpu_seconds": 1150.264539096,
+  "charged_host_seconds": 575.132269548,
+  "cloud_spend_usd": 0,
+  "elapsed_host_seconds": 395.13226954799995,
+  "export_reserve_seconds": 180,
+  "source_sha256": "2904cd7cb3487219a6d0acb2586c4d3f0d81e5d6f7ccddebc3fab7fa576ee80e"
+}

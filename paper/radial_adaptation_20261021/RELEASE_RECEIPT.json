@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-21T06:02:51.329152+00:00",
+  "source_files": {
+    "main.tex": "8762eacc686db152aeadf5d4e3da9eb8d412493cbac88f3ab6cdc0deb308f7e8",
+    "arxiv.sty": "08cbf7d94d1460e4002c29768c3d576f8c716e3ac173d3ead34e526d865fb59d",
+    "observed.tex": "05d9f673260480464c43061e96ce832e7ea96485ebd2965d0843cb9a13692fae",
+    "optimization.tex": "7713cefd46042cbb6673f7f8cbbe31e44e36d4fbe4e50f2d8713ce95eb2573d3",
+    "timing.pdf": "8055e95718208764039b57fe8b49f42c5e7e76f4e4e3264dfae656b9c76c43de"
+  },
+  "pdf_sha256": "5d5cb093cea08002519d36beb015c0a61b0d20aa8164535619a44db53083519b",
+  "source_archive_sha256": "01639ec8c272101b6be84ad79031ea40e4f984040c7e40bd5b8b3ed01eedb83e",
+  "pages": 7,
+  "visual_review": "All seven rendered pages inspected; no clipping, overlapping text, missing glyphs or broken references observed. One underfull vbox warning retained.",
+  "scientific_status": "NOT_EVALUATED_ADAPTIVE_BENEFIT",
+  "submission_ready": false,
+  "remaining_gates": [
+    "Adequately trained scientific comparison",
+    "Independent full reproduction",
+    "Owner authorship/affiliations/license metadata"
+  ],
+  "gpu_hours_cumulative": 0.5747906723183334,
+  "cloud_spend_usd": 0
+}

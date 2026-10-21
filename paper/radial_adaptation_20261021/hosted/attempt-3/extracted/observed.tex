@@ -1,0 +1,13 @@
+\begin{table}[ht]
+\centering\small
+\caption{Measured full-horizon update time on the initial T4 worker. Maximum of five timed updates after warm-up; these are engineering measurements.}
+\begin{tabular}{lr}\toprule Model & Seconds per update\\\midrule
+radial\_mixture & 0.535\\
+radial\_fixed & 0.470\\
+graph & 0.999\\
+simple\_pool & 0.959\\
+transformer & 0.754\\
+\bottomrule\end{tabular}\end{table}
+Real calibration training-data generation took 278.41 seconds. The minimum-update matrix projection was 179.10 host-hours; the maximum-step estimate with safety margin was 721.99 host-hours. The allowed host duration was two hours because both allocated T4 devices count toward the four-GPU-hour cap.
+
+The initial run elapsed 395.13 seconds. Including the 180-second export reserve, its conservative charge was 0.3195 allocated GPU-hours. Cloud spend was zero. The retained terminal status is cost-blocked, with zero of 140 comparison fits completed and no test data opened.

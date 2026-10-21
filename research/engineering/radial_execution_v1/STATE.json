@@ -1,0 +1,49 @@
+{
+  "study": "RIPII-RADIAL-EXECUTION-v1",
+  "type": "Engineering equivalent optimization candidate, not a new efficacy hypothesis",
+  "status": "PROTOCOL_MATCHED_FIXTURE_PASS_COST_STILL_BLOCKED",
+  "scientific_result": "NOT_EVALUATED",
+  "test_data_opened": false,
+  "budget": {
+    "total_allocated_gpu_hours": 4,
+    "prior_charged_gpu_seconds": 1621.327546966,
+    "this_probe_max_host_seconds": 1200,
+    "export_reserve_seconds": 180,
+    "charged_devices": 2,
+    "cloud_spend_usd": 0
+  },
+  "reference": "../../successors/radial_adaptation_v1",
+  "falsifier": "Any output, gradient, optimizer or serialized replay mismatch above fixed tolerance rejects equivalence; no full matrix admission without a complete measured cost gate.",
+  "tolerances": {
+    "atol": 2e-05,
+    "rtol": 0.0002,
+    "serialized_replay_atol": 0,
+    "serialized_replay_rtol": 0
+  },
+  "protected_boundary": "No scientific data, calibration outcomes or test splits used; only random engineering fixtures.",
+  "authorization": "2026-10-21 attached full-pipeline request; inherited 4 GPU-hour free-Kaggle cap",
+  "created_at_utc": "2026-10-21T05:45:40.630055+00:00",
+  "qualification": {
+    "engineering_status": "PASS",
+    "scientific_result": "NOT_EVALUATED",
+    "comparison_fits": 0,
+    "test_data_opened": false,
+    "minimum_update_only_host_seconds": 47156.5177439993,
+    "maximum_update_only_host_seconds": 125750.71398399814,
+    "cost_caveat": "Update-only extrapolation excludes data, validation, capture, serialization and safety reserve."
+  },
+  "charge": {
+    "elapsed_host_seconds": 43.95943669000002,
+    "reserved_export_seconds": 180,
+    "charged_devices": 2,
+    "charged_gpu_seconds": 447.91887338000004,
+    "prior_charged_gpu_seconds": 1621.327546966,
+    "cumulative_charged_gpu_seconds": 2069.246420346,
+    "cloud_spend_usd": 0
+  },
+  "remaining_allocated_gpu_hours": 3.4252093276816664,
+  "receipt": "hosted/attempt-2/intake.json",
+  "url": "https://www.kaggle.com/code/ryangomez010/ripii-radial-execution-v1-a9bc3d2b1442",
+  "completed_at_utc": "2026-10-21T05:56:05.175463+00:00",
+  "amendment": "Match scientific AdamW weight decay 0.0001 and test dynamic tensor learning-rate changes under capture; prior fixture and charge preserved."
+}

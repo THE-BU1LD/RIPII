@@ -1,0 +1,9 @@
+{
+  "engineering_status": "PASS",
+  "scientific_result": "NOT_EVALUATED",
+  "comparison_fits": 0,
+  "test_data_opened": false,
+  "minimum_update_only_host_seconds": 47156.5177439993,
+  "maximum_update_only_host_seconds": 125750.71398399814,
+  "cost_caveat": "Update-only extrapolation excludes data, validation, capture, serialization and safety reserve."
+}

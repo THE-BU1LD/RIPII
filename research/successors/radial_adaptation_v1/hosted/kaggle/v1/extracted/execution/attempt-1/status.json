@@ -1,0 +1,6 @@
+{
+  "reason": "RuntimeError: BLOCKED_COST_FULL_CONVERGENCE_MATRIX",
+  "scientific_result": "NOT_EVALUATED",
+  "status": "BLOCKED",
+  "test_data_opened": false
+}

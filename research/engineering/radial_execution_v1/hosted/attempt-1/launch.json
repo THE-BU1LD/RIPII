@@ -1,0 +1,35 @@
+{
+  "response": {
+    "versionNumberNullable": 1,
+    "ref": "/code/ryangomez010/ripii-radial-execution-v1-2100487bfee1",
+    "url": "https://www.kaggle.com/code/ryangomez010/ripii-radial-execution-v1-2100487bfee1",
+    "versionNumber": 1,
+    "hasVersionNumber": true,
+    "error": "",
+    "hasError": false,
+    "invalidTags": [],
+    "invalidDatasetSources": [],
+    "invalidCompetitionSources": [],
+    "invalidKernelSources": [],
+    "invalidModelSources": [],
+    "kernelId": 139960513
+  },
+  "at": "2026-10-21T05:47:10.116430+00:00",
+  "build": {
+    "payload_sha256": "2100487bfee160796e823cd1566321ae16c16c18c7513b627686655365b33fe2",
+    "notebook_sha256": "0b2dd477f79bcc2341babb9e78969b66976b9e9926a99846ba3e047390b223be",
+    "notebook": "/Volumes/PRO-BLADE/GitHubRepos/Personal-Research/RIPII/research/engineering/radial_execution_v1/portable/radial-execution-v1-2100487bfee1.ipynb",
+    "source_files": 63,
+    "budget": {
+      "total_allocated_gpu_hours": 4,
+      "prior_charged_gpu_seconds": 1150.264539096,
+      "this_probe_max_host_seconds": 1200,
+      "export_reserve_seconds": 180,
+      "charged_devices": 2,
+      "cloud_spend_usd": 0
+    }
+  },
+  "private": true,
+  "internet": false,
+  "timeout_seconds": 1440
+}

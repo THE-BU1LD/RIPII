@@ -1,0 +1,9 @@
+{
+  "elapsed_host_seconds": 55.531503935000046,
+  "reserved_export_seconds": 180,
+  "charged_devices": 2,
+  "charged_gpu_seconds": 471.0630078700001,
+  "prior_charged_gpu_seconds": 1150.264539096,
+  "cumulative_charged_gpu_seconds": 1621.327546966,
+  "cloud_spend_usd": 0
+}

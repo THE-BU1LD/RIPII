@@ -1,0 +1,406 @@
+SEPARATING RADIAL STRUCTURE FROM ADAPTIVE GATING IN
+LEARNED DYNAMICS:
+A SPECIFICATION, FALSIFICATION PROTOCOL, AND
+COMPUTE-LIMITED STUDY
+RESEARCH REPORT; ADAPTIVE BENEFIT NOT ESTABLISHED
+Anonymous research draft
+21 October 2026
+ABSTRACT
+A physics-structured predictor can outperform a generic baseline without demonstrating that its
+adaptive component is useful. We examine this distinction for the RIPII radial-mixture model, which
+combines two history-conditioned central-force experts using a bounded scene-dependent gate. Ear-
+lier development results remain inconclusive because training adequacy was not established. We
+specify a new comparison against independently trained ﬁxed gating, graph, pooling, and Trans-
+former predictors, together with a within-checkpoint gate intervention. The protocol requires six
+independent data-generation blocks per domain, two nested initialization seeds, validation-only hy-
+perparameter selection, and explicit training-adequacy checks before test access. Its implementation
+passed ten original CPU numerical tests and full-horizon CUDA backward and checkpoint-replay
+checks for all ﬁve models. A measured cost proﬁle then rejected the 140-ﬁt matrix under the au-
+thorized four allocated GPU-hour budget. No comparison training or test evaluation occurred. We
+report the model, mathematical guarantees and limitations, protocol, retained failure evidence, and
+an engineering investigation of execution overhead. These results establish an executable speciﬁca-
+tion and a concrete feasibility limitation, not a positive scientiﬁc result for adaptive gating.
+Keywords learned dynamics · adaptive gating · mechanism controls · reproducibility · compute-constrained evaluation
+1
+Introduction
+The research question is whether scene-dependent mixing of two radial force experts improves held-out trajectory
+prediction beyond the same radial architecture with a ﬁxed mixture. The distinction matters because geometric
+structure, integration rules, information access, and optimization can each improve a model independently of
+adaptation. A comparison against a generic graph predictor alone cannot identify the adaptive contribution.
+The working hypothesis is precise: under the declared synthetic springs and charged-particle distributions, adequately
+trained adaptive radial prediction reduces mean paired 64-step position error by at least two percent relative to
+independently trained ﬁxed radial prediction in both domains. A stronger mechanism claim additionally requires an
+advantage over replacing each trained adaptive gate by its training-set mean. This claim is falsiﬁable by adequately
+trained controls that match or outperform the adaptive predictor, by inadequate precision, or by failure of the
+intervention requirement.
+The prior radial-mixture v3 study is retained as INCONCLUSIVE_UNDERTRAINED. Its descriptive rankings are not
+converted into conﬁrmatory evidence. The new study is a separate identity, RIPII-RADIAL-ADAPTATION-v1, with
+fresh generator blocks and a protected evaluation boundary. Its question remains unresolved because measured
+execution cost prevented training. This report does not claim perfection, state-of-the-art performance, real-world
+utility, or a new physical law.
+
+Radial adaptation under a compute constraint
+EVIDENCE REPORT
+2
+Related Work and Contribution Boundary
+Interaction Networks explicitly model objects and relations for dynamical prediction [1]. NRI jointly infers latent
+interactions and predicts dynamics from observations [2]; the present experiments use its retained springs and charged-
+particle simulator implementation, not a reproduction of published NRI scores. EGNNs provide an established route
+to geometric equivariance [3]. These precedents rule out describing relational modeling or invariant-to-vector updates
+as new by themselves.
+NIIP instead represents relational constraints through learned energy functions and test-time trajectory optimization
+[4]. Our direct autoregressive predictor does not implement that inference mechanism. In particular, a velocity-
+dependent central force should not be described as an energy-conserving potential model without an additional
+derivation.
+The contribution pursued here is a controlled test of adaptation within a speciﬁed radial predictor. The listed baselines
+are strong matched controls from this project’s history, not a comprehensive current state-of-the-art suite. NRI,
+EGNN, potential-based methods, and task-speciﬁc analytic estimators remain relevant external comparisons before a
+broad superiority claim. No priority claim for the two-expert gate is made.
+CUDA graph execution can reduce repeated host dispatch overhead for static workloads [5]. Its applicability must be
+measured: a software optimization is neither a novel dynamics model nor evidence that the scientiﬁc hypothesis is
+true.
+3
+Problem Formulation
+A scene contains N = 5 objects. Each observed state is xt,i = (pt,i, vt,i) ∈R4, with two-dimensional position and
+velocity. The input history is X ∈RB×8×5×4 and the target forecast is Y ∈RB×64×5×4. Coordinates and velocities
+from the simulator are divided by ﬁve; these are normalized simulator units, not SI measurements. The observation
+interval is ∆t = 0.05.
+The predictor receives past states only. Ground-truth interaction edges are retained in dataset artifacts for provenance
+but never supplied as model inputs. The forecast is autoregressive after the observed context. The ﬁnite history need
+not identify a unique underlying interaction law: observationally equivalent histories can require different future
+forces. Therefore prediction error is the endpoint; recovery of physical parameters is not claimed.
+The optimization objective at curriculum horizon H is
+LH(θ) =
+1
+BHN4
+B
+X
+b=1
+H
+X
+h=1
+N
+X
+i=1
+∥bxb,h,i −xb,h,i∥2
+2 .
+(1)
+The sum notation includes the four state components through the squared norm. Evaluation uses position only:
+RMSEp =
+s
+1
+B 64 N 2
+X
+b,h,i
+∥bpb,h,i −pb,h,i∥2
+2.
+(2)
+Thus training and selection objectives differ explicitly: training weights all normalized state coordinates equally,
+while checkpoint selection minimizes validation position RMSE.
+4
+Complete Radial Model Speciﬁcation
+4.1
+History features
+For every ordered pair i ̸= j, deﬁne relative displacement rij = pi −pj, relative velocity uij = vi −vj, clipped
+distance dij = max(∥rij∥2, 10−4), radial speed sij = rT
+ijuij/dij, and relative speed qij = ∥uij∥2. Concatenating
+(d, s, q) over eight observed times yields 24 inputs per pair. A two-linear-layer MLP with SiLU hidden activation
+maps 24 →64 →64 to produce eij.
+For each object and spatial axis a, concatenate the eight observed (pi,a, vi,a) pairs. An MLP maps 16 →32 →32 to
+produce the axis embedding zi,a. Both embeddings are computed once per forecast and held ﬁxed while the predicted
+state evolves.
+2
+
+Radial adaptation under a compute constraint
+EVIDENCE REPORT
+4.2
+Experts and gate
+At each forecast step, form
+ξij = [eij, dij, min(d−1
+ij , 100), sij, qij] ∈R68.
+(3)
+Two independent MLPs map 68 →64 →1; their outputs are bounded by tanh, giving f A
+ij, f B
+ij ∈[−1, 1].
+The scene statistic vector contains mean and population standard deviation of directed-pair distance, mean absolute
+radial speed, and mean object speed. Concatenate it with the mean pair embedding to obtain 68 gate inputs. A
+68 →64 →1 MLP followed by a sigmoid gives
+g = 0.05 + 0.90 σ(G([e, stats])).
+(4)
+The adaptive coefﬁcient is shared across all pairs in a scene at that forecast step. The ﬁxed model sets g = 0.5. It
+retains the gate module in serialization, but the gate parameters are inactive; equal stored parameter counts do not
+imply equal effective capacity.
+The pair acceleration contribution is
+apair
+ij
+= 20 [gf A
+ij + (1 −g)f B
+ij ] rij
+dij
+.
+(5)
+An axis-shared 34 →32 →1 MLP receives [zi,a, pi,a, vi,a] and gives awall
+i,a
+= 20 tanh(W([zi,a, pi,a, vi,a])). Total
+acceleration is the sum over senders plus this boundary term.
+4.3
+Integration, initialization, and complexity
+The update is semi-implicit Euler:
+vt+1,i = vt,i + ∆t at,i,
+pt+1,i = pt,i + ∆t vt+1,i.
+(6)
+The output linear layers of both experts and the boundary head start at zero. Consequently the initial predictor is
+constant velocity, while the gate is initially unidentiﬁable from prediction: both expert outputs coincide. Standard
+module initialization is retained for the other layers. No auxiliary gate loss or supervised edge objective is used.
+For width w, pair computation is O(BHN 2w2) and stored unrolled activations are O(BHN 2w) up to layer-
+dependent constants. The implementation explicitly ﬁxes N = 5 through its receiver/sender buffers; variable-size
+generalization is not demonstrated. The adaptive model contains 21,956 stored and gradient-active parameters. Fixed
+radial stores the same number but has 17,475 gradient-active parameters in the qualiﬁcation check.
+4.4
+What is and is not guaranteed
+Under pair reversal, both r and u change sign. Distance, radial speed, and relative-speed history remain unchanged, so
+paired expert coefﬁcients match. The shared scene gate also matches. Hence apair
+ij
+= −apair
+ji , and the sum of internal
+pair accelerations is zero up to numerical error. This is an internal-force identity under the equal-mass interpretation.
+The external boundary term can change total momentum.
+Central direction alone does not imply energy conservation: the coefﬁcients depend on velocity and history and need
+not derive from a scalar potential. Semi-implicit Euler is not exact dynamics. The learned axis boundary term does
+not guarantee arbitrary rotational equivariance. These limits prevent extending a numerical momentum check into a
+claim of general physical correctness.
+5
+Controls and Identiﬁability
+The primary comparator is a separately initialized and trained ﬁxed-radial model with the same two experts, history
+encoders, boundary term, and integration rule. It isolates the trainable gate only imperfectly: the optimization path
+and effective parameter count also differ.
+A second comparison intervenes on the selected adaptive checkpoint. The replacement gate is its mean over training
+scenes and forecast steps. Test observations never determine this constant. This intervention retains the trained experts
+and removes scene-dependent gate variation, but can create an off-training-distribution internal representation. It is
+therefore a diagnostic requirement in addition to, not a substitute for, independently trained ﬁxed gating.
+The generic controls are the retained graph, global-pool, and Transformer implementations, each receiving the same
+eight-frame state history and 64-step objective. Widths are chosen by the frozen search grid to minimize stored
+3
+
+Radial adaptation under a compute constraint
+EVIDENCE REPORT
+parameter-count difference. Qualiﬁcation records 23,296 parameters for graph, 21,796 for pooling, and 22,756 for
+Transformer. The graph and pooling implementations use distance-threshold interactions; the Transformer has two
+encoder layers, four attention heads, zero dropout, and a feed-forward width twice its hidden width. These are project
+controls, not veriﬁed reproductions of external published baselines.
+6
+Prospective Experimental Protocol
+6.1
+Data and protected boundary
+The two domains are springs and charged particles from the pinned NRI simulator. The exact source and upstream
+license are vendored in the retained package. Each ﬁt uses 512 training scenes and 128 validation scenes. Each test
+regime would use 128 scenes. Sampling uses 50 simulator steps per observation and retains 72 observations. Every
+saved scene must have the declared shape and ﬁnite values.
+Calibration uses generator block 5100011 and initialization seed 61001. Main blocks are 5200011, 5300021,
+5400031, 5500041, 5600051, and 5700061; nested initialization seeds are 62003 and 63001. A dataset seed is
+100b + cd + cs + cr, where domain offsets are 0/50, split offsets are 1/2/3, and regime offsets are 0/10/20/30. This
+makes the declared identities disjoint; it is not a proof of all possible forms of leakage.
+The standard regime uses upstream defaults. Strong interaction uses strength 0.15 for springs and 1.5 for charged
+particles; fast motion uses velocity norm 0.75; noisy observations use noise variance parameter 0.01. The original
+simulator semantics govern these parameters. Regime changes are test-only. Test datasets may be generated only after
+every selected main ﬁt passes adequacy and the selection manifest is frozen.
+6.2
+Training and adequacy
+Two learning rates, 10−3 and 3 × 10−4, are calibrated independently per domain and model using eligible validation
+performance. This gives 2 × 5 × 2 = 20 calibration ﬁts; the main matrix contains 2 × 6 × 2 × 5 = 120 ﬁts.
+Training uses AdamW, weight decay 10−4, batch size 16, and global gradient-norm clipping at 1.0. A CPU generator
+selects scenes and valid temporal windows. Curriculum horizons are 1, 2, 4, 8, 16, and 32 for consecutive 500-update
+stages, followed by horizon 64. Validation occurs every 500 updates using the full 64-step forecast. A plateau
+scheduler multiplies the learning rate by 0.5 after patience 2, with minimum 3 × 10−6.
+No ﬁt is eligible before 6,000 updates. The maximum is 16,000. At least ﬁve full-horizon validation records are
+required. Both training and validation best-so-far position errors must improve by no more than one percent over
+the ﬁnal four checks, and the selected checkpoint’s training position RMSE must be at most 75 percent of constant
+velocity on the same training scenes. Only checkpoints trained at horizon 64 can be selected. The selected checkpoint
+is reloaded and its metrics recomputed.
+These conditions reject important forms of undertraining, but do not prove global optimality: a stalled poor optimizer
+can plateau, and ﬁnite thresholds are conventions. Failure of any required ﬁt blocks test access. No failed seed is
+silently replaced.
+6.3
+Inference and decision rules
+For each domain and generator block, average error over the two nested initialization seeds before comparing
+methods. The generator block, not a forecast frame or an optimization seed, is the independent unit. Deﬁne block
+gain Gb = (Rb −Cb)/Rb and log error ratio Lb = log(Rb/Cb) for reference R and candidate C.
+The one-sided paired sign-permutation test enumerates all 26 sign assignments to the six Lb values. This test relies
+on the relevant exchangeability/symmetry assumption under its null; independent simulation blocks alone do not
+prove that assumption. Holm adjustment covers the two primary domain comparisons. Adaptive beneﬁt requires
+mean gain at least two percent, positive gain in every block, and adjusted p ≤0.05 in both domains. The mechanism
+diagnostic also requires at least two percent mean gain and positive gains in every block against the training-mean
+gate intervention.
+Separate gates require at least ﬁve percent mean gain against each generic baseline, with every block positive, and no
+more than ﬁve percent regression in any OOD block against the trained comparators. Passing the adaptive primary
+gate does not automatically pass these stronger gates. Raw per-scene and per-horizon errors and predictions are
+retained for replay. With six independent units, inference remains coarse; uncertainty must be interpreted within this
+synthetic scope.
+4
+
+Radial adaptation under a compute constraint
+EVIDENCE REPORT
+7
+Observed Results
+7.1
+Engineering qualiﬁcation and cost refusal
+The new study passed 14 local control tests, ten original hosted CPU numerical tests without skips, and CUDA
+full-horizon backward/checkpoint-replay checks for all ﬁve models. These are executable-model checks, not efﬁcacy
+experiments.
+Table 1: Measured full-horizon update time on the initial T4 worker. Maximum of ﬁve timed updates after warm-up;
+these are engineering measurements.
+Model
+Seconds per update
+radial_mixture
+0.535
+radial_ﬁxed
+0.470
+graph
+0.999
+simple_pool
+0.959
+transformer
+0.754
+Real calibration training-data generation took 278.41 seconds. The minimum-update matrix projection was 179.10
+host-hours; the maximum-step estimate with safety margin was 721.99 host-hours. The allowed host duration was
+two hours because both allocated T4 devices count toward the four-GPU-hour cap.
+The initial run elapsed 395.13 seconds. Including the 180-second export reserve, its conservative charge was
+0.3195 allocated GPU-hours. Cloud spend was zero. The retained terminal status is cost-blocked, with zero of 140
+comparison ﬁts completed and no test data opened.
+The minimum-update projection scales measured full-horizon training/validation timing to 6,000 updates across the
+matrix. It does not credit cheaper early curriculum stages and is not a mathematical lower bound. The maximum
+estimate includes data, evaluation, and a 1.5 safety factor. Neither projection guarantees adequate training. Their
+role is resource admission. No adaptive-versus-ﬁxed effect size, ablation score, conﬁdence interval, or positive test
+conclusion exists for this new study.
+7.2
+Execution optimization investigation
+The engineering candidate removes repeated host-side tensor-value checks from the inner rollout, evaluates ﬁxed-
+shape dense edge messages with explicit masks, and captures repeated CUDA training operations. Public entry checks
+and post-update ﬁnite checks remain necessary; diagnostics can be computed using the original model outside the
+timed training kernel. Dense masking must preserve the dynamic distance threshold and its gradient behavior.
+Qualiﬁcation compares original and optimized outputs and parameter gradients at horizons 1, 8, and 64 after nonzero
+head perturbations; zero-initialized heads alone would be a vacuous test. It additionally checks edge-threshold
+cases, optimizer updates, serialization, invalid input rejection, and captured-versus-eager updates with changing
+data. Predeclared numerical tolerances are absolute 2 × 10−5 and relative 2 × 10−4; checkpoint replay is exact. A
+mismatch rejects equivalence rather than authorizing relaxed tolerances after inspection. The amended execution
+candidate passed all ﬁve model ﬁxtures at the scientiﬁc weight decay 10−4, including a captured tensor learning-rate
+change from 0.001 to 0.0005. The initial optimizer ﬁxture at default weight decay 0.01 is retained as a separate earlier
+attempt.
+The largest absolute parameter-gradient and ordinary optimizer-update differences were 2.38e-07 and 3.99e-07,
+respectively. Captured-versus-eager optimizer updates and serialized forecast replay were exact in the tested cases.
+These ﬁnite ﬁxtures are not a proof over every input or an independently reproduced training campaign.
+The update-only minimum-step extrapolation is 13.10 host-hours, excluding data generation, validation, graph
+capture, serialization, and safety reserve. This remains above the remaining authorized host time; the full study was
+not admitted. All three numerical attempts together charge 0.5748 allocated GPU-hours, including export reserves,
+with zero cloud spend.
+8
+Failure Analysis and Adversarial Audit
+The central unresolved issue is identiﬁability of adaptive value. A radial model can gain through its geometric prior
+while a ﬁxed mixture provides the same forecast quality. Expert label exchange leaves the mixture unchanged after
+5
+
+Radial adaptation under a compute constraint
+EVIDENCE REPORT
+Table 2: Protocol-matched captured training-step measurements. Maximum of seven timed updates; engineering
+ﬁxtures only.
+Model
+Seconds per update
+radial_mixture
+0.0537
+radial_ﬁxed
+0.0482
+graph
+0.0600
+simple_pool
+0.0621
+transformer
+0.0566
+Adaptive radial
+Fixed radial
+Graph
+Pooling
+Transformer
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+Seconds per update
+Initial eager profile
+Qualified capture fixture
+Figure 1: Descriptive update timings from separate Kaggle T4 runs. The plotted maxima use ﬁve measured initial
+updates and seven captured updates. Hardware state, ﬁxture setup, and timing boundaries differ; this is not a paired
+speedup estimate or an efﬁcacy result.
+complementing the gate; equal experts make the gate irrelevant. Gate variance alone therefore cannot establish a
+causal or physical interpretation.
+The principal experiment-design defect is feasibility. A 140-ﬁt convergence-aware matrix is disproportionate to a
+four-GPU-hour budget with the measured implementation. This was discovered before protected outcomes, and
+the refusal is retained. Reducing steps after observing this refusal would recreate the original adequacy problem.
+Reducing domains, seeds, or comparators would change the scientiﬁc question and requires a separately declared
+study.
+Other material limitations are the ﬁxed object count, synthetic data, incomplete effective-capacity matching, lack of
+wall-time matching across all controls, coarse independent-unit inference, unproven latest-baseline coverage, and
+incomplete independent reproduction. The repository’s ﬂaw register maps each issue to its cause, repair, and required
+acceptance evidence. Passing software checks does not close these scientiﬁc gaps.
+9
+Discussion and Limitations
+This work has established neither that adaptation helps nor that it is useless. The new study has no test outcomes. The
+earlier undertrained study cannot resolve the missing comparison, and a faster implementation cannot supply an effect
+estimate by itself.
+The next experiment is justiﬁed only if measured end-to-end cost ﬁts the remaining authorization and equivalence
+checks pass. Otherwise the honest endpoint is an unresolved hypothesis with a documented feasibility limit. A
+future narrower question can be worthwhile, but its claims must match its domains, baselines, and independent
+units. Real-world performance, stability over longer horizons, object-count scaling, calibrated uncertainty, and
+physical-parameter recovery remain untested.
+6
+
+Radial adaptation under a compute constraint
+EVIDENCE REPORT
+The ﬁnite engineering ﬁxtures do not prove functional equality for every possible input. Conversely, a numerical
+mismatch may reﬂect reduction order or a true bug; it must be explained before substituting an implementation.
+Repeated attempts to obtain a passing benchmark would need a ﬁxed development budget and preserved failures.
+10
+Reproducibility and Release Status
+The reference source freeze, protocol, predecessor hashes, raw Kaggle archive, environment, per-model qualiﬁcation
+records, cost proﬁle, charge ledger, and failure trace are retained. The scientiﬁc output archive SHA-256 begins
+9f7bdfcd5ae30fe7; the source freeze begins 2904cd7cb3487219. Full digests and artifact paths appear in the
+repository evidence manifest.
+The original study and engineering probe use separate identities. Budget accounting carries prior charges forward and
+counts both allocated T4 devices even when one device executes the worker. Local heavy work was refused when
+resource admission failed. Cloud runs use free Kaggle only and no paid scaling.
+The manuscript uses the retained user-supplied arXiv style without modifying its bytes. Its layout is not proof of arXiv
+acceptance. Authorship, afﬁliations, licensing of the whole release, and submission authorization are not inferred.
+This anonymous research draft is an evidence report, not a submission-ready positive-results paper.
+11
+Conclusion
+A controlled adaptive-versus-ﬁxed comparison requires adequate training and a mechanism-speciﬁc intervention. We
+implemented that comparison and veriﬁed its executable components, but measured cost prevented the experiment
+under its declared budget. The hypothesis remains untested in the new study. The defensible result is the exact model
+speciﬁcation, preserved evidence boundary, and measured feasibility failure, together with a separately qualiﬁed
+attempt to reduce execution overhead. No unsupported positive conclusion is substituted for missing experiments.
+AI Use
+AI assistance supported implementation, auditing, literature retrieval, and drafting. Retained artifacts determine
+numerical claims. Human authors remain responsible for scientiﬁc interpretation, attribution, licensing, and any
+submission.
+A
+Evidence and Acceptance Requirements
+A valid efﬁcacy claim requires the chain: frozen protocol and source; complete calibration and main-ﬁt inventory;
+passed adequacy records; frozen validation-only selections; raw protected predictions and targets; independent metric
+and statistical replay; and ﬁgures/tables regenerated from those records. None of the engineering checks replaces the
+missing trained-model portion of this chain.
+The ﬁxed-radial comparison, within-checkpoint gate intervention, generic-baseline gate, and OOD gate must be
+reported separately. A failure in one cannot be concealed by averaging it with a success in another. A missing
+comparison is reported as missing, not zero improvement.
+References
+[1] P. W. Battaglia, R. Pascanu, M. Lai, D. Rezende, and K. Kavukcuoglu. Interaction Networks for Learning about
+Objects, Relations and Physics. NeurIPS, 2016. https://arxiv.org/abs/1612.00222.
+[2] T. Kipf, E. Fetaya, K.-C. Wang, M. Welling, and R. Zemel. Neural Relational Inference for Interacting Systems.
+ICML, 2018. https://arxiv.org/abs/1802.04687.
+[3] V. Garcia Satorras, E. Hoogeboom, and M. Welling. E(n) Equivariant Graph Neural Networks. ICML, 2021.
+https://arxiv.org/abs/2102.09844.
+[4] A. Comas-Massagué et al. Inferring Relational Potentials in Interacting Systems. ICML, 2023. https://arxiv.
+org/abs/2310.14466.
+[5] V. Nguyen et al. Accelerating PyTorch with CUDA Graphs. PyTorch, 2021. https://pytorch.org/blog/
+accelerating-pytorch-with-cuda-graphs/.
+7
