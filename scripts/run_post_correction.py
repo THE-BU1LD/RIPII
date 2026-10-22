@@ -14,7 +14,7 @@ import subprocess
 import sys
 import threading
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -435,7 +435,7 @@ def safely_verified_cell(output: Path, mode: str, seed: int) -> bool:
 
 
 def quarantine(path: Path) -> Path:
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
+    stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%S.%fZ")
     target = path.with_name(f"{path.name}.incomplete.{stamp}")
     path.rename(target)
     return target
@@ -478,7 +478,7 @@ def run_cell(
                 "seed": seed,
                 "event": "quarantined_incomplete",
                 "path": str(moved),
-                "at": datetime.now(timezone.utc).isoformat(),
+                "at": datetime.now(UTC).isoformat(),
             }
         )
     elif cell.exists():
@@ -516,7 +516,7 @@ def run_cell(
                 "attempt": attempt,
                 "event": "cell_started",
                 "log": str(log_path),
-                "at": datetime.now(timezone.utc).isoformat(),
+                "at": datetime.now(UTC).isoformat(),
             }
         )
         with log_path.open("w", encoding="utf-8") as log:
@@ -537,7 +537,7 @@ def run_cell(
                         "seed": seed,
                         "attempt": attempt,
                         "event": "cell_complete",
-                        "at": datetime.now(timezone.utc).isoformat(),
+                        "at": datetime.now(UTC).isoformat(),
                     }
                 )
                 print(f"completed {mode} seed={seed}", flush=True)
@@ -551,7 +551,7 @@ def run_cell(
                 "attempt": attempt,
                 "event": "cell_attempt_failed",
                 "error": error,
-                "at": datetime.now(timezone.utc).isoformat(),
+                "at": datetime.now(UTC).isoformat(),
             }
         )
         moved = quarantine(cell)
@@ -562,7 +562,7 @@ def run_cell(
                 "attempt": attempt,
                 "event": "quarantined_incomplete",
                 "path": str(moved),
-                "at": datetime.now(timezone.utc).isoformat(),
+                "at": datetime.now(UTC).isoformat(),
             }
         )
     raise RuntimeError(error)
@@ -755,7 +755,7 @@ def main() -> None:
         launch = {
             "format": "ripii-post-correction-launch-v2",
             "status": "running",
-            "started_at": datetime.now(timezone.utc).isoformat(),
+            "started_at": datetime.now(UTC).isoformat(),
             "seeds": list(SEEDS),
             "modes": list(MODES),
             "steps": TARGET_STEPS,
@@ -791,7 +791,7 @@ def main() -> None:
                         "mode": mode,
                         "event": "quarantined_invalid_mode",
                         "path": str(moved),
-                        "at": datetime.now(timezone.utc).isoformat(),
+                        "at": datetime.now(UTC).isoformat(),
                     }
                 )
                 write_json(launch_path, launch)
@@ -827,7 +827,7 @@ def main() -> None:
                             {
                                 "event": "sentinel_complete",
                                 "verified_cells": processed_cells,
-                                "at": datetime.now(timezone.utc).isoformat(),
+                                "at": datetime.now(UTC).isoformat(),
                             }
                         )
                         write_json(launch_path, launch)
@@ -852,7 +852,7 @@ def main() -> None:
                     "mode": mode,
                     "event": launch["status"],
                     "error": str(exc)[:1000],
-                    "at": datetime.now(timezone.utc).isoformat(),
+                    "at": datetime.now(UTC).isoformat(),
                 }
             )
             write_json(launch_path, launch)
@@ -862,7 +862,7 @@ def main() -> None:
             {
                 "mode": mode,
                 "event": "complete",
-                "at": datetime.now(timezone.utc).isoformat(),
+                "at": datetime.now(UTC).isoformat(),
             }
         )
         write_json(launch_path, launch)
@@ -878,7 +878,7 @@ def main() -> None:
         rows.extend(mode_rows)
     summary_path = output / "study_summary.json"
     launch["status"] = "complete"
-    launch["completed_at"] = datetime.now(timezone.utc).isoformat()
+    launch["completed_at"] = datetime.now(UTC).isoformat()
     write_json(launch_path, launch)
     write_json(
         summary_path,
@@ -912,3 +912,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

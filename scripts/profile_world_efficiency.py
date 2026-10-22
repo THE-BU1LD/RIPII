@@ -5,7 +5,7 @@ import hashlib
 import json
 import math
 import platform
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import torch
@@ -130,7 +130,7 @@ def analyze(run_dir: Path, *, warmup: int = 5, repeats: int = 20) -> dict:
     result = {
         "format": "ripii-world-suite-profile-v1",
         "evidence_status": "engineering_efficiency_measurement",
-        "created_at_utc": datetime.now(timezone.utc).isoformat(),
+        "created_at_utc": datetime.now(UTC).isoformat(),
         "source_run": run_dir.name,
         "source_protocol_sha256": _sha256(protocol_path),
         "run_verification": verification,
@@ -195,3 +195,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
