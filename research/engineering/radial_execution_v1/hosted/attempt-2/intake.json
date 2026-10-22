@@ -1,0 +1,24 @@
+{
+  "archive_sha256": "5e148c69d887a6f13cc613052f83f0db4e3ad69273ac501244eb13b3bb556c09",
+  "manifest_files": 75,
+  "exact_prelaunch_source_match": true,
+  "charge": {
+    "elapsed_host_seconds": 43.95943669000002,
+    "reserved_export_seconds": 180,
+    "charged_devices": 2,
+    "charged_gpu_seconds": 447.91887338000004,
+    "prior_charged_gpu_seconds": 1621.327546966,
+    "cumulative_charged_gpu_seconds": 2069.246420346,
+    "cloud_spend_usd": 0
+  },
+  "status": "PASS",
+  "summary": {
+    "engineering_status": "PASS",
+    "scientific_result": "NOT_EVALUATED",
+    "comparison_fits": 0,
+    "test_data_opened": false,
+    "minimum_update_only_host_seconds": 47156.5177439993,
+    "maximum_update_only_host_seconds": 125750.71398399814,
+    "cost_caveat": "Update-only extrapolation excludes data, validation, capture, serialization and safety reserve."
+  }
+}

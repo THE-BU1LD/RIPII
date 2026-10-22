@@ -1,0 +1,92 @@
+{
+  "study": "RIPII-RADIAL-ADAPTATION-v1",
+  "status": "QUALIFIED_COST_BLOCKED",
+  "scientific_result": "NOT_EVALUATED",
+  "test_data_opened": false,
+  "protocol": "protocol.json",
+  "source_freeze": "FROZEN.json",
+  "previous_results_preserved": true,
+  "budget": {
+    "allocated_gpu_hours": 4,
+    "host_wall_seconds": 7200,
+    "allocated_gpus": 2,
+    "cloud_spend_usd": 0,
+    "charged_allocated_gpu_hours": 0.5747906723183334,
+    "remaining_allocated_gpu_hours": 3.4252093276816664,
+    "charge_includes_export_reserve": true,
+    "original_study_charge_gpu_hours": 0.31951792752666663,
+    "accounting_scope": "Original study plus both engineering qualification attempts, same original 4 GPU-hour authorization"
+  },
+  "url": "https://www.kaggle.com/code/ryangomez010/ripii-radial-adaptation-v1-4138f62b0ba1",
+  "history": [
+    {
+      "at": "2026-10-21T05:02:53.927112+00:00",
+      "control_tests": 14,
+      "control_tests_status": "PASS",
+      "ast": "PASS",
+      "ruff": "PASS",
+      "source_allowlist_secret_pattern_findings": [],
+      "source_files": 58,
+      "historical_evidence": "PRESERVED_HASH_VERIFIED",
+      "local_numerical_tests": "NOT_RUN_RESOURCE_BLOCKED",
+      "budget_user_authorized_gpu_hours": 4,
+      "cloud_spend_usd": 0
+    },
+    {
+      "at": "2026-10-21T05:04:09.272130+00:00",
+      "action": "Save & Run All requested; private notebook; GPU T4 x2; draft session remains off; no duplicate run",
+      "payload_sha256": "4138f62b0ba1677817fa80fa05911567c71f611052ebdc788ae16d95e47f4a41"
+    },
+    {
+      "at": "2026-10-21T05:40:29.473820+00:00",
+      "action": "Downloaded completed Kaggle version 1; safe archive intake and exact local source/protocol binding PASS; qualified CPU/CUDA; stopped before tuning at frozen cost gate. Historical evidence unchanged.",
+      "status": "QUALIFIED_COST_BLOCKED",
+      "scientific_result": "NOT_EVALUATED"
+    },
+    {
+      "at": "2026-10-21T06:01:26.234998+00:00",
+      "action": "Protocol-matched CUDA execution candidate qualified in separate engineering study; full matrix still infeasible. Cumulative allocated GPU charge carried forward.",
+      "cumulative_gpu_hours": 0.5747906723183334
+    }
+  ],
+  "uploaded": true,
+  "executed": true,
+  "comparison_fits": 0,
+  "evaluation_cells": 0,
+  "advance": false,
+  "hosted_version_id": 360654457,
+  "hosted_version_number": 1,
+  "receipt": "hosted/kaggle/v1/intake-receipt.json",
+  "profile": "hosted/kaggle/v1/extracted/execution/attempt-1/profile.json",
+  "next_action": "No scientific training admitted: optimized update-only matrix still projects 13.10 host-hours versus 1.71 remaining dual-T4 hours. Review PR32 and evidence report. Authorship/affiliations/license input and independently reproduced adequate scientific comparison remain open.",
+  "qualification": {
+    "local_control_tests": 14,
+    "hosted_original_cpu_tests": 10,
+    "hosted_cuda_models_full_horizon_backward_and_checkpoint_replay": 5,
+    "status": "PASS",
+    "scientific_training_adequacy": "NOT_EVALUATED"
+  },
+  "cost_profile": {
+    "minimum_steps_estimate_host_hours": 179.09713398714612,
+    "maximum_steps_safety_estimate_host_hours": 721.9934919100564,
+    "estimate_caveat": "Full-horizon timings extrapolated across the matrix; not an observed training duration or guarantee of convergence."
+  },
+  "execution_optimization": {
+    "state": "../../engineering/radial_execution_v1/STATE.json",
+    "status": "PROTOCOL_MATCHED_FIXTURE_PASS_COST_STILL_BLOCKED",
+    "minimum_update_only_host_hours": 13.099032706666472,
+    "scientific_training_admitted": false
+  },
+  "paper": {
+    "source": "../../../paper/radial_adaptation_20261021/main.tex",
+    "pdf": "../../../output/pdf/ripii-radial-adaptation-evidence.pdf",
+    "pages": 7,
+    "compiled_and_visually_reviewed": true,
+    "submission_ready": false
+  },
+  "publication": {
+    "pull_request": "https://github.com/THE-BU1LD/RIPII/pull/32",
+    "commit": "ebb8de62de2a28543802b05cf1d3e4ec2d927599",
+    "draft": true
+  }
+}

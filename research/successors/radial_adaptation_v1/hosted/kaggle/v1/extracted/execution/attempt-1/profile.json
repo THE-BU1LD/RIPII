@@ -1,0 +1,34 @@
+{
+  "gate": "BLOCKED_COST",
+  "minimum_steps_projection_seconds": 644749.682353726,
+  "projected_maximum_seconds": 2599176.570876203,
+  "real_data_seconds": 278.409840141,
+  "remaining_seconds": 6637.443760972,
+  "rows": [
+    {
+      "model": "radial_mixture",
+      "step_seconds_max": 0.5350072409999598,
+      "validation_and_train_seconds": 8.332424937000042
+    },
+    {
+      "model": "radial_fixed",
+      "step_seconds_max": 0.47000462600004767,
+      "validation_and_train_seconds": 7.244196191999947
+    },
+    {
+      "model": "graph",
+      "step_seconds_max": 0.9993101700000011,
+      "validation_and_train_seconds": 15.772087241000008
+    },
+    {
+      "model": "simple_pool",
+      "step_seconds_max": 0.9587913189999995,
+      "validation_and_train_seconds": 17.27228743699999
+    },
+    {
+      "model": "transformer",
+      "step_seconds_max": 0.7543082149999805,
+      "validation_and_train_seconds": 11.566082841000025
+    }
+  ]
+}

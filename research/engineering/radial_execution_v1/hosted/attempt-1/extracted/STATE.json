@@ -1,0 +1,26 @@
+{
+  "study": "RIPII-RADIAL-EXECUTION-v1",
+  "type": "Engineering equivalent optimization candidate, not a new efficacy hypothesis",
+  "status": "IMPLEMENTED_NOT_QUALIFIED",
+  "scientific_result": "NOT_EVALUATED",
+  "test_data_opened": false,
+  "budget": {
+    "total_allocated_gpu_hours": 4,
+    "prior_charged_gpu_seconds": 1150.264539096,
+    "this_probe_max_host_seconds": 1200,
+    "export_reserve_seconds": 180,
+    "charged_devices": 2,
+    "cloud_spend_usd": 0
+  },
+  "reference": "../../successors/radial_adaptation_v1",
+  "falsifier": "Any output, gradient, optimizer or serialized replay mismatch above fixed tolerance rejects equivalence; no full matrix admission without a complete measured cost gate.",
+  "tolerances": {
+    "atol": 2e-05,
+    "rtol": 0.0002,
+    "serialized_replay_atol": 0,
+    "serialized_replay_rtol": 0
+  },
+  "protected_boundary": "No scientific data, calibration outcomes or test splits used; only random engineering fixtures.",
+  "authorization": "2026-10-21 attached full-pipeline request; inherited 4 GPU-hour free-Kaggle cap",
+  "created_at_utc": "2026-10-21T05:45:40.630055+00:00"
+}

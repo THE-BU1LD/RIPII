@@ -1,0 +1,12 @@
+{
+  "status": {
+    "status": "COMPILED_AND_RENDERED",
+    "gpu_used": false,
+    "cloud_spend_usd": 0,
+    "pages": 7,
+    "elapsed_cpu_host_seconds": 54.951439805999996
+  },
+  "exact_prelaunch_source_match": true,
+  "manifest_files": 24,
+  "archive_sha256": "f25954758cd0ddc0a19aa44b10651f445f6b12e34af72cd09b011f92af3161de"
+}

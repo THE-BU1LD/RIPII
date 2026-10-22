@@ -1,0 +1,21 @@
+{
+  "response": {
+    "versionNumberNullable": 1,
+    "ref": "/code/ryangomez010/ripii-radial-execution-v1-a9bc3d2b1442",
+    "url": "https://www.kaggle.com/code/ryangomez010/ripii-radial-execution-v1-a9bc3d2b1442",
+    "versionNumber": 1,
+    "hasVersionNumber": true,
+    "error": "",
+    "hasError": false,
+    "invalidTags": [],
+    "invalidDatasetSources": [],
+    "invalidCompetitionSources": [],
+    "invalidKernelSources": [],
+    "invalidModelSources": [],
+    "kernelId": 139961365
+  },
+  "notebook_sha256": "e57f22a94d9d40f33ed6cf1495e80613419967ae50d47e18e9525a1d81884bbe",
+  "private": true,
+  "gpu": true,
+  "internet": false
+}

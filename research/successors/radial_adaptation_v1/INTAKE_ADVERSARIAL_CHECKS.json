@@ -1,0 +1,9 @@
+{
+  "checks": [
+    "traversal: PASS",
+    "absolute: PASS",
+    "symlink: PASS",
+    "missing receipts: PASS"
+  ],
+  "status": "PASS"
+}

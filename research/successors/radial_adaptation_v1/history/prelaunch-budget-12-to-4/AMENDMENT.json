@@ -1,0 +1,6 @@
+{
+  "reason": "User explicitly selected free Kaggle only, 4 GPU-hours and $0",
+  "before_any_numerical_execution": true,
+  "scientific_rules_changed": false,
+  "available_accelerator": "GPU T4 x2; charge both allocated GPUs"
+}

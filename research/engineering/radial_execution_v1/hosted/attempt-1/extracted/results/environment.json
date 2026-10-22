@@ -1,0 +1,6 @@
+{
+  "torch": "2.11.0+cu128",
+  "python": "3.13.15",
+  "device": "Tesla T4",
+  "devices": 2
+}

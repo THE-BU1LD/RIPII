@@ -1,0 +1,21 @@
+{
+  "response": {
+    "versionNumberNullable": 1,
+    "ref": "/code/ryangomez010/ripii-radial-paper-2a84bad5af57",
+    "url": "https://www.kaggle.com/code/ryangomez010/ripii-radial-paper-2a84bad5af57",
+    "versionNumber": 1,
+    "hasVersionNumber": true,
+    "error": "",
+    "hasError": false,
+    "invalidTags": [],
+    "invalidDatasetSources": [],
+    "invalidCompetitionSources": [],
+    "invalidKernelSources": [],
+    "invalidModelSources": [],
+    "kernelId": 139961908
+  },
+  "notebook_sha256": "718effe746c94d780813e4edbd75827da70202f0eaf24283d01eac6c54fb73e2",
+  "private": true,
+  "gpu": false,
+  "internet": true
+}

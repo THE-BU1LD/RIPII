@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-21T05:55:01.923696+00:00",
+  "head": "b612f235500bc9d678ccf29cf2372ff2cf1d2b24",
+  "scope": "Radial execution qualification, evidence paper, scoped GitHub publication; original 4 GPU-hour and zero-dollar cap preserved",
+  "local_memory_sample_1_mib": 296.796875,
+  "local_memory_sample_2_mib": 215.15625,
+  "pageouts": [
+    79692,
+    82123
+  ],
+  "local_heavy_work": "BLOCKED_RESOURCE",
+  "process_ownership": "No prior Kaggle run reserved quota at prelaunch check; local heavy work not admitted"
+}

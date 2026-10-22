@@ -1,0 +1,28 @@
+{
+  "reasons": [],
+  "samples": [
+    {
+      "conflicts": [],
+      "disk": 20939706368,
+      "errors": [],
+      "free": 32534048768,
+      "free_metric": "MemAvailable",
+      "pageouts": 0,
+      "swapins": 0,
+      "swapouts": 0,
+      "time": 1792559028.6720917
+    },
+    {
+      "conflicts": [],
+      "disk": 20939706368,
+      "errors": [],
+      "free": 32535334912,
+      "free_metric": "MemAvailable",
+      "pageouts": 0,
+      "swapins": 0,
+      "swapouts": 0,
+      "time": 1792559031.696199
+    }
+  ],
+  "status": "PASS"
+}

@@ -1,0 +1,110 @@
+{
+  "study": "RIPII-RADIAL-ADAPTATION-v1",
+  "scope": "Prospective synthetic successor informed by terminal v3 development; no real-world or publication claim",
+  "domains": [
+    "springs",
+    "charged"
+  ],
+  "models": [
+    "radial_mixture",
+    "radial_fixed",
+    "graph",
+    "simple_pool",
+    "transformer"
+  ],
+  "calibration_blocks": [
+    5100011
+  ],
+  "data_blocks": [
+    5200011,
+    5300021,
+    5400031,
+    5500041,
+    5600051,
+    5700061
+  ],
+  "calibration_model_seed": 61001,
+  "model_seeds": [
+    62003,
+    63001
+  ],
+  "learning_rates": [
+    0.001,
+    0.0003
+  ],
+  "weight_decay": 0.0001,
+  "context": 8,
+  "forecast": 64,
+  "objects": 5,
+  "train_scenes": 512,
+  "validation_scenes": 128,
+  "test_scenes": 128,
+  "batch_size": 16,
+  "candidate_hidden": 64,
+  "curriculum": [
+    [
+      500,
+      1
+    ],
+    [
+      1000,
+      2
+    ],
+    [
+      1500,
+      4
+    ],
+    [
+      2000,
+      8
+    ],
+    [
+      2500,
+      16
+    ],
+    [
+      3000,
+      32
+    ],
+    [
+      16000,
+      64
+    ]
+  ],
+  "minimum_steps": 6000,
+  "maximum_steps": 16000,
+  "validate_every": 500,
+  "plateau_window": 4,
+  "maximum_tail_improvement": 0.01,
+  "maximum_training_cv_ratio": 0.75,
+  "scheduler": {
+    "kind": "ReduceLROnPlateau",
+    "factor": 0.5,
+    "patience": 2,
+    "minimum_lr": 3e-06
+  },
+  "primary_metric": "64-step position RMSE in normalized NRI units",
+  "selection_metric": "validation_position_rmse",
+  "minimum_adaptive_improvement": 0.02,
+  "minimum_baseline_improvement": 0.05,
+  "alpha": 0.05,
+  "regimes": [
+    "standard",
+    "strong_interaction",
+    "fast",
+    "noisy"
+  ],
+  "maximum_ood_regression": 0.05,
+  "free_gpu_hours_cap": 4,
+  "cloud_spend_usd": 0,
+  "host_wall_seconds_cap": 7200,
+  "charged_device_count": 2,
+  "profile_safety_factor": 1.5,
+  "export_reserve_seconds": 180,
+  "numerical_failures": "Retain and stop; no seed substitution or test evaluation",
+  "cost_failure": "Stop before tuning; no automatic reduction of matrix or steps",
+  "test_access": "Generate only after every selected main fit passes independently replayed adequacy; selection manifest frozen first",
+  "primary_inference": "Six independent generator blocks per domain; average nested model seeds; exact one-sided paired sign permutation on log error ratios; Holm across two domains",
+  "adaptive_decision": "All main fits adequate, both domains mean paired gain >=2%, every block positive, both Holm-adjusted p <=0.05",
+  "mechanism_decision": "Also require mean >=2% benefit over train-mean gate intervention in each domain with every block positive; gate variation is descriptive only"
+}

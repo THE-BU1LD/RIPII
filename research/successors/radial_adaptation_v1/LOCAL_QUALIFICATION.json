@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-21T05:02:53.927112+00:00",
+  "control_tests": 14,
+  "control_tests_status": "PASS",
+  "ast": "PASS",
+  "ruff": "PASS",
+  "source_allowlist_secret_pattern_findings": [],
+  "source_files": 58,
+  "historical_evidence": "PRESERVED_HASH_VERIFIED",
+  "local_numerical_tests": "NOT_RUN_RESOURCE_BLOCKED",
+  "budget_user_authorized_gpu_hours": 4,
+  "cloud_spend_usd": 0
+}

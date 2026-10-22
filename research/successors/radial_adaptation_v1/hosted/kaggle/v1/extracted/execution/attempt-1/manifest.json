@@ -1,0 +1,23 @@
+{
+  "files": {
+    "admission.json": "81eb4e5e3c28c5bc09e0ee2a465513e805264f102940cd08e2c0b8fe9959b0de",
+    "charge.json": "1a7b7287ff931bebad4ccac94143ec466e359d8a85fb796dceb324723aec55e6",
+    "data/charged-5100011-train-standard.json": "1d5c40f49182ffe588e29b0987ac7c8739848eedb4bac2159992f410d521feb4",
+    "data/charged-5100011-train-standard.npz": "3f5daba52a9977eda7e610a5cdbbe05c41c813d3d42be2fe85e648c6a54a95a6",
+    "data/springs-5100011-train-standard.json": "87b653ddbc8ee8d074725327d6e196eed4b6a6a2672af8ebb9e67d461d4548ef",
+    "data/springs-5100011-train-standard.npz": "5537b0591642742bf9d775f57c5abe6c0832bfadc4acf68cfbc2dedf89da1880",
+    "environment.json": "729d94879d7475ba959eb32003c22600c4d7b6d072b92c775e6511309d264e1e",
+    "failure.json": "2bcd990d28d5c1c6d4a336677369ccecc84b752aa7988fa53f5502a01383427f",
+    "header.json": "622268f7d562f492625f55bd7f4dc259cdb0abd2d068087ba78661b1a851d845",
+    "profile.json": "d174a826fa7bdd3b419ac6c30876db920558aef51cff1d70beaba31c7b13e44b",
+    "qualification-cpu.json": "fa9cdd0ad6e7402b511a3d2f4003179b99699ac15a1536233a2f931d3c6fc35a",
+    "qualification-cuda.json": "9768c0dac828e05c4ef5cf1b686fc16ea56217691bd43972df740971cfa238d3",
+    "qualification-graph.pt": "d8e974195e37002f6d6002ba77b4ead3806b0a9bca3722835ab3a026408df7e9",
+    "qualification-radial_fixed.pt": "f9ca84aa5ed24d39f103dda77a81641ac9c75dc90267f939331eec85ce1e0e3f",
+    "qualification-radial_mixture.pt": "d363dc3517cfb067b456ed8da59ac6e8c1648815a0adf7dad331fe66536cd41f",
+    "qualification-simple_pool.pt": "3e6c94988ed58d14d9aec4b5d0cfafa532251895addcb980ca83fc8b930f9d94",
+    "qualification-transformer.pt": "3c55df63e0aaee85d12452b684d87d1898b47a41faf977fddf4084b7e70e4996",
+    "status.json": "0a7526c3b0670443855014d327658c62e2ed1cae06450739eeb8106410f1fc54",
+    "worker.log": "c8103063eb538f6794e9f942aa368f1cf2e579cb15bf0aed71c4215a62901e2e"
+  }
+}

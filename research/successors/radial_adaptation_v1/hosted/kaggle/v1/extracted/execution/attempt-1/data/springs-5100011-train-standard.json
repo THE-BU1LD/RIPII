@@ -1,0 +1,22 @@
+{
+  "block": 5100011,
+  "domain": "springs",
+  "edges_used_as_input": false,
+  "parameters": {
+    "n_balls": 5
+  },
+  "regime": "standard",
+  "sample_frequency": 50,
+  "scale": 5,
+  "seconds": 115.56985271000002,
+  "seed": 510001101,
+  "sha256": "5537b0591642742bf9d775f57c5abe6c0832bfadc4acf68cfbc2dedf89da1880",
+  "shape": [
+    512,
+    72,
+    5,
+    4
+  ],
+  "simulator_sha256": "3311aa22a06977a0635ad4777e2bb586f1ef21af1d6fed3eab81f70adef5c5b8",
+  "split": "train"
+}
