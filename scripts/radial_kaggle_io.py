@@ -51,10 +51,12 @@ def main():
             )
         text = args.notebook.read_text()
         notebook = json.loads(text)
-        assert notebook["nbformat"] == 4
-        assert (
-            notebook.get("metadata", {}).get("kernelspec", {}).get("name") == "python3"
-        ), "Missing Python kernel metadata"
+        if notebook.get("nbformat") != 4:
+            raise ValueError("Notebook format must be 4")
+        if (
+            notebook.get("metadata", {}).get("kernelspec", {}).get("name") != "python3"
+        ):
+            raise ValueError("Missing Python kernel metadata")
         request = {
             "slug": args.slug,
             "newTitle": slug.replace("-", " "),
@@ -71,7 +73,10 @@ def main():
         }
         if not args.cpu:
             quota = api("quota")
-            assert not quota["gpuQuota"]["isPayToScaleEnabled"], "Paid scaling enabled"
+            if quota.get("gpuQuota", {}).get("isPayToScaleEnabled") is not False:
+                raise ValueError(
+                    "Free GPU quota not confirmed; paid scaling enabled or unknown"
+                )
             request["machineShape"] = "NvidiaTeslaT4"
         response = api("push", request)
         receipt = {
@@ -108,7 +113,8 @@ def main():
                 name = item["fileName"]
                 if "/" not in name and name.endswith("-results.zip"):
                     url = item["url"]
-                    assert urllib.parse.urlparse(url).scheme == "https"
+                    if urllib.parse.urlparse(url).scheme != "https":
+                        raise ValueError("Artifact download requires HTTPS")
                     with (
                         urllib.request.urlopen(url, timeout=45) as response,
                         (args.destination / name).open("xb") as handle,
@@ -124,3 +130,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

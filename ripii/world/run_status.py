@@ -104,3 +104,4 @@ def verify_complete_status(path: Path, protocol_sha256: str) -> dict:
     ):
         raise ValueError("run did not complete the required state sequence")
     return tracker.payload
+

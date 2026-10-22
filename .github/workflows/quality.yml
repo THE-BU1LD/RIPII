@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
         with:
           python-version: "3.11"
           enable-cache: true
@@ -27,6 +27,7 @@ jobs:
         run: |
           uv run --no-sync python research/successors/radial_adaptation_v1/test_control.py
           uv run --no-sync python scripts/test_radial_execution_intake.py
+          uv run --no-sync python scripts/test_radial_kaggle_io.py
           uv run --no-sync python scripts/rebuild_radial_capsule.py --output /tmp/radial-reproduced.ipynb
       - name: Compile
         run: uv run --no-sync python -m compileall -q ripii scripts
@@ -44,3 +45,4 @@ jobs:
         env:
           PYTHON: .venv/bin/python
         run: ./scripts/verify_artifact.sh
+

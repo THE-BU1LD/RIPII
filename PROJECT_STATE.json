@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-10-21T06:01:26.236442+00:00",
+  "updated_at_utc": "2026-10-22T11:33:14Z",
   "checkout": {
     "head": "b612f235500bc9d678ccf29cf2372ff2cf1d2b24",
     "branch": "codex/research-execution-wave1",
@@ -147,7 +147,8 @@
     "v3_archive_intake": "PASS_13_TESTS_AND_TERMINAL_RECEIPT_603720078F314EA96335E5AE31647ACDCA340CEDE0C590E9F99F223A40275876",
     "v4_archive_intake": "PASS_6_TESTS_TERMINAL_SOURCE_MANIFEST_RESOURCE_RUNTIME_AND_NUMERICAL_BINDING",
     "v3_readiness_contract_tests": "PASS_9_PROTOCOL_MUTATION_COMPATIBILITY_V4_AMENDMENT_AND_TERMINAL_GATE_TESTS",
-    "selected_release_scientific_tests": "PASS_48"
+    "selected_release_scientific_tests": "PASS_48",
+    "radial_evidence_guard_repair": "PROSPECTIVE_INTAKE_AND_TRANSPORT_REGRESSIONS_PASS_NO_SCIENTIFIC_EXECUTION"
   },
   "claim_boundary": "Engineering readiness, synthetic development evidence, release readiness, and confirmation are separate. No current evidence supports superiority, SOTA, real-world utility, novelty, publication, or deployment claims.",
   "checkout_history": [
@@ -158,5 +159,19 @@
       "remote_verified_at_utc": "2026-10-18T04:37:00Z",
       "relationship": "LOCAL_CHECKOUT_AT_VERIFIED_REMOTE_MAIN_WITH_UNCOMMITTED_RESEARCH_WORK"
     }
+  ],
+  "maintenance_history": [
+    {
+      "at_utc": "2026-10-22T11:33:14Z",
+      "source_head_reviewed": "62be826644ebf9b33d3589c9185464c3e27c1aad",
+      "change": "Validate every charge component; enforce free GPU, notebook, and HTTPS checks under optimized Python.",
+      "evidence": "docs/RADIAL_EVIDENCE_GUARD_REPAIR_20261022.md",
+      "validation": "8 local archive intake tests and 4 mocked transport guard tests; tests include optimization levels 0 and 2.",
+      "scientific_runs": 0,
+      "cloud_spend_usd": 0,
+      "historical_artifacts_unchanged": true,
+      "scientific_dispositions_unchanged": true
+    }
   ]
 }
+

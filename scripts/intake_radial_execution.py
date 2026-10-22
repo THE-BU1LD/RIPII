@@ -50,9 +50,21 @@ def intake(archive, destination, expected_source):
         if digest(destination / name) != expected:
             raise ValueError("Source changed: " + name)
     charge = json.loads((destination / "charge.json").read_text())
+    for field in (
+        "cumulative_charged_gpu_seconds",
+        "prior_charged_gpu_seconds",
+        "charged_gpu_seconds",
+        "elapsed_host_seconds",
+        "reserved_export_seconds",
+    ):
+        component = charge.get(field)
+        if (
+            type(component) not in (int, float)
+            or not 0 <= component <= 14400
+            or not math.isfinite(component)
+        ):
+            raise ValueError("Budget exceeded or invalid component: " + field)
     value = charge["cumulative_charged_gpu_seconds"]
-    if not math.isfinite(value) or not 0 <= value <= 14400:
-        raise ValueError("Budget exceeded or invalid")
     if value != charge["prior_charged_gpu_seconds"] + charge["charged_gpu_seconds"]:
         raise ValueError("Cumulative charge mismatch")
     if charge["charged_gpu_seconds"] != 2 * (
@@ -99,3 +111,4 @@ if __name__ == "__main__":
         json.dumps(receipt, indent=2) + "\n"
     )
     print(json.dumps(receipt, indent=2))
+

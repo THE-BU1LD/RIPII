@@ -9,7 +9,9 @@ from intake_radial_execution import intake
 
 
 class IntakeTests(unittest.TestCase):
-    def fixture(self, root, *, wrong_source=False, extra=None, charge=10):
+    def fixture(
+        self, root, *, wrong_source=False, extra=None, charge=10, components=None
+    ):
         digest = hashlib.sha256(b"print('fixture')\n").hexdigest()
         source = {"probe.py": digest}
         expected = root / "expected.json"
@@ -26,6 +28,7 @@ class IntakeTests(unittest.TestCase):
                     "charged_gpu_seconds": charge,
                     "elapsed_host_seconds": charge / 2,
                     "reserved_export_seconds": 0,
+                    **(components or {}),
                 }
             ).encode(),
         }
@@ -76,6 +79,66 @@ class IntakeTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Budget"):
                 intake(archive, root / "out", expected)
 
+    def test_rejects_negative_components_even_when_totals_agree(self):
+        for prior, charged, elapsed, reserve in (
+            (-5, 15, 7.5, 0),
+            (12, -2, -1, 0),
+            (0, 10, -1, 6),
+            (0, 10, 6, -1),
+        ):
+            with (
+                self.subTest(prior=prior, elapsed=elapsed, reserve=reserve),
+                tempfile.TemporaryDirectory() as tmp,
+            ):
+                root = Path(tmp)
+                archive, expected = self.fixture(
+                    root,
+                    components={
+                        "prior_charged_gpu_seconds": prior,
+                        "charged_gpu_seconds": charged,
+                        "elapsed_host_seconds": elapsed,
+                        "reserved_export_seconds": reserve,
+                    },
+                )
+                with self.assertRaisesRegex(ValueError, "invalid component"):
+                    intake(archive, root / "out", expected)
+
+    def test_rejects_non_numeric_or_non_finite_components(self):
+        for field in (
+            "cumulative_charged_gpu_seconds",
+            "prior_charged_gpu_seconds",
+            "charged_gpu_seconds",
+            "elapsed_host_seconds",
+            "reserved_export_seconds",
+        ):
+            for value in (True, False, None, "0", float("nan"), float("inf")):
+                with (
+                    self.subTest(field=field, value=value),
+                    tempfile.TemporaryDirectory() as tmp,
+                ):
+                    root = Path(tmp)
+                    archive, expected = self.fixture(
+                        root, components={field: value}
+                    )
+                    with self.assertRaisesRegex(ValueError, "invalid component"):
+                        intake(archive, root / "out", expected)
+
+    def test_accepts_cumulative_budget_boundary(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            archive, expected = self.fixture(
+                root,
+                charge=14400,
+                components={
+                    "prior_charged_gpu_seconds": 10,
+                    "charged_gpu_seconds": 14390,
+                    "elapsed_host_seconds": 7190,
+                    "reserved_export_seconds": 5,
+                },
+            )
+            self.assertEqual(intake(archive, root / "out", expected)["status"], "PASS")
+
 
 if __name__ == "__main__":
     unittest.main()
+
