@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import os
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 _TRANSITIONS = {
@@ -15,7 +15,7 @@ _TRANSITIONS = {
 
 
 def _timestamp() -> str:
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    return datetime.now(UTC).isoformat().replace("+00:00", "Z")
 
 
 def _write_atomic(path: Path, payload: dict) -> None:
@@ -104,3 +104,4 @@ def verify_complete_status(path: Path, protocol_sha256: str) -> dict:
     ):
         raise ValueError("run did not complete the required state sequence")
     return tracker.payload
+
