@@ -38,3 +38,19 @@ These are lock consistency and source/provenance checks. Package installation, t
 The existing PR workflows run CPU tests, quality/coverage/build checks, dependency audit, CodeQL and hosted macOS capability smoke. Existing optional self-hosted CUDA and real-MPS jobs remain governed by their existing variables; neither is enabled by this change. Both optional jobs were skipped in the latest observed device-smoke run, 40295978096.
 
 No advisory ignore, exception, or relaxed gate is introduced. No scientific run is launched and no historical environment, result, claim or frozen source snapshot is relabeled. This is a maintained environment repair awaiting current-source hosted verification, not a new research result.
+
+## Pre-merge refresh | 9 November 2026
+
+The latest scheduled main audit, [42621155843](https://github.com/THE-BU1LD/RIPII/actions/runs/42621155843), still fails at base `a53db91a202cf8bed57a98e9c42f214eae49ec22`. Its dependency-audit job reports 13 advisories: 12 for filelock 3.32.5 and GHSA-xmj3-9gf7-h52w for setuptools 84.0.0. CodeQL passes. The filelock fixed versions reported by that audit are 4.2.1, except CVE-2026-112936 at 4.0.9; this candidate's 4.2.4 covers those reported minimums. The setuptools fixed version remains 84.1.0.
+
+A fresh source review confirmed that PR #35 at `70708c7911b0c994976ea791c5483b5c110ff0b4` remains limited to these two lock records and this evidence document. No workflow, audit exception, scientific source, or retained result changes. The repository has no submitted or outstanding inline PR reviews, and GitHub reports a clean, mergeable PR. These observations do not replace the checks below.
+
+Fresh local validation used the exact GitHub blobs on Python 3.12.14:
+
+- Base lock blob: `6aa796058950cf4d12e46121f0f2cdc16ae0b3b5`.
+- Candidate lock blob: `878fdf2f33d7f7aee69e72764335e5582493785c`; SHA-256 remains `65dba25cd57b41b3df303d5dae4eade3951b98934a0bc96a9cda0cbf3226d4cc`.
+- Both base and candidate pass `uv lock --offline --check`.
+- Candidate passes `uv export --offline --locked --no-dev --no-emit-project --format requirements.txt`.
+- A parsed record-by-record comparison confirms 58 package records, exactly the filelock and setuptools records changed, all 56 other records unchanged, and all resolution metadata unchanged. NumPy has two version-specific records, so counting unique package names is not an equivalent check.
+
+The four successful hosted workflows at the earlier PR head were run on 27 October. They are historical evidence, not a fresh live vulnerability audit. This evidence refresh leaves the existing CI and strict security workflows unchanged so the updated PR head receives current hosted validation before merge. After merge, verify the resulting main security run separately. Optional real-MPS and CUDA certification remain governed by their existing configuration and are not claimed by this repair.
