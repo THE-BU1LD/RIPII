@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 
 import torch
 
@@ -49,22 +50,26 @@ def check(device_name: str) -> dict:
     maximum_repeat_error = float((first_snapshot - second_snapshot).abs().max())
 
     loss = second.square().mean()
-    loss.backward()
-    gradient_tensors = sum(
-        parameter.grad is not None and torch.isfinite(parameter.grad).all().item()
-        for parameter in model.parameters()
-    )
     if (
-        not torch.isfinite(second).all()
+        not torch.isfinite(first_snapshot).all()
+        or not torch.isfinite(second_snapshot).all()
+        or not torch.isfinite(loss)
+        or not math.isfinite(maximum_repeat_error)
         or maximum_repeat_error > 1e-6
-        or gradient_tensors == 0
     ):
+        raise RuntimeError("device smoke violated finite/repeatable gradient contract")
+
+    loss.backward()
+    gradients = [
+        parameter.grad for parameter in model.parameters() if parameter.grad is not None
+    ]
+    if not gradients or any(not torch.isfinite(gradient).all() for gradient in gradients):
         raise RuntimeError("device smoke violated finite/repeatable gradient contract")
     return {
         "status": "PASS",
         "device": device_name,
         "maximum_repeat_error": maximum_repeat_error,
-        "finite_gradient_tensors": gradient_tensors,
+        "finite_gradient_tensors": len(gradients),
         "torch": str(torch.__version__),
     }
 
