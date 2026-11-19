@@ -3,4 +3,19 @@ extend = "../../../pyproject.toml"
 extend-exclude = ["reference"]
 
 [lint.isort]
-known-third-party = ["control", "engine", "optimized", "readiness", "qualify"]
+# This portable runtime loads its own adjacent modules through an isolated
+# sys.path, following the repository's existing executor-capsule convention.
+# Keep their imports in one section without rewriting preserved source bytes.
+known-third-party = [
+    "aggregate_results",
+    "captured_engine",
+    "control",
+    "engine",
+    "export_contract",
+    "notebook_runtime",
+    "optimized",
+    "orchestrate",
+    "pack_results",
+    "qualify",
+    "readiness",
+]
