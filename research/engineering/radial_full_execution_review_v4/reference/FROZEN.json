@@ -1,0 +1,14 @@
+{
+  "study": "RIPII-RADIAL-ADAPTATION-v2",
+  "files": {
+    "PREDECESSOR.json": "dea2f8b5d245f8033db2c1fcacc837c6d3e56deed302c8d962590085fa1839ae",
+    "PROTOCOL.md": "4f47762630fd5ab51ae5eba8e944b4a293d1ec6753a4e8c9f79acde671cd5799",
+    "protocol.json": "aa3ba359a6d93d38a425d24a3d212bcf58bf45a3a46dee1df0d823750d6204c4",
+    "verify_v2.py": "b2e85b335d3f9d74fc218fc43c458ddd736ad6228b51d7a297f76e2812e8994e",
+    "FROZEN-v1.json": "2904cd7cb3487219a6d0acb2586c4d3f0d81e5d6f7ccddebc3fab7fa576ee80e"
+  },
+  "predecessor_preservation": "PASS",
+  "scientific_matrix_changed_from_v1": false,
+  "execution_budget_changed_from_v1": true,
+  "frozen_at": "2026-10-21"
+}

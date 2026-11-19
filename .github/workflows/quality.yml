@@ -29,6 +29,7 @@ jobs:
           uv run --no-sync python scripts/test_radial_execution_intake.py
           uv run --no-sync python scripts/test_radial_kaggle_io.py
           uv run --no-sync python scripts/rebuild_radial_capsule.py --output /tmp/radial-reproduced.ipynb
+          uv run --no-sync python -m unittest discover -s research/engineering/radial_full_execution_review_v4 -p 'test_*.py' -v
       - name: Compile
         run: uv run --no-sync python -m compileall -q ripii scripts
       - name: Type-check package

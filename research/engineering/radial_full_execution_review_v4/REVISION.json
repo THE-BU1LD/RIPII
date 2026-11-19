@@ -1,0 +1,32 @@
+{
+  "revision": "RIPII-RADIAL-EXECUTION-v3",
+  "created_at_utc": "2026-10-25T09:27:11.953001+00:00",
+  "predecessor": "radial_full_execution_v2",
+  "predecessor_files": {
+    "research/engineering/radial_full_execution_v2/replay_checkpoint.py": "aa1196b563a666d4902af6ab0c3db9024fa4b65ac5d89844209fc9ad46acf358",
+    "research/engineering/radial_full_execution_v2/build.py": "57862df5f725dadf9a678967a14fa6990ad418bfd3dc0bcdbce535513ad6f679",
+    "research/engineering/radial_full_execution_v2/aggregate_results.py": "f65adbf3c67ef5e99d84ee6d8b9962f5c087021f8e994406ea8afa9f9df3326d",
+    "research/engineering/radial_full_execution_v2/pack_results.py": "e80a3981df19524ff0ce07da3ed9a949d7d0f3fe23bfe955ebbddf35fc7ed138",
+    "research/engineering/radial_full_execution_v2/PREDECESSOR.json": "1634dc1f642a9c5b33a71f226522a40a3c66185066c392a16d7fba8e34c658d6",
+    "research/engineering/radial_full_execution_v2/test_package.py": "1e9e4fe2d00ed3e74d61235781d3a86b7ca6215e9f94034966998d054e8ab89f",
+    "research/engineering/radial_full_execution_v2/notebook_runtime.py": "3f8afcafd2f2222dbd62650de54cc397baedc3aa812968af86f7558de812dddb",
+    "research/engineering/radial_full_execution_v2/test_control.py": "4a792bfea005bb6095df53ad83fb0bd68b105115dd4f6d0abb0bfb1e53cb9a16",
+    "research/engineering/radial_full_execution_v2/orchestrate.py": "56b76d4c74e5f497c0103c33b6307fd755d15fad1a87d245a43d34331f80ae49",
+    "research/engineering/radial_full_execution_v2/README.md": "8d9cf2a0b49a65eef3aa786faf627d79648212322aa906ac0be4275a2ded3d02",
+    "research/engineering/radial_full_execution_v2/probe.py": "5cabae5e9fbedd82d8661ef3c0e68369eda1f48996008b13a6e80d90bb6afcd6",
+    "research/engineering/radial_full_execution_v2/export_contract.py": "ab02e319e87bb3b9e3b1b616847e904ea802e66c04566a44f85cdb64f00e6976",
+    "research/engineering/radial_full_execution_v2/validate_package.py": "95019091a8b3c257bb116c8c76f827608b17cafacdaffa13d9e761a6d3afcb60",
+    "research/engineering/radial_full_execution_v2/readiness.py": "12aaf58c134c9f119c23f556480aebb980f6d822729ec8457d866802da0b23b6",
+    "research/engineering/radial_full_execution_v2/cost_profile.py": "c6a410843c33ce5f647871f86d17aa6bcc2e6ba5bfd2c6d307d726ccd38648f0",
+    "research/engineering/radial_full_execution_v2/optimized.py": "fe2173ff00c1591a8e2ad5d187b451cdf6ad6887331425909f9dc09b2f745e4c",
+    "research/engineering/radial_full_execution_v2/captured_engine.py": "0708ff665a00d0acbb906921057fa9716dc0e9b7f70fee6ae8a53acb5059d62e",
+    "research/engineering/radial_full_execution_v2/qualify.py": "0dfed43723b6d3bbce9ce3872ff61cb7c1bd84fc59baf499da77abc4f7583f1b",
+    "kaggle/intensive_20261025/research_source.zip": "ace8b5de213d10df646d375de5530c9468b4198c15e0d3056a76a7724604479f",
+    "kaggle/intensive_20261025/KAGGLE_FULL_RESEARCH_RUN.ipynb": "4b3ddc39c0a8fca872045e31ce060f6141505d6a695b53d9397c1fbb0b775903",
+    "output/intensive_20261025/RIPII_intensive_handoff_20261025.zip": "48e17725de514d182c36807e97e78e1918fc9871e9368ad89a7161c5b522f680"
+  },
+  "scientific_protocol": "RIPII-RADIAL-ADAPTATION-v2",
+  "scientific_change": false,
+  "cap_changed": false,
+  "matrix_changed": false
+}

@@ -1,0 +1,6 @@
+extend = "../../../pyproject.toml"
+# Scientific reference bytes are frozen; lint the active executor sources.
+extend-exclude = ["reference"]
+
+[lint.isort]
+known-third-party = ["control", "engine", "optimized", "readiness", "qualify"]
