@@ -1,0 +1,18 @@
+{
+  "revision": "RIPII-FROZEN-REFERENCE-QUALIFICATION-REVIEW-v4",
+  "date": "2026-11-19",
+  "base_repository_commit": "39714da4400a42a3ea0708754c4a09a63bda43b3",
+  "predecessor_revision": "RIPII-RADIAL-EXECUTION-v3",
+  "predecessor_archive_sha256": "31694c6a7f604d7afae2866a930ce379a46f7900585532d031526bee0dfca8de",
+  "predecessor_source_sha256": "f43e71379037622523200775366ed758de708e6fef2890d2147c0a8dc3606a20",
+  "scientific_protocol": "RIPII-RADIAL-ADAPTATION-v2",
+  "scope": "Frozen-reference preflight qualification, admission and production-probe routing",
+  "scientific_change": false,
+  "cap_changed": false,
+  "matrix_changed": false,
+  "new_comparison_fits": 0,
+  "protected_data_opened": false,
+  "cuda_qualification": "NOT_RUN",
+  "scientific_result": "NOT_EVALUATED",
+  "conference_ready": false
+}

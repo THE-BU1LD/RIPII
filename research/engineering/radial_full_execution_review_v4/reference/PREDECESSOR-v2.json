@@ -1,0 +1,11 @@
+{
+  "study": "RIPII-RADIAL-ADAPTATION-v1",
+  "state": "../radial_adaptation_v1/STATE.json",
+  "frozen_source": "../radial_adaptation_v1/FROZEN.json",
+  "protocol_sha256": "f93c9fc03d89489fa596b3f706e5dbcae3e3d9c8b2bff4754446331ed103be0e",
+  "terminal_status": "QUALIFIED_COST_BLOCKED",
+  "scientific_result": "NOT_EVALUATED",
+  "comparison_fits": 0,
+  "protected_test_opened": false,
+  "preservation": "V1 files and retained hosted evidence are unchanged"
+}
