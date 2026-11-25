@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-10-22T11:33:14Z",
+  "updated_at_utc": "2026-11-25T12:12:25.870008+00:00",
   "checkout": {
     "head": "b612f235500bc9d678ccf29cf2372ff2cf1d2b24",
     "branch": "codex/research-execution-wave1",
@@ -171,7 +171,17 @@
       "cloud_spend_usd": 0,
       "historical_artifacts_unchanged": true,
       "scientific_dispositions_unchanged": true
+    },
+    {
+      "at_utc": "2026-11-25T12:12:25.870008+00:00",
+      "source_head_reviewed": "df97992548a67b2ac6bf833064b3336e6517b76a",
+      "change": "Require a verified summary and a valid nonempty source identity mapping before strict source verification; reject noncanonical source paths and report whether current source was actually verified.",
+      "evidence": "research/engineering/source_verification_20261125/verification.json",
+      "validation": "10 targeted verifier tests passed; baseline 4 failures and initial plugin-loading failure preserved. Full neural-model suite not run.",
+      "scientific_runs": 0,
+      "protected_outcome_reads": 0,
+      "historical_artifacts_unchanged": true,
+      "scientific_dispositions_unchanged": true
     }
   ]
 }
-

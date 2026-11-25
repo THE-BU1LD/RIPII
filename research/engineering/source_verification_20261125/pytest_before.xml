@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="10" time="0.777" timestamp="2026-11-25T17:40:53.809145+05:30" hostname="f431f1032dba"><testcase classname="tests.test_verify_artifact_cli" name="test_verify_artifact_detects_tampering" time="0.160" /><testcase classname="tests.test_verify_artifact_cli" name="test_portable_summary_is_explicit_and_still_detects_tampering" time="0.121" /><testcase classname="tests.test_verify_artifact_cli" name="test_verify_artifact_rejects_internal_symlink" time="0.050" /><testcase classname="tests.test_verify_artifact_cli" name="test_verify_artifact_rejects_symlink_directory" time="0.047" /><testcase classname="tests.test_verify_artifact_cli" name="test_verify_artifact_accepts_regular_nested_artifact" time="0.050" /><testcase classname="tests.test_verify_artifact_cli" name="test_strict_source_verification_requires_verified_summary" time="0.047"><failure message="assert 0 == 1&#10; +  where 0 = CompletedProcess(args=['/workspace/scratch/6def315c7907/research_work/verify_env/bin/python', '/workspace/scratch/6def...artifacts_explicitly_skipped&quot;: 0,\n  &quot;source_drift&quot;: [],\n  &quot;source_additions&quot;: [],\n  &quot;failures&quot;: []\n}\n', stderr='').returncode">tmp_path = PosixPath('/workspace/scratch/6def315c7907/research_work/repos/ripii/.test-tmp/pytest/test_strict_source_verificatio0')
+
+    def test_strict_source_verification_requires_verified_summary(tmp_path: Path) -&gt; None:
+        repo, manifest = _strict_source_fixture(tmp_path)
+        manifest.write_text(json.dumps({"artifacts": []}), encoding="utf-8")
+        result = _strict_source_check(repo, manifest)
+&gt;       assert result.returncode == 1
+E       assert 0 == 1
+E        +  where 0 = CompletedProcess(args=['/workspace/scratch/6def315c7907/research_work/verify_env/bin/python', '/workspace/scratch/6def...artifacts_explicitly_skipped": 0,\n  "source_drift": [],\n  "source_additions": [],\n  "failures": []\n}\n', stderr='').returncode
+
+tests/test_verify_artifact_cli.py:199: AssertionError</failure></testcase><testcase classname="tests.test_verify_artifact_cli" name="test_strict_source_verification_rejects_malformed_identity" time="0.049"><failure message="assert 0 == 1&#10; +  where 0 = CompletedProcess(args=['/workspace/scratch/6def315c7907/research_work/verify_env/bin/python', '/workspace/scratch/6def...artifacts_explicitly_skipped&quot;: 0,\n  &quot;source_drift&quot;: [],\n  &quot;source_additions&quot;: [],\n  &quot;failures&quot;: []\n}\n', stderr='').returncode">tmp_path = PosixPath('/workspace/scratch/6def315c7907/research_work/repos/ripii/.test-tmp/pytest/test_strict_source_verificatio1')
+
+    def test_strict_source_verification_rejects_malformed_identity(tmp_path: Path) -&gt; None:
+        repo, manifest = _strict_source_fixture(tmp_path, source_identity=[])
+        result = _strict_source_check(repo, manifest)
+&gt;       assert result.returncode == 1
+E       assert 0 == 1
+E        +  where 0 = CompletedProcess(args=['/workspace/scratch/6def315c7907/research_work/verify_env/bin/python', '/workspace/scratch/6def...artifacts_explicitly_skipped": 0,\n  "source_drift": [],\n  "source_additions": [],\n  "failures": []\n}\n', stderr='').returncode
+
+tests/test_verify_artifact_cli.py:208: AssertionError</failure></testcase><testcase classname="tests.test_verify_artifact_cli" name="test_strict_source_verification_rejects_path_escape" time="0.053"><failure message="KeyError: 'source_inventory_error'">tmp_path = PosixPath('/workspace/scratch/6def315c7907/research_work/repos/ripii/.test-tmp/pytest/test_strict_source_verificatio2')
+
+    def test_strict_source_verification_rejects_path_escape(tmp_path: Path) -&gt; None:
+        repo, manifest = _strict_source_fixture(tmp_path, source_identity={"../outside.py": "0" * 64})
+        result = _strict_source_check(repo, manifest)
+        assert result.returncode == 1
+&gt;       assert "invalid source identity" in json.loads(result.stdout)["source_inventory_error"]
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'source_inventory_error'
+
+tests/test_verify_artifact_cli.py:216: KeyError</failure></testcase><testcase classname="tests.test_verify_artifact_cli" name="test_strict_source_verification_detects_changed_source" time="0.047"><failure message="KeyError: 'current_source_verified'">tmp_path = PosixPath('/workspace/scratch/6def315c7907/research_work/repos/ripii/.test-tmp/pytest/test_strict_source_verificatio3')
+
+    def test_strict_source_verification_detects_changed_source(tmp_path: Path) -&gt; None:
+        repo, manifest = _strict_source_fixture(tmp_path)
+        valid = _strict_source_check(repo, manifest)
+        assert valid.returncode == 0
+&gt;       assert json.loads(valid.stdout)["current_source_verified"] is True
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'current_source_verified'
+
+tests/test_verify_artifact_cli.py:223: KeyError</failure></testcase><testcase classname="tests.test_verify_artifact_cli" name="test_strict_source_verification_detects_added_source" time="0.045" /></testsuite></testsuites>

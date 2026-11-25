@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -104,23 +105,64 @@ def main() -> None:
 
     source_drift: list[str] = []
     source_additions: list[str] = []
-    if summary_path is not None:
-        summary = json.loads(summary_path.read_text(encoding="utf-8"))
-        expected_sources = summary.get("source_sha256", {})
-        if isinstance(expected_sources, dict):
+    source_inventory_error: str | None = None
+    if summary_path is None:
+        source_inventory_error = "current-source verification requires a verified summary.json"
+    else:
+        try:
+            summary = json.loads(summary_path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            summary = None
+        expected_sources = summary.get("source_sha256") if isinstance(summary, dict) else None
+        if not isinstance(expected_sources, dict) or not expected_sources:
+            source_inventory_error = "summary source_sha256 must be a nonempty object"
+        else:
             for relative, expected in expected_sources.items():
-                current = ROOT / relative
-                if not current.is_file() or sha256(current) != expected:
+                # A source identity names a canonical repository-relative file.
+                # Validate it before any filesystem read; neither an absolute
+                # path nor a parent traversal belongs to this checkout.
+                relative_path = PurePosixPath(relative)
+                if (
+                    not relative
+                    or "\\" in relative
+                    or relative_path.is_absolute()
+                    or ".." in relative_path.parts
+                    or relative_path.as_posix() != relative
+                    or not isinstance(expected, str)
+                    or re.fullmatch(r"[0-9a-fA-F]{64}", expected) is None
+                ):
+                    source_inventory_error = f"invalid source identity: {relative}"
+                    continue
+                parts = relative_path.parts
+                current = ROOT.joinpath(*parts)
+                contains_symlink = any(
+                    ROOT.joinpath(*parts[:index]).is_symlink()
+                    for index in range(1, len(parts) + 1)
+                )
+                if contains_symlink or not current.is_file():
+                    source_drift.append(relative)
+                    continue
+                try:
+                    matches = sha256(current) == expected.lower()
+                except OSError:
+                    matches = False
+                if not matches:
                     source_drift.append(relative)
             current_sources = {
-                str(path.relative_to(ROOT))
+                path.relative_to(ROOT).as_posix()
                 for base in (ROOT / "ripii", ROOT / "scripts")
                 for path in base.rglob("*.py")
             }
             current_sources.add("pyproject.toml")
             source_additions = sorted(current_sources - set(expected_sources))
-    if args.strict_current_source and (source_drift or source_additions):
-        failures.append("current source differs from recorded run source")
+    current_source_verified = (
+        source_inventory_error is None and not source_drift and not source_additions
+    )
+    if args.strict_current_source:
+        if source_inventory_error is not None:
+            failures.append(source_inventory_error)
+        elif source_drift or source_additions:
+            failures.append("current source differs from recorded run source")
 
     result = {
         "status": "PASS" if not failures else "FAIL",
@@ -134,6 +176,8 @@ def main() -> None:
         "run_artifacts_explicitly_skipped": skipped_run_artifacts,
         "source_drift": source_drift,
         "source_additions": source_additions,
+        "source_inventory_error": source_inventory_error,
+        "current_source_verified": current_source_verified,
         "failures": failures,
     }
     print(json.dumps(result, indent=2, allow_nan=False))
