@@ -10,6 +10,18 @@ summaries, reports, manifests, and hashes but cannot re-evaluate omitted checkpo
 Exact resume is verified on CPU. Hardware timing is descriptive and not portable.
 External dataset reproduction remains `EXTERNAL_EXECUTION_REQUIRED`.
 
+`scripts/verify_artifact.py --strict-current-source` requires a content-verified
+`summary.json` with a nonempty, valid `source_sha256` inventory. Missing source
+identities cannot establish a current-source match. The report's
+`current_source_verified` field distinguishes that check from ordinary artifact
+byte verification; default artifact verification still supports manifests that
+do not carry source identities. Changed or newly added source files cause the
+strict check to fail. This verifies recorded bytes, not scientific validity or
+the authenticity of a study.
+
+The repair and its generated regression fixtures are recorded in
+`research/engineering/source_verification_20261125/verification.json`.
+
 Create a deterministic, complete byte archive of any retained run with:
 
 ```bash

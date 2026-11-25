@@ -1,0 +1,41 @@
+{
+  "session": "strict_source_verification_20261125",
+  "base_commit": "df97992548a67b2ac6bf833064b3336e6517b76a",
+  "scope": "Artifact-verifier engineering; generated fixtures only",
+  "observation": "--strict-current-source returned PASS and exit 0 for an empty artifact manifest with no verified source identities.",
+  "repair": "Require a verified summary and a valid nonempty source identity mapping before strict source verification; reject noncanonical source paths and report whether current source was actually verified.",
+  "initial_environment_failure": {
+    "exit_code": 3,
+    "description": "pytest auto-loaded an unrelated anyio plugin that emitted PytestRemovedIn10Warning under -W error. Reran with PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 as intended by repository test configuration; no test assertions changed."
+  },
+  "baseline": {
+    "passed": 6,
+    "failed": 4,
+    "receipt": "pytest_before.xml"
+  },
+  "candidate": {
+    "passed": 10,
+    "failed": 0,
+    "warnings": 0,
+    "receipt": "pytest_after.xml"
+  },
+  "validation_command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest tests/test_verify_artifact_cli.py -q -W error",
+  "environment": {
+    "python": "3.12.14",
+    "pytest": "9.2.0",
+    "platform": "Linux"
+  },
+  "source_sha256": {
+    "scripts/verify_artifact.py": "c584dfde6805865779afde926c6baffd0d77f1deca44ca6bfa3d9b8d9a321722",
+    "tests/test_verify_artifact_cli.py": "928825a5c1f85f752d885c728700423f4140569c3f788ef5f6b28d0613156a1f"
+  },
+  "receipt_sha256": {
+    "pytest_before.xml": "ec34b8cab95c201381c4ebf94c61d0cba291c52de91404767b270fd869429294",
+    "pytest_after.xml": "1ccd02430bc838c97cc61ddab05794176b4b4a4b4b75dba4eece714f82a35a75"
+  },
+  "scientific_runs": 0,
+  "protected_outcome_reads": 0,
+  "historical_artifacts_changed": false,
+  "research_completion": false,
+  "remaining": "Full scientific runs, historical conclusions, external evaluation, release metadata and owner review remain separate. Remote branch has not been changed."
+}
