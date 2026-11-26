@@ -37,3 +37,9 @@ The unchanged 18 allocated GPU-hour cap is 64,800 GPU-seconds, including 3,794.5
 Keep the notebook in PREFLIGHT. Exact-source reference parity, capture parity, LR changes, gate intervention and fresh-process resume must pass for all five models before development admission. A fresh cost profile, reference check and four-lane smoke remain required in development. All scientific adequacy gates must pass before protected data opens. Independent confirmation remains refused because no such protocol exists.
 
 CUDA equivalence, numerical recovery, dependencies, full-matrix feasibility, the 140 fits and efficacy remain unverified. Historical negative and undertrained results remain separate. This code review makes no conference-readiness or submission claim.
+
+## Result inventory repair (26 November 2026)
+
+The standalone aggregator previously checked hashes only for files named in the result manifest. It could then load an unlisted `source/reference/control.py` and read unlisted evaluation inputs. A local fixture reproduced that behavior. The aggregator now requires exact file membership and refuses symlinks before loading source or creating its analysis directory. Verified control loading no longer creates bytecode files inside the retained input tree.
+
+Eight additional standard-library regression methods cover omitted source, omitted predictions, extra files, nested manifests, directory symlinks, missing/corrupt listed files, and repeatable analysis of a fully manifested pending fixture without input changes. The scientific reference, protocol, 140-fit matrix, protected-data gate and budgets are unchanged. These checks supply no new model-quality or GPU-qualification result.

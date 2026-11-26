@@ -14,5 +14,14 @@
   "protected_data_opened": false,
   "cuda_qualification": "NOT_RUN",
   "scientific_result": "NOT_EVALUATED",
-  "conference_ready": false
+  "conference_ready": false,
+  "result_inventory_repair": {
+    "date": "2026-11-26",
+    "base_repository_commit": "df97992548a67b2ac6bf833064b3336e6517b76a",
+    "scope": "Reject unregistered or symlinked result inputs before aggregation; load verified control without bytecode writes",
+    "new_regression_methods": 8,
+    "scientific_change": false,
+    "new_comparison_fits": 0,
+    "protected_data_opened": false
+  }
 }

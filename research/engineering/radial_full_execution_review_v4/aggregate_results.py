@@ -11,7 +11,16 @@ from readiness import verify_inventory
 
 def aggregate(root, output):
     root, output = Path(root), Path(output)
-    verify_inventory(root, json.loads((root / "manifest.json").read_text())["files"])
+    members = list(root.rglob("*"))
+    if any(path.is_symlink() for path in members):
+        raise ValueError("Symlink in result inventory")
+    files = json.loads((root / "manifest.json").read_text())["files"]
+    if not isinstance(files, dict):
+        raise ValueError("Result inventory must be an object")
+    actual = {str(path.relative_to(root)) for path in members if path.is_file()}
+    if actual != set(files) | {"manifest.json"}:
+        raise ValueError("Unregistered or missing results")
+    verify_inventory(root, files)
     output.mkdir(parents=True, exist_ok=False)
     execution = root / "execution"
     rows = []
@@ -24,7 +33,9 @@ def aggregate(root, output):
             "independent_frozen_control", control_path
         )
         control = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(control)
+        # The retained input tree is read-only evidence. Loading its verified
+        # source directly avoids adding an unmanifested __pycache__ directory.
+        exec(compile(control_path.read_bytes(), str(control_path), "exec"), control.__dict__)
         protocol = json.loads((root / "source/reference/protocol.json").read_text())
         for row in raw:
             if (
