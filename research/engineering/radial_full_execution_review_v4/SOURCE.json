@@ -82,7 +82,7 @@
   "reference/verify.py": "5a3c72a6e2382ed37bfd93ce1e1b9a0e3396cb3c5afb4d5f0dd252d96801b75e",
   "reference/verify_v2.py": "b2e85b335d3f9d74fc218fc43c458ddd736ad6228b51d7a297f76e2812e8994e",
   "replay_checkpoint.py": "aa1196b563a666d4902af6ab0c3db9024fa4b65ac5d89844209fc9ad46acf358",
-  "test_aggregation_inventory.py": "492849ba638b9eb82b98925e3165d26c1ac18e654dfac51ba2c92056e9ede5d2",
+  "test_aggregation_inventory.py": "8503a0efd7f6e30d5d2646e6f35c0c23191efc133b62dbe9875e04672e9777c8",
   "test_control.py": "17581c3cb3b620417589194d4f3b874770f3f2818fb059a28c884246b5c3488c",
   "test_package.py": "1e9e4fe2d00ed3e74d61235781d3a86b7ca6215e9f94034966998d054e8ab89f",
   "test_reference_admission.py": "9655e9719e7bdbb0cdad86f581898e48a4baadc32893d75e146e7f3a351cb814",
