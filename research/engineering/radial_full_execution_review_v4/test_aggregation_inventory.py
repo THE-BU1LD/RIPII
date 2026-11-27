@@ -44,7 +44,7 @@ def evaluation_fixture(root, marker=None):
     if marker is not None:
         source = (
             "from pathlib import Path\n"
-            + "Path(" + repr(str(marker)) + ").write_text('executed')\n"
+            "Path(" + repr(str(marker)) + ").write_text('executed')\n"
             + source
         )
     write(root, "source/reference/control.py", source)
